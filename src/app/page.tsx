@@ -89,18 +89,37 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <h2 className="text-2xl font-semibold tracking-tight">Browse by Category</h2>
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((cat) => (
-              <Link
-                key={cat.slug}
-                href="/components"
-                className="rounded-xl border border-(--border) p-4 transition-colors hover:bg-(--muted)/60"
-              >
-                <span className="text-sm font-medium">{cat.name}</span>
-                <p className="mt-1 line-clamp-2 text-xs leading-5 text-(--muted-foreground)">
-                  {cat.description}
-                </p>
-              </Link>
-            ))}
+            {categories.map((cat) => {
+              const hasComponents = components.some(
+                (c) => c.category === cat.slug && c.status === "published",
+              );
+              const card = (
+                <div
+                  className={`rounded-xl border border-(--border) p-4 transition-colors ${
+                    hasComponents ? "hover:bg-(--muted)/60" : "opacity-60"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{cat.name}</span>
+                    {!hasComponents && (
+                      <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
+                        Soon
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-(--muted-foreground)">
+                    {cat.description}
+                  </p>
+                </div>
+              );
+              return hasComponents ? (
+                <Link key={cat.slug} href={`/categories/${cat.slug}`} className="block">
+                  {card}
+                </Link>
+              ) : (
+                <div key={cat.slug}>{card}</div>
+              );
+            })}
           </div>
         </div>
       </section>

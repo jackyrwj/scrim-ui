@@ -213,6 +213,10 @@ export const patterns: PatternEntry[] = [
   },
 ];
 
+export function getCategory(slug: string) {
+  return categories.find((c) => c.slug === slug);
+}
+
 export function getComponent(slug: string) {
   return components.find((c) => c.slug === slug);
 }

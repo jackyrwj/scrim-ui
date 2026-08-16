@@ -3,6 +3,7 @@ import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
   { href: "/components", label: "Components" },
+  { href: "/categories", label: "Categories" },
   { href: "/patterns", label: "Patterns" },
   { href: "/inspiration", label: "Inspiration" },
 ];

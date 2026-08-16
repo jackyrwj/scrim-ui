@@ -22,7 +22,11 @@ export default function ComponentsPage() {
           if (items.length === 0) return null;
           return (
             <section key={cat.slug}>
-              <h2 className="text-xl font-semibold tracking-tight">{cat.name}</h2>
+              <h2 className="text-xl font-semibold tracking-tight">
+                <Link href={`/categories/${cat.slug}`} className="transition-colors hover:underline">
+                  {cat.name}
+                </Link>
+              </h2>
               <p className="mt-1 text-sm text-(--muted-foreground)">{cat.description}</p>
               <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((c) =>
