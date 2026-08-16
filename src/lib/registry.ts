@@ -250,6 +250,36 @@ export const components: ComponentEntry[] = [
     tags: ["tool", "toggle", "switch", "settings"],
     status: "published",
   },
+  {
+    name: "Voice Input",
+    slug: "voice-input",
+    category: "voice",
+    description: "A voice input control that expands into a recording panel with waveform and transcript.",
+    frameworks: ["react", "tailwind"],
+    variants: ["idle", "recording"],
+    tags: ["voice", "input", "recording", "microphone"],
+    status: "published",
+  },
+  {
+    name: "Voice Waveform",
+    slug: "voice-waveform",
+    category: "voice",
+    description: "Animated waveform bars with listening, recording and speaking states.",
+    frameworks: ["react", "tailwind"],
+    variants: ["idle", "listening", "recording", "speaking"],
+    tags: ["voice", "waveform", "audio", "indicator"],
+    status: "published",
+  },
+  {
+    name: "Voice Conversation",
+    slug: "voice-conversation",
+    category: "voice",
+    description: "A voice conversation transcript with speaking indicators and per-turn replay.",
+    frameworks: ["react", "tailwind"],
+    variants: ["transcript", "playing"],
+    tags: ["voice", "conversation", "transcript", "speaking"],
+    status: "published",
+  },
 ];
 
 export type PatternEntry = {

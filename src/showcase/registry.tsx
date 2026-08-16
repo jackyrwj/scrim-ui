@@ -17,6 +17,9 @@ import { memoryChipPageConfig } from "./memory-chip/page-config";
 import { modelSelectorPageConfig } from "./model-selector/page-config";
 import { reasoningLevelPageConfig } from "./reasoning-level/page-config";
 import { toolTogglePageConfig } from "./tool-toggle/page-config";
+import { voiceInputPageConfig } from "./voice-input/page-config";
+import { voiceWaveformPageConfig } from "./voice-waveform/page-config";
+import { voiceConversationPageConfig } from "./voice-conversation/page-config";
 
 /**
  * Map of slug -> page config for every *published* showcase component.
@@ -42,4 +45,7 @@ export const pageConfigs: Record<string, ComponentPageConfig> = {
   "model-selector": modelSelectorPageConfig,
   "reasoning-level": reasoningLevelPageConfig,
   "tool-toggle": toolTogglePageConfig,
+  "voice-input": voiceInputPageConfig,
+  "voice-waveform": voiceWaveformPageConfig,
+  "voice-conversation": voiceConversationPageConfig,
 };
