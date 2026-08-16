@@ -57,6 +57,11 @@ export default async function InspirationArticlePage({ params }: Props) {
         <p className="mt-4 max-w-2xl text-lg leading-7 text-(--muted-foreground)">
           {entry.summary}
         </p>
+        {entry.disclaimer && (
+          <p className="mt-4 max-w-2xl border-l-2 border-(--border) pl-3 text-xs leading-5 text-(--muted-foreground)">
+            {entry.disclaimer}
+          </p>
+        )}
       </header>
 
       {/* Sections */}
@@ -79,6 +84,21 @@ export default async function InspirationArticlePage({ params }: Props) {
                   </li>
                 ))}
               </ul>
+              {section.evidence && (
+                <blockquote className="mt-5 rounded-r-lg border-l-2 border-(--foreground) bg-(--card) py-3 pl-4 pr-4">
+                  <p className="text-sm leading-6 text-(--muted-foreground)">
+                    “{section.evidence.quote}”
+                  </p>
+                  <a
+                    href={section.evidence.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="mt-2 inline-block text-xs font-medium text-(--foreground) hover:underline"
+                  >
+                    Source: {section.evidence.sourceLabel} ↗
+                  </a>
+                </blockquote>
+              )}
               {demoConfig && (
                 <div className="mt-6">
                   <PreviewFrame title={`Pattern in action — ${entry.product}`}>
@@ -105,6 +125,64 @@ export default async function InspirationArticlePage({ params }: Props) {
           ))}
         </ul>
       </section>
+
+      {/* Source material — screenshots of the cited official pages */}
+      {entry.screenshots && entry.screenshots.length > 0 && (
+        <section className="mt-14">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-(--muted-foreground)">
+            Source material
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-(--muted-foreground)">
+            Screenshots of the official pages cited above, captured {entry.screenshots[0].accessed}.
+          </p>
+          <div className="mt-4 space-y-6">
+            {entry.screenshots.map((shot) => (
+              <figure key={shot.src} className="overflow-hidden rounded-xl border border-(--border)">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={shot.src} alt={shot.alt} className="w-full" />
+                <figcaption className="border-t border-(--border) bg-(--card) px-4 py-3 text-xs leading-5 text-(--muted-foreground)">
+                  {shot.caption} — from{" "}
+                  <a
+                    href={shot.source}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="font-medium text-(--foreground) hover:underline"
+                  >
+                    {shot.sourceLabel} ↗
+                  </a>
+                  , captured {shot.accessed}.
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Sources */}
+      {entry.sources && entry.sources.length > 0 && (
+        <section className="mt-14">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-(--muted-foreground)">
+            Sources
+          </h2>
+          <ol className="mt-4 space-y-2">
+            {entry.sources.map((s, i) => (
+              <li key={s.url} className="text-sm leading-6">
+                <span className="text-(--muted-foreground)">
+                  {String(i + 1).padStart(2, "0")}.{" "}
+                </span>
+                <a
+                  href={s.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="text-(--foreground) hover:underline"
+                >
+                  {s.label} ↗
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
 
       {/* Component loop */}
       {linkedComponents.length > 0 && (

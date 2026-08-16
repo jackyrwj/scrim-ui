@@ -6,7 +6,7 @@ import { BrandIcon } from "@/components/brands/brand-icon";
 export const metadata: Metadata = {
   title: "Inspiration — AI UI Pattern Breakdowns",
   description:
-    "Element-by-element UI breakdowns of ChatGPT, Claude, Perplexity, Cursor and more — what each pattern does, why it works, and how to build it.",
+    "Element-by-element UI breakdowns of ChatGPT, Claude, Perplexity, Cursor and more — each claim grounded in the product's official docs, with live demos you can copy.",
 };
 
 export default function InspirationPage() {
@@ -15,7 +15,8 @@ export default function InspirationPage() {
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Inspiration</h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
         UI pattern breakdowns of the products defining AI interfaces. Each article analyses
-        the interactions element by element — with a live demo of the pattern you can copy.
+        the interactions element by element, grounds every claim in the product&rsquo;s official
+        docs, and pairs the pattern with a live demo you can copy.
       </p>
 
       <div className="mt-10 grid gap-3 sm:grid-cols-2">

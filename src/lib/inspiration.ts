@@ -1,12 +1,39 @@
 /**
  * Inspiration data — UI pattern breakdowns of products defining AI interfaces.
  *
- * Each article follows a fixed structure: a one-line thesis, element-by-element
- * analysis, design takeaways, and a closed loop back to our components. Rather
- * than embedding third-party screenshots, each section can embed a *live demo*
- * of the matching component from our own library (via `elementSlug`), so the
- * analysis is always verifiable in the browser and always links to copyable code.
+ * Each article is an *evidence-driven* breakdown: element-by-element analysis,
+ * design takeaways, and a closed loop back to our components. The analysis is
+ * grounded in the product's public documentation — sections can carry a verbatim
+ * quote from an official source (`evidence`), the article can include screenshots
+ * of the cited official pages (`screenshots`) and a full list of sources
+ * consulted (`sources`). Each section can also embed a *live demo* of the
+ * matching component from our own library (via `elementSlug`), so the pattern is
+ * always verifiable in the browser and always links to copyable code.
  */
+
+export type InspirationEvidence = {
+  /** Verbatim quote from the primary source. */
+  quote: string;
+  /** Short human label of the source, e.g. "OpenAI Help Center". */
+  sourceLabel: string;
+  /** Canonical URL of the source. */
+  url: string;
+};
+
+export type InspirationScreenshot = {
+  /** Public path to the image, e.g. /inspiration/chatgpt-citations-help.png */
+  src: string;
+  /** Accessible alt text. */
+  alt: string;
+  /** What the reader should notice in the shot. */
+  caption: string;
+  /** URL the screenshot was captured from. */
+  source: string;
+  /** Short label of the source page. */
+  sourceLabel: string;
+  /** ISO date the screenshot was captured. */
+  accessed: string;
+};
 
 export type InspirationSection = {
   heading: string;
@@ -15,6 +42,8 @@ export type InspirationSection = {
   /** Optional slug of a component in `src/showcase/registry.tsx` whose live
    *  demo illustrates the pattern being discussed. */
   elementSlug?: string;
+  /** Verbatim quote from an official source that grounds this section. */
+  evidence?: InspirationEvidence;
 };
 
 export type InspirationEntry = {
@@ -26,6 +55,12 @@ export type InspirationEntry = {
   takeaways: string[];
   /** Component slugs to surface in the "Build it with our components" block. */
   componentSlugs: string[];
+  /** Screenshots of the official pages cited in the article. */
+  screenshots?: InspirationScreenshot[];
+  /** Every source consulted, in order. */
+  sources?: { label: string; url: string }[];
+  /** Transparency note about the article's method. */
+  disclaimer?: string;
 };
 
 export const inspirationEntries: InspirationEntry[] = [
@@ -35,15 +70,23 @@ export const inspirationEntries: InspirationEntry[] = [
     title: "The streaming-first chat interface",
     summary:
       "OpenAI's ChatGPT defined the AI chat surface — streaming reveals, a composer that never leaves view, and citations that appear only once grounded.",
+    disclaimer:
+      "An independent reading of ChatGPT's interface, grounded in OpenAI's public documentation. Quotes are verbatim from the linked official pages; screenshots show the cited pages and were captured on 2026-08-16. The product UI may differ from what is shown.",
     sections: [
       {
         heading: "Streaming reveal",
         elementSlug: "streaming-message",
         points: [
-          "The first token lands in about a second, then text streams into place with a blinking caret — momentum without a spinner.",
+          "The first token lands fast, then text streams into place with a blinking caret — momentum without a spinner.",
           "Send becomes Stop the moment generation starts: one control, two states, no second location to learn.",
           "While streaming, nothing else on the screen moves. The composer stays put and the message grows in place.",
         ],
+        evidence: {
+          quote:
+            "we received the first token after 0.1 seconds, and subsequent tokens every ~0.01-0.02 seconds.",
+          sourceLabel: "OpenAI Cookbook — How to stream completions",
+          url: "https://developers.openai.com/cookbook/examples/how_to_stream_completions",
+        },
       },
       {
         heading: "Composer-first layout",
@@ -51,17 +94,29 @@ export const inspirationEntries: InspirationEntry[] = [
         points: [
           "The composer is always visible — never below the fold, never requiring a scroll to reach.",
           "Enter sends, Shift+Enter is a newline, slash opens commands. The keyboard is the primary path.",
-          "Attachments, voice and tool toggles live beside the input, not behind a menu.",
+          "Web search, voice and attachments live beside the input, not behind a menu.",
         ],
+        evidence: {
+          quote:
+            "You can also click the web-search icon or use the “/Search” shortcut in supported experiences.",
+          sourceLabel: "OpenAI Help Center — What is ChatGPT?",
+          url: "https://help.openai.com/en/articles/12677804-what-is-chatgpt-faq",
+        },
       },
       {
         heading: "Grounded citations",
         elementSlug: "citation-ui",
         points: [
           "Superscript numbers appear only after the answer is grounded — never while streaming.",
-          "The number is small; the hover card that opens is the payoff: title, domain, snippet.",
-          "Numbers attach to sentences, so a reader can verify a single claim without scanning the whole page.",
+          "A small number sits at the end of a sentence; selecting it opens the source, hovering over it (desktop) previews it.",
+          "A Sources list at the end of the response exposes everything the model consulted — which is often more than the inline citations show.",
         ],
+        evidence: {
+          quote:
+            "ChatGPT responses that use search can include inline citations. Users can select a citation to view the source.",
+          sourceLabel: "OpenAI Help Center — ChatGPT search for Enterprise and Edu",
+          url: "https://help.openai.com/en/articles/10093903-chatgpt-search-for-enterprise-and-edu",
+        },
       },
       {
         heading: "Model choice at the point of use",
@@ -86,6 +141,44 @@ export const inspirationEntries: InspirationEntry[] = [
       "Let users switch models and regenerate without losing their draft or the thread.",
     ],
     componentSlugs: ["prompt-input", "streaming-message", "citation-ui", "prompt-input-model-selector"],
+    screenshots: [
+      {
+        src: "/inspiration/chatgpt-citations-help.png",
+        alt: "OpenAI Help Center article describing how ChatGPT search renders inline citations and a Sources list",
+        caption:
+          "OpenAI's help center explains how search responses show inline citations, hover previews on desktop, and a Sources list.",
+        source: "https://help.openai.com/en/articles/10093903-chatgpt-search-for-enterprise-and-edu",
+        sourceLabel: "OpenAI Help Center",
+        accessed: "2026-08-16",
+      },
+      {
+        src: "/inspiration/chatgpt-web-search-docs.png",
+        alt: "OpenAI API documentation for the web search tool, covering inline citations and the sources field",
+        caption:
+          "The API docs describe the same citations the product shows: inline url_citation annotations and a complete sources field.",
+        source: "https://developers.openai.com/api/docs/guides/tools-web-search",
+        sourceLabel: "OpenAI API docs",
+        accessed: "2026-08-16",
+      },
+    ],
+    sources: [
+      {
+        label: "OpenAI Help Center — What is ChatGPT? (FAQ)",
+        url: "https://help.openai.com/en/articles/12677804-what-is-chatgpt-faq",
+      },
+      {
+        label: "OpenAI Help Center — ChatGPT search for Enterprise and Edu",
+        url: "https://help.openai.com/en/articles/10093903-chatgpt-search-for-enterprise-and-edu",
+      },
+      {
+        label: "OpenAI API docs — Tools: web search",
+        url: "https://developers.openai.com/api/docs/guides/tools-web-search",
+      },
+      {
+        label: "OpenAI Cookbook — How to stream completions",
+        url: "https://developers.openai.com/cookbook/examples/how_to_stream_completions",
+      },
+    ],
   },
   {
     slug: "claude",

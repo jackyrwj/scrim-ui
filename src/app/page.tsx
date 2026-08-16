@@ -272,8 +272,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
           <p className="mt-2 text-(--muted-foreground)">
-            UI pattern breakdowns of the products defining AI interfaces — each with a live demo
-            of the pattern you can copy.
+            UI pattern breakdowns of the products defining AI interfaces — grounded in the
+            official docs, with a live demo of each pattern you can copy.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             {inspirationEntries.map((entry) => (
