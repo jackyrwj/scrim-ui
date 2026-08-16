@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import type { ResourceCategory, ResourceEntry } from "@/lib/resources";
+import { BrandIcon } from "@/components/brands/brand-icon";
 
 function Badge({ tone, children }: { tone: "green" | "violet" | "neutral"; children: React.ReactNode }) {
   const toneCls = {
@@ -22,7 +23,8 @@ function ResourceCard({ entry }: { entry: ResourceEntry }) {
   return (
     <article className="flex flex-col rounded-xl border border-(--border) p-5 transition-colors hover:border-(--muted-foreground)/50">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="font-medium leading-snug">
+        <h3 className="flex items-center gap-2.5 font-medium leading-snug">
+          <BrandIcon name={entry.name} />
           <a
             href={entry.url}
             target="_blank"

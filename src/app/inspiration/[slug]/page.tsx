@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getInspirationEntry, inspirationEntries } from "@/lib/inspiration";
 import { components } from "@/lib/registry";
 import { pageConfigs } from "@/showcase/registry";
+import { BrandIcon } from "@/components/brands/brand-icon";
 import { PreviewFrame } from "@/components/component-page/preview-frame";
 
 type Props = {
@@ -47,8 +48,11 @@ export default async function InspirationArticlePage({ params }: Props) {
       </nav>
 
       <header className="mt-6">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          {entry.product}: {entry.title}
+        <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          <BrandIcon name={entry.product} size={32} />
+          <span>
+            {entry.product}: {entry.title}
+          </span>
         </h1>
         <p className="mt-4 max-w-2xl text-lg leading-7 text-(--muted-foreground)">
           {entry.summary}

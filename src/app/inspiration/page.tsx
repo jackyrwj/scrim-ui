@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { inspirationEntries } from "@/lib/inspiration";
+import { BrandIcon } from "@/components/brands/brand-icon";
 
 export const metadata: Metadata = {
   title: "Inspiration — AI UI Pattern Breakdowns",
@@ -25,7 +26,10 @@ export default function InspirationPage() {
             className="group flex flex-col rounded-xl border border-(--border) bg-(--card) p-6 transition-colors hover:bg-(--muted)/60"
           >
             <div className="flex items-center justify-between">
-              <span className="font-medium group-hover:underline">{entry.product}</span>
+              <span className="flex items-center gap-2.5 font-medium group-hover:underline">
+                <BrandIcon name={entry.product} />
+                {entry.product}
+              </span>
               <span className="text-xs text-(--muted-foreground)">
                 {entry.componentSlugs.length} components
               </span>

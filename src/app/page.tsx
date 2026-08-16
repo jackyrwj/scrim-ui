@@ -2,6 +2,7 @@ import Link from "next/link";
 import { categories, components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
+import { BrandIcon } from "@/components/brands/brand-icon";
 import { DemoDefault } from "@/showcase/prompt-input/demos";
 
 export default function Home() {
@@ -249,7 +250,10 @@ export default function Home() {
                 className="group rounded-xl border border-(--border) p-5 transition-colors hover:bg-(--muted)/60"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-medium group-hover:underline">{r.name}</span>
+                  <span className="flex items-center gap-2.5 font-medium group-hover:underline">
+                    <BrandIcon name={r.name} />
+                    {r.name}
+                  </span>
                   <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
                     {r.free ? "Free" : "Paid"}
                   </span>
@@ -278,6 +282,7 @@ export default function Home() {
                 href={`/inspiration/${entry.slug}`}
                 className="inline-flex items-center gap-2 rounded-full border border-(--border) px-4 py-2 text-sm transition-colors hover:bg-(--muted)/60"
               >
+                <BrandIcon name={entry.product} size={16} />
                 {entry.product}
                 <span aria-hidden>→</span>
               </Link>
