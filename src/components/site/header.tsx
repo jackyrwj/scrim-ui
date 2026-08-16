@@ -2,9 +2,10 @@ import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 
 const navItems = [
+  { href: "/tools", label: "Tools" },
   { href: "/components", label: "Components" },
-  { href: "/categories", label: "Categories" },
   { href: "/patterns", label: "Patterns" },
+  { href: "/resources", label: "Resources" },
   { href: "/inspiration", label: "Inspiration" },
 ];
 
