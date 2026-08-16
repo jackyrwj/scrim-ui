@@ -11,6 +11,8 @@ export type ComponentPageConfig = {
   sourceFile: string;
   heroDemo: ReactNode;
   variants: ComponentVariant[];
+  /** Optional parameterized playground — a live demo driven by a prop panel. */
+  playground?: ReactNode;
   usage: string[];
   mistakes: string[];
 };

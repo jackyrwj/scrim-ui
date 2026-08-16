@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { categories, components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
+import { inspirationEntries } from "@/lib/inspiration";
 import { DemoDefault } from "@/showcase/prompt-input/demos";
-
-const inspiration = ["ChatGPT", "Claude", "Perplexity", "Cursor"];
 
 export default function Home() {
   const published = components.filter((c) => c.status === "published");
@@ -269,17 +268,19 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
           <p className="mt-2 text-(--muted-foreground)">
-            UI pattern breakdowns of the products defining AI interfaces.
+            UI pattern breakdowns of the products defining AI interfaces — each with a live demo
+            of the pattern you can copy.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            {inspiration.map((name) => (
-              <span
-                key={name}
-                className="inline-flex items-center gap-2 rounded-full border border-(--border) px-4 py-2 text-sm"
+            {inspirationEntries.map((entry) => (
+              <Link
+                key={entry.slug}
+                href={`/inspiration/${entry.slug}`}
+                className="inline-flex items-center gap-2 rounded-full border border-(--border) px-4 py-2 text-sm transition-colors hover:bg-(--muted)/60"
               >
-                {name}
-                <span className="text-xs text-(--muted-foreground)">soon</span>
-              </span>
+                {entry.product}
+                <span aria-hidden>→</span>
+              </Link>
             ))}
           </div>
         </div>

@@ -1,9 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
 import { DemoRunning, DemoSuccess, DemoError, DemoStack } from "./demos";
+import { ToolCallPlayground } from "./playground";
 
 export const toolCallPageConfig: ComponentPageConfig = {
   sourceFile: "tool-call.tsx",
   heroDemo: <DemoRunning />,
+  playground: <ToolCallPlayground />,
   variants: [
     {
       id: "running",

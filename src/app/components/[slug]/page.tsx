@@ -84,6 +84,17 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         </div>
       </section>
 
+      {/* Playground */}
+      {config.playground && (
+        <section className="mt-14">
+          <h2 className="text-xl font-semibold tracking-tight">Playground</h2>
+          <p className="mb-5 mt-1 text-sm text-(--muted-foreground)">
+            Tweak the props and watch the component update live.
+          </p>
+          {config.playground}
+        </section>
+      )}
+
       {/* Code */}
       <section className="mt-14">
         <div className="mb-3 flex items-center justify-between">

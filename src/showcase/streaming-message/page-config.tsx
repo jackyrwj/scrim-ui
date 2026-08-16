@@ -1,9 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
 import { DemoStreaming, DemoComplete, DemoStopped, DemoUserTurn } from "./demos";
+import { StreamingMessagePlayground } from "./playground";
 
 export const streamingMessagePageConfig: ComponentPageConfig = {
   sourceFile: "streaming-message.tsx",
   heroDemo: <DemoStreaming />,
+  playground: <StreamingMessagePlayground />,
   variants: [
     {
       id: "streaming",

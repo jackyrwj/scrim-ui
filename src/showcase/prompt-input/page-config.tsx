@@ -7,10 +7,12 @@ import {
   DemoError,
   DemoDisabled,
 } from "./demos";
+import { PromptInputPlayground } from "./playground";
 
 export const promptInputPageConfig: ComponentPageConfig = {
   sourceFile: "prompt-input.tsx",
   heroDemo: <DemoDefault />,
+  playground: <PromptInputPlayground />,
   variants: [
     {
       id: "default",
