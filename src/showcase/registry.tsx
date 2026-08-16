@@ -11,6 +11,12 @@ import { fileUploadPageConfig } from "./file-upload/page-config";
 import { searchToolCallPageConfig } from "./search-tool-call/page-config";
 import { promptInputAttachmentsPageConfig } from "./prompt-input-attachments/page-config";
 import { promptInputModelSelectorPageConfig } from "./prompt-input-model-selector/page-config";
+import { memoryListPageConfig } from "./memory-list/page-config";
+import { memorySuggestionPageConfig } from "./memory-suggestion/page-config";
+import { memoryChipPageConfig } from "./memory-chip/page-config";
+import { modelSelectorPageConfig } from "./model-selector/page-config";
+import { reasoningLevelPageConfig } from "./reasoning-level/page-config";
+import { toolTogglePageConfig } from "./tool-toggle/page-config";
 
 /**
  * Map of slug -> page config for every *published* showcase component.
@@ -30,4 +36,10 @@ export const pageConfigs: Record<string, ComponentPageConfig> = {
   "search-tool-call": searchToolCallPageConfig,
   "prompt-input-attachments": promptInputAttachmentsPageConfig,
   "prompt-input-model-selector": promptInputModelSelectorPageConfig,
+  "memory-list": memoryListPageConfig,
+  "memory-suggestion": memorySuggestionPageConfig,
+  "memory-chip": memoryChipPageConfig,
+  "model-selector": modelSelectorPageConfig,
+  "reasoning-level": reasoningLevelPageConfig,
+  "tool-toggle": toolTogglePageConfig,
 };
