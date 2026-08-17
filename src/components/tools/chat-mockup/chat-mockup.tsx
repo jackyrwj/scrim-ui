@@ -3,6 +3,7 @@
 import * as React from "react";
 import { toPng } from "html-to-image";
 import { MockupPreview } from "./mockup-preview";
+import { Field, Section, Chip, inputCls, selectCls } from "../tool-ui";
 import {
   defaultConfig,
   createMessage,
@@ -11,59 +12,6 @@ import {
   type MockupMessage,
   type MockupRole,
 } from "./types";
-
-/* ------------------------------------------------------------------ */
-/* Reusable bits                                                       */
-/* ------------------------------------------------------------------ */
-
-const inputCls =
-  "w-full rounded-lg border border-(--border) bg-(--background) px-3 py-2 text-sm outline-none transition-colors focus:border-(--foreground)";
-const selectCls = `${inputCls} appearance-none`;
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-xs font-medium text-(--muted-foreground)">{label}</span>
-      {children}
-    </label>
-  );
-}
-
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="rounded-xl border border-(--border) bg-(--card) p-4">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-(--muted-foreground)">
-        {title}
-      </h2>
-      <div className="mt-3">{children}</div>
-    </section>
-  );
-}
-
-function Chip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`inline-flex items-center rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${
-        active
-          ? "bg-(--foreground) text-(--background)"
-          : "border border-(--border) text-(--muted-foreground) hover:text-(--foreground)"
-      }`}
-    >
-      {children}
-    </button>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /* Message editor                                                      */

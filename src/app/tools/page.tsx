@@ -27,14 +27,14 @@ const tools: Tool[] = [
     name: "AI Interface Prompt Generator",
     description:
       "Describe your product and get a copy-ready prompt for generating the interface in v0, Claude or Cursor.",
-    status: "planned",
+    status: "published",
   },
   {
     slug: "playground",
     name: "Component Playground",
     description:
-      "Tune component parameters live — streaming speed, reasoning steps, tool call states — right on each component page.",
-    status: "planned",
+      "Try the prompt input, streaming message and tool call components in one place — tune their states live and jump to the full component page.",
+    status: "published",
   },
 ];
 

@@ -1,11 +1,21 @@
 "use client";
 
 import * as React from "react";
+import { trackEvent } from "@/lib/analytics";
 
-export function CopyButton({ code, label = "Copy" }: { code: string; label?: string }) {
+export function CopyButton({
+  code,
+  label = "Copy",
+  disabled = false,
+}: {
+  code: string;
+  label?: string;
+  disabled?: boolean;
+}) {
   const [copied, setCopied] = React.useState(false);
 
   async function copy() {
+    if (disabled) return;
     try {
       await navigator.clipboard.writeText(code);
     } catch {
@@ -17,13 +27,15 @@ export function CopyButton({ code, label = "Copy" }: { code: string; label?: str
       document.body.removeChild(ta);
     }
     setCopied(true);
+    trackEvent("copy_code", { label });
     setTimeout(() => setCopied(false), 2000);
   }
 
   return (
     <button
       onClick={copy}
-      className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-(--border) bg-(--background) px-3 text-xs font-medium text-(--foreground) transition-colors hover:bg-(--muted)"
+      disabled={disabled}
+      className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-(--border) bg-(--background) px-3 text-xs font-medium text-(--foreground) transition-colors hover:bg-(--muted) disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-(--background)"
     >
       {copied ? (
         <>

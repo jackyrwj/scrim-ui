@@ -3,17 +3,27 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/header";
 import { SiteFooter } from "@/components/site/footer";
+import { GoogleAnalytics } from "@/components/site/google-analytics";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ai-ui-resources.vercel.app"),
   title: {
     default: "AI UI Resources — UI patterns and components for AI products",
     template: "%s — AI UI Resources",
   },
   description:
     "Beautiful, copy-ready UI patterns and components for AI products. Prompt inputs, streaming messages, tool calls, citations, agent states, reasoning and more.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "AI UI Resources",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 const themeScript = `
@@ -35,6 +45,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <GoogleAnalytics />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
         <SiteHeader />

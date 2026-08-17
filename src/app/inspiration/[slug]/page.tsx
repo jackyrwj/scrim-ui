@@ -22,7 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = getInspirationEntry(slug);
   if (!entry) return { title: "Inspiration" };
   return {
-    title: `${entry.product} UI patterns — Inspiration | AI UI Resources`,
+    title: entry.product
+      ? `${entry.product} UI patterns — Inspiration | AI UI Resources`
+      : `${entry.title} — Guide | AI UI Resources`,
     description: entry.summary,
   };
 }
@@ -44,15 +46,26 @@ export default async function InspirationArticlePage({ params }: Props) {
           Inspiration
         </Link>
         <span aria-hidden>/</span>
-        <span>{entry.product}</span>
+        <span>{entry.product ?? "Guide"}</span>
       </nav>
 
       <header className="mt-6">
-        <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
-          <BrandIcon name={entry.product} size={32} />
-          <span>
-            {entry.product}: {entry.title}
+        {entry.kind === "guide" && (
+          <span className="inline-flex rounded-full border border-(--border) px-2 py-0.5 text-[11px] font-medium text-(--muted-foreground)">
+            Decision guide
           </span>
+        )}
+        <h1 className="mt-1 flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+          {entry.product ? (
+            <>
+              <BrandIcon name={entry.product} size={32} />
+              <span>
+                {entry.product}: {entry.title}
+              </span>
+            </>
+          ) : (
+            <span>{entry.title}</span>
+          )}
         </h1>
         <p className="mt-4 max-w-2xl text-lg leading-7 text-(--muted-foreground)">
           {entry.summary}
@@ -101,7 +114,13 @@ export default async function InspirationArticlePage({ params }: Props) {
               )}
               {demoConfig && (
                 <div className="mt-6">
-                  <PreviewFrame title={`Pattern in action — ${entry.product}`}>
+                  <PreviewFrame
+                    title={
+                      entry.product
+                        ? `Pattern in action — ${entry.product}`
+                        : "Pattern in action"
+                    }
+                  >
                     {demoConfig.heroDemo}
                   </PreviewFrame>
                 </div>
@@ -181,7 +200,7 @@ export default async function InspirationArticlePage({ params }: Props) {
           href="/inspiration"
           className="text-(--muted-foreground) transition-colors hover:text-(--foreground)"
         >
-          ← All breakdowns
+          ← All inspiration
         </Link>
         <Link
           href="/components"

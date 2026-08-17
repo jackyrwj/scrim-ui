@@ -11,12 +11,14 @@ export default function Home() {
     ["Vercel AI SDK", "assistant-ui", "v0"].includes(r.name),
   );
   const popular = published.filter((c) =>
-    ["prompt-input", "streaming-message", "tool-call", "agent-status", "reasoning", "source-card"].includes(c.slug),
+    ["prompt-input", "streaming-message", "user-message", "markdown-message", "tool-call", "code-execution"].includes(c.slug),
   );
   const recentlyAdded = [...published]
     .reverse()
     .slice(0, 6)
     .filter((c) => !popular.some((p) => p.slug === c.slug));
+  const caseStudies = inspirationEntries.filter((e) => e.kind === "case-study");
+  const guides = inspirationEntries.filter((e) => e.kind === "guide");
 
   return (
     <div>
@@ -270,24 +272,57 @@ export default function Home() {
       {/* Inspiration */}
       <section>
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
-          <p className="mt-2 text-(--muted-foreground)">
-            UI pattern breakdowns of the products defining AI interfaces — grounded in the
-            official docs, with a live demo of each pattern you can copy.
-          </p>
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
+              <p className="mt-2 text-(--muted-foreground)">
+                Product breakdowns and decision guides for AI interfaces — grounded in
+                official docs, with a live demo of each pattern you can copy.
+              </p>
+            </div>
+            <Link
+              href="/inspiration"
+              className="text-sm text-(--muted-foreground) hover:text-(--foreground)"
+            >
+              View all →
+            </Link>
+          </div>
+
           <div className="mt-8 flex flex-wrap gap-3">
-            {inspirationEntries.map((entry) => (
+            {caseStudies.map((entry) => (
               <Link
                 key={entry.slug}
                 href={`/inspiration/${entry.slug}`}
                 className="inline-flex items-center gap-2 rounded-full border border-(--border) px-4 py-2 text-sm transition-colors hover:bg-(--muted)/60"
               >
-                <BrandIcon name={entry.product} size={16} />
+                <BrandIcon name={entry.product ?? ""} size={16} />
                 {entry.product}
                 <span aria-hidden>→</span>
               </Link>
             ))}
           </div>
+
+          {guides.length > 0 && (
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {guides.map((entry) => (
+                <Link
+                  key={entry.slug}
+                  href={`/inspiration/${entry.slug}`}
+                  className="group rounded-xl border border-(--border) p-5 transition-colors hover:bg-(--muted)/60"
+                >
+                  <span className="inline-flex rounded-full border border-(--border) px-2 py-0.5 text-[11px] font-medium text-(--muted-foreground)">
+                    Guide
+                  </span>
+                  <span className="mt-2 block font-medium group-hover:underline">
+                    {entry.title}
+                  </span>
+                  <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">
+                    {entry.summary}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </div>

@@ -1,6 +1,14 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
 import { promptInputPageConfig } from "./prompt-input/page-config";
 import { streamingMessagePageConfig } from "./streaming-message/page-config";
+import { userMessagePageConfig } from "./user-message/page-config";
+import { messageActionsPageConfig } from "./message-actions/page-config";
+import { errorMessagePageConfig } from "./error-message/page-config";
+import { markdownMessagePageConfig } from "./markdown-message/page-config";
+import { thinkingIndicatorPageConfig } from "./thinking-indicator/page-config";
+import { reasoningStepsPageConfig } from "./reasoning-steps/page-config";
+import { contextFilesPageConfig } from "./context-files/page-config";
+import { codeExecutionPageConfig } from "./code-execution/page-config";
 import { toolCallPageConfig } from "./tool-call/page-config";
 import { reasoningPageConfig } from "./reasoning/page-config";
 import { sourceCardPageConfig } from "./source-card/page-config";
@@ -29,6 +37,14 @@ import { voiceConversationPageConfig } from "./voice-conversation/page-config";
 export const pageConfigs: Record<string, ComponentPageConfig> = {
   "prompt-input": promptInputPageConfig,
   "streaming-message": streamingMessagePageConfig,
+  "user-message": userMessagePageConfig,
+  "message-actions": messageActionsPageConfig,
+  "error-message": errorMessagePageConfig,
+  "markdown-message": markdownMessagePageConfig,
+  "thinking-indicator": thinkingIndicatorPageConfig,
+  "reasoning-steps": reasoningStepsPageConfig,
+  "context-files": contextFilesPageConfig,
+  "code-execution": codeExecutionPageConfig,
   "tool-call": toolCallPageConfig,
   reasoning: reasoningPageConfig,
   "source-card": sourceCardPageConfig,
