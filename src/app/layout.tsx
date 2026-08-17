@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   },
   description:
     "Beautiful, copy-ready UI patterns and components for AI products. Prompt inputs, streaming messages, tool calls, citations, agent states, reasoning and more.",
+  verification: {
+    google: "q9XeVxN3vnRIl6aeqoyMgat1_ehAk9hSGrAw0X5li2w",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
