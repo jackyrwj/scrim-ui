@@ -126,38 +126,6 @@ export default async function InspirationArticlePage({ params }: Props) {
         </ul>
       </section>
 
-      {/* Source material — screenshots of the cited official pages */}
-      {entry.screenshots && entry.screenshots.length > 0 && (
-        <section className="mt-14">
-          <h2 className="text-xs font-semibold uppercase tracking-wide text-(--muted-foreground)">
-            Source material
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-(--muted-foreground)">
-            Screenshots of the official pages cited above, captured {entry.screenshots[0].accessed}.
-          </p>
-          <div className="mt-4 space-y-6">
-            {entry.screenshots.map((shot) => (
-              <figure key={shot.src} className="overflow-hidden rounded-xl border border-(--border)">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={shot.src} alt={shot.alt} className="w-full" />
-                <figcaption className="border-t border-(--border) bg-(--card) px-4 py-3 text-xs leading-5 text-(--muted-foreground)">
-                  {shot.caption} — from{" "}
-                  <a
-                    href={shot.source}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="font-medium text-(--foreground) hover:underline"
-                  >
-                    {shot.sourceLabel} ↗
-                  </a>
-                  , captured {shot.accessed}.
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-      )}
-
       {/* Sources */}
       {entry.sources && entry.sources.length > 0 && (
         <section className="mt-14">

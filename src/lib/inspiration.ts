@@ -4,9 +4,9 @@
  * Each article is an *evidence-driven* breakdown: element-by-element analysis,
  * design takeaways, and a closed loop back to our components. The analysis is
  * grounded in the product's public documentation — sections can carry a verbatim
- * quote from an official source (`evidence`), the article can include screenshots
- * of the cited official pages (`screenshots`) and a full list of sources
- * consulted (`sources`). Each section can also embed a *live demo* of the
+ * quote from an official source (`evidence`), the article can include a full
+ * list of sources consulted (`sources`). Each section can also embed a *live
+ * demo* of the
  * matching component from our own library (via `elementSlug`), so the pattern is
  * always verifiable in the browser and always links to copyable code.
  */
@@ -18,21 +18,6 @@ export type InspirationEvidence = {
   sourceLabel: string;
   /** Canonical URL of the source. */
   url: string;
-};
-
-export type InspirationScreenshot = {
-  /** Public path to the image, e.g. /inspiration/chatgpt-citations-help.png */
-  src: string;
-  /** Accessible alt text. */
-  alt: string;
-  /** What the reader should notice in the shot. */
-  caption: string;
-  /** URL the screenshot was captured from. */
-  source: string;
-  /** Short label of the source page. */
-  sourceLabel: string;
-  /** ISO date the screenshot was captured. */
-  accessed: string;
 };
 
 export type InspirationSection = {
@@ -55,8 +40,6 @@ export type InspirationEntry = {
   takeaways: string[];
   /** Component slugs to surface in the "Build it with our components" block. */
   componentSlugs: string[];
-  /** Screenshots of the official pages cited in the article. */
-  screenshots?: InspirationScreenshot[];
   /** Every source consulted, in order. */
   sources?: { label: string; url: string }[];
   /** Transparency note about the article's method. */
@@ -71,7 +54,7 @@ export const inspirationEntries: InspirationEntry[] = [
     summary:
       "OpenAI's ChatGPT defined the AI chat surface — streaming reveals, a composer that never leaves view, and citations that appear only once grounded.",
     disclaimer:
-      "An independent reading of ChatGPT's interface, grounded in OpenAI's public documentation. Quotes are verbatim from the linked official pages; screenshots show the cited pages and were captured on 2026-08-16. The product UI may differ from what is shown.",
+      "An independent reading of ChatGPT's interface, grounded in OpenAI's public documentation. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
     sections: [
       {
         heading: "Streaming reveal",
@@ -141,26 +124,6 @@ export const inspirationEntries: InspirationEntry[] = [
       "Let users switch models and regenerate without losing their draft or the thread.",
     ],
     componentSlugs: ["prompt-input", "streaming-message", "citation-ui", "prompt-input-model-selector"],
-    screenshots: [
-      {
-        src: "/inspiration/chatgpt-citations-help.png",
-        alt: "OpenAI Help Center article describing how ChatGPT search renders inline citations and a Sources list",
-        caption:
-          "OpenAI's help center explains how search responses show inline citations, hover previews on desktop, and a Sources list.",
-        source: "https://help.openai.com/en/articles/10093903-chatgpt-search-for-enterprise-and-edu",
-        sourceLabel: "OpenAI Help Center",
-        accessed: "2026-08-16",
-      },
-      {
-        src: "/inspiration/chatgpt-web-search-docs.png",
-        alt: "OpenAI API documentation for the web search tool, covering inline citations and the sources field",
-        caption:
-          "The API docs describe the same citations the product shows: inline url_citation annotations and a complete sources field.",
-        source: "https://developers.openai.com/api/docs/guides/tools-web-search",
-        sourceLabel: "OpenAI API docs",
-        accessed: "2026-08-16",
-      },
-    ],
     sources: [
       {
         label: "OpenAI Help Center — What is ChatGPT? (FAQ)",
@@ -186,6 +149,8 @@ export const inspirationEntries: InspirationEntry[] = [
     title: "Reasoning traces, artifacts and a calmer visual language",
     summary:
       "Anthropic's Claude mainstreamed the thinking trace, artifacts that turn replies into canvases, and a warm low-contrast palette built for trust.",
+    disclaimer:
+      "An independent reading of Claude's interface, grounded in Anthropic's public documentation. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
     sections: [
       {
         heading: "Visible reasoning",
@@ -195,6 +160,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Expanding reveals step-by-step reasoning; the elapsed timer reads as progress, not impatience.",
           "Reasoning completes with a small check, not a fanfare — the outcome, not the process, stays central.",
         ],
+        evidence: {
+          quote:
+            "Click the \"Thinking\" section to view Claude's thought process summary and problem-solving approach. Reviewing it can be valuable for verifying how Claude arrived at its conclusion.",
+          sourceLabel: "Claude Help Center — Change the model, effort, and thinking settings",
+          url: "https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings",
+        },
       },
       {
         heading: "Artifacts over replies",
@@ -203,6 +174,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "The artifact becomes the interface; the chat stays the place to iterate on intent.",
           "Every edit re-rolls only the artifact — the conversation is the plan, the artifact is the product.",
         ],
+        evidence: {
+          quote:
+            "When Claude creates an artifact, you'll see the content displayed in a dedicated window to the right of the main chat.",
+          sourceLabel: "Claude Help Center — What are artifacts and how do I use them?",
+          url: "https://support.claude.com/en/articles/9487310-what-are-artifacts-and-how-do-i-use-them",
+        },
       },
       {
         heading: "Restrained color",
@@ -218,6 +195,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Tool use renders as a compact status line — tool name, outcome, elapsed time.",
           "Inputs and outputs hide behind an expand/collapse; the result reads at a glance.",
         ],
+        evidence: {
+          quote:
+            "Shows detailed tool usage and execution, with a timestamp and the model used on each assistant message. Also expands MCP calls, which collapse to a single line like “Called slack 3 times” by default",
+          sourceLabel: "Claude Code docs — Interactive mode (transcript viewer)",
+          url: "https://code.claude.com/docs/en/interactive-mode",
+        },
       },
       {
         heading: "Draft-first composition",
@@ -226,6 +209,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Prompt editing stays inline with rich text; the draft is first-class, not a throwaway box.",
           "The composer communicates the product's personality before any answer does.",
         ],
+        evidence: {
+          quote:
+            "For Markdown documents, you can edit in place: highlight the text you want changed, click \"Edit with Claude,\" and type your request. Claude makes the edit right where you marked it, so you don't have to describe which section you mean in the chat.",
+          sourceLabel: "Claude Help Center — What are artifacts and how do I use them?",
+          url: "https://support.claude.com/en/articles/9487310-what-are-artifacts-and-how-do-i-use-them",
+        },
       },
     ],
     takeaways: [
@@ -235,6 +224,20 @@ export const inspirationEntries: InspirationEntry[] = [
       "Make every agent action auditable at a glance, with details one click away.",
     ],
     componentSlugs: ["reasoning", "tool-call", "prompt-input"],
+    sources: [
+      {
+        label: "Claude Help Center — Change the model, effort, and thinking settings",
+        url: "https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings",
+      },
+      {
+        label: "Claude Help Center — What are artifacts and how do I use them?",
+        url: "https://support.claude.com/en/articles/9487310-what-are-artifacts-and-how-do-i-use-them",
+      },
+      {
+        label: "Claude Code docs — Interactive mode (transcript viewer)",
+        url: "https://code.claude.com/docs/en/interactive-mode",
+      },
+    ],
   },
   {
     slug: "perplexity",
@@ -242,6 +245,8 @@ export const inspirationEntries: InspirationEntry[] = [
     title: "Search and generation in one surface",
     summary:
       "Perplexity rebuilt search around an LLM — and its UI earns trust through visible tool calls, sentence-level citations and a persistent sources rail.",
+    disclaimer:
+      "An independent reading of Perplexity's interface, grounded in Perplexity's official documentation. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
     sections: [
       {
         heading: "Search as the default mode",
@@ -250,6 +255,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Every query is a search; the tool call is shown as a small visible step, demystifying where the answer comes from.",
           "Elapsed time and result counts signal real work happening — not a magic answer.",
         ],
+        evidence: {
+          quote:
+            "Simply ask any question, and it searches the web to deliver accessible, conversational answers backed by verifiable sources.",
+          sourceLabel: "Perplexity Help Center — What is Perplexity?",
+          url: "https://www.perplexity.ai/help-center/en/articles/10352155-what-is-perplexity.html",
+        },
       },
       {
         heading: "Sentence-level citations",
@@ -258,6 +269,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Numbers attach to the claim, not the paragraph — a reader can verify the exact sentence.",
           "Hovering brings up the source card with domain, favicon and a snippet; credibility reads instantly.",
         ],
+        evidence: {
+          quote:
+            "Each answer includes numbered citations linking to the original sources, allowing you to easily verify the information or explore further.",
+          sourceLabel: "Perplexity Help Center — How does Perplexity work?",
+          url: "https://www.perplexity.ai/help-center/en/articles/10352895-how-does-perplexity-work.html",
+        },
       },
       {
         heading: "The sources rail",
@@ -266,6 +283,11 @@ export const inspirationEntries: InspirationEntry[] = [
           "A persistent sidebar lists every source used, ranked by relevance, with expandable snippets.",
           "Sources persist across follow-ups, so later claims stay checkable against the same thread.",
         ],
+        evidence: {
+          quote: "Select or hover over a source in an answer to open its details.",
+          sourceLabel: "Perplexity Help Center — Understanding source labels",
+          url: "https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels.html",
+        },
       },
       {
         heading: "Follow-up flow",
@@ -273,6 +295,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Suggested follow-ups keep the session moving; the thread reads like a conversation, not a query log.",
           "The composer is a single line — low friction, high volume — encouraging the next question.",
         ],
+        evidence: {
+          quote:
+            "You can ask follow-up questions, and Perplexity will remember the context of your previous queries, ensuring a seamless, flowing conversation.",
+          sourceLabel: "Perplexity Help Center — How does Perplexity work?",
+          url: "https://www.perplexity.ai/help-center/en/articles/10352895-how-does-perplexity-work.html",
+        },
       },
     ],
     takeaways: [
@@ -282,6 +310,20 @@ export const inspirationEntries: InspirationEntry[] = [
       "A single-line composer with suggested follow-ups is the lowest-friction loop in AI UI.",
     ],
     componentSlugs: ["search-tool-call", "citation-ui", "source-card"],
+    sources: [
+      {
+        label: "Perplexity Help Center — What is Perplexity?",
+        url: "https://www.perplexity.ai/help-center/en/articles/10352155-what-is-perplexity.html",
+      },
+      {
+        label: "Perplexity Help Center — How does Perplexity work?",
+        url: "https://www.perplexity.ai/help-center/en/articles/10352895-how-does-perplexity-work.html",
+      },
+      {
+        label: "Perplexity Help Center — Understanding source labels",
+        url: "https://www.perplexity.ai/help-center/en/articles/20260806-understanding-source-labels.html",
+      },
+    ],
   },
   {
     slug: "cursor",
@@ -289,6 +331,8 @@ export const inspirationEntries: InspirationEntry[] = [
     title: "The agentic editor that made agent state visible",
     summary:
       "Cursor turned coding into an agent task — and solved the trust problem with a persistent agent status, auditable tool calls and an explicit approval gate.",
+    disclaimer:
+      "An independent reading of Cursor's interface, grounded in Cursor's official documentation. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
     sections: [
       {
         heading: "Agent status, always in view",
@@ -297,6 +341,11 @@ export const inspirationEntries: InspirationEntry[] = [
           "The agent's state — thinking, running, waiting — is a persistent quiet indicator, never a blocking modal.",
           "State changes announce themselves in place; the diff updates live as files change.",
         ],
+        evidence: {
+          quote: "Watch edits appear in the diff view as they happen.",
+          sourceLabel: "Cursor docs — Agent mode",
+          url: "https://cursor.com/help/ai-features/agent",
+        },
       },
       {
         heading: "Tool calls you can audit",
@@ -305,6 +354,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Every file read, write and shell command lists with its outcome — the agent's work is fully auditable.",
           "Expand to see the diff or command output; collapse to keep the flow.",
         ],
+        evidence: {
+          quote:
+            "Cursor includes tools that help agents write code: reading files, editing files, running terminal commands, searching the web, and more.",
+          sourceLabel: "Cursor docs — Agent Security",
+          url: "https://cursor.com/docs/agent/security",
+        },
       },
       {
         heading: "The approval gate",
@@ -313,6 +368,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "Irreversible actions pause the agent until a human approves — the exact command is shown before it runs.",
           "Approve and deny are explicit and one click away; the default is to ask, not to act.",
         ],
+        evidence: {
+          quote:
+            "Run Modes control how the Cursor agent runs tool calls, and when Cursor interrupts you for approval.",
+          sourceLabel: "Cursor docs — Run Modes",
+          url: "https://cursor.com/docs/agent/security/run-modes",
+        },
       },
       {
         heading: "Diff-first communication",
@@ -320,6 +381,12 @@ export const inspirationEntries: InspirationEntry[] = [
           "The agent communicates by editing, and the diff is the message — progress lives in the file tree, not a chat log.",
           "Chat scrolls out of the way; the workspace is the primary surface.",
         ],
+        evidence: {
+          quote:
+            "Agent's edits are applied as it works. Review them in the diff view and reject anything you don't want.",
+          sourceLabel: "Cursor docs — Agent mode",
+          url: "https://cursor.com/help/ai-features/agent",
+        },
       },
     ],
     takeaways: [
@@ -329,6 +396,20 @@ export const inspirationEntries: InspirationEntry[] = [
       "Communicate by editing — make the diff the conversation, the workspace the surface.",
     ],
     componentSlugs: ["agent-status", "tool-call", "approval-request"],
+    sources: [
+      {
+        label: "Cursor docs — Agent mode",
+        url: "https://cursor.com/help/ai-features/agent",
+      },
+      {
+        label: "Cursor docs — Agent Security",
+        url: "https://cursor.com/docs/agent/security",
+      },
+      {
+        label: "Cursor docs — Run Modes",
+        url: "https://cursor.com/docs/agent/security/run-modes",
+      },
+    ],
   },
 ];
 
