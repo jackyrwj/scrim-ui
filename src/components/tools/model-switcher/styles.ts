@@ -25,7 +25,9 @@ const LIGHT: Palette = {
   hover: "#f4f4f5",
   panel: "#ffffff",
   chip: "#f4f4f5",
-  chipText: "#71717a",
+  // zinc-600, not zinc-500: at 10px on the chip fill zinc-500 lands at
+  // 4.39:1, just under the 4.5:1 WCAG AA threshold.
+  chipText: "#52525b",
   shadow: "0 10px 30px -12px rgba(24,24,27,0.25)",
 };
 

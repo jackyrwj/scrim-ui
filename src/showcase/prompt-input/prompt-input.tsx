@@ -281,6 +281,7 @@ export function PromptInput({
               onClick={() => setWebSearch((v) => !v)}
               disabled={disabled}
               aria-pressed={webSearch}
+              aria-label="Web search"
               className={toggleButton(webSearch)}
             >
               <GlobeIcon />
@@ -294,6 +295,7 @@ export function PromptInput({
               onClick={() => setTools((v) => !v)}
               disabled={disabled}
               aria-pressed={tools}
+              aria-label="Tools"
               className={toggleButton(tools)}
             >
               <WrenchIcon />

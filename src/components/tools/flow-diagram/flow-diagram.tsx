@@ -114,6 +114,7 @@ function NodeEditor({
         <select
           value={node.type}
           onChange={(e) => changeType(e.target.value as NodeType)}
+          aria-label="Node type"
           className={selectCls + " text-xs"}
         >
           {NODE_TYPE_OPTIONS.map((o) => (
