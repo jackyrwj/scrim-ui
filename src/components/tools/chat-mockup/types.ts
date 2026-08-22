@@ -12,6 +12,9 @@ export type MockupMessage = {
   sources?: boolean;
 };
 
+import { type MockupDevice } from "../device-presets";
+export type { MockupDevice };
+
 export type MockupConfig = {
   /** Window title shown in the mockup header. */
   title: string;
@@ -19,7 +22,7 @@ export type MockupConfig = {
   subtitle: string;
   /** Model name shown as the header pill and in the composer selector. */
   modelName: string;
-  device: "mobile" | "tablet" | "desktop";
+  device: MockupDevice;
   theme: "light" | "dark";
   /** Animate the last assistant message with a streaming reveal. */
   streaming: boolean;
@@ -32,18 +35,6 @@ export type MockupConfig = {
   avatarLabel: string;
   messages: MockupMessage[];
 };
-
-export const DEVICE_WIDTHS: Record<MockupConfig["device"], number> = {
-  mobile: 390,
-  tablet: 700,
-  desktop: 900,
-};
-
-export const DEVICE_OPTIONS: { value: MockupConfig["device"]; label: string }[] = [
-  { value: "mobile", label: "Mobile · 390px" },
-  { value: "tablet", label: "Tablet · 700px" },
-  { value: "desktop", label: "Desktop · 900px" },
-];
 
 let idSeq = 0;
 export function newMessageId(): string {

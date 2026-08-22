@@ -7,7 +7,7 @@ import { Reasoning } from "@/showcase/reasoning/reasoning";
 import { ToolCall } from "@/showcase/tool-call/tool-call";
 import { CitationList, type Citation } from "@/showcase/citation-ui/citation-ui";
 import type { MockupConfig } from "./types";
-import { DEVICE_WIDTHS } from "./types";
+import { DEVICE_WIDTHS } from "../device-presets";
 
 /* ------------------------------------------------------------------ */
 /* Sample content for the AI elements                                   */

@@ -7,11 +7,11 @@ import { Field, Section, Chip, inputCls, selectCls } from "../tool-ui";
 import {
   defaultConfig,
   createMessage,
-  DEVICE_OPTIONS,
   type MockupConfig,
   type MockupMessage,
   type MockupRole,
 } from "./types";
+import { DEVICE_OPTIONS } from "../device-presets";
 
 /* ------------------------------------------------------------------ */
 /* Message editor                                                      */
