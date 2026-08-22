@@ -16,6 +16,28 @@
   --card: #ffffff;
   --accent: #18181b;
   --accent-foreground: #fafafa;
+
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --primary-hover: #6d28d9;
+  --primary-muted: #ede9fe;
+  --primary-muted-foreground: #6d28d9;
+
+  --gradient-primary: linear-gradient(135deg, #7c3aed, #2563eb);
+  --gradient-subtle: linear-gradient(135deg, var(--muted), var(--background));
+  --gradient-glow: radial-gradient(ellipse at 50% 0%, var(--primary-muted) 0%, transparent 60%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.15);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-entrance: 600ms;
 }
 
 .dark {
@@ -27,6 +49,20 @@
   --card: #111113;
   --accent: #fafafa;
   --accent-foreground: #18181b;
+
+  --primary: #a78bfa;
+  --primary-foreground: #09090b;
+  --primary-hover: #8b5cf6;
+  --primary-muted: #2e1065;
+  --primary-muted-foreground: #a78bfa;
+
+  --gradient-primary: linear-gradient(135deg, #a78bfa, #60a5fa);
+  --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(46, 16, 101, 0.5) 0%, transparent 60%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(167, 139, 250, 0.2);
 }
 
 html {
@@ -43,4 +79,43 @@ body {
 ::selection {
   background: var(--foreground);
   color: var(--background);
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aos-hidden,
+.aos-stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity var(--duration-entrance) var(--ease-out-expo),
+    transform var(--duration-entrance) var(--ease-out-expo);
+}
+
+.aos-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aos-hidden,
+  .aos-stagger-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
