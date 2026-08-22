@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "gpt-tokenizer": "^4.0.0",
     "html-to-image": "^1.11.13",
     "next": "16.3.1",
     "react": "19.2.8",
