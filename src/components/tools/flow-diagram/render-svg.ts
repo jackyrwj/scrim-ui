@@ -1,4 +1,4 @@
-import type { PositionedNode, Edge } from "./layout-engine";
+import type { PositionedNode, Edge, MergePoint } from "./layout-engine";
 import type { NodeType } from "./types";
 
 const NODE_COLORS: Record<NodeType, { fill: string; stroke: string; text: string }> = {
@@ -25,21 +25,29 @@ function renderNode(node: PositionedNode): string {
   const desc = node.description ? truncate(node.description, 34) : "";
 
   if (node.type === "branch" || node.type === "approval-gate") {
-    const size = node.height * 0.45;
+    // A proper flowchart decision: a diamond spanning the node box, so long
+    // labels sit inside the shape instead of spilling out of a small rhombus.
+    const left = node.x;
+    const right = node.x + node.width;
+    const top = node.y;
+    const bottom = node.y + node.height;
+    const points = `${cx},${top} ${right},${cy} ${cx},${bottom} ${left},${cy}`;
+    const diamondLabel = truncate(node.label || node.type.replace(/-/g, " "), 24);
+    const diamondDesc = node.description ? truncate(node.description, 26) : "";
+
     return `
       <g>
-        <rect x="${cx - size}" y="${cy - size}" width="${size * 2}" height="${size * 2}"
-          rx="4" fill="${colors.fill}" stroke="${colors.stroke}" stroke-width="2"
-          transform="rotate(45 ${cx} ${cy})" />
-        <text x="${cx}" y="${cy + (desc ? -4 : 4)}" text-anchor="middle" fill="${colors.text}"
+        <polygon points="${points}" fill="${colors.fill}" stroke="${colors.stroke}"
+          stroke-width="2" stroke-linejoin="round" />
+        <text x="${cx}" y="${cy + (diamondDesc ? -3 : 4)}" text-anchor="middle" fill="${colors.text}"
           font-size="11" font-weight="600" font-family="system-ui, sans-serif">
-          ${escapeXml(label)}
+          ${escapeXml(diamondLabel)}
         </text>
         ${
-          desc
+          diamondDesc
             ? `<text x="${cx}" y="${cy + 12}" text-anchor="middle" fill="${colors.text}"
                 font-size="9" opacity="0.7" font-family="system-ui, sans-serif">
-                ${escapeXml(desc)}
+                ${escapeXml(diamondDesc)}
               </text>`
             : ""
         }
@@ -67,14 +75,41 @@ function renderNode(node: PositionedNode): string {
 
 function renderEdge(edge: Edge): string {
   const midY = (edge.y1 + edge.y2) / 2;
+
+  // An empty branch path bows out towards viaX so its label clears the trunk.
+  const path =
+    edge.viaX === undefined
+      ? `M ${edge.x1} ${edge.y1} C ${edge.x1} ${midY}, ${edge.x2} ${midY}, ${edge.x2} ${edge.y2}`
+      : `M ${edge.x1} ${edge.y1} C ${edge.viaX} ${edge.y1 + 24}, ${edge.viaX} ${
+          edge.y2 - 24
+        }, ${edge.x2} ${edge.y2}`;
+
+  const labelX = edge.viaX === undefined ? (edge.x1 + edge.x2) / 2 : edge.viaX;
+  const label = edge.label
+    ? `
+    <text x="${labelX}" y="${midY - 4}" text-anchor="middle" fill="#475569"
+      font-size="10" font-weight="600" font-family="system-ui, sans-serif"
+      stroke="white" stroke-width="3" paint-order="stroke" stroke-linejoin="round">
+      ${escapeXml(truncate(edge.label, 18))}
+    </text>`
+    : "";
+
   return `
-    <path d="M ${edge.x1} ${edge.y1} C ${edge.x1} ${midY}, ${edge.x2} ${midY}, ${edge.x2} ${edge.y2}"
-      fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrowhead)" />`;
+    <path d="${path}" fill="none" stroke="#94a3b8" stroke-width="2"
+      marker-end="url(#arrowhead)" />${label}`;
+}
+
+function renderMerge(merge: MergePoint): string {
+  return `
+    <circle cx="${merge.x}" cy="${merge.y}" r="${merge.r}"
+      fill="white" stroke="#94a3b8" stroke-width="2" />
+    <circle cx="${merge.x}" cy="${merge.y}" r="${merge.r / 2.6}" fill="#94a3b8" />`;
 }
 
 export function renderFlowSvg(
   positioned: PositionedNode[],
   edges: Edge[],
+  merges: MergePoint[],
   viewBox: string,
   title: string
 ): string {
@@ -101,6 +136,7 @@ export function renderFlowSvg(
   ${titleBlock}
   <g transform="translate(0, ${titleOffset})">
     ${edges.map(renderEdge).join("")}
+    ${merges.map(renderMerge).join("")}
     ${positioned.map(renderNode).join("")}
   </g>
 </svg>`;

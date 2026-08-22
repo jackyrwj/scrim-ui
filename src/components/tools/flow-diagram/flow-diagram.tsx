@@ -3,15 +3,25 @@
 import * as React from "react";
 import { toPng } from "html-to-image";
 import { Section, Field, inputCls, selectCls } from "../tool-ui";
-import type { FlowConfig, FlowNode, NodeType } from "./types";
-import { defaultConfig, createNode, NODE_TYPE_OPTIONS } from "./types";
+import type { FlowBranch, FlowConfig, FlowNode, NodeType } from "./types";
+import {
+  MAX_BRANCH_DEPTH,
+  NODE_TYPE_OPTIONS,
+  canBranch,
+  createBranch,
+  createNode,
+  defaultConfig,
+} from "./types";
 import { layoutNodes } from "./layout-engine";
 import { renderFlowSvg } from "./render-svg";
+
+const MAX_PATHS = 3;
 
 function NodeEditor({
   node,
   index,
   total,
+  depth = 0,
   onChange,
   onMove,
   onDelete,
@@ -19,15 +29,57 @@ function NodeEditor({
   node: FlowNode;
   index: number;
   total: number;
+  depth?: number;
   onChange: (updated: FlowNode) => void;
   onMove: (direction: -1 | 1) => void;
   onDelete: () => void;
 }) {
+  const allowBranching = depth < MAX_BRANCH_DEPTH;
+  const branches = node.branches ?? [];
+  const showPaths = canBranch(node.type) && allowBranching;
+
+  function changeType(type: NodeType) {
+    if (canBranch(type)) {
+      onChange({
+        ...node,
+        type,
+        branches: allowBranching
+          ? (node.branches ?? [createBranch("Yes"), createBranch("No")])
+          : undefined,
+      });
+      return;
+    }
+    const { branches: _dropped, ...rest } = node;
+    void _dropped;
+    onChange({ ...rest, type });
+  }
+
+  function updateBranch(bi: number, patch: Partial<FlowBranch>) {
+    onChange({
+      ...node,
+      branches: branches.map((b, i) => (i === bi ? { ...b, ...patch } : b)),
+    });
+  }
+
+  function updateBranchNodes(bi: number, nodes: FlowNode[]) {
+    updateBranch(bi, { nodes });
+  }
+
+  function addPath() {
+    if (branches.length >= MAX_PATHS) return;
+    onChange({ ...node, branches: [...branches, createBranch("")] });
+  }
+
+  function removePath(bi: number) {
+    if (branches.length <= 2) return;
+    onChange({ ...node, branches: branches.filter((_, i) => i !== bi) });
+  }
+
   return (
     <div className="rounded-lg border border-(--border) bg-(--background) p-3">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-[10px] font-semibold uppercase tracking-wider text-(--muted-foreground)">
-          Node {index + 1}
+          {depth === 0 ? `Node ${index + 1}` : `Step ${index + 1}`}
         </span>
         <div className="flex gap-1">
           <button
@@ -61,9 +113,7 @@ function NodeEditor({
       <div className="space-y-2">
         <select
           value={node.type}
-          onChange={(e) =>
-            onChange({ ...node, type: e.target.value as NodeType })
-          }
+          onChange={(e) => changeType(e.target.value as NodeType)}
           className={selectCls + " text-xs"}
         >
           {NODE_TYPE_OPTIONS.map((o) => (
@@ -87,6 +137,99 @@ function NodeEditor({
           className={inputCls + " text-xs"}
         />
       </div>
+
+      {showPaths && (
+        <div className="mt-3 space-y-3 border-t border-(--border) pt-3">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-(--muted-foreground)">
+              Paths
+            </span>
+            {branches.length < MAX_PATHS && (
+              <button
+                type="button"
+                onClick={addPath}
+                className="text-[11px] font-medium text-(--muted-foreground) transition-colors hover:text-(--foreground)"
+              >
+                + Add path
+              </button>
+            )}
+          </div>
+
+          {branches.map((branch, bi) => (
+            <div
+              key={branch.id}
+              className="rounded-lg border border-dashed border-(--border) p-2.5"
+            >
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={branch.label}
+                  onChange={(e) => updateBranch(bi, { label: e.target.value })}
+                  placeholder={`Path ${bi + 1} label`}
+                  aria-label="Path label"
+                  className={inputCls + " h-7 py-0 text-xs"}
+                />
+                <button
+                  type="button"
+                  onClick={() => removePath(bi)}
+                  disabled={branches.length <= 2}
+                  className="shrink-0 rounded px-1.5 py-0.5 text-xs text-(--muted-foreground) transition-colors hover:text-red-500 disabled:opacity-30"
+                  aria-label="Remove path"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="mt-2 space-y-2">
+                {branch.nodes.map((child, ci) => (
+                  <NodeEditor
+                    key={child.id}
+                    node={child}
+                    index={ci}
+                    total={branch.nodes.length}
+                    depth={depth + 1}
+                    onChange={(updated) =>
+                      updateBranchNodes(
+                        bi,
+                        branch.nodes.map((n, i) => (i === ci ? updated : n)),
+                      )
+                    }
+                    onMove={(dir) => {
+                      const target = ci + dir;
+                      if (target < 0 || target >= branch.nodes.length) return;
+                      const next = [...branch.nodes];
+                      [next[ci], next[target]] = [next[target], next[ci]];
+                      updateBranchNodes(bi, next);
+                    }}
+                    onDelete={() =>
+                      updateBranchNodes(
+                        bi,
+                        branch.nodes.filter((_, i) => i !== ci),
+                      )
+                    }
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={() =>
+                  updateBranchNodes(bi, [...branch.nodes, createNode("ai-response")])
+                }
+                className="mt-2 w-full rounded-lg border border-dashed border-(--border) px-2 py-1.5 text-[11px] font-medium text-(--muted-foreground) transition-colors hover:border-(--foreground) hover:text-(--foreground)"
+              >
+                + Add step to this path
+              </button>
+
+              {branch.nodes.length === 0 && (
+                <p className="mt-2 text-[11px] leading-4 text-(--muted-foreground)">
+                  Empty path — drawn as a labelled edge straight to the merge point.
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -97,14 +240,14 @@ export function FlowDiagram() {
   );
   const previewRef = React.useRef<HTMLDivElement>(null);
 
-  const { positioned, edges, viewBox } = React.useMemo(
+  const { positioned, edges, merges, viewBox } = React.useMemo(
     () => layoutNodes(config.nodes),
     [config.nodes]
   );
 
   const svgString = React.useMemo(
-    () => renderFlowSvg(positioned, edges, viewBox, config.title),
-    [positioned, edges, viewBox, config.title]
+    () => renderFlowSvg(positioned, edges, merges, viewBox, config.title),
+    [positioned, edges, merges, viewBox, config.title]
   );
 
   function updateNode(index: number, updated: FlowNode) {
@@ -168,7 +311,8 @@ export function FlowDiagram() {
           </h1>
           <p className="mt-1.5 max-w-xl text-sm text-(--muted-foreground)">
             Build a visual flow of your AI conversation — user messages, AI
-            responses, tool calls, and approval gates. Export as SVG or PNG.
+            responses, tool calls, and approval gates. Decision nodes split into
+            parallel paths that merge back. Export as SVG or PNG.
           </p>
         </div>
         <div className="flex gap-2">
