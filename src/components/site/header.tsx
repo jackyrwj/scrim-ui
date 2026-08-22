@@ -5,6 +5,7 @@ import { Search } from "./search";
 import { components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
+import { publishedTools } from "@/lib/tools";
 
 const navItems = [
   { href: "/tools", label: "Tools" },
@@ -30,16 +31,9 @@ function buildSearchItems() {
     items.push({ title: e.title, href: `/inspiration/${e.slug}`, type: "Inspiration", description: e.summary });
   }
 
-  items.push({ title: "AI Chat Mockup Generator", href: "/tools/chat-mockup", type: "Tool", description: "Compose a realistic AI chat screen and export as PNG" });
-  items.push({ title: "Component Playground", href: "/tools/playground", type: "Tool", description: "Interactive playground for all components" });
-  items.push({ title: "Prompt Generator", href: "/tools/prompt-generator", type: "Tool", description: "Generate UI prompts for AI coding tools" });
-  items.push({ title: "Voice Assistant Mockup Generator", href: "/tools/voice-mockup", type: "Tool", description: "Compose a realistic voice assistant screen and export as PNG" });
-  items.push({ title: "Voice Conversation Script Library", href: "/tools/voice-scripts", type: "Tool", description: "Ready-made voice assistant transcripts for common scenarios" });
-  items.push({ title: "Model Switcher Builder", href: "/tools/model-switcher", type: "Tool", description: "Design a custom AI model switcher and copy the React component" });
-  items.push({ title: "Prompt Token Counter", href: "/tools/token-counter", type: "Tool", description: "Estimated token counts and API costs for GPT, Claude and Gemini" });
-  items.push({ title: "AI Chat Theme Generator", href: "/tools/theme-generator", type: "Tool", description: "Generate a full AI chat color scheme from one brand color" });
-  items.push({ title: "Screenshot Device Mockup", href: "/tools/screenshot-mockup", type: "Tool", description: "Place a screenshot in an iPhone, MacBook, iPad or browser frame" });
-  items.push({ title: "AI Conversation Flow Diagram", href: "/tools/flow-diagram", type: "Tool", description: "Build and export conversation flow diagrams as SVG or PNG" });
+  for (const t of publishedTools) {
+    items.push({ title: t.name, href: `/tools/${t.slug}`, type: "Tool", description: t.searchDescription });
+  }
 
   return items;
 }

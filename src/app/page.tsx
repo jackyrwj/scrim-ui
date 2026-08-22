@@ -2,6 +2,7 @@ import Link from "next/link";
 import { categories, components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
+import { featuredTools, toolLabel } from "@/lib/tools";
 import { BrandIcon } from "@/components/brands/brand-icon";
 import { DemoDefault } from "@/showcase/prompt-input/demos";
 import { SurpriseMeButton } from "@/components/site/surprise-me-button";
@@ -135,67 +136,43 @@ export default function Home() {
               View all →
             </Link>
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Link
-              href="/tools/chat-mockup"
-              className="group flex flex-col justify-between gap-4 rounded-xl border border-(--border) bg-(--card) p-6 transition-all hover:-translate-y-0.5"
-              style={{ boxShadow: "var(--shadow-md)" }}
-            >
-              <div>
-                <span className="text-lg font-semibold group-hover:underline">
-                  AI Chat Mockup Generator
-                </span>
-                <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
-                  Compose a realistic AI chat screen — streaming, reasoning, tool calls, citations —
-                  and export it as a PNG.
-                </p>
-              </div>
-              <span className="inline-flex items-center gap-1 text-sm font-medium" style={{ color: "var(--primary)" }}>
-                Open tool <span aria-hidden>→</span>
-              </span>
-            </Link>
-            <Link
-              href="/tools/voice-mockup"
-              className="group flex flex-col justify-between gap-4 rounded-xl border-l-4 border border-(--border) bg-(--card) p-6 transition-all hover:-translate-y-0.5"
-              style={{ borderLeftColor: "var(--primary)", boxShadow: "var(--shadow-md)" }}
-            >
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg font-semibold group-hover:underline">
-                    Voice Assistant Mockup Generator
-                  </span>
-                  <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
-                    New
-                  </span>
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredTools.map((tool) => (
+              <Link
+                key={tool.slug}
+                href={`/tools/${tool.slug}`}
+                className={`aos-stagger-item group flex flex-col justify-between gap-4 rounded-xl border border-(--border) bg-(--card) p-6 transition-all hover:-translate-y-0.5 ${
+                  tool.isNew ? "border-l-4" : ""
+                }`}
+                style={{
+                  boxShadow: "var(--shadow-md)",
+                  ...(tool.isNew ? { borderLeftColor: "var(--primary)" } : {}),
+                }}
+              >
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-semibold group-hover:underline">
+                      {toolLabel(tool)}
+                    </span>
+                    {tool.isNew && (
+                      <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
+                        New
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
+                    {tool.description}
+                  </p>
                 </div>
-                <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
-                  Compose a realistic voice assistant screen — listening, thinking, speaking,
-                  interrupted — and export it as a PNG.
-                </p>
-              </div>
-              <span className="inline-flex items-center gap-1 text-sm font-medium" style={{ color: "var(--primary)" }}>
-                Open tool <span aria-hidden>→</span>
-              </span>
-            </Link>
-            <Link
-              href="/tools/voice-scripts"
-              className="group flex flex-col justify-between gap-4 rounded-xl border border-(--border) bg-(--card) p-6 transition-all hover:-translate-y-0.5"
-              style={{ boxShadow: "var(--shadow-sm)" }}
-            >
-              <div>
-                <span className="text-lg font-semibold group-hover:underline">
-                  Voice Conversation Scripts
+                <span
+                  className="inline-flex items-center gap-1 text-sm font-medium"
+                  style={{ color: "var(--primary)" }}
+                >
+                  {tool.cta ?? "Open tool"} <span aria-hidden>→</span>
                 </span>
-                <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
-                  Ready-made voice assistant transcripts for common scenarios. Load them into the
-                  mockup generator or copy the text.
-                </p>
-              </div>
-              <span className="inline-flex items-center gap-1 text-sm font-medium" style={{ color: "var(--primary)" }}>
-                Browse scripts <span aria-hidden>→</span>
-              </span>
-            </Link>
-          </div>
+              </Link>
+            ))}
+          </StaggerChildren>
         </AnimateOnScroll>
       </section>
 
