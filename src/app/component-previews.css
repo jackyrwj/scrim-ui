@@ -1,0 +1,45 @@
+/* ------------------------------------------------------------------ */
+/* Static previews for the homepage "Popular Components" cards.        */
+/*                                                                     */
+/* Same pure-markup + CSS idea as tool-previews.css, but deliberately  */
+/* quieter: shorter frame, flat background, and NO resting animation.  */
+/* The hero rig and the tool cards are already moving; a third moving  */
+/* band would flatten the page's hierarchy. These only stir on hover,  */
+/* where the motion is feedback rather than decoration.                */
+/* ------------------------------------------------------------------ */
+
+.cp {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 12 / 5;
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Hover-only motion. Every animation below is off until the card is
+   hovered, so an untouched page has exactly one animated region. */
+@keyframes cp-caret {
+  0%, 45%   { opacity: 1; }
+  55%, 100% { opacity: 0; }
+}
+@keyframes cp-grow {
+  from { transform: scaleX(0.25); }
+  to   { transform: scaleX(1); }
+}
+@keyframes cp-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+.cp-caret { opacity: 1; }
+.cp-line  { transform-origin: left center; }
+
+.group:hover .cp-caret { animation: cp-caret 1s steps(1, end) infinite; }
+.group:hover .cp-line  { animation: cp-grow 0.5s var(--ease-out-expo) both; }
+.group:hover .cp-dot   { animation: cp-pulse 1.4s var(--ease-smooth) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cp * { animation: none !important; }
+  .cp .cp-caret { opacity: 1; }
+  .cp .cp-line  { transform: none; }
+}

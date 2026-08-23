@@ -32,7 +32,7 @@ function buildSearchItems() {
   }
 
   for (const t of publishedTools) {
-    items.push({ title: t.name, href: `/tools/${t.slug}`, type: "Tool", description: t.searchDescription });
+    items.push({ title: t.name, href: `/tools/${t.slug}`, type: "Tool", description: t.tagline });
   }
 
   return items;

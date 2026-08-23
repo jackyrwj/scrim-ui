@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "./tool-previews.css";
+@import "./hero-showcase.css";
+@import "./component-previews.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

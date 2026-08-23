@@ -4,9 +4,11 @@ import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
 import { featuredTools, toolLabel } from "@/lib/tools";
 import { BrandIcon } from "@/components/brands/brand-icon";
-import { DemoDefault } from "@/showcase/prompt-input/demos";
 import { SurpriseMeButton } from "@/components/site/surprise-me-button";
 import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-scroll";
+import { ToolPreview } from "@/components/site/tool-preview";
+import { ComponentPreview } from "@/components/site/component-preview";
+import { HeroShowcase } from "@/components/site/hero-showcase";
 
 const categoryIcons: Record<string, string> = {
   "prompt-input": "💬",
@@ -52,10 +54,10 @@ export default function Home() {
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-glow)" }}
         />
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
+        <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
           <div className="mx-auto max-w-3xl text-center">
             <h1
-              className="text-4xl font-bold tracking-tight sm:text-5xl"
+              className="text-3xl font-bold tracking-tight sm:text-5xl"
               style={{
                 background: "var(--gradient-primary)",
                 backgroundSize: "200% auto",
@@ -66,110 +68,94 @@ export default function Home() {
             >
               AI UI Resources
             </h1>
-            <p className="mt-5 text-lg leading-8 text-(--muted-foreground) sm:text-xl">
-              Beautiful UI patterns and components for AI products. Prompt inputs, agent states,
-              tool calls, citations, reasoning, voice, memory and more.
+            <p className="mt-4 text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
+              Free in-browser tools and copy-ready components for building AI interfaces —
+              prompt inputs, agent states, tool calls, citations, reasoning, voice and memory.
             </p>
 
-            {/* Stats */}
-            <div className="mt-8 flex items-center justify-center gap-6 sm:gap-10">
-              {stats.map((s) => (
-                <div key={s.label} className="text-center">
-                  <div className="text-2xl font-bold sm:text-3xl">{s.value}</div>
-                  <div className="mt-0.5 text-xs text-(--muted-foreground) sm:text-sm">{s.label}</div>
-                </div>
-              ))}
-            </div>
-
             {/* CTAs */}
-            <div className="mt-8 flex items-center justify-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
               <Link
-                href="/components"
+                href="/tools"
                 className="inline-flex h-10 items-center rounded-lg px-5 text-sm font-medium text-(--primary-foreground) transition-all hover:opacity-90 active:scale-[0.98]"
                 style={{ background: "var(--gradient-primary)" }}
               >
-                Browse Components
+                Open the tools
               </Link>
               <Link
-                href="/patterns"
+                href="/components"
                 className="inline-flex h-10 items-center rounded-lg border border-(--border) px-5 text-sm font-medium transition-all hover:bg-(--primary-muted) hover:border-(--primary)/30 active:scale-[0.98]"
               >
-                Explore Patterns
+                Browse components
               </Link>
               <SurpriseMeButton slugs={published.map((c) => c.slug)} />
             </div>
+          </div>
 
-            {/* Quick-start category pills */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-              {categories.slice(0, 6).map((cat) => (
-                <Link
-                  key={cat.slug}
-                  href={`/categories/${cat.slug}`}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-(--border) px-3 py-1 text-xs font-medium transition-all hover:bg-(--primary-muted) hover:border-(--primary)/30"
-                >
-                  <span>{categoryIcons[cat.slug] ?? "📦"}</span>
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
+          {/* The main event: a live, scripted tour of three real tools */}
+          <div className="mt-8 sm:mt-10">
+            <HeroShowcase />
           </div>
-          <div className="mx-auto mt-14 max-w-2xl">
-            <DemoDefault />
-            <p className="mt-3 text-center text-xs text-(--muted-foreground)">
-              Every component on this site is live, interactive and copy-ready.
-            </p>
-          </div>
+
+          {/* Stats, kept to a single quiet line so they don't compete */}
+          <p className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-(--muted-foreground)">
+            {stats.map((s, i) => (
+              <span key={s.label} className="inline-flex items-center gap-3">
+                {i > 0 && <span aria-hidden>·</span>}
+                <span>
+                  <span className="font-semibold text-(--foreground)">{s.value}</span> {s.label.toLowerCase()}
+                </span>
+              </span>
+            ))}
+          </p>
         </div>
       </section>
 
       {/* Tools */}
       <section className="bg-(--muted)/30">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">Tools</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Free, in-browser tools for designing AI interfaces.
               </p>
             </div>
-            <Link href="/tools" className="text-sm text-(--muted-foreground) hover:text-(--foreground)">
+            <Link href="/tools" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               View all →
             </Link>
           </div>
-          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredTools.map((tool) => (
               <Link
                 key={tool.slug}
                 href={`/tools/${tool.slug}`}
-                className={`aos-stagger-item group flex flex-col justify-between gap-4 rounded-xl border border-(--border) bg-(--card) p-6 transition-all hover:-translate-y-0.5 ${
-                  tool.isNew ? "border-l-4" : ""
-                }`}
-                style={{
-                  boxShadow: "var(--shadow-md)",
-                  ...(tool.isNew ? { borderLeftColor: "var(--primary)" } : {}),
-                }}
+                className="aos-stagger-item group flex flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-1 hover:border-(--primary)/40"
+                style={{ boxShadow: "var(--shadow-sm)" }}
               >
-                <div>
+                <ToolPreview slug={tool.slug} />
+                <div className="flex flex-1 flex-col p-5">
                   <div className="flex items-center gap-2">
-                    <span className="text-lg font-semibold group-hover:underline">
-                      {toolLabel(tool)}
-                    </span>
+                    <span className="font-semibold group-hover:underline">{toolLabel(tool)}</span>
                     {tool.isNew && (
                       <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
                         New
                       </span>
                     )}
                   </div>
-                  <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
-                    {tool.description}
+                  <p className="mt-1.5 flex-1 text-sm leading-6 text-(--muted-foreground)">
+                    {tool.tagline}
                   </p>
+                  <span
+                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
+                    style={{ color: "var(--primary)" }}
+                  >
+                    {tool.cta ?? "Open tool"}{" "}
+                    <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+                      →
+                    </span>
+                  </span>
                 </div>
-                <span
-                  className="inline-flex items-center gap-1 text-sm font-medium"
-                  style={{ color: "var(--primary)" }}
-                >
-                  {tool.cta ?? "Open tool"} <span aria-hidden>→</span>
-                </span>
               </Link>
             ))}
           </StaggerChildren>
@@ -179,38 +165,41 @@ export default function Home() {
       {/* Popular components */}
       <section className="border-b border-(--border)">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="flex items-end justify-between">
+          <div className="flex items-end justify-between gap-4">
             <h2 className="text-2xl font-semibold tracking-tight">Popular Components</h2>
-            <Link href="/components" className="text-sm text-(--muted-foreground) hover:text-(--foreground)">
+            <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               View all →
             </Link>
           </div>
-          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {popular.map((c) => (
               <Link
                 key={c.slug}
                 href={c.status === "published" ? `/components/${c.slug}` : "/components"}
-                className="aos-stagger-item group rounded-xl border border-(--border) p-5 transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
+                className="aos-stagger-item group flex flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
                 style={{ boxShadow: "var(--shadow-sm)" }}
               >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium group-hover:underline">{c.name}</span>
-                  <div className="flex items-center gap-1.5">
-                    {c.variants.length > 1 && (
-                      <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
-                        {c.variants.length} variants
-                      </span>
-                    )}
-                    {c.status === "planned" && (
-                      <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
-                        Soon
-                      </span>
-                    )}
+                <ComponentPreview slug={c.slug} />
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium group-hover:underline">{c.name}</span>
+                    <div className="flex items-center gap-1.5">
+                      {c.variants.length > 1 && (
+                        <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
+                          {c.variants.length} variants
+                        </span>
+                      )}
+                      {c.status === "planned" && (
+                        <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
+                          Soon
+                        </span>
+                      )}
+                    </div>
                   </div>
+                  <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">
+                    {c.description}
+                  </p>
                 </div>
-                <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">
-                  {c.description}
-                </p>
               </Link>
             ))}
           </StaggerChildren>
@@ -273,9 +262,9 @@ export default function Home() {
       {recentlyAdded.length > 0 && (
         <section className="border-b border-(--border)">
           <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <div className="flex items-end justify-between">
+            <div className="flex items-end justify-between gap-4">
               <h2 className="text-2xl font-semibold tracking-tight">Recently Added</h2>
-              <Link href="/components" className="text-sm text-(--muted-foreground) hover:text-(--foreground)">
+              <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
                 View all →
               </Link>
             </div>
@@ -310,14 +299,14 @@ export default function Home() {
           style={{ background: "var(--gradient-subtle)" }}
         />
         <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">AI Patterns</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Complete, remix-ready interfaces — not just single components.
               </p>
             </div>
-            <Link href="/patterns" className="text-sm text-(--muted-foreground) hover:text-(--foreground)">
+            <Link href="/patterns" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               View all →
             </Link>
           </div>
@@ -343,14 +332,14 @@ export default function Home() {
       {/* Resources */}
       <section className="border-b border-(--border)">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">Resources</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 A curated directory of libraries, generators and guides for building AI interfaces.
               </p>
             </div>
-            <Link href="/resources" className="text-sm text-(--muted-foreground) hover:text-(--foreground)">
+            <Link href="/resources" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               View all →
             </Link>
           </div>
@@ -385,7 +374,7 @@ export default function Home() {
       {/* Inspiration */}
       <section className="bg-(--muted)/30">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <div className="flex items-end justify-between">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
               <p className="mt-2 text-(--muted-foreground)">
@@ -395,7 +384,7 @@ export default function Home() {
             </div>
             <Link
               href="/inspiration"
-              className="text-sm text-(--muted-foreground) hover:text-(--foreground)"
+              className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)"
             >
               View all →
             </Link>
