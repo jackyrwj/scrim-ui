@@ -3,6 +3,7 @@
 import * as React from "react";
 import { CopyButton } from "@/components/component-page/copy-button";
 import { Field, Section, Chip, inputCls, selectCls } from "../tool-ui";
+import { BrandIcon } from "@/components/brands/brand-icon";
 import {
   buildPrompt,
   defaultPromptConfig,
@@ -106,6 +107,7 @@ export function PromptGenerator() {
                   active={config.platform === platform}
                   onClick={() => setConfig({ ...config, platform })}
                 >
+                  <BrandIcon name={PLATFORM_LABELS[platform]} size={12} tone="current" className="mr-1.5" />
                   {PLATFORM_LABELS[platform]}
                 </Chip>
               ))}
