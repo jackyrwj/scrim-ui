@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { trackEvent } from "@/lib/analytics";
+import { copyText } from "@/lib/clipboard";
 
 export function CopyButton({
   code,
@@ -16,16 +17,7 @@ export function CopyButton({
 
   async function copy() {
     if (disabled) return;
-    try {
-      await navigator.clipboard.writeText(code);
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = code;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-    }
+    await copyText(code);
     setCopied(true);
     trackEvent("copy_code", { label });
     setTimeout(() => setCopied(false), 2000);

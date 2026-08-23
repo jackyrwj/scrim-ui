@@ -11,6 +11,7 @@ const navItems = [
   { href: "/tools", label: "Tools" },
   { href: "/components", label: "Components" },
   { href: "/patterns", label: "Patterns" },
+  { href: "/icons", label: "Icons" },
   { href: "/resources", label: "Resources" },
   { href: "/inspiration", label: "Inspiration" },
 ];
