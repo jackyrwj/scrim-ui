@@ -7,6 +7,8 @@
 /* Server component on purpose — these ship zero JS.                   */
 /* ------------------------------------------------------------------ */
 
+import { ModelIcon } from "@/components/brands/brand-icon";
+
 const previews: Record<string, () => React.ReactElement> = {
   "model-switcher": ModelSwitcherPreview,
   "chat-mockup": ChatMockupPreview,
@@ -57,8 +59,9 @@ function ModelSwitcherPreview() {
         {["Sonnet", "Opus", "Haiku"].map((name) => (
           <div
             key={name}
-            className="relative z-10 flex-1 py-1.5 text-center text-[11px] font-medium text-(--muted-foreground)"
+            className="relative z-10 flex flex-1 items-center justify-center gap-1 py-1.5 text-[11px] font-medium text-(--muted-foreground)"
           >
+            <ModelIcon name={`Claude ${name}`} size={10} />
             {name}
           </div>
         ))}

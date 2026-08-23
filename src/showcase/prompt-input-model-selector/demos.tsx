@@ -2,8 +2,9 @@
 
 import * as React from "react";
 import { PromptInputModelSelector, type ModelOption } from "./prompt-input-model-selector";
+import { withModelIcons } from "@/components/brands/brand-icon";
 
-const MODELS: ModelOption[] = [
+const MODELS: ModelOption[] = withModelIcons([
   {
     id: "claude-opus-5",
     name: "Claude Opus 5",
@@ -28,7 +29,7 @@ const MODELS: ModelOption[] = [
     badges: ["Advanced"],
     description: "Most capable generally available model.",
   },
-];
+]);
 
 export function DemoDefault() {
   return <PromptInputModelSelector models={MODELS} defaultModel="claude-sonnet-5" onSubmit={() => {}} />;
@@ -42,10 +43,12 @@ export function DemoManyModels() {
   return (
     <PromptInputModelSelector
       models={[
-        { id: "gpt-5", name: "GPT-5", badges: ["Fast"], description: "Broad tooling support." },
-        { id: "gemini-3", name: "Gemini 3", badges: ["Long context"], description: "Very large context window." },
-        { id: "llama-4", name: "Llama 4", badges: ["Open"], description: "Self-hostable open weights." },
-        { id: "deepseek-v4", name: "DeepSeek V4", badges: ["Cheap"], description: "Lowest cost per token." },
+        ...withModelIcons([
+          { id: "gpt-5", name: "GPT-5", badges: ["Fast"], description: "Broad tooling support." },
+          { id: "gemini-3", name: "Gemini 3", badges: ["Long context"], description: "Very large context window." },
+          { id: "llama-4", name: "Llama 4", badges: ["Open"], description: "Self-hostable open weights." },
+          { id: "deepseek-v4", name: "DeepSeek V4", badges: ["Cheap"], description: "Lowest cost per token." },
+        ]),
         ...MODELS,
       ]}
       defaultModel="deepseek-v4"

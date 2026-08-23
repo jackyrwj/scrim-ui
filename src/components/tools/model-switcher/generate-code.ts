@@ -1,3 +1,4 @@
+import { brandData, resolveModelBrand } from "@/lib/brands";
 import { getPalette, getSizing, readableOn, withAlpha } from "./styles";
 import type { ModelSwitcherConfig } from "./types";
 
@@ -10,14 +11,26 @@ import type { ModelSwitcherConfig } from "./types";
 const q = (value: string) => JSON.stringify(value);
 
 function modelsBlock(config: ModelSwitcherConfig): string {
+  const hasMarks = usedMarks(config).length > 0;
   return config.models
-    .map(
-      (m) =>
-        `  { id: ${q(m.id)}, name: ${q(m.name)}, hint: ${q(m.hint)}, badge: ${q(
-          m.badge,
-        )}, dot: ${q(m.dot)} },`,
-    )
+    .map((m) => {
+      const mark = resolveModelBrand(m.name);
+      return `  { id: ${q(m.id)}, name: ${q(m.name)}, hint: ${q(m.hint)}, badge: ${q(
+        m.badge,
+      )}, dot: ${q(m.dot)}${hasMarks ? `, mark: ${mark ? q(mark) : "null"}` : ""} },`;
+    })
     .join("\n");
+}
+
+/** `mark={...}` for the emitted <Dot>, or "" when no model in this config has a brand. */
+function markProp(config: ModelSwitcherConfig, expr: string): string {
+  return usedMarks(config).length > 0 ? ` mark={${expr}.mark}` : "";
+}
+
+/** Brand keys actually used by this config, so the export inlines no more than it needs. */
+function usedMarks(config: ModelSwitcherConfig): string[] {
+  const keys = config.models.map((m) => resolveModelBrand(m.name)).filter((k): k is string => !!k);
+  return [...new Set(keys)];
 }
 
 function helpers(config: ModelSwitcherConfig): string {
@@ -26,13 +39,54 @@ function helpers(config: ModelSwitcherConfig): string {
   const parts: string[] = [];
 
   if (config.showDots) {
-    parts.push(`function Dot({ color }: { color: string }) {
+    const marks = usedMarks(config);
+    if (marks.length > 0) {
+      // Paths are inlined, not imported, so the exported file keeps its promise
+      // of having no dependencies beyond React.
+      const table = marks
+        .map((key) => {
+          const d = brandData[key];
+          const path = d.body.replace(/^<path d="/, "").replace(/"\/>$/, "");
+          return `  ${q(key)}: { viewBox: ${q(d.viewBox)}, color: ${q(
+            config.theme === "dark" ? d.dark : d.light,
+          )}, path: ${q(path)} },`;
+        })
+        .join("\n");
+      parts.push(`/** Provider marks, from Simple Icons (CC0). Logos are trademarks of their owners. */
+const MARKS: Record<string, { viewBox: string; color: string; path: string }> = {
+${table}
+};
+
+function Dot({ color, mark }: { color: string; mark: string | null }) {
+  const brand = mark ? MARKS[mark] : undefined;
+  if (brand) {
+    return (
+      <svg
+        aria-hidden
+        viewBox={brand.viewBox}
+        width={${s.mark}}
+        height={${s.mark}}
+        style={{ flexShrink: 0, fill: brand.color }}
+      >
+        <path d={brand.path} />
+      </svg>
+    );
+  }
   return (
     <span
       style={{ width: ${s.dot}, height: ${s.dot}, borderRadius: 999, background: color, flexShrink: 0 }}
     />
   );
 }`);
+    } else {
+      parts.push(`function Dot({ color }: { color: string }) {
+  return (
+    <span
+      style={{ width: ${s.dot}, height: ${s.dot}, borderRadius: 999, background: color, flexShrink: 0 }}
+    />
+  );
+}`);
+    }
   }
 
   if (config.showBadges) {
@@ -137,7 +191,7 @@ function optionRow(config: ModelSwitcherConfig): string {
 
   const dot = config.showDots
     ? `      <span style={{ display: "flex", paddingTop: ${config.showHints ? 5 : 0} }}>
-        <Dot color={model.dot} />
+        <Dot color={model.dot}${markProp(config, "model")} />
       </span>\n`
     : "";
 
@@ -211,7 +265,7 @@ function dropdownBody(config: ModelSwitcherConfig): string {
   const s = getSizing(config.size);
   const width = config.fullWidth ? `"100%"` : `"auto"`;
 
-  const dot = config.showDots ? `          <Dot color={selected.dot} />\n` : "";
+  const dot = config.showDots ? `          <Dot color={selected.dot}${markProp(config, "selected")} />\n` : "";
   const prefix = config.triggerPrefix
     ? `          <span style={{ color: ${q(c.muted)} }}>${config.triggerPrefix}</span>\n`
     : "";
@@ -300,7 +354,7 @@ function segmentedBody(config: ModelSwitcherConfig): string {
   const s = getSizing(config.size);
   const onAccent = readableOn(config.accent);
 
-  const dot = config.showDots ? `            {!active && <Dot color={model.dot} />}\n` : "";
+  const dot = config.showDots ? `            {!active && <Dot color={model.dot}${markProp(config, "model")} />}\n` : "";
   const badge = config.showBadges
     ? `            {model.badge && (
               <Badge
@@ -366,7 +420,7 @@ function pillsBody(config: ModelSwitcherConfig): string {
   const s = getSizing(config.size);
 
   const dot = config.showDots
-    ? `            <Dot color={active ? ${q(config.accent)} : model.dot} />\n`
+    ? `            <Dot color={active ? ${q(config.accent)} : model.dot}${markProp(config, "model")} />\n`
     : "";
   const check = config.showCheck ? `            {active && <CheckIcon />}\n` : "";
   const badge = config.showBadges ? `            {model.badge && <Badge text={model.badge} />}\n` : "";
@@ -516,7 +570,13 @@ export type ModelItem = {
   name: string;
   hint: string;
   badge: string;
-  dot: string;
+  dot: string;${
+  usedMarks(config).length > 0
+    ? `
+  /** Provider key into MARKS, or null for a plain color dot. */
+  mark: string | null;`
+    : ""
+}
 };
 
 export const MODELS: ModelItem[] = [

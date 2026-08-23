@@ -10,6 +10,7 @@ import {
   schemeToCssVars,
   schemeToTailwindConfig,
 } from "./color-engine";
+import { ModelIcon } from "@/components/brands/brand-icon";
 
 function ChatPreview({ scheme }: { scheme: ColorScheme }) {
   return (
@@ -27,7 +28,11 @@ function ChatPreview({ scheme }: { scheme: ColorScheme }) {
           style={{ background: scheme.streamingCursor }}
         />
         <span className="text-sm font-medium">AI Assistant</span>
-        <span className="ml-auto text-xs" style={{ color: scheme.mutedText }}>
+        <span
+          className="ml-auto inline-flex items-center gap-1.5 text-xs"
+          style={{ color: scheme.mutedText }}
+        >
+          <ModelIcon name="GPT-4o" size={11} tone="current" />
           GPT-4o
         </span>
       </div>

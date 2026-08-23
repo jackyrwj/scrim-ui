@@ -11,6 +11,12 @@ export type ModelOption = {
   name: string;
   hint: string;
   badges?: string[];
+  /**
+   * Optional leading mark, e.g. the provider's logo. A slot rather than a
+   * built-in lookup so this component stays dependency-free — pass whatever
+   * icon element you already have.
+   */
+  icon?: React.ReactNode;
 };
 
 export type ModelSelectorProps = {
@@ -117,6 +123,7 @@ export function ModelSelector({
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
+                        {opt.icon}
                         <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                           {opt.name}
                         </span>

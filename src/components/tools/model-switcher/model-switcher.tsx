@@ -245,7 +245,7 @@ export function ModelSwitcherTool() {
                 onChange={(v) => update({ showBadges: v })}
               />
               <Toggle
-                label="Color dots"
+                label="Model marks"
                 checked={config.showDots}
                 onChange={(v) => update({ showDots: v })}
               />
@@ -290,6 +290,7 @@ export function ModelSwitcherTool() {
                       value={model.dot}
                       onChange={(e) => updateModel(i, { dot: e.target.value })}
                       aria-label={`${model.name} color`}
+                      title="Fallback dot color — a recognised model name shows its provider's logo instead"
                       list="model-dot-colors"
                       className="h-7 w-7 shrink-0 cursor-pointer rounded-md border border-(--border)"
                     />

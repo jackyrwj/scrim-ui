@@ -11,6 +11,12 @@ export type ModelOption = {
   name: string;
   description?: string;
   badges?: string[];
+  /**
+   * Optional leading mark, e.g. the provider's logo. A slot rather than a
+   * built-in lookup so this component stays dependency-free — pass whatever
+   * icon element you already have.
+   */
+  icon?: React.ReactNode;
 };
 
 export type PromptInputModelSelectorProps = {
@@ -147,6 +153,7 @@ export function PromptInputModelSelector({
               className="inline-flex h-7 items-center gap-1.5 rounded-lg bg-zinc-100 px-2.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
             >
               <SparkIcon className="text-zinc-400" />
+              {active?.icon}
               {active?.name ?? "Select model"}
               <ChevronDownIcon className={open ? "rotate-180 transition-transform text-zinc-400" : "text-zinc-400 transition-transform"} />
             </button>
@@ -172,6 +179,7 @@ export function PromptInputModelSelector({
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-1.5 text-sm font-medium text-zinc-800 dark:text-zinc-100">
+                        {m.icon}
                         {m.name}
                         {m.badges?.map((b) => (
                           <span

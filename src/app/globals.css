@@ -68,6 +68,17 @@
   --shadow-glow: 0 0 20px rgba(167, 139, 250, 0.2);
 }
 
+/* <BrandIcon tone="brand"> ships both appearances of a brand color as custom
+   properties and lets CSS pick, so the mark is correct in server-rendered HTML
+   with no theme check in JS. See src/lib/brands.ts for how the pair is
+   derived. */
+.brand-mark {
+  color: var(--brand-light);
+}
+.dark .brand-mark {
+  color: var(--brand-dark);
+}
+
 html {
   scroll-behavior: smooth;
 }

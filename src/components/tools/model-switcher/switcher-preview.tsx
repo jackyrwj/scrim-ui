@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { brandData, resolveModelBrand } from "@/lib/brands";
 import { getPalette, getSizing, readableOn, withAlpha } from "./styles";
-import type { ModelItem, ModelSwitcherConfig } from "./types";
+import type { ModelItem, ModelSwitcherConfig, SwitcherTheme } from "./types";
 
 /* ------------------------------------------------------------------ */
 /* Icons                                                               */
@@ -71,7 +72,38 @@ function SearchIcon({ size }: { size: number }) {
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
-function Dot({ color, size }: { color: string; size: number }) {
+/**
+ * The leading mark for a model row. A recognised model shows its provider's
+ * logo; anything else falls back to the configurable color dot, because model
+ * lists here are user-supplied and "My fine-tune" has no logo to show.
+ */
+function Dot({
+  color,
+  size,
+  markSize,
+  name,
+  theme,
+}: {
+  color: string;
+  size: number;
+  markSize: number;
+  name: string;
+  theme: SwitcherTheme;
+}) {
+  const key = resolveModelBrand(name);
+  if (key) {
+    const data = brandData[key];
+    return (
+      <svg
+        aria-hidden
+        viewBox={data.viewBox}
+        width={markSize}
+        height={markSize}
+        style={{ flexShrink: 0, fill: theme === "dark" ? data.dark : data.light }}
+        dangerouslySetInnerHTML={{ __html: data.body }}
+      />
+    );
+  }
   return (
     <span
       style={{
@@ -156,7 +188,7 @@ function OptionRow({
     >
       {config.showDots && (
         <span style={{ paddingTop: config.showHints && model.hint ? 5 : 0, display: "flex" }}>
-          <Dot color={model.dot} size={s.dot} />
+          <Dot color={model.dot} size={s.dot} markSize={s.mark} name={model.name} theme={config.theme} />
         </span>
       )}
       <span style={{ minWidth: 0, flex: 1 }}>
@@ -233,7 +265,7 @@ function DropdownVariant({
         <span
           style={{ display: "inline-flex", minWidth: 0, alignItems: "center", gap: s.gap }}
         >
-          {config.showDots && <Dot color={selected.dot} size={s.dot} />}
+          {config.showDots && <Dot color={selected.dot} size={s.dot} markSize={s.mark} name={selected.name} theme={config.theme} />}
           {config.triggerPrefix && (
             <span style={{ color: c.muted }}>{config.triggerPrefix}</span>
           )}
@@ -346,7 +378,7 @@ function SegmentedVariant({
               transition: "background 150ms ease, color 150ms ease",
             }}
           >
-            {config.showDots && !active && <Dot color={m.dot} size={s.dot} />}
+            {config.showDots && !active && <Dot color={m.dot} size={s.dot} markSize={s.mark} name={m.name} theme={config.theme} />}
             {m.name}
             {config.showBadges && m.badge && (
               <Badge
@@ -405,7 +437,7 @@ function PillsVariant({
               transition: "background 150ms ease, color 150ms ease, border-color 150ms ease",
             }}
           >
-            {config.showDots && <Dot color={active ? config.accent : m.dot} size={s.dot} />}
+            {config.showDots && <Dot color={active ? config.accent : m.dot} size={s.dot} markSize={s.mark} name={m.name} theme={config.theme} />}
             {m.name}
             {config.showCheck && active && <CheckIcon size={s.font - 1} />}
             {config.showBadges && m.badge && (

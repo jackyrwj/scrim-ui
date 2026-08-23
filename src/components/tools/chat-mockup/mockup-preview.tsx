@@ -8,6 +8,8 @@ import { ToolCall } from "@/showcase/tool-call/tool-call";
 import { CitationList, type Citation } from "@/showcase/citation-ui/citation-ui";
 import type { MockupConfig } from "./types";
 import { DEVICE_WIDTHS } from "../device-presets";
+import { ModelIcon } from "@/components/brands/brand-icon";
+import { resolveModelBrand } from "@/lib/brands";
 
 /* ------------------------------------------------------------------ */
 /* Sample content for the AI elements                                   */
@@ -88,10 +90,17 @@ export function MockupPreview({ config }: { config: MockupConfig }) {
               <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{config.subtitle}</p>
             )}
           </div>
-          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
-            {config.modelName}
-          </span>
+          {resolveModelBrand(config.modelName) ? (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+              <ModelIcon name={config.modelName} size={11} />
+              {config.modelName}
+            </span>
+          ) : (
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
+              {config.modelName}
+            </span>
+          )}
         </div>
 
         {/* Messages */}
@@ -150,7 +159,13 @@ export function MockupPreview({ config }: { config: MockupConfig }) {
           <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
             <PromptInput
               placeholder={config.composerPlaceholder}
-              models={[{ id: config.modelName, name: config.modelName }]}
+              models={[
+                {
+                  id: config.modelName,
+                  name: config.modelName,
+                  icon: <ModelIcon name={config.modelName} size={13} />,
+                },
+              ]}
               defaultModel={config.modelName}
               attachments={config.showAttachments ? SAMPLE_ATTACHMENTS : []}
               showWebSearch={config.showSearch}

@@ -16,9 +16,9 @@ type Turn = {
 };
 
 const MODELS = [
-  { id: "sonnet", name: "Claude Sonnet", hint: "Balanced" },
-  { id: "opus", name: "Claude Opus", hint: "Reasoning" },
-  { id: "haiku", name: "Claude Haiku", hint: "Fast" },
+  { id: "sonnet", name: "Claude Sonnet", hint: "Balanced", icon: <ClaudeMark /> },
+  { id: "opus", name: "Claude Opus", hint: "Reasoning", icon: <ClaudeMark /> },
+  { id: "haiku", name: "Claude Haiku", hint: "Fast", icon: <ClaudeMark /> },
 ];
 
 const SOURCES: Citation[] = [
@@ -47,6 +47,18 @@ const REPLIES = [
 /* ------------------------------------------------------------------ */
 /* Icons                                                               */
 /* ------------------------------------------------------------------ */
+
+/**
+ * The provider's mark, inlined so this pattern stays dependency-free. Swap it
+ * for whichever providers your own model list uses.
+ */
+function ClaudeMark() {
+  return (
+    <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden className="shrink-0 fill-[#d97757]">
+      <path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z" />
+    </svg>
+  );
+}
 
 function PlusIcon() {
   return (

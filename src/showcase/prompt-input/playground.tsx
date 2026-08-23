@@ -3,12 +3,13 @@
 import * as React from "react";
 import { PromptInput, type Attachment } from "./prompt-input";
 import { Playground, PField, PToggle, pInputCls } from "@/components/component-page/playground";
+import { withModelIcons } from "@/components/brands/brand-icon";
 
-const demoModels = [
+const demoModels = withModelIcons([
   { id: "gpt-5", name: "GPT-5", hint: "Fast" },
   { id: "claude-sonnet", name: "Claude Sonnet", hint: "Balanced" },
   { id: "claude-opus", name: "Claude Opus", hint: "Reasoning" },
-];
+]);
 
 const sampleFiles: Attachment[] = [
   { id: "s1", name: "screenshot.png", size: "1.2 MB", type: "image" },

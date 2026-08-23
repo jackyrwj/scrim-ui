@@ -186,6 +186,7 @@ export function TokenCounter() {
                       className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 rounded-lg border border-(--border) px-3 py-2.5"
                     >
                       <div className="flex items-center gap-2 text-sm font-medium">
+                        <BrandIcon name={e.model.family} size={14} />
                         {e.model.name}
                         {e.exact && (
                           <span className="rounded-full bg-(--muted) px-1.5 py-0.5 text-[10px] font-medium text-(--muted-foreground)">

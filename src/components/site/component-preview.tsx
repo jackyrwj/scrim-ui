@@ -10,6 +10,8 @@
 /* Server component on purpose — zero JS.                              */
 /* ------------------------------------------------------------------ */
 
+import { ModelIcon } from "@/components/brands/brand-icon";
+
 const previews: Record<string, () => React.ReactElement> = {
   "prompt-input": PromptInputPreview,
   "streaming-message": StreamingMessagePreview,
@@ -75,7 +77,8 @@ function PromptInputPreview() {
           <span className="rounded-md border border-(--border) px-1.5 py-0.5 text-[9px] text-(--muted-foreground)">
             @
           </span>
-          <span className="rounded-md border border-(--border) px-1.5 py-0.5 text-[9px] text-(--muted-foreground)">
+          <span className="inline-flex items-center gap-1 rounded-md border border-(--border) px-1.5 py-0.5 text-[9px] text-(--muted-foreground)">
+            <ModelIcon name="Claude Sonnet 4.5" size={8} />
             Sonnet 4.5
           </span>
           <span className="ml-auto h-5 w-5 rounded-md" style={{ background: "var(--primary)" }} />

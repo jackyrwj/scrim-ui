@@ -55,12 +55,14 @@ export type Sizing = {
   badgeFont: number;
   gap: number;
   dot: number;
+  /** Brand marks need more room than a color dot to stay legible. */
+  mark: number;
 };
 
 const SIZES: Record<SwitcherSize, Sizing> = {
-  sm: { height: 30, paddingX: 10, font: 12, hintFont: 11, badgeFont: 10, gap: 6, dot: 6 },
-  md: { height: 36, paddingX: 12, font: 13, hintFont: 12, badgeFont: 10, gap: 8, dot: 7 },
-  lg: { height: 44, paddingX: 16, font: 15, hintFont: 13, badgeFont: 11, gap: 10, dot: 8 },
+  sm: { height: 30, paddingX: 10, font: 12, hintFont: 11, badgeFont: 10, gap: 6, dot: 6, mark: 11 },
+  md: { height: 36, paddingX: 12, font: 13, hintFont: 12, badgeFont: 10, gap: 8, dot: 7, mark: 13 },
+  lg: { height: 44, paddingX: 16, font: 15, hintFont: 13, badgeFont: 11, gap: 10, dot: 8, mark: 15 },
 };
 
 export function getSizing(size: SwitcherSize): Sizing {

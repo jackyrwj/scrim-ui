@@ -17,6 +17,12 @@ export type ModelOption = {
   id: string;
   name: string;
   hint?: string;
+  /**
+   * Optional leading mark, e.g. the provider's logo. A slot rather than a
+   * built-in lookup so this component stays dependency-free — pass whatever
+   * icon element you already have.
+   */
+  icon?: React.ReactNode;
 };
 
 export type PromptInputProps = {
@@ -314,6 +320,7 @@ export function PromptInput({
                 aria-expanded={modelOpen}
                 className="inline-flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 disabled:opacity-40 disabled:pointer-events-none dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
               >
+                {activeModel?.icon}
                 {activeModel?.name ?? "Model"}
                 <ChevronDownIcon className={modelOpen ? "rotate-180 transition-transform" : "transition-transform"} />
               </button>
@@ -337,8 +344,11 @@ export function PromptInput({
                         m.id === model ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-600 dark:text-zinc-400"
                       }`}
                     >
-                      <span>{m.name}</span>
-                      {m.hint && <span className="text-xs text-zinc-500 dark:text-zinc-400">{m.hint}</span>}
+                      <span className="flex min-w-0 items-center gap-1.5">
+                        {m.icon}
+                        <span className="truncate">{m.name}</span>
+                      </span>
+                      {m.hint && <span className="shrink-0 text-xs text-zinc-500 dark:text-zinc-400">{m.hint}</span>}
                     </button>
                   ))}
                 </div>
