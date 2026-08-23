@@ -9,6 +9,8 @@ export const MODEL_PRICING: ModelInfo[] = [
   { name: "Claude Opus 4", family: "Anthropic", inputPrice: 15, outputPrice: 75, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
   { name: "Gemini 2.5 Flash", family: "Google", inputPrice: 0.15, outputPrice: 0.6, multiplier: 1.4, tokenizer: null, ratioToO200k: 1.05 },
   { name: "Gemini 2.5 Pro", family: "Google", inputPrice: 1.25, outputPrice: 10, multiplier: 1.4, tokenizer: null, ratioToO200k: 1.05 },
+  { name: "DeepSeek-V4-Flash", family: "DeepSeek", inputPrice: 0.44, outputPrice: 1.32, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.1 },
+  { name: "DeepSeek-V4-Pro", family: "DeepSeek", inputPrice: 1.32, outputPrice: 3.96, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.1 },
 ];
 
 /* ------------------------------------------------------------------ */

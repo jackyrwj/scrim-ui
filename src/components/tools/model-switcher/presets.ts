@@ -41,6 +41,7 @@ export const modelPresets: ModelPreset[] = [
       { id: "gpt", name: "GPT-4o", hint: "OpenAI · multimodal", badge: "", dot: "#10a37f" },
       { id: "claude", name: "Claude Sonnet 4", hint: "Anthropic · long context", badge: "", dot: "#d97757" },
       { id: "gemini", name: "Gemini 2.5 Pro", hint: "Google · 1M token context", badge: "", dot: "#4285f4" },
+      { id: "deepseek", name: "DeepSeek-V4-Pro", hint: "DeepSeek · lowest cost per token", badge: "Cheap", dot: "#4d6bfe" },
       { id: "llama", name: "Llama 3.3 70B", hint: "Meta · open weights", badge: "Free", dot: "#0866ff" },
     ],
   },

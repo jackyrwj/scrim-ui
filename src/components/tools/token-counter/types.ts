@@ -1,6 +1,6 @@
 export type ModelInfo = {
   name: string;
-  family: "OpenAI" | "Anthropic" | "Google";
+  family: "OpenAI" | "Anthropic" | "Google" | "DeepSeek";
   inputPrice: number;
   outputPrice: number;
   /** Words-to-tokens factor, used before the real tokenizer is loaded. */

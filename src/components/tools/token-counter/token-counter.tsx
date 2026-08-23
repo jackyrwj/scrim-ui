@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Section } from "../tool-ui";
+import { BrandIcon } from "@/components/brands/brand-icon";
 import { CopyButton } from "@/components/component-page/copy-button";
 import type { TokenConfig } from "./types";
 import { defaultConfig } from "./types";
@@ -19,6 +20,7 @@ const FAMILY_COLORS: Record<string, string> = {
   OpenAI: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300",
   Anthropic: "bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300",
   Google: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
+  DeepSeek: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300",
 };
 
 export function TokenCounter() {
@@ -69,7 +71,7 @@ export function TokenCounter() {
     { label: "Sentences", value: stats.sentences },
   ];
 
-  const families = ["OpenAI", "Anthropic", "Google"] as const;
+  const families = ["OpenAI", "Anthropic", "Google", "DeepSeek"] as const;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -141,7 +143,7 @@ export function TokenCounter() {
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <p className="max-w-md text-xs leading-5 text-(--muted-foreground)">
               {encoderState === "ready"
-                ? "GPT-4o family counts come from the real o200k_base tokenizer. Claude and Gemini have no public tokenizer, so those rows are scaled from it."
+                ? "GPT-4o family counts come from the real o200k_base tokenizer. Claude, Gemini and DeepSeek have no public tokenizer, so those rows are scaled from it."
                 : "Approximate counts using word-based heuristics. Load the real tokenizer for exact GPT-4o family counts."}
             </p>
             {encoderState !== "ready" && (
@@ -171,8 +173,9 @@ export function TokenCounter() {
               <div key={family} className="mb-5 last:mb-0">
                 <div className="mb-2 flex items-center gap-2">
                   <span
-                    className={`inline-flex rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${FAMILY_COLORS[family]}`}
+                    className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${FAMILY_COLORS[family]}`}
                   >
+                    <BrandIcon name={family} size={11} tone="current" />
                     {family}
                   </span>
                 </div>
