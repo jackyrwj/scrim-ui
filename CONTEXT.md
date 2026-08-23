@@ -1,8 +1,8 @@
 # AI UI Resources
 
-A resource hub for people building AI product interfaces. It gives away five kinds
-of thing — source you copy, interfaces you compose, tools you run, artwork you
-download, and writing you read — all bounded to AI-native UI (see
+A resource hub for people building AI product interfaces. It gives away four kinds
+of thing — source you copy, interfaces you compose, tools you run, and writing you
+read — all bounded to AI-native UI (see
 [ADR 0001](./docs/adr/0001-ai-native-depth-over-breadth.md)).
 
 ## Language
@@ -20,14 +20,6 @@ A complete, remix-ready interface composed from several Components, e.g. a whole
 chat or research flow rather than one control.
 _Avoid_: Template, layout, example app
 
-**Asset**:
-A piece of artwork with no behaviour — an icon, graphic, font. The boundary
-against Component is **behaviour, not delivery form**: an Asset never responds to
-interaction, so it may be handed over as a downloaded file *or* as copied markup
-without becoming a Component. Downloading is the canonical path; copy is a
-convenience.
-_Avoid_: 素材, media, download, graphic
-
 **Tool**:
 A first-party utility that runs entirely in the reader's browser and produces
 something — a mockup, a count, a diagram, an exported component.
@@ -40,8 +32,8 @@ _Avoid_: Link, reference, listing
 **Concept**:
 One idea in the AI-interface vocabulary — streaming, tool call, approval gate,
 context window. Sits above Component: several Components can express the same
-Concept, and a Category is a grouping of Concepts. Introduced because the icon set
-is drawn per Concept, never per Component, so that no two icons share a silhouette.
+Concept, and a Category is a grouping of Concepts. Useful when talking about what
+the library covers, as distinct from how many files are in it.
 _Avoid_: Topic, idea, tag
 
 **Category**:
@@ -57,6 +49,8 @@ A third-party company's logo, rendered only to *identify* the product being name
 or linked. Never a deliverable — we do not host, package or offer marks for
 download, because their trademark rights are not covered by the CC0 license on the
 path data. See [ADR 0002](./docs/adr/0002-no-third-party-marks-as-assets.md).
+Distinct from the Lucide icons the site uses for its own concepts
+([ADR 0003](./docs/adr/0003-lucide-for-icons.md)), which represent nobody.
 _Avoid_: Logo, icon, brand icon
 
 **Model Mark**:

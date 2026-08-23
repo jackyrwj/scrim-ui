@@ -9,19 +9,8 @@ import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-s
 import { ToolPreview } from "@/components/site/tool-preview";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { HeroShowcase } from "@/components/site/hero-showcase";
-
-const categoryIcons: Record<string, string> = {
-  "prompt-input": "💬",
-  messages: "✉️",
-  reasoning: "🧠",
-  "tool-calls": "🔧",
-  sources: "📑",
-  agents: "🤖",
-  files: "📎",
-  voice: "🎙️",
-  memory: "💾",
-  "model-settings": "⚙️",
-};
+import { createElement } from "react";
+import { categoryIconFor } from "@/lib/icons";
 
 export default function Home() {
   const published = components.filter((c) => c.status === "published");
@@ -216,7 +205,6 @@ export default function Home() {
                 (c) => c.category === cat.slug && c.status === "published",
               ).length;
               const hasComponents = count > 0;
-              const icon = categoryIcons[cat.slug] ?? "📦";
               const card = (
                 <div
                   className={`rounded-xl border border-(--border) p-4 transition-all ${
@@ -228,7 +216,12 @@ export default function Home() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-2 text-sm font-medium">
-                      <span className="text-base">{icon}</span>
+                      {createElement(categoryIconFor(cat.slug), {
+                        size: 16,
+                        strokeWidth: 1.75,
+                        "aria-hidden": true,
+                        className: "text-(--primary)",
+                      })}
                       {cat.name}
                     </span>
                     {hasComponents ? (
