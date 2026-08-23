@@ -111,16 +111,16 @@ export function MemoryList({
       <div className="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
         <div>
           <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{title}</p>
-          <p className="mt-0.5 text-xs text-zinc-400">{description}</p>
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
         </div>
-        <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+        <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
           {items.length} {items.length === 1 ? "item" : "items"}
         </span>
       </div>
 
       {/* Items */}
       {items.length === 0 ? (
-        <p className="px-4 py-8 text-center text-xs text-zinc-400">{emptyText}</p>
+        <p className="px-4 py-8 text-center text-xs text-zinc-500 dark:text-zinc-400">{emptyText}</p>
       ) : (
         <ul className="max-h-56 divide-y divide-zinc-100 overflow-y-auto dark:divide-zinc-800">
           {items.map((item) => (
@@ -132,7 +132,7 @@ export function MemoryList({
                 {item.text}
               </p>
               {item.updatedAt && (
-                <span className="shrink-0 text-[11px] text-zinc-400">{item.updatedAt}</span>
+                <span className="shrink-0 text-[11px] text-zinc-500 dark:text-zinc-400">{item.updatedAt}</span>
               )}
               {onForget && (
                 <button

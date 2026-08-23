@@ -147,7 +147,7 @@ export function AgentStatus({
               {s.icon}
               {s.label}
             </span>
-            {elapsed && <span className="text-xs tabular-nums text-zinc-400">{elapsed}</span>}
+            {elapsed && <span className="text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{elapsed}</span>}
           </div>
           {action && (
             <p className="mt-0.5 truncate text-[13px] text-zinc-500 dark:text-zinc-400">{action}</p>

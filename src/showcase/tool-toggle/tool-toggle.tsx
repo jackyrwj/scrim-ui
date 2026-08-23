@@ -38,7 +38,7 @@ export function ToolToggle({
     <div className={`rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
       <div className="border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
         <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{title}</p>
-        <p className="mt-0.5 text-xs text-zinc-400">{description}</p>
+        <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
       </div>
 
       <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -53,7 +53,7 @@ export function ToolToggle({
               <p className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
                 {tool.name}
               </p>
-              <p className="mt-0.5 text-xs text-zinc-400">{tool.description}</p>
+              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{tool.description}</p>
             </div>
             <button
               type="button"

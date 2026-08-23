@@ -125,7 +125,7 @@ export function VoiceInput({
           <div className="min-w-0 flex-1 text-red-500 dark:text-red-400">
             <Bars active />
           </div>
-          <span className="shrink-0 text-xs tabular-nums text-zinc-400">{recordingTime}</span>
+          <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{recordingTime}</span>
           {onCancel && (
             <button
               type="button"
@@ -156,7 +156,7 @@ export function VoiceInput({
       >
         <MicIcon />
       </button>
-      <span className="text-sm text-zinc-400">Click to talk</span>
+      <span className="text-sm text-zinc-500 dark:text-zinc-400">Click to talk</span>
       <div className="ml-auto text-zinc-300 dark:text-zinc-600">
         <Bars active={false} />
       </div>

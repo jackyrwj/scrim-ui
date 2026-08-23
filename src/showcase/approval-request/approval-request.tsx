@@ -72,7 +72,7 @@ export function ApprovalRequest({
         <div className="min-w-0 flex-1">
           <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{title}</p>
           {requester && (
-            <p className="mt-0.5 text-xs text-zinc-400">{requester} is requesting approval</p>
+            <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{requester} is requesting approval</p>
           )}
           {description && (
             <p className="mt-1.5 text-[13px] leading-5 text-zinc-500 dark:text-zinc-400">
@@ -103,7 +103,7 @@ export function ApprovalRequest({
                 <XIcon />
                 Deny
               </button>
-              <span className="ml-auto text-[11px] text-zinc-400">Auto-deny in 4:32</span>
+              <span className="ml-auto text-[11px] text-zinc-500 dark:text-zinc-400">Auto-deny in 4:32</span>
             </div>
           ) : (
             <p

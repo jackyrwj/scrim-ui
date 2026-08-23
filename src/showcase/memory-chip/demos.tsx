@@ -10,7 +10,7 @@ export function DemoContext() {
       </div>
       <div className="flex items-center gap-2">
         <MemoryChip variant="saved" />
-        <span className="text-[11px] text-zinc-400">just now</span>
+        <span className="text-[11px] text-zinc-500 dark:text-zinc-400">just now</span>
       </div>
     </div>
   );
@@ -19,7 +19,7 @@ export function DemoContext() {
 export function DemoOn() {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-xs text-zinc-400">Status</span>
+      <span className="text-xs text-zinc-500 dark:text-zinc-400">Status</span>
       <MemoryChip variant="on" label="Memory on · 3 items" />
     </div>
   );

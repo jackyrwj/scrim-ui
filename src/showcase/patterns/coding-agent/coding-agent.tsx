@@ -88,7 +88,7 @@ export function CodingAgentPattern() {
     <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
       {/* Header */}
       <div>
-        <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">Task</p>
+        <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Task</p>
         <h3 className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Fix the token refresh race condition
         </h3>

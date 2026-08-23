@@ -89,10 +89,10 @@ export function SearchToolCall({
         <span className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
           {status === "searching" ? "Searching the web" : "Search the web"}
         </span>
-        <span className="hidden shrink-0 truncate text-xs text-zinc-400 sm:block">
+        <span className="hidden shrink-0 truncate text-xs text-zinc-500 dark:text-zinc-400 sm:block">
           {status === "searching" ? `"${query}"` : `${results.length} results`}
         </span>
-        {elapsed && <span className="shrink-0 text-xs tabular-nums text-zinc-400">{elapsed}</span>}
+        {elapsed && <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{elapsed}</span>}
         {status === "searching" ? (
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-blue-100 px-2 py-0.5 text-[11px] text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
             <span className="h-2.5 w-2.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
@@ -167,7 +167,7 @@ export function SearchToolCall({
                     <p className="truncate text-sm font-medium text-zinc-800 group-hover:underline dark:text-zinc-100">
                       {r.title}
                     </p>
-                    <p className="text-xs text-zinc-400">{domainFromUrl(r.url)}</p>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{domainFromUrl(r.url)}</p>
                     {r.snippet && (
                       <p className="mt-0.5 line-clamp-1 text-[13px] text-zinc-500 dark:text-zinc-400">
                         {r.snippet}

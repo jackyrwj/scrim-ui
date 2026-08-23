@@ -133,7 +133,7 @@ export function ModelPreferencesPattern() {
           <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
             Model &amp; Memory Preferences
           </p>
-          <p className="mt-0.5 text-xs text-zinc-400">
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
             How the assistant thinks, which tools it may use, and what it remembers.
           </p>
         </div>
@@ -149,7 +149,7 @@ export function ModelPreferencesPattern() {
           <section className="space-y-2">
             <div>
               <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Default model</p>
-              <p className="mt-0.5 text-xs text-zinc-400">
+              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                 Used for new conversations; you can still switch per message.
               </p>
             </div>
@@ -174,7 +174,7 @@ export function ModelPreferencesPattern() {
             onForget={forgetMemory}
             description="Facts the assistant keeps across conversations"
           />
-          <p className="mt-3 text-[11px] leading-5 text-zinc-400">
+          <p className="mt-3 text-[11px] leading-5 text-zinc-500 dark:text-zinc-400">
             Memories are included with each message so the assistant stays consistent. Remove
             anything you do not want stored.
           </p>

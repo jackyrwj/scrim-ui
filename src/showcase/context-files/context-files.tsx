@@ -68,7 +68,7 @@ export function ContextFiles({
       </div>
 
       {files.length === 0 ? (
-        <div className="px-3 py-4 text-center text-xs text-zinc-400 dark:text-zinc-500">
+        <div className="px-3 py-4 text-center text-xs text-zinc-500 dark:text-zinc-400">
           No files in context yet — attach files and they’ll appear here.
         </div>
       ) : (
@@ -82,7 +82,7 @@ export function ContextFiles({
                 {file.name}
               </span>
               {file.detail && (
-                <span className="shrink-0 text-[11px] text-zinc-400 dark:text-zinc-500">
+                <span className="shrink-0 text-[11px] text-zinc-500 dark:text-zinc-400">
                   {file.detail}
                 </span>
               )}

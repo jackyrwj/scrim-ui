@@ -76,7 +76,7 @@ export function UserMessage({
         <div className="flex flex-wrap items-center justify-end gap-2">
           <span className="text-sm font-medium">You</span>
           {edited && (
-            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
               Edited
             </span>
           )}

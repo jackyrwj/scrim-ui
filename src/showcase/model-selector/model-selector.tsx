@@ -71,7 +71,7 @@ export function ModelSelector({
         <span className="flex min-w-0 items-center gap-2">
           <span className="truncate font-medium">{selected?.name ?? placeholder}</span>
           {selected?.badges?.[0] && (
-            <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
               {selected.badges[0]}
             </span>
           )}
@@ -133,7 +133,7 @@ export function ModelSelector({
                         {opt.badges.map((b) => (
                           <span
                             key={b}
-                            className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+                            className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
                           >
                             {b}
                           </span>

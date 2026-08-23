@@ -7,19 +7,19 @@ export function DemoStates() {
     <div className="space-y-4">
       <div>
         <VoiceWaveform state="idle" className="text-zinc-300 dark:text-zinc-600" />
-        <p className="mt-1.5 text-xs text-zinc-400">Idle — nothing being captured</p>
+        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Idle — nothing being captured</p>
       </div>
       <div>
         <VoiceWaveform state="listening" className="text-emerald-500" />
-        <p className="mt-1.5 text-xs text-zinc-400">Listening — waiting for speech</p>
+        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Listening — waiting for speech</p>
       </div>
       <div>
         <VoiceWaveform state="recording" className="text-red-500" />
-        <p className="mt-1.5 text-xs text-zinc-400">Recording — capturing input</p>
+        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Recording — capturing input</p>
       </div>
       <div>
         <VoiceWaveform state="speaking" className="text-violet-500" />
-        <p className="mt-1.5 text-xs text-zinc-400">Speaking — the model is answering aloud</p>
+        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Speaking — the model is answering aloud</p>
       </div>
     </div>
   );
@@ -32,7 +32,7 @@ export function DemoHero() {
         AI
       </span>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 text-xs text-zinc-400">
+        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           <span className="font-medium text-zinc-600 dark:text-zinc-300">Assistant</span>
           <span>Speaking</span>
         </div>

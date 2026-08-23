@@ -106,7 +106,7 @@ function FileChip({
     >
       {file.type === "image" ? <ImageIcon /> : <FileIcon />}
       <span className="max-w-36 truncate">{file.name}</span>
-      {file.size && <span className="text-zinc-400">{file.size}</span>}
+      {file.size && <span className="text-zinc-500 dark:text-zinc-400">{file.size}</span>}
 
       {status === "uploading" && file.progress !== undefined && (
         <>
@@ -116,7 +116,7 @@ function FileChip({
               style={{ width: `${file.progress}%` }}
             />
           </span>
-          <span className="tabular-nums text-zinc-400">{file.progress}%</span>
+          <span className="tabular-nums text-zinc-500 dark:text-zinc-400">{file.progress}%</span>
         </>
       )}
 
@@ -224,7 +224,7 @@ export function PromptInputAttachments({
           >
             <PlusIcon />
           </button>
-          <span className="text-[11px] text-zinc-400">Enter to send · Shift+Enter for newline</span>
+          <span className="text-[11px] text-zinc-500 dark:text-zinc-400">Enter to send · Shift+Enter for newline</span>
           <button
             type="button"
             onClick={submit}

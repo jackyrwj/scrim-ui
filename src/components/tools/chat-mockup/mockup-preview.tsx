@@ -85,7 +85,7 @@ export function MockupPreview({ config }: { config: MockupConfig }) {
               {config.title}
             </p>
             {config.subtitle && (
-              <p className="truncate text-xs text-zinc-400">{config.subtitle}</p>
+              <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{config.subtitle}</p>
             )}
           </div>
           <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
@@ -156,7 +156,7 @@ export function MockupPreview({ config }: { config: MockupConfig }) {
               showWebSearch={config.showSearch}
               showTools={config.showTools}
             />
-            <p className="mt-1.5 text-center text-[11px] text-zinc-400">
+            <p className="mt-1.5 text-center text-[11px] text-zinc-500 dark:text-zinc-400">
               AI can make mistakes. Verify important information.
             </p>
           </div>

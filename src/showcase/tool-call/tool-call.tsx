@@ -76,7 +76,7 @@ function StatusPill({ status, onCancel }: { status: ToolStatus; onCancel?: () =>
         onClick={onCancel}
         disabled={!onCancel}
         title="Cancel"
-        className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-500 transition-colors hover:bg-zinc-200 disabled:hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:disabled:hover:bg-zinc-800"
+        className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 transition-colors hover:bg-zinc-200 disabled:hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:disabled:hover:bg-zinc-800"
       >
         <span className="h-2.5 w-2.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
         Running
@@ -154,7 +154,7 @@ export function ToolCall({
         <span className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
           {name}
         </span>
-        {duration && <span className="shrink-0 text-xs tabular-nums text-zinc-400">{duration}</span>}
+        {duration && <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{duration}</span>}
         <span className="shrink-0">
           <StatusPill status={status} onCancel={onCancel} />
         </span>
@@ -172,7 +172,7 @@ export function ToolCall({
         <div className="space-y-2 border-t border-zinc-100 px-3.5 py-3 dark:border-zinc-800">
           {input && (
             <div>
-              <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">
+              <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 Input
               </span>
               <pre className="mt-1 overflow-x-auto rounded-lg bg-zinc-50 p-2.5 font-mono text-xs leading-5 text-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-300">
@@ -182,7 +182,7 @@ export function ToolCall({
           )}
           {output && (
             <div>
-              <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">
+              <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 Output
               </span>
               <pre className="mt-1 overflow-x-auto rounded-lg bg-zinc-50 p-2.5 font-mono text-xs leading-5 text-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-300">

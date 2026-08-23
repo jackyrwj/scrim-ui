@@ -140,7 +140,7 @@ export function AIChatPattern() {
             ),
           )}
         </nav>
-        <div className="border-t border-zinc-200 p-3 text-xs text-zinc-400 dark:border-zinc-800">
+        <div className="border-t border-zinc-200 p-3 text-xs text-zinc-500 dark:text-zinc-400 dark:border-zinc-800">
           <div className="mb-1 font-medium text-zinc-500 dark:text-zinc-400">Claude Sonnet</div>
           <div className="flex items-center gap-1">
             <SearchIcon />
@@ -155,7 +155,7 @@ export function AIChatPattern() {
         <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
           <div>
             <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">AI Chat</p>
-            <p className="text-xs text-zinc-400">Streaming UI patterns</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Streaming UI patterns</p>
           </div>
           <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
             Online
@@ -204,7 +204,7 @@ export function AIChatPattern() {
             showWebSearch
             onSubmit={submit}
           />
-          <p className="mt-1.5 text-center text-[11px] text-zinc-400">
+          <p className="mt-1.5 text-center text-[11px] text-zinc-500 dark:text-zinc-400">
             AI can make mistakes. Verify important information.
           </p>
         </div>

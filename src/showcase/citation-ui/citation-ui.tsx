@@ -66,7 +66,7 @@ export function InlineCitation({ citation, className = "" }: InlineCitationProps
           <p className="text-sm font-medium leading-snug text-zinc-800 dark:text-zinc-100">
             {citation.title}
           </p>
-          <p className="mt-1 flex items-center gap-1 text-xs text-zinc-400">
+          <p className="mt-1 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
             <span className="truncate">{host}</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" className="shrink-0">
               <path d="M7 17 17 7M7 7h10v10" />
@@ -97,11 +97,11 @@ export function CitationList({
   if (citations.length === 0) return null;
   return (
     <div className={`space-y-1.5 ${className}`}>
-      <p className="text-xs font-medium uppercase tracking-wide text-zinc-400">Sources</p>
+      <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Sources</p>
       <ol className="space-y-1">
         {citations.map((c) => (
           <li key={c.id} className="flex items-baseline gap-2 text-sm">
-            <span className="w-4 shrink-0 text-right text-xs tabular-nums text-zinc-400">
+            <span className="w-4 shrink-0 text-right text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
               {c.id}
             </span>
             <a

@@ -111,7 +111,7 @@ export function VoiceConversation({
             >
               <div
                 className={`flex items-center gap-2 text-[11px] ${
-                  user ? "text-zinc-300 dark:text-zinc-500" : "text-zinc-400"
+                  user ? "text-zinc-300 dark:text-zinc-600" : "text-zinc-500 dark:text-zinc-400"
                 }`}
               >
                 <span className="font-medium">{user ? "You" : "Assistant"}</span>

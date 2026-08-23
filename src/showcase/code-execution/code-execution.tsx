@@ -85,7 +85,7 @@ export function CodeExecution({
           Code execution
         </span>
         {duration && (
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">{duration}</span>
+          <span className="text-xs text-zinc-500 dark:text-zinc-400">{duration}</span>
         )}
         <span className="ml-auto flex items-center gap-2">
           {running && onStop && (
@@ -122,7 +122,7 @@ export function CodeExecution({
       )}
 
       {!running && (output || error) && (
-        <div className={`flex items-center gap-1.5 px-3 pb-2 text-[11px] ${failed ? "text-red-600 dark:text-red-400" : "text-zinc-400 dark:text-zinc-500"}`}>
+        <div className={`flex items-center gap-1.5 px-3 pb-2 text-[11px] ${failed ? "text-red-600 dark:text-red-400" : "text-zinc-500 dark:text-zinc-400"}`}>
           <span className="font-medium">exit {exitCode}</span>
           {duration && ` · ${duration}`}
         </div>

@@ -102,7 +102,7 @@ export function VoiceMockupPreview({ config }: { config: VoiceMockupConfig }) {
                 {config.title}
               </p>
               {config.subtitle && (
-                <p className="truncate text-xs text-zinc-400">{config.subtitle}</p>
+                <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{config.subtitle}</p>
               )}
             </div>
           </div>
@@ -116,7 +116,7 @@ export function VoiceMockupPreview({ config }: { config: VoiceMockupConfig }) {
             bars={22}
             className="h-7 w-40 shrink-0 text-violet-500"
           />
-          <p className="truncate text-xs text-zinc-400">{hint}</p>
+          <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{hint}</p>
         </div>
 
         {/* Conversation */}

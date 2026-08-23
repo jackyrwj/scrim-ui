@@ -176,7 +176,7 @@ export function PromptInputModelSelector({
                         {m.badges?.map((b) => (
                           <span
                             key={b}
-                            className="rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-700 dark:text-zinc-300"
+                            className="rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300"
                           >
                             {b}
                           </span>
@@ -195,7 +195,7 @@ export function PromptInputModelSelector({
           </div>
 
           {active?.description && (
-            <span className="hidden truncate text-xs text-zinc-400 sm:block">{active.description}</span>
+            <span className="hidden truncate text-xs text-zinc-500 dark:text-zinc-400 sm:block">{active.description}</span>
           )}
         </div>
 

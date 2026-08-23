@@ -236,7 +236,7 @@ export function PromptInput({
               >
                 {file.type === "image" ? <ImageIcon /> : <FileIcon />}
                 <span className="max-w-40 truncate">{file.name}</span>
-                {file.size && <span className="text-zinc-400">{file.size}</span>}
+                {file.size && <span className="text-zinc-500 dark:text-zinc-400">{file.size}</span>}
                 <button
                   type="button"
                   aria-label={`Remove ${file.name}`}
@@ -338,7 +338,7 @@ export function PromptInput({
                       }`}
                     >
                       <span>{m.name}</span>
-                      {m.hint && <span className="text-xs text-zinc-400">{m.hint}</span>}
+                      {m.hint && <span className="text-xs text-zinc-500 dark:text-zinc-400">{m.hint}</span>}
                     </button>
                   ))}
                 </div>

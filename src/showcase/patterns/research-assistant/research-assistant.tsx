@@ -92,7 +92,7 @@ export function ResearchAssistantPattern() {
     <div className="rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
       {/* Question header */}
       <div className="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
-        <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">Research Question</p>
+        <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Research Question</p>
         <h3 className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           Which Claude 5 model is most cost-effective for a high-volume support bot?
         </h3>
@@ -145,7 +145,7 @@ export function ResearchAssistantPattern() {
 
         {/* Sources sidebar */}
         <aside className="hidden lg:block">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-400">Sources</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Sources</p>
           <div className="mt-2 space-y-2">
             {SEARCH_RESULTS.map((r, i) => (
               <SourceCard key={i} title={r.title} url={r.url} snippet={r.snippet} index={i + 1} />

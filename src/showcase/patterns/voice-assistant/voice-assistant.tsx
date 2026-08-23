@@ -202,7 +202,7 @@ export function VoiceAssistantPattern() {
             <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
               Voice Assistant
             </p>
-            <p className="text-xs text-zinc-400">Hands-free answers</p>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">Hands-free answers</p>
           </div>
         </div>
         <StatusChip stage={stage} streaming={streaming} />
@@ -215,7 +215,7 @@ export function VoiceAssistantPattern() {
           bars={22}
           className="h-7 w-40 shrink-0 text-violet-500"
         />
-        <p className="truncate text-xs text-zinc-400">{stageText(stage, streaming)}</p>
+        <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{stageText(stage, streaming)}</p>
       </div>
 
       {/* Messages */}

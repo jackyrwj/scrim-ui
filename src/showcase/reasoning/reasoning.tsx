@@ -98,7 +98,7 @@ export function Reasoning({
         <span className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
           {isThinking ? "Reasoning" : "Reasoning trace"}
         </span>
-        {elapsed && <span className="shrink-0 text-xs tabular-nums text-zinc-400">{elapsed}</span>}
+        {elapsed && <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{elapsed}</span>}
         {isThinking && (
           <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-[11px] text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
             <span className="h-2.5 w-2.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
@@ -114,7 +114,7 @@ export function Reasoning({
       {open && (
         <div className="border-t border-zinc-100 px-4 py-3 dark:border-zinc-800">
           {steps.length === 0 ? (
-            <div className="flex items-center gap-2 text-sm text-zinc-400">
+            <div className="flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
               <span className="h-2 w-2 animate-pulse rounded-full bg-zinc-300 dark:bg-zinc-600" />
               <span>Formulating an approach…</span>
             </div>
@@ -122,7 +122,7 @@ export function Reasoning({
             <ol className="relative space-y-3 before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-px before:bg-zinc-200 dark:before:bg-zinc-800">
               {steps.map((step, i) => (
                 <li key={i} className="relative pl-6">
-                  <span className="absolute left-0 top-1 flex h-[15px] w-[15px] items-center justify-center rounded-full border border-zinc-200 bg-white text-[9px] text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800">
+                  <span className="absolute left-0 top-1 flex h-[15px] w-[15px] items-center justify-center rounded-full border border-zinc-200 bg-white text-[9px] text-zinc-500 dark:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800">
                     {i + 1}
                   </span>
                   <p className="text-sm font-medium text-zinc-800 dark:text-zinc-200">{step.title}</p>

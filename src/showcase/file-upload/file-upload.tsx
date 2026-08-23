@@ -126,7 +126,7 @@ export function FileUpload({
           <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
             Drag &amp; drop files here
           </span>
-          <span className="text-xs text-zinc-400">or click to browse</span>
+          <span className="text-xs text-zinc-500 dark:text-zinc-400">or click to browse</span>
         </button>
       ) : (
         <div className="flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3.5 dark:border-zinc-800 dark:bg-zinc-900">
@@ -145,7 +145,7 @@ export function FileUpload({
               <span className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
                 {fileName ?? "document.pdf"}
               </span>
-              {fileSize && <span className="shrink-0 text-xs text-zinc-400">{fileSize}</span>}
+              {fileSize && <span className="shrink-0 text-xs text-zinc-500 dark:text-zinc-400">{fileSize}</span>}
             </div>
 
             {status === "uploading" && (
@@ -169,7 +169,7 @@ export function FileUpload({
           </div>
 
           {status === "uploading" && (
-            <span className="shrink-0 text-xs tabular-nums text-zinc-400">{progress}%</span>
+            <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{progress}%</span>
           )}
           {status === "error" && onRetry && (
             <button

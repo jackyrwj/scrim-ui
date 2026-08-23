@@ -107,7 +107,7 @@ export function VoiceAssistantMockup() {
             </span>
             <div>
               <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{TITLE}</p>
-              {SUBTITLE && <p className="truncate text-xs text-zinc-400">{SUBTITLE}</p>}
+              {SUBTITLE && <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{SUBTITLE}</p>}
             </div>
           </div>
           <StatusChip stage={STAGE} />
@@ -120,7 +120,7 @@ export function VoiceAssistantMockup() {
             bars={22}
             className="h-7 w-40 shrink-0 text-violet-500"
           />
-          <p className="truncate text-xs text-zinc-400">{hint}</p>
+          <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{hint}</p>
         </div>
 
         {/* Conversation */}

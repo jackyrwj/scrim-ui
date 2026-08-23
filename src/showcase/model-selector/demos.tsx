@@ -40,7 +40,7 @@ export function DemoSettings() {
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Model</p>
-          <p className="mt-0.5 text-xs text-zinc-400">Which model answers your messages</p>
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">Which model answers your messages</p>
         </div>
         <ModelSelector
           options={models}
