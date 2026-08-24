@@ -23,7 +23,7 @@ export function InspirationCard({
   return (
     <Link
       href={`/inspiration/${entry.slug}`}
-      className="group flex h-full flex-col rounded-xl border border-(--border) bg-(--card) p-6 transition-colors hover:bg-(--muted)/60"
+      className="group flex h-full flex-col rounded-xl border border-(--border) bg-(--card) p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:bg-(--muted)/60"
     >
       <div className="flex items-center justify-between">
         <span className="rounded-full border border-(--border) px-2 py-0.5 text-[11px] font-medium text-(--muted-foreground)">
@@ -36,7 +36,9 @@ export function InspirationCard({
 
       {entry.product ? (
         <span className="mt-3 flex items-center gap-2 font-medium group-hover:underline">
-          <BrandIcon name={entry.product} size={18} />
+          <span className="transition-transform duration-300 group-hover:scale-110">
+            <BrandIcon name={entry.product} size={18} />
+          </span>
           {entry.product}
         </span>
       ) : (
@@ -52,7 +54,10 @@ export function InspirationCard({
         {entry.summary}
       </p>
       <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium">
-        Read {entry.kind === "guide" ? "guide" : "breakdown"} <span aria-hidden>→</span>
+        Read {entry.kind === "guide" ? "guide" : "breakdown"}{" "}
+        <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
+          →
+        </span>
       </span>
     </Link>
   );

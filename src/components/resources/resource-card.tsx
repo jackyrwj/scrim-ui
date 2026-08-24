@@ -42,10 +42,12 @@ export function ResourceCard({
   const href = `/resources/${resourceSlug(entry.name)}`;
   const Heading = headingLevel;
   return (
-    <article className="group relative flex h-full flex-col rounded-xl border border-(--border) bg-(--card) p-5 transition-colors hover:border-(--muted-foreground)/50">
+    <article className="group relative flex h-full flex-col rounded-xl border border-(--border) bg-(--card) p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:shadow-[var(--shadow-sm)]">
       <div className="flex items-start justify-between gap-3">
         <Heading className="flex items-center gap-2.5 font-medium leading-snug">
-          <BrandIcon name={entry.name} />
+          <span className="transition-transform duration-300 group-hover:scale-110">
+            <BrandIcon name={entry.name} />
+          </span>
           {/* Stretched link: the whole card opens our detail page, while the
               "official site" link below stays separately clickable via z-10. */}
           <Link href={href} className="after:absolute after:inset-0 after:content-['']">
@@ -85,7 +87,10 @@ export function ResourceCard({
           className="relative z-10 inline-flex items-center gap-0.5 transition-colors hover:text-(--foreground)"
         >
           Official site
-          <ArrowUpRight className="size-3" aria-hidden />
+          <ArrowUpRight
+            className="size-3 transition-transform duration-300 group-hover:translate-x-px group-hover:-translate-y-px"
+            aria-hidden
+          />
         </a>
       </div>
     </article>

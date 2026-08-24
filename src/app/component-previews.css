@@ -1,11 +1,10 @@
 /* ------------------------------------------------------------------ */
-/* Static previews for the homepage "Popular Components" cards.        */
+/* Static previews for the homepage "Components" cards.                */
 /*                                                                     */
-/* Same pure-markup + CSS idea as tool-previews.css, but deliberately  */
-/* quieter: shorter frame, flat background, and NO resting animation.  */
-/* The hero rig and the tool cards are already moving; a third moving  */
-/* band would flatten the page's hierarchy. These only stir on hover,  */
-/* where the motion is feedback rather than decoration.                */
+/* Same pure-markup + CSS idea as tool-previews.css, and now the same  */
+/* resting motion: these used to stir only on hover so the page had a  */
+/* single animated band, but a still card next to a moving one reads   */
+/* as a card that failed to load rather than as restraint.             */
 /* ------------------------------------------------------------------ */
 
 .cp {
@@ -16,27 +15,45 @@
   border-bottom: 1px solid var(--border);
 }
 
-/* Hover-only motion. Every animation below is off until the card is
-   hovered, so an untouched page has exactly one animated region. */
+/* Resting motion, on the same terms as the tool cards: it runs without
+   being hovered, pauses until the card is actually on screen, and stops
+   dead under prefers-reduced-motion.
+
+   The lines spend most of each cycle at full width and snap back at the
+   loop boundary, so what a still page shows is an occasional ripple of
+   content re-rendering rather than a band of things pumping. */
 @keyframes cp-caret {
   0%, 45%   { opacity: 1; }
   55%, 100% { opacity: 0; }
 }
 @keyframes cp-grow {
-  from { transform: scaleX(0.25); }
-  to   { transform: scaleX(1); }
+  0%, 3%    { transform: scaleX(0.25); }
+  18%, 100% { transform: scaleX(1); }
 }
 @keyframes cp-pulse {
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.35; }
 }
 
-.cp-caret { opacity: 1; }
-.cp-line  { transform-origin: left center; }
+.cp-caret { opacity: 1; animation: cp-caret 1s steps(1, end) infinite; }
+.cp-line {
+  transform-origin: left center;
+  animation: cp-grow 6s var(--ease-out-expo) infinite;
+}
+.cp-dot { animation: cp-pulse 1.4s var(--ease-smooth) infinite; }
 
-.group:hover .cp-caret { animation: cp-caret 1s steps(1, end) infinite; }
-.group:hover .cp-line  { animation: cp-grow 0.5s var(--ease-out-expo) both; }
-.group:hover .cp-dot   { animation: cp-pulse 1.4s var(--ease-smooth) infinite; }
+/* Nothing paints until the card has been revealed. */
+.aos-stagger-item:not(.aos-visible) .cp *,
+.aos-hidden:not(.aos-visible) .cp * {
+  animation-play-state: paused !important;
+}
+
+/* Offset by column so a row of cards does not ripple in lockstep. The
+   negative delay starts each one mid-cycle rather than making it wait.
+   Only reaches elements without an inline delay of their own — the
+   previews that already stage their own lines keep their wave. */
+.aos-stagger-item:nth-child(3n + 2) .cp * { animation-delay: -2s; }
+.aos-stagger-item:nth-child(3n + 3) .cp * { animation-delay: -4s; }
 
 @media (prefers-reduced-motion: reduce) {
   .cp * { animation: none !important; }

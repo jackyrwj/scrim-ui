@@ -39,3 +39,25 @@
   width: 290px;
   transform: scale(var(--pp-scale));
 }
+
+/* --- Motion ---------------------------------------------------------
+   The cp-* animation classes are shared with the component previews (see
+   the header note), so the pattern tiles inherit the resting motion set
+   in component-previews.css. What has to be repeated here is the gate:
+   those rules key off `.cp`, and a pattern tile's frame is `.pp`. */
+
+.aos-stagger-item:not(.aos-visible) .pp *,
+.aos-hidden:not(.aos-visible) .pp * {
+  animation-play-state: paused !important;
+}
+
+.aos-stagger-item:nth-child(3n + 2) .pp * { animation-delay: -2s; }
+.aos-stagger-item:nth-child(3n + 3) .pp * { animation-delay: -4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pp * {
+    animation: none !important;
+  }
+  .pp .cp-caret { opacity: 1; }
+  .pp .cp-line { transform: none; }
+}
