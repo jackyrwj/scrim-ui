@@ -1,35 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoIdle, DemoUploading, DemoDone, DemoError } from "./demos";
+import { DemoIdle } from "./demos";
+import { fileUploadControls, renderFileUpload } from "./controls";
 
 export const fileUploadPageConfig: ComponentPageConfig = {
   sourceFile: "file-upload.tsx",
   heroDemo: <DemoIdle />,
-  variants: [
-    {
-      id: "idle",
-      title: "Idle dropzone",
-      note: "A clickable dashed dropzone with drag-over feedback. Keyboard users can tab to it and activate.",
-      demo: <DemoIdle />,
-    },
-    {
-      id: "uploading",
-      title: "Uploading",
-      note: "Real progress with file name and size. The live demo simulates progress so you can see the motion.",
-      demo: <DemoUploading />,
-    },
-    {
-      id: "done",
-      title: "Uploaded",
-      note: "Confirmation that the file is ready to be used as context, with a remove control.",
-      demo: <DemoDone />,
-    },
-    {
-      id: "error",
-      title: "Failed",
-      note: "The file stays listed with a clear failure message and a retry — never silently dropped.",
-      demo: <DemoError />,
-    },
-  ],
+  explorer: { schema: fileUploadControls, render: renderFileUpload },
   usage: [
     "Reuse the actual selected file's name, size and type icon — never a placeholder.",
     "Show progress immediately; a file that 'hangs' after selecting erodes trust in the whole input.",

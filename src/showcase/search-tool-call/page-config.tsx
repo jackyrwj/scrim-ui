@@ -1,35 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoSearching, DemoDone, DemoError, DemoLive } from "./demos";
+import { DemoLive } from "./demos";
+import { searchToolCallControls, renderSearchToolCall } from "./controls";
 
 export const searchToolCallPageConfig: ComponentPageConfig = {
   sourceFile: "search-tool-call.tsx",
   heroDemo: <DemoLive />,
-  variants: [
-    {
-      id: "searching",
-      title: "Searching",
-      note: "The query is surfaced immediately with a spinner and elapsed time. The live variant below auto-advances.",
-      demo: <DemoSearching />,
-    },
-    {
-      id: "live",
-      title: "Live sequence",
-      note: "Searching → done, with a stop control. This is the state machine users actually experience.",
-      demo: <DemoLive />,
-    },
-    {
-      id: "done",
-      title: "Results",
-      note: "Compact source rows open by default so the user can verify what was found.",
-      demo: <DemoDone />,
-    },
-    {
-      id: "error",
-      title: "Failed",
-      note: "A recoverable error with retry — search failures are common and should never be dead ends.",
-      demo: <DemoError />,
-    },
-  ],
+  explorer: { schema: searchToolCallControls, render: renderSearchToolCall },
   usage: [
     "Show the query the moment the tool starts — users verify the search is about what they asked.",
     "Progress to results in place; collapsing and reopening the whole card is jarring.",

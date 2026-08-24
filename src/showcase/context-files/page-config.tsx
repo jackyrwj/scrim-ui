@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoDefault, DemoFull, DemoEmpty } from "./demos";
+import { DemoDefault } from "./demos";
+import { contextFilesControls, renderContextFiles } from "./controls";
 
 export const contextFilesPageConfig: ComponentPageConfig = {
   sourceFile: "context-files.tsx",
   heroDemo: <DemoDefault />,
-  variants: [
-    {
-      id: "default",
-      title: "Default",
-      note: "A compact panel of files in context with per-file size and a remove affordance.",
-      demo: <DemoDefault />,
-    },
-    {
-      id: "full",
-      title: "Full context",
-      note: "As the window fills, the usage bar turns amber then red. Try removing a file — the count and bar update live.",
-      demo: <DemoFull />,
-    },
-    {
-      id: "empty",
-      title: "Empty",
-      note: "Before any attachment, the panel guides the user toward the attach action instead of showing nothing.",
-      demo: <DemoEmpty />,
-    },
-  ],
+  explorer: { schema: contextFilesControls, render: renderContextFiles },
   usage: [
     "Make context visible: users behave differently when they can see exactly which files the model is reading.",
     "Show token pressure with a colored bar — red only past ~85% so it means something.",

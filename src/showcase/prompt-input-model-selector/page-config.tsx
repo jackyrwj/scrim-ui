@@ -1,35 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoDefault, DemoFullDescriptions, DemoManyModels, DemoDisabled } from "./demos";
+import { DemoDefault } from "./demos";
+import { promptInputModelSelectorControls, renderPromptInputModelSelector } from "./controls";
 
 export const promptInputModelSelectorPageConfig: ComponentPageConfig = {
   sourceFile: "prompt-input-model-selector.tsx",
   heroDemo: <DemoDefault />,
-  variants: [
-    {
-      id: "default",
-      title: "Default",
-      note: "Model sits in its own bar above the input, with a capability hint. Switch models mid-compose freely.",
-      demo: <DemoDefault />,
-    },
-    {
-      id: "full-descriptions",
-      title: "With descriptions",
-      note: "Each option explains its trade-off so users pick deliberately, not by name recognition.",
-      demo: <DemoFullDescriptions />,
-    },
-    {
-      id: "many-models",
-      title: "Many models",
-      note: "Long menus stay scannable — name, one badge, one line of description.",
-      demo: <DemoManyModels />,
-    },
-    {
-      id: "disabled",
-      title: "Disabled",
-      note: "Model choice is gated behind sign-in; the composer itself stays visible.",
-      demo: <DemoDisabled />,
-    },
-  ],
+  explorer: { schema: promptInputModelSelectorControls, render: renderPromptInputModelSelector },
   usage: [
     "Put model choice where the prompt is composed, not in a settings page — users switch per message.",
     "Describe the trade-off, not just the brand — 'fast' vs 'most capable' is the real decision.",

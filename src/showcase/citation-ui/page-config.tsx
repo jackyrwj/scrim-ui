@@ -1,35 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoInline, DemoBadge, DemoHoverCard, DemoSourceList } from "./demos";
+import { DemoInline } from "./demos";
+import { citationUiControls, renderCitationUi } from "./controls";
 
 export const citationUiPageConfig: ComponentPageConfig = {
   sourceFile: "citation-ui.tsx",
   heroDemo: <DemoInline />,
-  variants: [
-    {
-      id: "inline",
-      title: "Inline citation",
-      note: "Numbered markers inline in prose. Hover (or focus) shows a preview card; the chip is still clickable as a link.",
-      demo: <DemoInline />,
-    },
-    {
-      id: "hover-card",
-      title: "Hover card",
-      note: "The preview card carries title, domain and snippet so users judge relevance without leaving the answer.",
-      demo: <DemoHoverCard />,
-    },
-    {
-      id: "source-list",
-      title: "Source list",
-      note: "The numbered reference list that pairs with the inline markers.",
-      demo: <DemoSourceList />,
-    },
-    {
-      id: "badge",
-      title: "Markers + list",
-      note: "Markers in text and the full list below — the canonical citation pattern.",
-      demo: <DemoBadge />,
-    },
-  ],
+  explorer: { schema: citationUiControls, render: renderCitationUi },
   usage: [
     "Number sources in order of first citation so markers stay stable through the answer.",
     "Make the marker a real button/link — hover previews, click opens. Never a span with a title attribute.",

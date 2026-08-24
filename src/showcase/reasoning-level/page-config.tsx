@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoDefault, DemoDeep, DemoCompact } from "./demos";
+import { DemoDefault } from "./demos";
+import { reasoningLevelControls, renderReasoningLevel } from "./controls";
 
 export const reasoningLevelPageConfig: ComponentPageConfig = {
   sourceFile: "reasoning-level.tsx",
   heroDemo: <DemoDefault />,
-  variants: [
-    {
-      id: "default",
-      title: "Balanced",
-      note: "A segmented control with a live caption explaining the current choice.",
-      demo: <DemoDefault />,
-    },
-    {
-      id: "deep",
-      title: "Deep",
-      note: "Deep reasoning is for hard problems — it should be the exception, not the default.",
-      demo: <DemoDeep />,
-    },
-    {
-      id: "compact",
-      title: "Compact",
-      note: "A tight version for popovers and side panels where vertical space is scarce.",
-      demo: <DemoCompact />,
-    },
-  ],
+  explorer: { schema: reasoningLevelControls, render: renderReasoningLevel },
   usage: [
     "Name levels by outcome (Light / Balanced / Deep), not internal parameter names.",
     "Explain the current level in plain words — what will the model do differently?",

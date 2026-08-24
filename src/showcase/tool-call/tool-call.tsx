@@ -134,14 +134,21 @@ export function ToolCall({
             : ""
       } ${className}`}
     >
-      {/* Header */}
-      <button
-        type="button"
-        onClick={() => hasDetails && setOpen((v) => !v)}
-        aria-expanded={open}
-        disabled={!hasDetails}
-        className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left"
-      >
+      {/* Header.
+
+          The disclosure button covers the icon, name and duration only. It
+          used to wrap the whole row, which put StatusPill's Cancel button
+          inside it — nested buttons are invalid HTML, and React refuses to
+          hydrate them. The pill and the chevron are siblings of the button
+          now, so both controls stay independently clickable. */}
+      <div className="flex w-full items-center gap-2.5 px-3.5 py-2.5">
+        <button
+          type="button"
+          onClick={() => hasDetails && setOpen((v) => !v)}
+          aria-expanded={open}
+          disabled={!hasDetails}
+          className="flex min-w-0 flex-1 items-center gap-2.5 text-left"
+        >
         <span
           className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${
             status === "error"
@@ -157,17 +164,22 @@ export function ToolCall({
           {name}
         </span>
         {duration && <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{duration}</span>}
+        </button>
         <span className="shrink-0">
           <StatusPill status={status} onCancel={onCancel} />
         </span>
         {hasDetails && (
-          <span
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-label={open ? "Hide details" : "Show details"}
             className={`shrink-0 text-zinc-400 transition-transform ${open ? "rotate-180" : ""}`}
           >
             <ChevronIcon />
-          </span>
+          </button>
         )}
-      </button>
+      </div>
 
       {/* Details */}
       {open && hasDetails && (

@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoRunning, DemoSuccess, DemoError } from "./demos";
+import { DemoRunning } from "./demos";
+import { codeExecutionControls, renderCodeExecution } from "./controls";
 
 export const codeExecutionPageConfig: ComponentPageConfig = {
   sourceFile: "code-execution.tsx",
   heroDemo: <DemoRunning />,
-  variants: [
-    {
-      id: "running",
-      title: "Running",
-      note: "A spinner pill and a Stop control while execution runs; click Stop to see the interrupted state.",
-      demo: <DemoRunning />,
-    },
-    {
-      id: "success",
-      title: "Success",
-      note: "A green pill with stdout and the exit code — the user can read exactly what the code produced.",
-      demo: <DemoSuccess />,
-    },
-    {
-      id: "error",
-      title: "Error",
-      note: "stderr renders in red with the traceback and exit code — error messages stay visible and copyable.",
-      demo: <DemoError />,
-    },
-  ],
+  explorer: { schema: codeExecutionControls, render: renderCodeExecution },
   usage: [
     "Show the exact code that ran — trust in an agent's work comes from auditability, not from a summary.",
     "Render stdout and stderr as real text with a mono font, always scrollable; never truncate silently.",

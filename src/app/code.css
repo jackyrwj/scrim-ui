@@ -1,0 +1,49 @@
+/* ------------------------------------------------------------------ */
+/* Syntax colours for the tokenizer in src/lib/code-highlight.ts.      */
+/*                                                                     */
+/* Code blocks stay on a near-black surface in both appearances. A     */
+/* light-mode code block would fight the page around it, and every     */
+/* reference this site is measured against — shadcn, Tailwind UI, the  */
+/* Next docs — keeps code dark in both. So there is one palette tuned  */
+/* for that surface rather than a light and a dark one, which also     */
+/* means the Explorer's regenerated snippet never has to re-theme.     */
+/*                                                                     */
+/* Every colour below clears 4.5:1 on --code-bg; the lowest is the     */
+/* comment grey at 6.15:1. scripts/contrast.mjs checks them.           */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --code-bg: #0c0c0f;
+  --code-fg: #e4e4e7;
+  --tok-comment: #8b90a3;
+  --tok-string: #9ad4a4;
+  --tok-number: #e5c07b;
+  --tok-keyword: #c79bf0;
+  --tok-tag: #7cc5f0;
+  --tok-attr: #f0b8a0;
+  --tok-punct: #a1a1aa;
+}
+
+/* Each token repeats the block's own background. It changes nothing visually —
+   it is the same colour already behind the span — but it puts an opaque
+   background on the element a contrast checker is measuring, instead of five
+   ancestors up past a clipped, masked, horizontally-scrolling box. axe walks
+   up from the text and gives up on that chain, reporting every token as
+   failing against white while the block is plainly dark. */
+.tok-comment,
+.tok-string,
+.tok-number,
+.tok-keyword,
+.tok-tag,
+.tok-attr,
+.tok-punct {
+  background: var(--code-bg);
+}
+
+.tok-comment { color: var(--tok-comment); font-style: italic; }
+.tok-string  { color: var(--tok-string); }
+.tok-number  { color: var(--tok-number); }
+.tok-keyword { color: var(--tok-keyword); }
+.tok-tag     { color: var(--tok-tag); }
+.tok-attr    { color: var(--tok-attr); }
+.tok-punct   { color: var(--tok-punct); }

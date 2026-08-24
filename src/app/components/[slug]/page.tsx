@@ -5,11 +5,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { components, getComponent, getRelated } from "@/lib/registry";
 import { pageConfigs } from "@/showcase/registry";
-import { PreviewFrame } from "@/components/component-page/preview-frame";
-import { CopyButton } from "@/components/component-page/copy-button";
 import { CodeBlock } from "@/components/component-page/code-block";
-import { VariantCode } from "@/components/component-page/variant-code";
-import { variantSnippet } from "@/lib/variant-source";
+import { ComponentExplorer } from "@/components/component-page/explorer";
 
 export function generateStaticParams() {
   return components.filter((c) => c.status === "published").map((c) => ({ slug: c.slug }));
@@ -61,67 +58,22 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         ))}
       </div>
 
-      {/* Live preview */}
+      {/* Presets, controls, preview and generated code in one surface. This
+          replaced a hero preview, a list of static variants each with its own
+          collapsed snippet, and — for three components out of thirty — a
+          separate hand-written playground. See lib/component-controls.ts. */}
       <section className="mt-10">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-(--muted-foreground)">
-            Live Preview
-          </h2>
-          <CopyButton code={source} label="Copy React" />
-        </div>
-        <PreviewFrame>{config.heroDemo}</PreviewFrame>
+        <ComponentExplorer schema={config.explorer.schema} render={config.explorer.render} />
       </section>
-
-      {/* Variants. Each one carries its own source, extracted from the demo
-          that renders it — see lib/variant-source.ts. Copying the whole
-          component file told you nothing about how to reach a given state. */}
-      <section className="mt-14">
-        <h2 className="text-xl font-semibold tracking-tight">Variants</h2>
-        <p className="mb-6 mt-1 text-sm text-(--muted-foreground)">
-          Every variant is the same component under different props. Copy one to get the props
-          that produce that state — the component itself is in{" "}
-          <a href="#code" className="underline underline-offset-2 hover:text-(--foreground)">
-            Code
-          </a>{" "}
-          below.
-        </p>
-        <div className="space-y-8">
-          {config.variants.map((v) => {
-            const snippet = variantSnippet(slug, v.id);
-            return (
-              <div key={v.id} id={`variant-${v.id}`} className="scroll-mt-20">
-                <h3 className="text-sm font-medium">{v.title}</h3>
-                <p className="mt-1 mb-3 text-sm text-(--muted-foreground)">{v.note}</p>
-                <PreviewFrame>{v.demo}</PreviewFrame>
-                {snippet && <VariantCode code={snippet} lang={`${v.id}.tsx`} />}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Playground */}
-      {config.playground && (
-        <section className="mt-14">
-          <h2 className="text-xl font-semibold tracking-tight">Playground</h2>
-          <p className="mb-5 mt-1 text-sm text-(--muted-foreground)">
-            Tweak the props and watch the component update live.
-          </p>
-          {config.playground}
-        </section>
-      )}
 
       {/* Code */}
       <section id="code" className="mt-14 scroll-mt-20">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-xl font-semibold tracking-tight">Code</h2>
-          <CopyButton code={source} label="Copy React" />
-        </div>
-        <p className="mb-3 text-sm text-(--muted-foreground)">
+        <h2 className="text-xl font-semibold tracking-tight">Code</h2>
+        <p className="mb-3 mt-1 text-sm text-(--muted-foreground)">
           Single-file React + Tailwind component. No dependencies — drop it into any project with
           Tailwind configured.
         </p>
-        <CodeBlock code={source} lang={config.sourceFile} />
+        <CodeBlock code={source} filename={config.sourceFile} />
       </section>
 
       {/* Usage guidelines */}

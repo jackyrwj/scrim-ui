@@ -1,56 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import {
-  DemoDefault,
-  DemoAttachments,
-  DemoModelSelector,
-  DemoLoading,
-  DemoError,
-  DemoDisabled,
-} from "./demos";
-import { PromptInputPlayground } from "./playground";
+import { DemoDefault } from "./demos";
+import { promptInputControls, renderPromptInput } from "./controls";
 
 export const promptInputPageConfig: ComponentPageConfig = {
   sourceFile: "prompt-input.tsx",
   heroDemo: <DemoDefault />,
-  playground: <PromptInputPlayground />,
-  variants: [
-    {
-      id: "default",
-      title: "Default",
-      note: "Enter to send, Shift+Enter for a new line. Send button activates when input is non-empty; while generating it becomes a stop button.",
-      demo: <DemoDefault />,
-    },
-    {
-      id: "with-attachments",
-      title: "With attachments",
-      note: "Attachment chips with file type icons, size and one-click removal.",
-      demo: <DemoAttachments />,
-    },
-    {
-      id: "with-model-selector",
-      title: "With model selector",
-      note: "Inline model picker with capability hints. Closes on Escape or outside click.",
-      demo: <DemoModelSelector />,
-    },
-    {
-      id: "loading",
-      title: "Loading",
-      note: "While a response is generating, the send button is replaced by a stop control.",
-      demo: <DemoLoading />,
-    },
-    {
-      id: "error",
-      title: "Error",
-      note: "Submission failures surface below the input with a red border, without clearing the draft.",
-      demo: <DemoError />,
-    },
-    {
-      id: "disabled",
-      title: "Disabled",
-      note: "For logged-out or read-only states. All controls are inert and the whole input is dimmed.",
-      demo: <DemoDisabled />,
-    },
-  ],
+  explorer: { schema: promptInputControls, render: renderPromptInput },
   usage: [
     "Send on Enter, newline on Shift+Enter — never the reverse.",
     "Keep the send button disabled (not hidden) while the input is empty so its position is stable.",

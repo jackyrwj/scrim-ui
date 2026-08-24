@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoError, DemoRetrying, DemoRateLimit } from "./demos";
+import { DemoError } from "./demos";
+import { errorMessageControls, renderErrorMessage } from "./controls";
 
 export const errorMessagePageConfig: ComponentPageConfig = {
   sourceFile: "error-message.tsx",
   heroDemo: <DemoError />,
-  variants: [
-    {
-      id: "error",
-      title: "Error",
-      note: "A red-tinted message with a one-line explanation and a single retry action. Click retry to see the success follow-up.",
-      demo: <DemoError />,
-    },
-    {
-      id: "retrying",
-      title: "Retrying",
-      note: "While the retry is in flight, the button becomes a spinner and the copy explains what is being preserved.",
-      demo: <DemoRetrying />,
-    },
-    {
-      id: "rate-limit",
-      title: "Rate limit",
-      note: "A countdown instead of a retry button — telling the user when they can act is more honest than a spinner that fails again.",
-      demo: <DemoRateLimit />,
-    },
-  ],
+  explorer: { schema: errorMessageControls, render: renderErrorMessage },
   usage: [
     "Say what happened in one plain sentence and, if possible, what was preserved — a saved draft turns a failure into a small win.",
     "Offer exactly one recovery path. Error and retry, or rate-limit and wait — never both.",

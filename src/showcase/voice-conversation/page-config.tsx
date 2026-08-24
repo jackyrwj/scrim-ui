@@ -1,23 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoConversation, DemoPlaying } from "./demos";
+import { DemoConversation } from "./demos";
+import { voiceConversationControls, renderVoiceConversation } from "./controls";
 
 export const voiceConversationPageConfig: ComponentPageConfig = {
   sourceFile: "voice-conversation.tsx",
   heroDemo: <DemoConversation />,
-  variants: [
-    {
-      id: "conversation",
-      title: "Transcript",
-      note: "Alternating voice turns with timestamps, a speaking indicator and per-turn replay.",
-      demo: <DemoConversation />,
-    },
-    {
-      id: "playing",
-      title: "Live speaking",
-      note: "Press Replay and the speaking indicator cycles through the turns as the audio 'plays'.",
-      demo: <DemoPlaying />,
-    },
-  ],
+  explorer: { schema: voiceConversationControls, render: renderVoiceConversation },
   usage: [
     "Show who is speaking with an animated waveform — silence reads as 'offline' at a glance.",
     "Offer per-turn replay; voice is ephemeral and users will want to re-hear a number.",

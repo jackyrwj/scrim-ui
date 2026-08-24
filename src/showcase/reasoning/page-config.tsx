@@ -1,35 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoThinking, DemoComplete, DemoCollapsed, DemoCoding } from "./demos";
+import { DemoThinking } from "./demos";
+import { reasoningControls, renderReasoning } from "./controls";
 
 export const reasoningPageConfig: ComponentPageConfig = {
   sourceFile: "reasoning.tsx",
   heroDemo: <DemoThinking />,
-  variants: [
-    {
-      id: "thinking",
-      title: "Thinking",
-      note: "A live elapsed timer and spinner signal active reasoning. 'Stop reasoning' lets the user interrupt.",
-      demo: <DemoThinking />,
-    },
-    {
-      id: "complete",
-      title: "Complete",
-      note: "Steps render as a numbered timeline with a completion confirmation. Fully open for inspection.",
-      demo: <DemoComplete />,
-    },
-    {
-      id: "collapsed",
-      title: "Collapsed",
-      note: "The trace collapses to a single line — keep it compact once the user has moved on.",
-      demo: <DemoCollapsed />,
-    },
-    {
-      id: "coding",
-      title: "Coding trace",
-      note: "Reasoning traces adapt per domain — here the steps read like a debugging log.",
-      demo: <DemoCoding />,
-    },
-  ],
+  explorer: { schema: reasoningControls, render: renderReasoning },
   usage: [
     "Show the trace as it happens — a blank pause during 'thinking' reads as a hang or a failure.",
     "Keep each step one line when possible; expand details on demand.",

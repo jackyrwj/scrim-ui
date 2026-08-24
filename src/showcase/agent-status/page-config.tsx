@@ -1,42 +1,13 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoRunning, DemoWaiting, DemoCompleted, DemoFailed, DemoStack } from "./demos";
+import { DemoRunning } from "./demos";
+import { agentStatusControls, renderAgentStatus } from "./controls";
 
 export const agentStatusPageConfig: ComponentPageConfig = {
   sourceFile: "agent-status.tsx",
   heroDemo: <DemoRunning />,
-  variants: [
-    {
-      id: "running",
-      title: "Running",
-      note: "Live progress bar, elapsed time and a stop control. The action line describes the current step.",
-      demo: <DemoRunning />,
-    },
-    {
-      id: "waiting",
-      title: "Waiting",
-      note: "Amber 'waiting' state — the agent is paused on a human decision or external dependency.",
-      demo: <DemoWaiting />,
-    },
-    {
-      id: "completed",
-      title: "Completed",
-      note: "Green confirmation with a summary of what the agent actually did.",
-      demo: <DemoCompleted />,
-    },
-    {
-      id: "failed",
-      title: "Failed",
-      note: "Red state with the failing step named, plus a one-click retry.",
-      demo: <DemoFailed />,
-    },
-    {
-      id: "stack",
-      title: "Multi-agent view",
-      note: "Several agents in one panel — each with its own lifecycle. This is what a fleet UI looks like.",
-      demo: <DemoStack />,
-    },
-  ],
+  explorer: { schema: agentStatusControls, render: renderAgentStatus },
   usage: [
+    "Stack one card per agent when several run at once — each keeps its own lifecycle, and the panel becomes a fleet view rather than a single status line.",
     "Name the current action in plain language — users trust agents that narrate what they're doing.",
     "Show a real progress bar only when progress is measurable; otherwise use elapsed time, not a fake bar.",
     "Reserve waiting (amber) for true human or external dependencies, not for loading.",

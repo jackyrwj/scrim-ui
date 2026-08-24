@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoDefault, DemoStreaming, DemoCompact } from "./demos";
+import { DemoDefault } from "./demos";
+import { messageActionsControls, renderMessageActions } from "./controls";
 
 export const messageActionsPageConfig: ComponentPageConfig = {
   sourceFile: "message-actions.tsx",
   heroDemo: <DemoDefault />,
-  variants: [
-    {
-      id: "default",
-      title: "Default",
-      note: "Copy, regenerate, share and up/down feedback sit in a quiet row under the message, aligned with its content.",
-      demo: <DemoDefault />,
-    },
-    {
-      id: "streaming",
-      title: "While streaming",
-      note: "Actions dim and disable while the message is still generating — feedback on a partial answer is noise.",
-      demo: <DemoStreaming />,
-    },
-    {
-      id: "compact",
-      title: "Compact",
-      note: "Icon-only mode keeps the transcript dense while preserving every action on hover.",
-      demo: <DemoCompact />,
-    },
-  ],
+  explorer: { schema: messageActionsControls, render: renderMessageActions },
   usage: [
     "Anchor actions to the message, not the viewport — the user's next step is about that specific answer.",
     "Disable feedback actions while streaming; a vote on half a sentence teaches the model nothing.",

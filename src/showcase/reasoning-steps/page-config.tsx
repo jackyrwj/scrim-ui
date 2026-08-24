@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoCollapsed, DemoExpanded, DemoRunning } from "./demos";
+import { DemoExpanded } from "./demos";
+import { reasoningStepsControls, renderReasoningSteps } from "./controls";
 
 export const reasoningStepsPageConfig: ComponentPageConfig = {
   sourceFile: "reasoning-steps.tsx",
   heroDemo: <DemoExpanded />,
-  variants: [
-    {
-      id: "expanded",
-      title: "Expanded",
-      note: "A step-by-step trace where finished steps show a check, the running step spins, and later steps wait as dots.",
-      demo: <DemoExpanded />,
-    },
-    {
-      id: "collapsed",
-      title: "Collapsed",
-      note: "The default resting state — a compact header with step count and elapsed time that expands on click.",
-      demo: <DemoCollapsed />,
-    },
-    {
-      id: "running",
-      title: "Running",
-      note: "Late in the run the header keeps the full count; the active step carries the elapsed timer.",
-      demo: <DemoRunning />,
-    },
-  ],
+  explorer: { schema: reasoningStepsControls, render: renderReasoningSteps },
   usage: [
     "Show a step trace when the agent's work is a sequence the user can reason about — search, files, tools — not for a single undivided answer.",
     "Collapse the trace by default and let the header live-update; the summary is the status, the list is the detail.",

@@ -1,29 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoDefault, DemoOpen, DemoSettings } from "./demos";
+import { DemoDefault } from "./demos";
+import { modelSelectorControls, renderModelSelector } from "./controls";
 
 export const modelSelectorPageConfig: ComponentPageConfig = {
   sourceFile: "model-selector.tsx",
   heroDemo: <DemoDefault />,
-  variants: [
-    {
-      id: "default",
-      title: "Default",
-      note: "A real model picker — choose a model and the list updates and closes.",
-      demo: <DemoDefault />,
-    },
-    {
-      id: "open",
-      title: "Expanded",
-      note: "Each option shows a name, a one-line hint and capability badges so the choice is informed.",
-      demo: <DemoOpen />,
-    },
-    {
-      id: "settings",
-      title: "Settings row",
-      note: "The same picker embedded in a settings row, next to its label.",
-      demo: <DemoSettings />,
-    },
-  ],
+  explorer: { schema: modelSelectorControls, render: renderModelSelector },
   usage: [
     "Show capability badges (reasoning, tools, speed) so users pick on substance, not name.",
     "Default to the model that best serves the current task, not the most powerful one.",

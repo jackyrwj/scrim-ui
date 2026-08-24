@@ -124,7 +124,7 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
           This file composes the components above. Copy each component from its page, then this
           pattern file wires them together.
         </p>
-        <CodeBlock code={source} lang={config.sourceFile} />
+        <CodeBlock code={source} filename={config.sourceFile} />
       </section>
 
       {/* Usage */}

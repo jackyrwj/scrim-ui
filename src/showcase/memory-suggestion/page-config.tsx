@@ -1,23 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoSuggestion, DemoSaved } from "./demos";
+import { DemoSuggestion } from "./demos";
+import { memorySuggestionControls, renderMemorySuggestion } from "./controls";
 
 export const memorySuggestionPageConfig: ComponentPageConfig = {
   sourceFile: "memory-suggestion.tsx",
   heroDemo: <DemoSuggestion />,
-  variants: [
-    {
-      id: "suggestion",
-      title: "Suggestion",
-      note: "The assistant proposes saving a fact. Ask before you store — the user keeps control.",
-      demo: <DemoSuggestion />,
-    },
-    {
-      id: "saved",
-      title: "Saved",
-      note: "Confirmation after saving, with an Undo path so a wrong save is never permanent.",
-      demo: <DemoSaved />,
-    },
-  ],
+  explorer: { schema: memorySuggestionControls, render: renderMemorySuggestion },
   usage: [
     "Propose a save only for durable, useful facts — not transient details of the conversation.",
     "Always make the save explicit with Save / Not now; never silently store.",

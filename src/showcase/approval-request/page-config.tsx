@@ -1,35 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoPending, DemoCode, DemoApproved, DemoDenied } from "./demos";
+import { DemoPending } from "./demos";
+import { approvalRequestControls, renderApprovalRequest } from "./controls";
 
 export const approvalRequestPageConfig: ComponentPageConfig = {
   sourceFile: "approval-request.tsx",
   heroDemo: <DemoPending />,
-  variants: [
-    {
-      id: "pending",
-      title: "Pending",
-      note: "A real approval card — context, the exact action, and an auto-deny countdown so requests never linger.",
-      demo: <DemoPending />,
-    },
-    {
-      id: "code",
-      title: "Code change",
-      note: "File diffs render in a mono block so the user can actually judge the change before allowing.",
-      demo: <DemoCode />,
-    },
-    {
-      id: "approved",
-      title: "Approved",
-      note: "Confirmation that the action was executed — the agent continues from here.",
-      demo: <DemoApproved />,
-    },
-    {
-      id: "denied",
-      title: "Denied",
-      note: "The action is blocked and the agent is told to find another way.",
-      demo: <DemoDenied />,
-    },
-  ],
+  explorer: { schema: approvalRequestControls, render: renderApprovalRequest },
   usage: [
     "Ask for approval only for irreversible, costly or sensitive actions — not every step.",
     "Always show the concrete action (command, diff, recipients), not a vague 'proceed?'",

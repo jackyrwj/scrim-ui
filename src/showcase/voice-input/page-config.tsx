@@ -1,23 +1,11 @@
 import type { ComponentPageConfig } from "@/lib/component-page";
-import { DemoIdle, DemoRecording } from "./demos";
+import { DemoIdle } from "./demos";
+import { voiceInputControls, renderVoiceInput } from "./controls";
 
 export const voiceInputPageConfig: ComponentPageConfig = {
   sourceFile: "voice-input.tsx",
   heroDemo: <DemoIdle />,
-  variants: [
-    {
-      id: "idle",
-      title: "Idle",
-      note: "A single microphone button. Click it and the control expands into a recording panel.",
-      demo: <DemoIdle />,
-    },
-    {
-      id: "recording",
-      title: "Recording",
-      note: "Live waveform, elapsed time, live transcript, and Stop / Cancel. The red state reads as 'capturing'.",
-      demo: <DemoRecording />,
-    },
-  ],
+  explorer: { schema: voiceInputControls, render: renderVoiceInput },
   usage: [
     "Offer voice next to text, never instead of it — some users always prefer typing.",
     "Make the recording state unmistakable: red accent, live waveform, elapsed time.",
