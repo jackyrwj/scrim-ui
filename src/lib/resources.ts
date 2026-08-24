@@ -1196,3 +1196,53 @@ export const resources: ResourceEntry[] = [
 export function getResourceCategory(slug: string) {
   return resourceCategories.find((c) => c.slug === slug);
 }
+
+/**
+ * URL slug for a resource's detail page at `/resources/<slug>`.
+ *
+ * Derived from `name` rather than stored per entry: 102 hand-maintained slugs
+ * would be 102 chances to typo one, and every name in the catalogue produces a
+ * distinct slug (asserted by `resourceBySlug` below, which would silently drop
+ * a collision otherwise). The trade-off is that renaming a resource changes its
+ * URL — add a redirect in next.config.ts if that ever happens to a page with
+ * inbound links.
+ */
+export function resourceSlug(name: string) {
+  return name
+    .toLowerCase()
+    .replace(/\+/g, "-plus")
+    .replace(/&/g, "-and-")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+const bySlug = new Map(resources.map((entry) => [resourceSlug(entry.name), entry]));
+
+if (bySlug.size !== resources.length) {
+  throw new Error(
+    `resources.ts: two entries share a slug — ${resources.length} entries, ${bySlug.size} slugs`,
+  );
+}
+
+export function getResource(slug: string) {
+  return bySlug.get(slug);
+}
+
+/**
+ * Sibling resources shown at the foot of a detail page: same category first,
+ * preferring ones that share a tag, then anything else in the category.
+ */
+export function relatedResources(entry: ResourceEntry, limit = 4) {
+  const tags = new Set(entry.tags);
+  return resources
+    .filter((r) => r !== entry && r.category === entry.category)
+    .map((r) => ({ r, overlap: r.tags.filter((t) => tags.has(t)).length }))
+    .sort((a, b) => b.overlap - a.overlap)
+    .slice(0, limit)
+    .map(({ r }) => r);
+}
+
+/** Hostname without `www.`, for the "official site" line on a detail page. */
+export function resourceHost(url: string) {
+  return new URL(url).hostname.replace(/^www\./, "");
+}

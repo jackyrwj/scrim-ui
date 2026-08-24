@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { resources, resourceCategories } from "@/lib/resources";
 import { ResourcesBrowser } from "@/components/resources/resources-browser";
@@ -17,7 +18,13 @@ export default function ResourcesPage() {
         building AI interfaces — each with a note on when to use it.
       </p>
 
-      <ResourcesBrowser entries={resources} categories={resourceCategories} />
+      {/* The browser reads `?category=` (the link a detail page comes back on)
+          via useSearchParams, which is URL data — reading it on the server
+          would make this whole route render on demand. Behind Suspense it
+          stays a prerendered page whose filter resolves on the client. */}
+      <Suspense fallback={<div className="mt-8 h-[60vh]" />}>
+        <ResourcesBrowser entries={resources} categories={resourceCategories} />
+      </Suspense>
 
       <p className="mt-10 text-sm text-(--muted-foreground)">
         Curated by hand, with source attribution. Some resources are freemium — check the vendor

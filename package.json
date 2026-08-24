@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "previews": "node scripts/capture-previews.mjs"
   },
   "dependencies": {
     "gpt-tokenizer": "^4.0.0",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.1",
+    "playwright": "^1.62.1",
     "simple-icons": "^16.28.0",
     "tailwindcss": "^4",
     "typescript": "^5"

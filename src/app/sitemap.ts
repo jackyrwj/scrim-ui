@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { components, categories, patterns } from "@/lib/registry";
 import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
+import { resources, resourceSlug } from "@/lib/resources";
 
 const BASE_URL = "https://ai-ui-resources.vercel.app";
 
@@ -54,5 +55,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages];
+  const resourcePages: MetadataRoute.Sitemap = resources.map((r) => ({
+    url: `${BASE_URL}/resources/${resourceSlug(r.name)}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
 }

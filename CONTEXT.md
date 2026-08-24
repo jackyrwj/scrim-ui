@@ -26,8 +26,21 @@ something — a mockup, a count, a diagram, an exported component.
 _Avoid_: App, generator, utility
 
 **Resource**:
-A third-party thing we point at but do not host. Lives in the curated directory.
-_Avoid_: Link, reference, listing
+A third-party thing we point at but do not host. Lives in the curated directory
+at `/resources`, and gets a **Listing** of its own at `/resources/<slug>`.
+_Avoid_: Link, reference, listing (as a synonym for the resource itself)
+
+**Listing**:
+The detail page for one Resource — its facts, our curation note, a **Preview**,
+and a link out to the official site. A Listing is *ours*; the Resource is theirs.
+Deliberately not called a review: we do not score or rank third-party products.
+_Avoid_: Review, profile, product page
+
+**Preview**:
+A screenshot of a Resource's own homepage, captured by
+`scripts/capture-previews.mjs` into `public/previews/<slug>.webp` and committed.
+Not a live embed — most of the sites we link refuse to be framed.
+_Avoid_: Embed, thumbnail, screenshot (in prose about the site's structure)
 
 **Concept**:
 One idea in the AI-interface vocabulary — streaming, tool call, approval gate,
