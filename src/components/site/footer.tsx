@@ -87,7 +87,7 @@ export function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-(--border) pt-6 text-xs text-(--muted-foreground) sm:flex-row">
-          <p>© {new Date().getFullYear()} Scrim UI. Free to copy.</p>
+          <p>© {new Date().getFullYear()} Scrim UI. Components are MIT licensed — free to copy.</p>
           <a
             href="#"
             className="transition-colors hover:text-(--foreground)"
