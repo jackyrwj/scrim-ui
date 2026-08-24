@@ -5,13 +5,10 @@ import { SiteHeader } from "@/components/site/header";
 import { PreviewMotion } from "@/components/site/preview-motion";
 import { SiteFooter } from "@/components/site/footer";
 import { GoogleAnalytics } from "@/components/site/google-analytics";
+import { SITE_URL as BASE_URL, SITE_NAME } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
-
-/* The deployed origin. Still the vercel.app host: the wordmark changed,
-   the domain has not, and sitemap.ts and robots.ts point at this one. */
-const BASE_URL = "https://ai-ui-resources.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -30,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Scrim UI",
+    siteName: SITE_NAME,
   },
   twitter: {
     card: "summary_large_image",
@@ -55,7 +52,7 @@ const structuredData = {
     {
       "@type": "Organization",
       "@id": `${BASE_URL}/#organization`,
-      name: "Scrim UI",
+      name: SITE_NAME,
       url: BASE_URL,
       description:
         "Free in-browser tools and copy-ready components for building AI product interfaces.",
@@ -63,7 +60,7 @@ const structuredData = {
     {
       "@type": "WebSite",
       "@id": `${BASE_URL}/#website`,
-      name: "Scrim UI",
+      name: SITE_NAME,
       url: BASE_URL,
       inLanguage: "en-US",
       publisher: { "@id": `${BASE_URL}/#organization` },
