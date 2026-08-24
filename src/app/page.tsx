@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { categories, components, patterns } from "@/lib/registry";
+import { components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
 import { featuredTools, toolLabel } from "@/lib/tools";
@@ -9,8 +9,22 @@ import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-s
 import { ToolPreview } from "@/components/site/tool-preview";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { HeroShowcase } from "@/components/site/hero-showcase";
+import { PatternPreview } from "@/components/site/pattern-preview";
+import { IconCard } from "@/components/icons/icon-card";
 import { createElement } from "react";
-import { categoryIconFor } from "@/lib/icons";
+import { patternIconFor } from "@/lib/icons";
+import { iconGuide } from "@/lib/icon-guide";
+
+/* One icon per idea the site is about, spread across categories so the row
+   reads as a map rather than a sample of one corner. */
+const FEATURED_ICONS = [
+  "Streaming",
+  "Tool call",
+  "Reasoning",
+  "Citation",
+  "Approval gate",
+  "Context window",
+];
 
 export default function Home() {
   const published = components.filter((c) => c.status === "published");
@@ -21,10 +35,12 @@ export default function Home() {
   const popular = published.filter((c) =>
     ["prompt-input", "streaming-message", "user-message", "markdown-message", "tool-call", "code-execution"].includes(c.slug),
   );
-  const recentlyAdded = [...published]
-    .reverse()
-    .slice(0, 6)
-    .filter((c) => !popular.some((p) => p.slug === c.slug));
+  const featuredIcons = FEATURED_ICONS.map((concept) => {
+    const entry = iconGuide.find((e) => e.concept === concept);
+    if (!entry) throw new Error(`Homepage features an icon concept that no longer exists: ${concept}`);
+    return entry;
+  });
+  const componentName = (slug: string) => components.find((c) => c.slug === slug)?.name ?? slug;
   const caseStudies = inspirationEntries.filter((e) => e.kind === "case-study");
   const guides = inspirationEntries.filter((e) => e.kind === "guide");
 
@@ -155,7 +171,7 @@ export default function Home() {
       <section className="border-b border-(--border)">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="text-2xl font-semibold tracking-tight">Popular Components</h2>
+            <h2 className="text-2xl font-semibold tracking-tight">Components</h2>
             <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               View all →
             </Link>
@@ -195,96 +211,6 @@ export default function Home() {
         </AnimateOnScroll>
       </section>
 
-      {/* Browse by category */}
-      <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-          <h2 className="text-2xl font-semibold tracking-tight">Browse by Category</h2>
-          <StaggerChildren stagger={60} className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((cat) => {
-              const count = components.filter(
-                (c) => c.category === cat.slug && c.status === "published",
-              ).length;
-              const hasComponents = count > 0;
-              const card = (
-                <div
-                  className={`rounded-xl border border-(--border) p-4 transition-all ${
-                    hasComponents
-                      ? "hover:-translate-y-0.5 hover:border-(--primary)/30"
-                      : "opacity-60"
-                  }`}
-                  style={hasComponents ? { boxShadow: "var(--shadow-sm)" } : undefined}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 text-sm font-medium">
-                      {createElement(categoryIconFor(cat.slug), {
-                        size: 16,
-                        strokeWidth: 1.75,
-                        "aria-hidden": true,
-                        className: "text-(--primary)",
-                      })}
-                      {cat.name}
-                    </span>
-                    {hasComponents ? (
-                      <span className="rounded-full bg-(--primary-muted) px-2 py-0.5 text-[11px] font-medium" style={{ color: "var(--primary)" }}>
-                        {count}
-                      </span>
-                    ) : (
-                      <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
-                        Soon
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-(--muted-foreground)">
-                    {cat.description}
-                  </p>
-                </div>
-              );
-              return hasComponents ? (
-                <Link key={cat.slug} href={`/categories/${cat.slug}`} className="aos-stagger-item block">
-                  {card}
-                </Link>
-              ) : (
-                <div key={cat.slug} className="aos-stagger-item">{card}</div>
-              );
-            })}
-          </StaggerChildren>
-        </AnimateOnScroll>
-      </section>
-
-      {/* Recently added */}
-      {recentlyAdded.length > 0 && (
-        <section className="border-b border-(--border)">
-          <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <div className="flex items-end justify-between gap-4">
-              <h2 className="text-2xl font-semibold tracking-tight">Recently Added</h2>
-              <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
-                View all →
-              </Link>
-            </div>
-            <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {recentlyAdded.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/components/${c.slug}`}
-                  className="aos-stagger-item group rounded-xl border border-(--border) p-5 transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
-                  style={{ boxShadow: "var(--shadow-sm)" }}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium group-hover:underline">{c.name}</span>
-                    {c.variants.length > 1 && (
-                      <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
-                        {c.variants.length} variants
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">{c.description}</p>
-                </Link>
-              ))}
-            </StaggerChildren>
-          </AnimateOnScroll>
-        </section>
-      )}
-
       {/* Patterns */}
       <section className="relative overflow-hidden">
         <div
@@ -294,7 +220,7 @@ export default function Home() {
         <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">AI Patterns</h2>
+              <h2 className="text-2xl font-semibold tracking-tight">Patterns</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Complete, remix-ready interfaces — not just single components.
               </p>
@@ -303,20 +229,69 @@ export default function Home() {
               View all →
             </Link>
           </div>
-          <StaggerChildren className="mt-8 grid gap-3 lg:grid-cols-3">
+          {/* Same rendered tile as /patterns. A pattern is a layout, and the
+              layout is the thing you are choosing between — a text card made
+              five whole screens look interchangeable. */}
+          <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {patterns.map((p) => (
               <Link
                 key={p.slug}
                 href={`/patterns/${p.slug}`}
-                className="aos-stagger-item group rounded-xl border border-(--border) bg-(--card) p-5 transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
+                className="aos-stagger-item group flex flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
                 style={{ boxShadow: "var(--shadow-sm)" }}
               >
-                <span className="font-medium group-hover:underline">{p.name}</span>
-                <p className="mt-1.5 text-sm text-(--muted-foreground)">{p.description}</p>
-                <span className="mt-4 inline-block text-sm font-medium" style={{ color: "var(--primary)" }}>
-                  Open pattern →
-                </span>
+                <PatternPreview slug={p.slug} />
+                <div className="flex flex-1 flex-col p-5">
+                  <span className="flex items-center gap-2">
+                    {createElement(patternIconFor(p.slug), {
+                      size: 15,
+                      strokeWidth: 1.75,
+                      "aria-hidden": true,
+                      className:
+                        "shrink-0 text-(--muted-foreground) transition-colors group-hover:text-(--primary)",
+                    })}
+                    <span className="font-medium group-hover:underline">{p.name}</span>
+                  </span>
+                  <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
+                    {p.description}
+                  </p>
+                </div>
               </Link>
+            ))}
+          </StaggerChildren>
+        </AnimateOnScroll>
+      </section>
+
+      {/* Icons */}
+      <section className="bg-(--muted)/30">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">Icons</h2>
+              <p className="mt-2 text-(--muted-foreground)">
+                One Lucide icon picked per AI concept — copy the SVG, the JSX, or the file.
+              </p>
+            </div>
+            <Link href="/icons" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
+              View all →
+            </Link>
+          </div>
+          {/* The real card from /icons, buttons and all: an icon you cannot
+              copy is just decoration, and the copy is the whole offer. */}
+          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredIcons.map((e) => (
+              // grid, not block: stretches the card to the row height so the
+              // copy row sits on the same line across the grid.
+              <div key={e.concept} className="aos-stagger-item grid">
+                <IconCard
+                  concept={e.concept}
+                  meaning={e.meaning}
+                  name={e.icon.displayName ?? "Icon"}
+                  components={e.components.map((slug) => ({ slug, name: componentName(slug) }))}
+                >
+                  {createElement(e.icon, { size: 22, strokeWidth: 2, "aria-hidden": true })}
+                </IconCard>
+              </div>
             ))}
           </StaggerChildren>
         </AnimateOnScroll>

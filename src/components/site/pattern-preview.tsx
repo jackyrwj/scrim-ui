@@ -193,7 +193,7 @@ function ResearchAssistantPreview() {
     <Stage>
       <Screen>
         <div className="flex flex-1 flex-col">
-          <div className="flex-1 space-y-1.5 p-2">
+          <div className="flex-1 space-y-1.5 px-2 py-1.5">
             {/* the search run */}
             <div className="space-y-1 rounded-md border border-(--border) p-1.5">
               <div className="flex items-center gap-1">
@@ -204,7 +204,6 @@ function ResearchAssistantPreview() {
                 <span className="ml-auto text-[8px] leading-3 text-(--muted-foreground)">3</span>
               </div>
               <Line w="76%" delay={0.06} />
-              <Line w="58%" delay={0.12} />
             </div>
             {/* the answer */}
             <div className="space-y-1.5 pt-0.5">
@@ -223,7 +222,6 @@ function ResearchAssistantPreview() {
                   className="flex-1 space-y-1 rounded-md border border-(--border) bg-(--muted)/50 p-1.5"
                 >
                   <Line w="70%" delay={0.3 + i * 0.06} />
-                  <Line w="45%" delay={0.36 + i * 0.06} />
                 </div>
               ))}
             </div>
