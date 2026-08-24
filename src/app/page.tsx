@@ -4,7 +4,6 @@ import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
 import { featuredTools, toolLabel } from "@/lib/tools";
 import { BrandIcon } from "@/components/brands/brand-icon";
-import { SurpriseMeButton } from "@/components/site/surprise-me-button";
 import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-scroll";
 import { ToolPreview } from "@/components/site/tool-preview";
 import { ComponentPreview } from "@/components/site/component-preview";
@@ -77,28 +76,11 @@ export default function Home() {
               Free in-browser tools and copy-ready components for building AI interfaces —
               prompt inputs, agent states, tool calls, citations, reasoning, voice and memory.
             </p>
-
-            {/* CTAs */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
-              <Link
-                href="/tools"
-                className="inline-flex h-10 items-center rounded-lg px-5 text-sm font-medium text-(--primary-foreground) transition-all hover:opacity-90 active:scale-[0.98]"
-                style={{ background: "var(--gradient-primary)" }}
-              >
-                Open the tools
-              </Link>
-              <Link
-                href="/components"
-                className="inline-flex h-10 items-center rounded-lg border border-(--border) px-5 text-sm font-medium transition-all hover:bg-(--primary-muted) hover:border-(--primary)/30 active:scale-[0.98]"
-              >
-                Browse components
-              </Link>
-              <SurpriseMeButton slugs={published.map((c) => c.slug)} />
-            </div>
           </div>
 
-          {/* The main event: a live, scripted tour of three real tools */}
-          <div className="mt-8 sm:mt-10">
+          {/* The main event: a live, scripted tour of three real tools.
+              Wider than the prose above it — it is the thing being read. */}
+          <div className="-mx-1 mt-8 sm:mx-[-3rem] sm:mt-10 lg:mx-[-4.5rem]">
             <HeroShowcase />
           </div>
 

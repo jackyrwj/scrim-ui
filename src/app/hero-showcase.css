@@ -4,13 +4,6 @@
 /* src/components/site/hero-showcase.tsx.                              */
 /* ------------------------------------------------------------------ */
 
-/* The stage clips a full-size tool preview. Fading the bottom edge    */
-/* reads as "zoomed into the real thing" instead of "cut off".         */
-.hs-stage {
-  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
-}
-
 /* Fake cursor: the transform is written straight to the node, so all  */
 /* this needs to do is make the move look like a hand, not a jump.     */
 .hs-cursor {
@@ -99,15 +92,25 @@
 /*   .hs-drift    — the slow idle move, a keyframe animation            */
 /* ------------------------------------------------------------------ */
 
+/* Padding, not a crop. The camera used to scale the frame past these
+   edges so the shot was cut off on all four sides; the tilt still reads
+   as a camera angle when the whole sheet is inside the frame, and the
+   rounded corners are part of what is being shown. */
 .hs-viewport {
   position: relative;
-  overflow: hidden;
   border-radius: 1.5rem;
-  perspective: 1500px;
+  padding: 1.25rem;
+  perspective: 1600px;
   perspective-origin: 50% 45%;
   background:
     radial-gradient(ellipse at 30% 0%, var(--primary-muted) 0%, transparent 55%),
     var(--muted);
+}
+
+@media (min-width: 640px) {
+  .hs-viewport {
+    padding: 2rem;
+  }
 }
 
 .hs-camera,
@@ -129,20 +132,20 @@
 /* One angle per slide, so moving between slides also moves the camera. */
 
 .hs-camera[data-tilt="rest"][data-shot="chat-mockup"] {
-  transform: scale(1.34) rotateX(9deg) rotateY(-13deg) rotateZ(-2.5deg) translate(-6%, -1%);
+  transform: scale(0.9) rotateX(7deg) rotateY(-11deg) rotateZ(-1.5deg);
 }
 
 .hs-camera[data-tilt="rest"][data-shot="model-switcher"] {
-  transform: scale(1.34) rotateX(7deg) rotateY(11deg) rotateZ(2.5deg) translate(-5%, -1%);
+  transform: scale(0.91) rotateX(6deg) rotateY(9deg) rotateZ(1.5deg);
 }
 
 .hs-camera[data-tilt="rest"][data-shot="flow-diagram"] {
-  transform: scale(1.44) rotateX(12deg) rotateY(-7deg) rotateZ(1.5deg) translate(-7%, 0);
+  transform: scale(0.93) rotateX(9deg) rotateY(-6deg) rotateZ(1deg);
 }
 
 /* Before it has been scrolled to: pushed back and further off-axis. */
 .hs-camera[data-tilt="enter"] {
-  transform: scale(1.18) rotateX(16deg) rotateY(-16deg) rotateZ(-4deg) translateY(26px);
+  transform: scale(0.94) rotateX(13deg) rotateY(-13deg) rotateZ(-3deg) translateY(22px);
 }
 
 /* Taken over: the camera pulls back to a flat, readable, clickable screen. */
@@ -159,10 +162,10 @@
 
 @keyframes hs-drift {
   from {
-    transform: translate3d(-0.8%, 0.6%, 0) rotateZ(-0.6deg) scale(1);
+    transform: translate3d(-0.5%, 0.4%, 0) rotateZ(-0.5deg) scale(1);
   }
   to {
-    transform: translate3d(0.8%, -0.6%, 0) rotateZ(0.6deg) scale(1.03);
+    transform: translate3d(0.5%, -0.4%, 0) rotateZ(0.5deg) scale(1);
   }
 }
 

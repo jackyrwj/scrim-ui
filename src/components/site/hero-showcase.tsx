@@ -12,7 +12,6 @@
 /* ------------------------------------------------------------------ */
 
 import * as React from "react";
-import Link from "next/link";
 import { MockupPreview } from "@/components/tools/chat-mockup/mockup-preview";
 import {
   defaultConfig as chatDefaults,
@@ -157,8 +156,7 @@ const SLIDES: {
   /** Intrinsic px width of the stage content, used to compute the fit scale. */
   width: number;
   narrowWidth: number;
-  /** Scale down to fit the stage height too. Off for the chat, which is
-      meant to overflow and be clipped as it grows. */
+  /** Intrinsic px height, for the slides that are taller than the stage. */
   fitHeight?: boolean;
 }[] = [
   {
@@ -168,6 +166,7 @@ const SLIDES: {
     headline: "Compose an AI chat screen, export it as a PNG.",
     width: 700,
     narrowWidth: 390,
+    fitHeight: true,
   },
   {
     id: "model-switcher",
@@ -368,11 +367,8 @@ export function HeroShowcase() {
          the layout box. mx-auto cannot produce the negative margin this
          needs once the content is wider than the stage. */
       content.style.marginLeft = `${Math.round((available - contentWidth) / 2)}px`;
-      /* Only the height-fitted slides get centred. The chat is pinned to
-         the top so that switching a toggle on grows it downwards instead
-         of sliding the whole mockup up. */
       const slack = stage.clientHeight - naturalHeight * scale;
-      content.style.marginTop = fitHeight && slack > 48 ? `${Math.round(slack / 2)}px` : "24px";
+      content.style.marginTop = slack > 48 ? `${Math.round(slack / 2)}px` : "16px";
     };
 
     fit();
@@ -391,7 +387,7 @@ export function HeroShowcase() {
     const { positioned, edges, merges, viewBox } = layoutNodes(FLOW_PRESETS[flowPreset].nodes);
     return renderFlowSvg(positioned, edges, merges, viewBox, "").replace(
       'style="width:100%;height:auto"',
-      `style="height:${narrow ? 220 : 330}px;width:auto;display:block"`,
+      `style="height:${narrow ? 240 : 430}px;width:auto;display:block"`,
     );
   }, [flowPreset, narrow]);
 
@@ -530,8 +526,12 @@ export function HeroShowcase() {
                 {/* Stage */}
                 <div
                   ref={stageRef}
-                  className="hs-stage relative min-w-0 flex-1 overflow-hidden bg-(--muted)/30 px-2 sm:px-5"
-                  style={{ height: narrow ? 380 : 440 }}
+                  // w-full on phones, where the body stacks: `flex-1` in a
+                  // column flex with no definite height let the stage grow to
+                  // whatever the un-scaled content wanted, which is the height
+                  // the fit calculation is trying to measure against.
+                  className="hs-stage relative w-full min-w-0 overflow-hidden bg-(--muted)/30 px-2 sm:flex-1 sm:px-5"
+                  style={{ height: narrow ? 520 : 560 }}
                 >
                   <div ref={contentRef} className="origin-top" style={{ width: contentWidth }}>
                     {slide.id === "chat-mockup" && <MockupPreview config={chatConfig} />}
@@ -599,13 +599,6 @@ export function HeroShowcase() {
           Hover to take over
         </span>
       </div>
-
-      <p className="mt-3 text-center text-xs text-(--muted-foreground)">
-        Not a recording — these are the real tools.{" "}
-        <Link href={`/tools/${slide.slug}`} className="underline underline-offset-2 hover:text-(--foreground)">
-          Open {slide.tab} →
-        </Link>
-      </p>
     </div>
   );
 }

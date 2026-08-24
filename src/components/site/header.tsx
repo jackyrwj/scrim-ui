@@ -64,14 +64,6 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2">
           <Search items={searchItems} />
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden text-sm text-(--muted-foreground) transition-colors hover:text-(--foreground) sm:block"
-          >
-            GitHub
-          </a>
           <ThemeToggle />
           <MobileNav />
         </div>
