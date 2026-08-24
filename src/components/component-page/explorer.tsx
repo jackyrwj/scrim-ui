@@ -74,7 +74,6 @@ export function ComponentExplorer({
   ].join(":");
 
   const activePreset = schema.presets.find((p) => matchesPreset(schema, p, values));
-  const note = activePreset?.note;
 
   return (
     <div className="overflow-hidden rounded-xl border border-(--border)">
@@ -89,6 +88,7 @@ export function ComponentExplorer({
                 type="button"
                 onClick={() => setValues(presetValues(schema, p))}
                 aria-pressed={active}
+                title={p.note}
                 className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
                   active
                     ? "bg-(--foreground) text-(--background)"
@@ -137,9 +137,6 @@ export function ComponentExplorer({
                 {t.label}
               </button>
             ))}
-            <span className="ml-auto truncate pl-2 text-[11px] text-(--muted-foreground)">
-              {note}
-            </span>
           </div>
 
           {tab === "preview" ? (
