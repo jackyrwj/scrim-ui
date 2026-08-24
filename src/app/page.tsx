@@ -2,7 +2,7 @@ import Link from "next/link";
 import { components, patterns } from "@/lib/registry";
 import { resources, resourceSlug } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
-import { featuredTools } from "@/lib/tools";
+import { featuredTools, publishedTools } from "@/lib/tools";
 import { ResourceCard } from "@/components/resources/resource-card";
 import { previewPath } from "@/lib/previews";
 import { InspirationCard } from "@/components/inspiration/entry-card";
@@ -29,7 +29,6 @@ const FEATURED_ICONS = [
 
 export default function Home() {
   const published = components.filter((c) => c.status === "published");
-  const totalVariants = published.reduce((sum, c) => sum + c.variants.length, 0);
   /* Six, spread across what the directory covers: two chat-UI libraries, a
      headless kit, the component library everyone starts from, and the two
      generators people actually reach for. */
@@ -55,13 +54,6 @@ export default function Home() {
     ...inspirationEntries.filter((e) => e.kind === "case-study"),
     ...inspirationEntries.filter((e) => e.kind !== "case-study"),
   ].slice(0, 6);
-
-  const stats = [
-    { value: `${published.length}+`, label: "Components" },
-    { value: `${totalVariants}+`, label: "Variants" },
-    { value: `${patterns.length}`, label: "Patterns" },
-    { value: `${resources.length}+`, label: "Resources" },
-  ];
 
   return (
     <div>
@@ -101,32 +93,21 @@ export default function Home() {
             <HeroShowcase />
           </div>
 
-          {/* Stats, kept to a single quiet line so they don't compete */}
-          <p className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-(--muted-foreground)">
-            {stats.map((s, i) => (
-              <span key={s.label} className="inline-flex items-center gap-3">
-                {i > 0 && <span aria-hidden>·</span>}
-                <span>
-                  <span className="font-semibold text-(--foreground)">{s.value}</span> {s.label.toLowerCase()}
-                </span>
-              </span>
-            ))}
-          </p>
         </div>
       </section>
 
       {/* Tools */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Tools</h2>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Free, in-browser tools for designing AI interfaces.
               </p>
             </div>
             <Link href="/tools" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
-              View all →
+              All {publishedTools.length} tools →
             </Link>
           </div>
           <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -141,11 +122,11 @@ export default function Home() {
 
       {/* Popular components */}
       <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="text-2xl font-semibold tracking-tight">Components</h2>
+            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
             <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
-              View all →
+              All {published.length} components →
             </Link>
           </div>
           <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -189,16 +170,16 @@ export default function Home() {
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-subtle)" }}
         />
-        <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Patterns</h2>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Patterns</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Complete, remix-ready interfaces — not just single components.
               </p>
             </div>
             <Link href="/patterns" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
-              View all →
+              All {patterns.length} patterns →
             </Link>
           </div>
           {/* Same rendered tile as /patterns. A pattern is a layout, and the
@@ -236,7 +217,7 @@ export default function Home() {
 
       {/* Icons */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">Icons</h2>
@@ -245,7 +226,7 @@ export default function Home() {
               </p>
             </div>
             <Link href="/icons" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
-              View all →
+              All {iconGuide.length} icons →
             </Link>
           </div>
           {/* The real card from /icons, buttons and all: an icon you cannot
@@ -271,7 +252,7 @@ export default function Home() {
 
       {/* Resources */}
       <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">Resources</h2>
@@ -280,7 +261,7 @@ export default function Home() {
               </p>
             </div>
             <Link href="/resources" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
-              View all →
+              All {resources.length} resources →
             </Link>
           </div>
           {/* The card from /resources, plus the captured screenshot the
@@ -300,7 +281,7 @@ export default function Home() {
 
       {/* Inspiration */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
@@ -313,7 +294,7 @@ export default function Home() {
               href="/inspiration"
               className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)"
             >
-              View all →
+              All {inspirationEntries.length} articles →
             </Link>
           </div>
 
@@ -324,6 +305,38 @@ export default function Home() {
               </div>
             ))}
           </StaggerChildren>
+        </AnimateOnScroll>
+      </section>
+
+      {/* Close */}
+      <section className="relative overflow-hidden border-t border-(--border)">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "var(--gradient-glow)" }}
+        />
+        <AnimateOnScroll className="relative mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
+          <h2 className="display-title text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
+            Everything here is free and copy-ready
+          </h2>
+          <p className="mt-3 text-(--muted-foreground)">
+            No signup, no install, no package to add. The tools run in your browser and the
+            components are single files you paste into your own project.
+          </p>
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="/tools"
+              className="inline-flex h-11 items-center rounded-lg px-6 text-sm font-medium text-(--primary-foreground) transition-all hover:opacity-90 active:scale-[0.98]"
+              style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}
+            >
+              Open the tools
+            </Link>
+            <Link
+              href="/components"
+              className="inline-flex h-11 items-center rounded-lg border border-(--border) px-6 text-sm font-medium transition-all hover:border-(--primary)/40 hover:bg-(--primary-muted) active:scale-[0.98]"
+            >
+              Browse components
+            </Link>
+          </div>
         </AnimateOnScroll>
       </section>
     </div>

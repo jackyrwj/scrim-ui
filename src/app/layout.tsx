@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/header";
+import { PreviewMotion } from "@/components/site/preview-motion";
 import { SiteFooter } from "@/components/site/footer";
 import { GoogleAnalytics } from "@/components/site/google-analytics";
 
@@ -51,6 +52,7 @@ export default function RootLayout({
         <GoogleAnalytics />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
+        <PreviewMotion />
         <SiteHeader />
         <main className="flex-1">{children}</main>
         <SiteFooter />

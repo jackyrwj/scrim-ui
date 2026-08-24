@@ -76,7 +76,9 @@
   --display-shadow: 0 2px 6px rgb(0 0 0 / 0.55);
 
   --gradient-primary: linear-gradient(135deg, #a78bfa, #60a5fa);
-  --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(46, 16, 101, 0.5) 0%, transparent 60%);
+  /* Dialled back from 0.5. The etched title reads as a solid object now,
+     and a heavy violet wash behind it turned the whole hero purple. */
+  --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(46, 16, 101, 0.3) 0%, transparent 60%);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -109,6 +111,13 @@ body {
 ::selection {
   background: var(--foreground);
   color: var(--background);
+}
+
+/* A preview frame the reader cannot see. Set by PreviewMotion, which adds
+   the class rather than requiring one — with JS off nothing is idle and
+   every preview runs, as it did before the observer existed. */
+.preview-idle * {
+  animation-play-state: paused !important;
 }
 
 /* --- The display title ---------------------------------------------
