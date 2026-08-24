@@ -8,6 +8,8 @@ import { pageConfigs } from "@/showcase/registry";
 import { PreviewFrame } from "@/components/component-page/preview-frame";
 import { CopyButton } from "@/components/component-page/copy-button";
 import { CodeBlock } from "@/components/component-page/code-block";
+import { VariantCode } from "@/components/component-page/variant-code";
+import { variantSnippet } from "@/lib/variant-source";
 
 export function generateStaticParams() {
   return components.filter((c) => c.status === "published").map((c) => ({ slug: c.slug }));
@@ -70,17 +72,31 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         <PreviewFrame>{config.heroDemo}</PreviewFrame>
       </section>
 
-      {/* Variants */}
+      {/* Variants. Each one carries its own source, extracted from the demo
+          that renders it — see lib/variant-source.ts. Copying the whole
+          component file told you nothing about how to reach a given state. */}
       <section className="mt-14">
         <h2 className="text-xl font-semibold tracking-tight">Variants</h2>
-        <div className="mt-6 space-y-8">
-          {config.variants.map((v) => (
-            <div key={v.id}>
-              <h3 className="text-sm font-medium">{v.title}</h3>
-              <p className="mt-1 mb-3 text-sm text-(--muted-foreground)">{v.note}</p>
-              <PreviewFrame>{v.demo}</PreviewFrame>
-            </div>
-          ))}
+        <p className="mb-6 mt-1 text-sm text-(--muted-foreground)">
+          Every variant is the same component under different props. Copy one to get the props
+          that produce that state — the component itself is in{" "}
+          <a href="#code" className="underline underline-offset-2 hover:text-(--foreground)">
+            Code
+          </a>{" "}
+          below.
+        </p>
+        <div className="space-y-8">
+          {config.variants.map((v) => {
+            const snippet = variantSnippet(slug, v.id);
+            return (
+              <div key={v.id} id={`variant-${v.id}`} className="scroll-mt-20">
+                <h3 className="text-sm font-medium">{v.title}</h3>
+                <p className="mt-1 mb-3 text-sm text-(--muted-foreground)">{v.note}</p>
+                <PreviewFrame>{v.demo}</PreviewFrame>
+                {snippet && <VariantCode code={snippet} lang={`${v.id}.tsx`} />}
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -96,7 +112,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       )}
 
       {/* Code */}
-      <section className="mt-14">
+      <section id="code" className="mt-14 scroll-mt-20">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-xl font-semibold tracking-tight">Code</h2>
           <CopyButton code={source} label="Copy React" />

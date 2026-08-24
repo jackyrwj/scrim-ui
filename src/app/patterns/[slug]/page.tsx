@@ -1,9 +1,11 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { createElement } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { patterns, getPattern, getComponent } from "@/lib/registry";
+import { patternIconFor } from "@/lib/icons";
 import { patternConfigs } from "@/showcase/patterns/registry";
 import { PreviewFrame } from "@/components/component-page/preview-frame";
 import { CopyButton } from "@/components/component-page/copy-button";
@@ -45,8 +47,32 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
         <span className="mx-2">/</span>
         <span className="text-(--foreground)">{entry.name}</span>
       </nav>
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name}</h1>
+      <div className="flex items-center gap-2.5">
+        {createElement(patternIconFor(slug), {
+          size: 26,
+          strokeWidth: 1.75,
+          "aria-hidden": true,
+          className: "shrink-0 text-(--primary)",
+        })}
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name}</h1>
+      </div>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{entry.description}</p>
+
+      {/* The same three facts the card on /patterns promised, restated where
+          the reader decides whether to copy: one file, this big, made of
+          components they can read separately. */}
+      <p className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-(--muted-foreground)">
+        <span className="rounded-md border border-(--border) px-1.5 py-0.5 font-mono text-[12px]">
+          {config.sourceFile}
+        </span>
+        <span className="tabular-nums">{source.trimEnd().split("\n").length} lines</span>
+        <span aria-hidden>·</span>
+        <span className="tabular-nums">
+          {config.elements.filter((el) => el.componentSlug).length} components
+        </span>
+        <span aria-hidden>·</span>
+        <span>React + Tailwind, no dependencies</span>
+      </p>
 
       {/* Live preview */}
       <section className="mt-10">
@@ -127,9 +153,18 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
               <Link
                 key={p.slug}
                 href={`/patterns/${p.slug}`}
-                className="rounded-xl border border-(--border) p-4 transition-colors hover:bg-(--muted)/60"
+                className="group rounded-xl border border-(--border) p-4 transition-colors hover:bg-(--muted)/60"
               >
-                <span className="font-medium hover:underline">{p.name}</span>
+                <span className="flex items-center gap-2">
+                  {createElement(patternIconFor(p.slug), {
+                    size: 15,
+                    strokeWidth: 1.75,
+                    "aria-hidden": true,
+                    className:
+                      "shrink-0 text-(--muted-foreground) transition-colors group-hover:text-(--primary)",
+                  })}
+                  <span className="font-medium group-hover:underline">{p.name}</span>
+                </span>
                 <p className="mt-1 line-clamp-2 text-sm text-(--muted-foreground)">{p.description}</p>
               </Link>
             ))}

@@ -10,6 +10,7 @@
  * keep their own inline SVG.
  */
 import {
+  AudioLines,
   AudioWaveform,
   BookMarked,
   BookmarkCheck,
@@ -29,6 +30,7 @@ import {
   LoaderCircle,
   MessageCircle,
   MessageSquare,
+  MessagesSquare,
   MessageSquareWarning,
   Mic,
   MicVocal,
@@ -37,6 +39,7 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   SquareTerminal,
+  Telescope,
   TextCursor,
   TextCursorInput,
   TextInitial,
@@ -103,9 +106,23 @@ export const componentIcons: Record<string, LucideIcon> = {
   "voice-conversation": MicVocal,
 };
 
+/** Pattern slug -> its icon, for the pattern cards and their page headers. */
+export const patternIcons: Record<string, LucideIcon> = {
+  "ai-chat": MessagesSquare,
+  "research-assistant": Telescope,
+  "coding-agent": SquareTerminal,
+  "voice-assistant": AudioLines,
+  "model-preferences": SlidersHorizontal,
+};
+
 /** Falls back to a neutral mark so a new Component never renders a blank cell. */
 export function iconFor(slug: string): LucideIcon {
   return componentIcons[slug] ?? Layers;
+}
+
+/** Pattern icon, with the same guarantee. */
+export function patternIconFor(slug: string): LucideIcon {
+  return patternIcons[slug] ?? Layers;
 }
 
 /** Category icon, with the same guarantee. */

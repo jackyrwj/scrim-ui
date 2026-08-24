@@ -1,0 +1,41 @@
+/* ------------------------------------------------------------------ */
+/* Static previews for the /patterns cards.                            */
+/*                                                                     */
+/* A Pattern is a whole screen, not one control, so the frame is wider */
+/* and the miniature shows *layout* — where the rail, the thread, the  */
+/* composer and the approval bar sit — rather than the detail of any   */
+/* one part. Recognising the arrangement is what tells a reader which  */
+/* pattern they want.                                                  */
+/*                                                                     */
+/* The motion classes (cp-line, cp-caret, cp-dot) are deliberately the */
+/* ones from component-previews.css: those rules key off `.group:hover` */
+/* alone, so they already apply inside these cards and the two grids   */
+/* stir in exactly the same way. Only the frame is new.                */
+/* ------------------------------------------------------------------ */
+
+/* Every miniature is authored at one size and scaled, never re-laid-out:
+   the two featured patterns sit in a wider card and get a larger tile, but
+   widening the markup instead would stretch a chat bubble into a bar. One
+   transform keeps the proportions the pattern was drawn at. */
+.pp {
+  --pp-scale: 1;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Only once the featured card is actually wider than the rest — below the
+   grid's first breakpoint every card is full width, and scaling there would
+   push the tile past its own frame. */
+@media (min-width: 640px) {
+  .pp--lg {
+    --pp-scale: 1.36;
+  }
+}
+
+.pp-stage {
+  width: 290px;
+  transform: scale(var(--pp-scale));
+}
