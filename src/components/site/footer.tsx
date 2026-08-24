@@ -24,9 +24,9 @@ export function SiteFooter() {
           <div>
             <div className="flex items-center gap-2 font-semibold">
               <span className="flex h-6 w-6 items-center justify-center rounded-md bg-(--foreground) text-(--background) text-xs font-bold">
-                AI
+                S
               </span>
-              AI UI Resources
+              Scrim UI
             </div>
             <p className="mt-3 text-sm leading-6 text-(--muted-foreground)">
               Open-source UI patterns and components for AI products. Free to copy, built for designers and developers.
@@ -88,7 +88,7 @@ export function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-(--border) pt-6 text-xs text-(--muted-foreground) sm:flex-row">
-          <p>© {new Date().getFullYear()} AI UI Resources. Free to copy.</p>
+          <p>© {new Date().getFullYear()} Scrim UI. Free to copy.</p>
           <a
             href="#"
             className="transition-colors hover:text-(--foreground)"

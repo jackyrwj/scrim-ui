@@ -450,7 +450,7 @@ export function HeroShowcase() {
                   <span className="h-2.5 w-2.5 rounded-full bg-(--border)" />
                 </div>
                 <div className="min-w-0 flex-1 truncate rounded-md bg-(--background) px-3 py-1 text-center font-mono text-[11px] text-(--muted-foreground)">
-                  ai-ui-resources.app/tools/{slide.slug}
+                  scrimui.com/tools/{slide.slug}
                 </div>
                 <span className="hidden shrink-0 items-center gap-1.5 text-[11px] text-(--muted-foreground) sm:inline-flex">
                   <span

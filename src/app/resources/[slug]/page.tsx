@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = getResource(slug);
   if (!entry) return { title: "Resource" };
   return {
-    // The root layout appends " — AI UI Resources".
+    // The root layout appends " — Scrim UI".
     title: `${entry.name} — ${getResourceCategory(entry.category)?.name ?? "Resource"}`,
     description: entry.description,
     alternates: { canonical: `/resources/${slug}` },

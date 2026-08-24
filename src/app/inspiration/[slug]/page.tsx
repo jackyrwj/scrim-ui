@@ -22,9 +22,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const entry = getInspirationEntry(slug);
   if (!entry) return { title: "Inspiration" };
   return {
+    /* No brand here. The root layout's title template appends " — Scrim UI"
+       to whatever this returns, so spelling it out produced
+       "… | Scrim UI — Scrim UI" and burned twelve characters of a title
+       Google truncates around sixty. */
     title: entry.product
-      ? `${entry.product} UI patterns — Inspiration | AI UI Resources`
-      : `${entry.title} — Guide | AI UI Resources`,
+      ? `${entry.product} UI patterns — Inspiration`
+      : `${entry.title} — Guide`,
     description: entry.summary,
   };
 }

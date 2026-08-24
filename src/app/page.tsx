@@ -65,8 +65,13 @@ export default function Home() {
         />
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
           <div className="mx-auto max-w-3xl text-center">
+            {/* A claim, not the wordmark. The name is already in the header,
+                the title tag and the footer; spending the page's one h1 on it
+                repeated a term only people who already know the site would
+                search for, and left the strongest heading on the page saying
+                nothing about what is here. */}
             <h1 className="display-title text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-              AI UI Resources
+              The UI layer your AI product is missing
             </h1>
             <p className="mt-4 text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
               Free in-browser tools and copy-ready components for building AI interfaces —
