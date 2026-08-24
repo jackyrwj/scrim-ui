@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ScrimBadge } from "./scrim-mark";
 
 const browseLinks = [
   { href: "/components", label: "Components" },
@@ -23,9 +24,7 @@ export function SiteFooter() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 font-semibold">
-              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-(--foreground) text-(--background) text-xs font-bold">
-                S
-              </span>
+              <ScrimBadge />
               Scrim UI
             </div>
             <p className="mt-3 text-sm leading-6 text-(--muted-foreground)">

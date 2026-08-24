@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 import { MobileNav } from "./mobile-nav";
 import { Search } from "./search";
+import { ScrimBadge } from "./scrim-mark";
 import { components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
@@ -46,9 +47,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-(--border) bg-(--background)/80 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-(--foreground) text-(--background) text-xs font-bold">
-            S
-          </span>
+          <ScrimBadge />
           <span>Scrim UI</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-(--muted-foreground) md:flex">

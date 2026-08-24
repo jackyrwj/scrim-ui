@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <!--
+    The header lockup's badge, standalone. A browser tab has no inherited
+    colour, so currentColor is not available here and the palette is baked
+    in — and inverted under prefers-color-scheme, the same flip the header
+    gets from its tokens, so the mark never sits dark-on-dark in a dark tab
+    strip. favicon.ico carries the violet version for the clients that
+    ignore this media query.
+  -->
+  <style>
+    .bg { fill: #09090b }
+    .fg { fill: #fafafa }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #fafafa }
+      .fg { fill: #09090b }
+    }
+  </style>
+  <rect class="bg" width="96" height="96" rx="22"/>
+  <g transform="translate(24 24) scale(0.5)">
+    <path class="fg" fill-rule="evenodd" d="M0 0 H80 L0 80 Z M96 16 V96 H16 Z"/>
+  </g>
+</svg>
