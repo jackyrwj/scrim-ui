@@ -115,6 +115,11 @@ export function ScreenshotMockup() {
           <Section title="Screenshot">
             {config.imageDataUrl ? (
               <div className="space-y-2">
+                {/* eslint-disable-next-line @next/next/no-img-element --
+                    the src is a data: URL the reader just picked from their own
+                    disk. next/image has nothing to optimize (no remote fetch,
+                    no known dimensions) and its wrapper markup would end up in
+                    the html-to-image capture below. */}
                 <img
                   src={config.imageDataUrl}
                   alt="Uploaded screenshot"
@@ -371,6 +376,9 @@ export function ScreenshotMockup() {
                 }}
               >
                 <FrameComponent>
+                  {/* eslint-disable-next-line @next/next/no-img-element --
+                      same data: URL, and this subtree is exactly what
+                      html-to-image serialises into the exported PNG. */}
                   <img
                     src={config.imageDataUrl}
                     alt="Screenshot"

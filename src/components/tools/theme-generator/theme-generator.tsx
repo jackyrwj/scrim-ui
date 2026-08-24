@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Section, Chip, Field, inputCls } from "../tool-ui";
+import { Section, Chip, inputCls } from "../tool-ui";
 import { CopyButton } from "@/components/component-page/copy-button";
 import type { ThemeConfig, ThemeMode, ColorScheme } from "./types";
 import { defaultConfig, COLOR_LABELS } from "./types";
@@ -81,7 +81,10 @@ function ChatPreview({ scheme }: { scheme: ColorScheme }) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
           </svg>
-          search_web("streaming protocol SSE")
+          {/* A string expression, not bare JSX text: the double quotes are part
+              of the code sample being shown, and entity-escaping them here
+              would make the source harder to read than the output. */}
+          {'search_web("streaming protocol SSE")'}
         </div>
 
         {/* Source card */}
