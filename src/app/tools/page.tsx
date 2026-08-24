@@ -1,6 +1,7 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { tools } from "@/lib/tools";
+import { ToolCard } from "@/components/site/tool-card";
+import { StaggerChildren } from "@/components/site/animate-on-scroll";
 
 export const metadata: Metadata = {
   title: "Tools",
@@ -17,38 +18,13 @@ export default function ToolsPage() {
         everything runs locally in your browser.
       </p>
 
-      <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <StaggerChildren className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => (
-          <div key={tool.slug}>
-            {tool.status === "published" ? (
-              <Link
-                href={`/tools/${tool.slug}`}
-                className="group flex h-full flex-col rounded-xl border border-(--border) p-5 transition-colors hover:bg-(--muted)/60"
-              >
-                <span className="font-medium group-hover:underline">{tool.name}</span>
-                <p className="mt-1.5 flex-1 text-sm leading-6 text-(--muted-foreground)">
-                  {tool.description}
-                </p>
-                <span className="mt-4 inline-block text-sm font-medium text-(--foreground)">
-                  Open tool →
-                </span>
-              </Link>
-            ) : (
-              <div className="flex h-full flex-col rounded-xl border border-dashed border-(--border) p-5 opacity-70">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{tool.name}</span>
-                  <span className="rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
-                    Soon
-                  </span>
-                </div>
-                <p className="mt-1.5 flex-1 text-sm leading-6 text-(--muted-foreground)">
-                  {tool.description}
-                </p>
-              </div>
-            )}
+          <div key={tool.slug} className="aos-stagger-item grid">
+            <ToolCard tool={tool} />
           </div>
         ))}
-      </div>
+      </StaggerChildren>
     </div>
   );
 }

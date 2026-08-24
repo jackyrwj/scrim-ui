@@ -16,6 +16,10 @@ const previews: Record<string, () => React.ReactElement> = {
   "flow-diagram": FlowDiagramPreview,
   "voice-mockup": VoiceMockupPreview,
   "token-counter": TokenCounterPreview,
+  "screenshot-mockup": ScreenshotMockupPreview,
+  "voice-scripts": VoiceScriptsPreview,
+  "prompt-generator": PromptGeneratorPreview,
+  playground: PlaygroundPreview,
 };
 
 export function hasToolPreview(slug: string) {
@@ -226,7 +230,7 @@ function TokenCounterPreview() {
             <div
               key={i}
               className="tp-chip h-2 rounded-sm"
-              style={{ width: w, background: "var(--border)", animationDelay: `${i * 0.12}s` }}
+              style={{ width: w, animationDelay: `${i * 0.12}s` }}
             />
           ))}
         </div>
@@ -236,6 +240,155 @@ function TokenCounterPreview() {
         <div className="mt-2 flex justify-between text-[9px] text-(--muted-foreground)">
           <span>o200k_base</span>
           <span>1,284 tokens · $0.006</span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* The four below exist because /tools now uses this same card. On the
+   homepage only the six featured tools appear and all of them had a
+   preview; the full list fell through to GenericPreview, which made four
+   different tools look like the same grey placeholder. */
+
+function ScreenshotMockupPreview() {
+  return (
+    <Stage>
+      {/* A browser frame with a screenshot dropping into it. */}
+      <div
+        className="overflow-hidden rounded-xl border border-(--border) bg-(--card)"
+        style={{ boxShadow: "var(--shadow-sm)" }}
+      >
+        <div className="flex items-center gap-1 border-b border-(--border) bg-(--muted)/60 px-2 py-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-(--border)" />
+          <span className="h-1.5 w-1.5 rounded-full bg-(--border)" />
+          <span className="h-1.5 w-1.5 rounded-full bg-(--border)" />
+          <span className="ml-1 h-1.5 flex-1 rounded-full bg-(--border)" />
+        </div>
+        <div className="grid h-[76px] place-items-center p-2">
+          <div
+            className="tp-drop h-full w-full rounded-md"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--primary-muted) 0%, var(--muted) 55%, var(--primary-muted) 100%)",
+              border: "1px solid var(--border)",
+            }}
+          />
+        </div>
+      </div>
+      <div className="mt-3 flex justify-center gap-1.5">
+        {["iPhone", "MacBook", "Browser"].map((d) => (
+          <span
+            key={d}
+            className="rounded-full border border-(--border) bg-(--card) px-2 py-0.5 text-[9px] text-(--muted-foreground)"
+          >
+            {d}
+          </span>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+function VoiceScriptsPreview() {
+  const rows = ["Booking a table", "Rescheduling a call", "Reading a summary"];
+  return (
+    <Stage>
+      <div
+        className="relative rounded-xl border border-(--border) bg-(--card) p-1.5"
+        style={{ boxShadow: "var(--shadow-sm)" }}
+      >
+        {/* The picker walks the list, the way you skim ready-made scripts. */}
+        <div
+          className="tp-step absolute inset-x-1.5 top-1.5 rounded-md border"
+          style={{
+            height: "calc((100% - 0.75rem) / 3)",
+            background: "var(--primary-muted)",
+            borderColor: "var(--primary)",
+          }}
+        />
+        {rows.map((r) => (
+          <div
+            key={r}
+            className="relative z-10 flex items-center gap-1.5 px-2 py-1.5 text-[10px] text-(--muted-foreground)"
+          >
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-(--muted-foreground)" />
+            {r}
+          </div>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
+function PromptGeneratorPreview() {
+  return (
+    <Stage>
+      <div
+        className="rounded-xl border border-(--border) bg-(--card) p-2.5"
+        style={{ boxShadow: "var(--shadow-sm)" }}
+      >
+        <p className="text-[9px] font-medium tracking-wide text-(--muted-foreground) uppercase">
+          Prompt
+        </p>
+        <div className="mt-1.5 space-y-1.5">
+          {["100%", "88%", "64%"].map((w, i) => (
+            <div
+              key={w}
+              className="tp-line h-1.5 rounded-full bg-(--border)"
+              style={{ width: w, animationDelay: `${i * 0.4}s`, transformOrigin: "left center" }}
+            />
+          ))}
+        </div>
+        <div className="mt-2.5 flex items-center gap-1.5">
+          <span className="tp-chip h-4 w-16 rounded-md" />
+          <span className="text-[9px] text-(--muted-foreground)">v0 · Claude · Cursor</span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+function PlaygroundPreview() {
+  return (
+    <Stage>
+      <div
+        className="flex gap-2 rounded-xl border border-(--border) bg-(--card) p-2"
+        style={{ boxShadow: "var(--shadow-sm)" }}
+      >
+        {/* Controls on the left, the component answering on the right —
+            the whole point of the playground in one frame. */}
+        <div className="w-[74px] shrink-0 space-y-1.5 border-r border-(--border) pr-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-center gap-1">
+              <span className="h-1 flex-1 rounded-full bg-(--border)" />
+              {/* The delay goes on both halves: animation-delay does not
+                  inherit, and a knob out of step with its track reads as
+                  a bug rather than as a switch. */}
+              <span
+                className="tp-toggle flex h-2.5 w-4 shrink-0 items-center rounded-full px-[2px]"
+                style={{ animationDelay: `${i * 0.9}s` }}
+              >
+                <span
+                  className="tp-knob h-1.5 w-1.5 rounded-full bg-(--card)"
+                  style={{ animationDelay: `${i * 0.9}s` }}
+                />
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="flex-1 space-y-1.5">
+          <div className="flex gap-1">
+            <span className="tp-chip h-3 w-8 rounded" />
+            <span className="tp-chip h-3 w-6 rounded" style={{ animationDelay: "1.6s" }} />
+          </div>
+          {["100%", "76%", "90%"].map((w, i) => (
+            <div
+              key={w}
+              className="tp-line h-1.5 rounded-full bg-(--border)"
+              style={{ width: w, animationDelay: `${0.3 + i * 0.3}s`, transformOrigin: "left center" }}
+            />
+          ))}
         </div>
       </div>
     </Stage>

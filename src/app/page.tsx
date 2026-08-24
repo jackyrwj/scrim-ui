@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { components, patterns } from "@/lib/registry";
-import { resources } from "@/lib/resources";
+import { resources, resourceSlug } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
-import { featuredTools, toolLabel } from "@/lib/tools";
+import { featuredTools } from "@/lib/tools";
 import { ResourceCard } from "@/components/resources/resource-card";
+import { previewPath } from "@/lib/previews";
 import { InspirationCard } from "@/components/inspiration/entry-card";
 import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-scroll";
-import { ToolPreview } from "@/components/site/tool-preview";
+import { ToolCard } from "@/components/site/tool-card";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { HeroShowcase } from "@/components/site/hero-showcase";
 import { PatternPreview } from "@/components/site/pattern-preview";
@@ -126,36 +127,9 @@ export default function Home() {
           </div>
           <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {featuredTools.map((tool) => (
-              <Link
-                key={tool.slug}
-                href={`/tools/${tool.slug}`}
-                className="aos-stagger-item group flex flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-1 hover:border-(--primary)/40"
-                style={{ boxShadow: "var(--shadow-sm)" }}
-              >
-                <ToolPreview slug={tool.slug} />
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold group-hover:underline">{toolLabel(tool)}</span>
-                    {tool.isNew && (
-                      <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
-                        New
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1.5 flex-1 text-sm leading-6 text-(--muted-foreground)">
-                    {tool.tagline}
-                  </p>
-                  <span
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-medium"
-                    style={{ color: "var(--primary)" }}
-                  >
-                    {tool.cta ?? "Open tool"}{" "}
-                    <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                      →
-                    </span>
-                  </span>
-                </div>
-              </Link>
+              <div key={tool.slug} className="aos-stagger-item grid">
+                <ToolCard tool={tool} />
+              </div>
             ))}
           </StaggerChildren>
         </AnimateOnScroll>
@@ -305,14 +279,15 @@ export default function Home() {
               View all →
             </Link>
           </div>
-          {/* The card from /resources, not a summary of it: the badges, the
-              "why we list it" line and the separate link to the official site
-              are what make the entry judgeable rather than just named. */}
+          {/* The card from /resources, plus the captured screenshot the
+              directory cannot afford to show 102 times. The badges, the
+              "why we list it" line and the separate link to the official
+              site are what make the entry judgeable rather than named. */}
           <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {featuredResources.map((r) => (
               // grid, not block: stretches the card to the row height.
               <div key={r.url} className="aos-stagger-item grid">
-                <ResourceCard entry={r} headingLevel="h3" />
+                <ResourceCard entry={r} headingLevel="h3" preview={previewPath(resourceSlug(r.name))} />
               </div>
             ))}
           </StaggerChildren>
