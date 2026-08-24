@@ -41,15 +41,20 @@ function TurnEditor({
   return (
     <div className="rounded-xl border border-(--border) bg-(--card) p-3">
       <div className="flex items-center gap-2">
-        <select
-          value={turn.role}
-          onChange={(e) => onPatch({ role: e.target.value as VoiceTurnRole })}
-          className={`${selectCls} w-28 shrink-0`}
-          aria-label="Turn role"
-        >
-          <option value="user">User</option>
-          <option value="assistant">Assistant</option>
-        </select>
+        {/* The width lives on the wrapper: selectCls carries w-full,
+            which outranks a w-28 on the same element and let the select
+            push the move and delete buttons off the card. */}
+        <div className="w-28 shrink-0">
+          <select
+            value={turn.role}
+            onChange={(e) => onPatch({ role: e.target.value as VoiceTurnRole })}
+            className={selectCls}
+            aria-label="Turn role"
+          >
+            <option value="user">User</option>
+            <option value="assistant">Assistant</option>
+          </select>
+        </div>
         <div className="flex flex-1 items-center justify-end gap-1">
           <button
             type="button"

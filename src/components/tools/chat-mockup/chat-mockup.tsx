@@ -35,15 +35,20 @@ function MessageEditor({
   return (
     <div className="rounded-xl border border-(--border) bg-(--card) p-3">
       <div className="flex items-center gap-2">
-        <select
-          value={msg.role}
-          onChange={(e) => onPatch({ role: e.target.value as MockupRole })}
-          className={`${selectCls} w-28 shrink-0`}
-          aria-label="Message role"
-        >
-          <option value="user">User</option>
-          <option value="assistant">Assistant</option>
-        </select>
+        {/* The width lives on the wrapper: selectCls carries w-full,
+            which outranks a w-28 on the same element and let the select
+            push the move and delete buttons off the card. */}
+        <div className="w-28 shrink-0">
+          <select
+            value={msg.role}
+            onChange={(e) => onPatch({ role: e.target.value as MockupRole })}
+            className={selectCls}
+            aria-label="Message role"
+          >
+            <option value="user">User</option>
+            <option value="assistant">Assistant</option>
+          </select>
+        </div>
         <div className="flex flex-1 items-center justify-end gap-1">
           <button
             type="button"
@@ -102,6 +107,68 @@ function MessageEditor({
 /* ------------------------------------------------------------------ */
 /* ChatMockup — the tool                                               */
 /* ------------------------------------------------------------------ */
+
+/**
+ * Scales the mockup down when the preview column is narrower than it.
+ *
+ * The column is ~730px at every viewport — it is a fixed fraction of a
+ * max-w-6xl page — while the device presets go up to 852px, so the live
+ * preview was always cut off on the right whatever screen you were on. A
+ * horizontal scrollbar is not a preview; you cannot judge a screenshot you
+ * can only see two thirds of.
+ *
+ * The transform sits outside previewRef, so the exported PNG is still
+ * rasterised at the mockup's true size. Written straight to the node rather
+ * than held in state, as in the hero showcase, so a resize does not cost a
+ * render of the whole tool.
+ */
+function FitToWidth({ children }: { children: React.ReactNode }) {
+  const boxRef = React.useRef<HTMLDivElement>(null);
+  const innerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const box = boxRef.current;
+    const inner = innerRef.current;
+    if (!box || !inner) return;
+
+    let lastWidth = -1;
+    const fit = () => {
+      const available = box.clientWidth;
+      const natural = inner.offsetWidth;
+      if (!natural) return;
+      const scale = Math.min(1, available / natural);
+      inner.style.transform = scale < 1 ? `scale(${scale})` : "";
+      /* Scaled from the top-left, so the visual box starts at the box edge;
+         `mx-auto` cannot centre it because the *layout* box keeps the
+         mockup's full width and would hang off the right. Centring is only
+         needed in the other direction, when the mockup already fits. */
+      inner.style.marginLeft = `${Math.max(0, Math.round((available - natural * scale) / 2))}px`;
+      /* The box is height:auto around a transformed child, which does not
+         shrink the layout box — so set it to the visual height. */
+      box.style.height = `${Math.round(inner.offsetHeight * scale)}px`;
+      lastWidth = available;
+    };
+
+    fit();
+    const observer = new ResizeObserver(() => {
+      /* Setting box.style.height re-triggers this observer; only react when
+         the width — the thing the scale depends on — actually moved. */
+      if (box.clientWidth !== lastWidth) fit();
+      else box.style.height = `${Math.round(inner.offsetHeight * Math.min(1, box.clientWidth / (inner.offsetWidth || 1)))}px`;
+    });
+    observer.observe(box);
+    observer.observe(inner);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={boxRef} className="overflow-hidden">
+      <div ref={innerRef} className="w-fit origin-top-left">
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export function ChatMockup() {
   const [config, setConfig] = React.useState<MockupConfig>(() => structuredClone(defaultConfig));
@@ -368,7 +435,10 @@ export function ChatMockup() {
         </div>
 
         {/* Preview */}
-        <div className="lg:sticky lg:top-20">
+        {/* min-w-0: a `1fr` track is minmax(auto, 1fr), so without it the
+            preview's min-content width blows the column out past the page
+            and the overflow-x-auto below never gets a chance to scroll. */}
+        <div className="min-w-0 lg:sticky lg:top-20">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-semibold uppercase tracking-wide text-(--muted-foreground)">
               Live preview
@@ -377,12 +447,12 @@ export function ChatMockup() {
               {DEVICE_OPTIONS.find((o) => o.value === config.device)?.label}
             </span>
           </div>
-          <div className="overflow-x-auto rounded-xl border border-(--border) bg-(--muted)/40 p-6">
-            <div className="mx-auto w-fit">
+          <div className="rounded-xl border border-(--border) bg-(--muted)/40 p-6">
+            <FitToWidth>
               <div ref={previewRef}>
                 <MockupPreview config={config} />
               </div>
-            </div>
+            </FitToWidth>
           </div>
           <p className="mt-2 text-center text-xs text-(--muted-foreground)">
             Tip: turn off streaming for a fully rendered, clean screenshot.

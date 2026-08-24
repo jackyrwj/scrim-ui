@@ -64,7 +64,12 @@ export const defaultConfig: MockupConfig = {
     {
       ...createMessage(
         "assistant",
-        "Three patterns separate a good AI chat from a great one:\n\n1. **Streaming** — reveal tokens as they arrive and offer a stop control.\n2. **Grounding** — cite sources inline so claims can be verified.\n3. **Transparency** — show tool calls and reasoning, don't hide the work.",
+        /* No markdown in the sample text. The mockup renders through
+           StreamingMessage, which takes a plain string by design — it is a
+           component people copy, not a renderer — so `**Streaming**` came out
+           with its asterisks showing, here and in the homepage hero that
+           reuses this config. */
+        "Three patterns separate a good AI chat from a great one:\n\n1. Streaming — reveal tokens as they arrive and offer a stop control.\n2. Grounding — cite sources inline so claims can be verified.\n3. Transparency — show tool calls and reasoning, don't hide the work.",
       ),
       reasoning: true,
       tools: true,
