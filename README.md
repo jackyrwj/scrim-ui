@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+<img src="src/app/icon.svg" width="56" height="56" alt="">
 
-First, run the development server:
+# Scrim UI
+
+**The UI layer your AI product is missing.**
+
+Free in-browser tools and copy-ready components for AI interfaces — prompt
+inputs, agent states, tool calls, citations, reasoning, voice and memory.
+
+[scrimui.dev](https://scrimui.dev)
+
+</div>
+
+---
+
+A scrim is the gauze that looks opaque until you light what is behind it. AI
+products invented a whole vocabulary of interface in three years — streaming,
+tool calls, reasoning traces, approval gates, context windows, memory — and
+nobody wrote it down. This is the attempt: what each concept is called, what
+icon it gets, what it looks like, what code it is, and when to use it.
+
+## Install a component
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx shadcn@latest add https://scrimui.dev/r/prompt-input.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+All 29 components are in the registry; the index is at
+[`/r/registry.json`](https://scrimui.dev/r/registry.json).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Or skip the CLI entirely — every component page has the full source and a copy
+button, and every component is **one file that imports nothing but React**. No
+package to add, no version to track, no breaking change to absorb. Paste it and
+it is yours.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## What is here
 
-## Learn More
+| | |
+|---|---|
+| **[Tools](https://scrimui.dev/tools)** | Ten in-browser tools. Compose a chat or voice mockup and export a PNG, generate a theme from one brand colour, draw a conversation flow, count tokens. Nothing uploads; it all runs locally. |
+| **[Components](https://scrimui.dev/components)** | 29 single-file React + Tailwind components, each with a live prop explorer that regenerates the call site as you change it. |
+| **[Patterns](https://scrimui.dev/patterns)** | Five whole screens — chat, research, coding agent, voice, preferences — assembled from those components. |
+| **[Icons](https://scrimui.dev/icons)** | Lucide ships 2,034 icons and no opinion about which one means "tool call". This is that opinion: 34 concepts, one icon each. |
+| **[Resources](https://scrimui.dev/resources)** | A curated directory of 102 libraries, generators and guides, each with a note on why it is listed. |
+| **[Inspiration](https://scrimui.dev/inspiration)** | Element-by-element breakdowns of ChatGPT, Claude, Perplexity and Cursor, plus decision guides — when to stream, when to pause for approval — each grounded in official docs. |
 
-To learn more about Next.js, take a look at the following resources:
+## Run it locally
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Next.js App Router, Tailwind v4, TypeScript. No database, no API keys, no
+environment variables required — every page is statically generated.
 
-## Deploy on Vercel
+| | |
+|---|---|
+| `npm run dev` | Dev server on :3000 |
+| `npm run build` | Production build. 253 static routes, including every OG card and registry entry |
+| `npm run lint` | ESLint |
+| `npx tsc --noEmit` | Types |
+| `node scripts/contrast.mjs` | Checks the colour tokens against WCAG AA. Run it after touching `globals.css` |
+| `npm run previews` | Re-captures the resource screenshots with Playwright. Slow, rarely needed |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Set `NEXT_PUBLIC_SITE_URL` to override the origin used by the sitemap,
+canonical URLs and the registry.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Layout
+
+```
+src/
+  app/                     routes; opengraph-image.tsx and r/[name] are build-time generated
+  showcase/<slug>/
+    <slug>.tsx             the component — one file, React only, this is what ships
+    demos.tsx              rendered examples
+    controls.tsx           the prop schema the explorer drives
+    page-config.tsx        usage notes and common mistakes
+  components/
+    site/                  header, footer, hero showcase, card previews
+    tools/                 the ten browser tools
+    component-page/        the explorer and code display
+  lib/
+    registry.ts            the component list — source of truth for the site and the registry
+    icon-guide.ts          concept → Lucide icon
+    resources.ts           the directory
+    inspiration.ts         the articles
+```
+
+## Licence
+
+Code is [MIT](LICENSE). Copy a component and you owe nothing — no attribution,
+no link back.
+
+The editorial content, the name and mark, and the third-party screenshots are
+not MIT; [LICENSING.md](LICENSING.md) says exactly what is and is not covered.
+
+Icons are from [Lucide](https://lucide.dev) under the ISC licence. The icons
+are theirs; the concept-to-icon mapping is ours.
