@@ -66,9 +66,11 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         <ComponentExplorer schema={config.explorer.schema} render={config.explorer.render} />
       </section>
 
-      {/* Code */}
-      <section id="code" className="mt-14 scroll-mt-20">
-        <h2 className="text-xl font-semibold tracking-tight">Code</h2>
+      {/* The component file itself, as opposed to the call site the Explorer
+          shows. Both are code; naming them both "Code" made the second look
+          like a repeat of the first. */}
+      <section id="source" className="mt-14 scroll-mt-20">
+        <h2 className="text-xl font-semibold tracking-tight">Component source</h2>
         <p className="mb-3 mt-1 text-sm text-(--muted-foreground)">
           Single-file React + Tailwind component. No dependencies — drop it into any project with
           Tailwind configured.

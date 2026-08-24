@@ -34,6 +34,13 @@ import { CodeCopyButton } from "./code-copy-button";
  * paste into your own project. Controls give the same "change it and watch"
  * loop, stay type-safe, and cost nothing to load.
  */
+type TabId = "preview" | "usage";
+
+const TABS: { id: TabId; label: string }[] = [
+  { id: "preview", label: "Preview" },
+  { id: "usage", label: "Usage" },
+];
+
 export function ComponentExplorer({
   schema,
   render,
@@ -49,7 +56,7 @@ export function ComponentExplorer({
     [schema],
   );
   const [values, setValues] = React.useState<ControlValues>(initial);
-  const [tab, setTab] = React.useState<"preview" | "code">("preview");
+  const [tab, setTab] = React.useState<TabId>("preview");
   const [run, setRun] = React.useState(0);
 
   const set = React.useCallback((name: string, value: ControlValues[string]) => {
@@ -109,19 +116,25 @@ export function ComponentExplorer({
         {/* Stage */}
         <div className="min-w-0 border-(--border) lg:border-r">
           <div className="flex items-center gap-1 border-b border-(--border) px-3 py-2">
-            {(["preview", "code"] as const).map((t) => (
+            {/* "Usage", not "Code": the page carries two code surfaces and
+                they answer different questions. This one is the call site —
+                the few lines you write in your own app, which follow the
+                controls. The section further down is the component file you
+                paste into your repo. Naming them both "Code" made one look
+                like a duplicate of the other. */}
+            {TABS.map((t) => (
               <button
-                key={t}
+                key={t.id}
                 type="button"
-                onClick={() => setTab(t)}
-                aria-pressed={tab === t}
-                className={`rounded-lg px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
-                  tab === t
+                onClick={() => setTab(t.id)}
+                aria-pressed={tab === t.id}
+                className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+                  tab === t.id
                     ? "bg-(--muted) text-(--foreground)"
                     : "text-(--muted-foreground) hover:text-(--foreground)"
                 }`}
               >
-                {t}
+                {t.label}
               </button>
             ))}
             <span className="ml-auto truncate pl-2 text-[11px] text-(--muted-foreground)">
@@ -152,6 +165,13 @@ export function ComponentExplorer({
                   <CodeTokens tokens={tokens} />
                 </code>
               </pre>
+              <p className="px-4 pb-3.5 text-[11px] text-(--tok-comment)">
+                This is the call site. The component itself is in{" "}
+                <a href="#source" className="underline underline-offset-2">
+                  Component source
+                </a>{" "}
+                below.
+              </p>
             </div>
           )}
         </div>
