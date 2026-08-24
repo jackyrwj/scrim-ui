@@ -73,22 +73,26 @@ export default function Home() {
         />
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
           <div className="mx-auto max-w-3xl text-center">
-            <h1
-              className="text-3xl font-bold tracking-tight sm:text-5xl"
-              style={{
-                background: "var(--gradient-primary)",
-                backgroundSize: "200% auto",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                animation: "shimmer 6s linear infinite",
-              }}
-            >
+            <h1 className="display-title text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
               AI UI Resources
             </h1>
             <p className="mt-4 text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
               Free in-browser tools and copy-ready components for building AI interfaces —
               prompt inputs, agent states, tool calls, citations, reasoning, voice and memory.
             </p>
+
+            {/* One call to action. The nav above already carries the six
+                destinations; a row of buttons repeating them only made the
+                reader choose before they had seen anything. */}
+            <div className="mt-7 flex justify-center">
+              <Link
+                href="/tools"
+                className="inline-flex h-11 items-center rounded-lg px-6 text-sm font-medium text-(--primary-foreground) transition-all hover:opacity-90 active:scale-[0.98]"
+                style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}
+              >
+                Open the tools
+              </Link>
+            </div>
           </div>
 
           {/* The main event: a live, scripted tour of three real tools.

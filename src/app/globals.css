@@ -34,6 +34,10 @@
   --primary-muted: #ede9fe;
   --primary-muted-foreground: #6d28d9;
 
+  --display-top: #18181b;
+  --display-bottom: #52525b;
+  --display-shadow: 0 1px 2px rgb(0 0 0 / 0.14);
+
   --gradient-primary: linear-gradient(135deg, #7c3aed, #2563eb);
   --gradient-subtle: linear-gradient(135deg, var(--muted), var(--background));
   --gradient-glow: radial-gradient(ellipse at 50% 0%, var(--primary-muted) 0%, transparent 60%);
@@ -66,6 +70,10 @@
   --primary-hover: #8b5cf6;
   --primary-muted: #2e1065;
   --primary-muted-foreground: #a78bfa;
+
+  --display-top: #ffffff;
+  --display-bottom: #8b8b95;
+  --display-shadow: 0 2px 6px rgb(0 0 0 / 0.55);
 
   --gradient-primary: linear-gradient(135deg, #a78bfa, #60a5fa);
   --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(46, 16, 101, 0.5) 0%, transparent 60%);
@@ -101,6 +109,30 @@ body {
 ::selection {
   background: var(--foreground);
   color: var(--background);
+}
+
+/* --- The display title ---------------------------------------------
+   The hero h1, treated as an object with a light on it rather than as
+   coloured text: a vertical gradient down the glyphs and a shadow a
+   pixel below, which together read as type pressed into the page.
+
+   The gradient is clipped to the glyphs, so the fill is transparent and
+   what you actually see at every letter edge is the shadow. That is the
+   whole trick, and it is why the shadow has to be tuned per theme: on
+   white a dark shadow below is a cast shadow, on near-black it would be
+   invisible, so dark mode lights from above and leans on the gradient
+   falling away instead.
+
+   Purple was the previous treatment, animated on a loop. It made the
+   site name compete with the tool tour underneath it, which is the part
+   worth looking at. */
+.display-title {
+  background-image: linear-gradient(to bottom, var(--display-top) 0%, var(--display-bottom) 64%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: var(--display-shadow);
 }
 
 @keyframes shimmer {

@@ -429,40 +429,6 @@ export function HeroShowcase() {
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
     >
-      {/* Tabs */}
-      <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
-        {SLIDES.map((s, i) => (
-          <button
-            key={s.id}
-            type="button"
-            onClick={() => {
-              resetSlide(s.id);
-              setSlideIndex(i);
-              setStep(0);
-            }}
-            aria-current={i === slideIndex ? "true" : undefined}
-            className={`relative overflow-hidden rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors sm:text-sm ${
-              i === slideIndex
-                ? "border-(--primary)/40 bg-(--primary-muted) text-(--primary-muted-foreground)"
-                : "border-(--border) text-(--muted-foreground) hover:text-(--foreground)"
-            }`}
-          >
-            {i === slideIndex && !reduced && (
-              <span
-                key={`${slideIndex}-${running}`}
-                aria-hidden
-                className="hs-progress absolute inset-y-0 left-0 bg-(--primary)/15"
-                style={{
-                  animationDuration: `${slideDuration(s.id)}ms`,
-                  animationPlayState: running ? "running" : "paused",
-                }}
-              />
-            )}
-            <span className="relative">{s.tab}</span>
-          </button>
-        ))}
-      </div>
-
       {/* The camera rig.
           At rest the frame is pushed past the viewport edges and rolled in
           3D, so it reads as a sheet of paper shot up close — each slide
@@ -599,6 +565,50 @@ export function HeroShowcase() {
           Hover to take over
         </span>
       </div>
+
+      {/* What you are looking at, as a caption rather than a control.
+          The tour drives itself; three tab buttons above the frame asked
+          the reader to operate a thing that was already playing, and put
+          three competing calls to action next to the one that matters. */}
+      <ol className="mt-5 grid gap-x-6 gap-y-4 sm:grid-cols-3">
+        {SLIDES.map((s, i) => {
+          const active = i === slideIndex;
+          return (
+            <li key={s.id} aria-current={active ? "step" : undefined}>
+              <div className="relative h-px w-full overflow-hidden bg-(--border)">
+                {active && !reduced && (
+                  <span
+                    key={`${slideIndex}-${running}`}
+                    aria-hidden
+                    className="hs-progress absolute inset-y-0 left-0"
+                    style={{
+                      background: "var(--primary)",
+                      animationDuration: `${slideDuration(s.id)}ms`,
+                      animationPlayState: running ? "running" : "paused",
+                    }}
+                  />
+                )}
+                {active && reduced && (
+                  <span aria-hidden className="absolute inset-0" style={{ background: "var(--primary)" }} />
+                )}
+              </div>
+              <p className="mt-2.5 flex items-baseline gap-2 text-sm font-medium">
+                <span
+                  className={`font-mono text-[11px] tabular-nums ${
+                    active ? "text-(--primary)" : "text-(--muted-foreground)"
+                  }`}
+                >
+                  0{i + 1}
+                </span>
+                <span className={active ? "text-(--foreground)" : "text-(--muted-foreground)"}>
+                  {s.tab}
+                </span>
+              </p>
+              <p className="mt-1 text-[13px] leading-5 text-(--muted-foreground)">{s.headline}</p>
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }
