@@ -7,7 +7,6 @@ import type { Metadata } from "next";
 import { patterns, getPattern, getComponent } from "@/lib/registry";
 import { patternIconFor } from "@/lib/icons";
 import { patternConfigs } from "@/showcase/patterns/registry";
-import { PreviewFrame } from "@/components/component-page/preview-frame";
 import { CopyButton } from "@/components/component-page/copy-button";
 import { CodeBlock } from "@/components/component-page/code-block";
 
@@ -82,7 +81,12 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
           </h2>
           <CopyButton code={source} label="Copy Pattern" />
         </div>
-        <PreviewFrame>{config.heroDemo}</PreviewFrame>
+        {/* No PreviewFrame here, unlike the component pages. Every pattern is a
+            whole screen that already draws its own card — border, background,
+            fixed height — so the frame added a second card around the first,
+            and its `max-w-xl` stage squeezed a two-column settings screen into
+            half its width. The pattern gets the page's full measure instead. */}
+        {config.heroDemo}
       </section>
 
       {/* Built from */}

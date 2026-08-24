@@ -50,7 +50,11 @@ export function VoiceWaveform({
         {Array.from({ length: bars }).map((_, i) => {
           /* static bell shape: center bars taller than the edges */
           const t = i / Math.max(bars - 1, 1);
-          const base = 0.3 + 0.7 * Math.sin(Math.PI * t);
+          /* Rounded, not raw: a full-precision float lands in the SSR HTML as
+             scaleY(0.6943240406445356), and the browser hands it back to
+             hydration as scaleY(0.694324) — a mismatch React reports as an
+             error. Three decimals is well below a visible difference. */
+          const base = Number((0.3 + 0.7 * Math.sin(Math.PI * t)).toFixed(3));
           return (
             <span
               key={i}
