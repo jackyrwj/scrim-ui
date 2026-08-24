@@ -1,0 +1,25 @@
+name: Resource listing
+description: Suggest a library, generator or guide for the directory
+labels: [resources]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: URL
+    validations: { required: true }
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it worth listing?
+      description: >
+        One line on why, not what. "Drop-in chat canvas with threads,
+        streaming and tools — good for production chat apps" is a reason.
+        "A React component library" is not. Every entry carries this line,
+        and an entry without one is a link dump.
+    validations: { required: true }
+  - type: input
+    id: affiliation
+    attributes:
+      label: Are you affiliated with it?
+      description: Fine either way — say so.
+    validations: { required: true }

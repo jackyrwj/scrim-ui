@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# A second push to a PR cancels the first: the only run worth paying for is
+# the one against the head commit.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Types
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Contrast
+        # Reads the tokens out of globals.css and fails if any pair the site
+        # actually renders falls under WCAG AA. Cheap, and it catches the one
+        # class of regression that looks fine on the author's monitor.
+        run: node scripts/contrast.mjs
+
+      - name: Build
+        # The real check. Prerenders 253 routes, which is where a showcase
+        # component that grew an import fails — the registry route asserts
+        # that every component imports nothing but React.
+        run: npm run build

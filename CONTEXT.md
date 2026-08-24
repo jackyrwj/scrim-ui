@@ -1,4 +1,4 @@
-# AI UI Resources
+# Scrim UI
 
 A resource hub for people building AI product interfaces. It gives away four kinds
 of thing — source you copy, interfaces you compose, tools you run, and writing you

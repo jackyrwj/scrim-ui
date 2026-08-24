@@ -1,0 +1,40 @@
+name: Component request
+description: Propose an AI interface component the site does not have yet
+labels: [component]
+body:
+  - type: textarea
+    id: concept
+    attributes:
+      label: What is the concept?
+      description: >
+        Name the thing in the words a builder would use — "approval gate",
+        "context window meter" — and say what it communicates to the person
+        using the product.
+    validations: { required: true }
+  - type: textarea
+    id: prior-art
+    attributes:
+      label: Where does it already exist?
+      description: >
+        Link two or three real products that ship it. The site documents
+        conventions rather than inventing them, so a component nobody ships
+        yet is a pattern proposal, not a component.
+    validations: { required: true }
+  - type: textarea
+    id: mistakes
+    attributes:
+      label: What do people get wrong about it?
+      description: >
+        Every component page carries a "common mistakes" list, and it is the
+        part a reader cannot get from the source. If there is nothing to say
+        here, the component is probably a variant of one we have.
+    validations: { required: true }
+  - type: checkboxes
+    id: constraint
+    attributes:
+      label: The constraint
+      options:
+        - label: >
+            This can be built as a single file importing nothing but React —
+            no Radix, no lucide-react, no headless library.
+          required: true
