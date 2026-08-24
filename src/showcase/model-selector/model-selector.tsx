@@ -75,7 +75,9 @@ export function ModelSelector({
         className="inline-flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
       >
         <span className="flex min-w-0 items-center gap-2">
-          <span className="truncate font-medium">{selected?.name ?? placeholder}</span>
+          <span className="truncate font-medium">
+            {selected?.name ?? placeholder}
+          </span>
           {selected?.badges?.[0] && (
             <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
               {selected.badges[0]}
@@ -101,57 +103,64 @@ export function ModelSelector({
         <>
           {/* Click-away backdrop */}
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <ul
+          {/* A div, not a ul: role="listbox" overrides the ul's implicit list
+              role, which makes every <li> inside it an orphaned listitem, and
+              role="option" must be a *direct* child of the listbox — the <li>
+              wrapper broke that too. Buttons are not valid children of <ul>
+              anyway. */}
+          <div
             role="listbox"
+            aria-label="Model"
             className="absolute left-0 right-0 top-full z-20 mt-1.5 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
           >
             {options.map((opt) => {
               const active = opt.id === selected?.id;
               return (
-                <li key={opt.id}>
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={active}
-                    onClick={() => {
-                      onSelect?.(opt.id);
-                      setOpen(false);
-                    }}
-                    className={`flex w-full items-start gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 ${
-                      active ? "bg-zinc-50 dark:bg-zinc-800" : ""
-                    }`}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        {opt.icon}
-                        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                          {opt.name}
+                <button
+                  key={opt.id}
+                  type="button"
+                  role="option"
+                  aria-selected={active}
+                  onClick={() => {
+                    onSelect?.(opt.id);
+                    setOpen(false);
+                  }}
+                  className={`flex w-full items-start gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 ${
+                    active ? "bg-zinc-50 dark:bg-zinc-800" : ""
+                  }`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      {opt.icon}
+                      <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                        {opt.name}
+                      </span>
+                      {active && (
+                        <span className="text-violet-600 dark:text-violet-400">
+                          <CheckIcon />
                         </span>
-                        {active && (
-                          <span className="text-violet-600 dark:text-violet-400">
-                            <CheckIcon />
-                          </span>
-                        )}
-                      </div>
-                      <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{opt.hint}</p>
+                      )}
                     </div>
-                    {opt.badges && opt.badges.length > 0 && (
-                      <div className="flex shrink-0 flex-wrap items-center gap-1 pt-0.5">
-                        {opt.badges.map((b) => (
-                          <span
-                            key={b}
-                            className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-                          >
-                            {b}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </button>
-                </li>
+                    <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                      {opt.hint}
+                    </p>
+                  </div>
+                  {opt.badges && opt.badges.length > 0 && (
+                    <div className="flex shrink-0 flex-wrap items-center gap-1 pt-0.5">
+                      {opt.badges.map((b) => (
+                        <span
+                          key={b}
+                          className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                        >
+                          {b}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </button>
               );
             })}
-          </ul>
+          </div>
         </>
       )}
     </div>

@@ -90,7 +90,9 @@ export function ApprovalRequest({
               <button
                 type="button"
                 onClick={onAllow}
-                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 text-xs font-medium text-white transition-opacity hover:opacity-90"
+                /* emerald-700, not -600: white on emerald-600 is 3.65:1, under
+                   the 4.5 floor for this 12px label. -700 is 5.48:1. */
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-emerald-700 px-3.5 text-xs font-medium text-white transition-opacity hover:opacity-90"
               >
                 <CheckIcon />
                 Allow
@@ -109,7 +111,8 @@ export function ApprovalRequest({
             <p
               className={`mt-3 inline-flex items-center gap-1.5 text-xs font-medium ${
                 status === "approved"
-                  ? "text-emerald-600 dark:text-emerald-400"
+                  ? /* -700 in light: emerald-600 on white is 3.65:1 at 12px. */
+                    "text-emerald-700 dark:text-emerald-400"
                   : "text-red-600 dark:text-red-400"
               }`}
             >

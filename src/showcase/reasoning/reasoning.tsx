@@ -147,7 +147,7 @@ export function Reasoning({
             </button>
           )}
           {!isThinking && steps.length > 0 && (
-            <p className="mt-3 flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
+            <p className="mt-3 flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-400">
               <CheckIcon />
               Reasoning complete — {steps.length} step{steps.length > 1 ? "s" : ""}
             </p>

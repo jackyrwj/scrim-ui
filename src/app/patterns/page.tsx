@@ -125,7 +125,10 @@ export default function PatternsPage() {
         <p className="flex-1 text-(--muted-foreground)">
           <span className="font-medium text-(--foreground)">Component</span> — one control, like
           the composer or a tool call.{" "}
-          <Link href="/components" className="text-(--primary) hover:underline">
+          {/* Underlined always, not just on hover: this link sits inside a
+              paragraph and its colour is only 1.08:1 against the surrounding
+              text, so colour alone does not mark it as a link (WCAG 1.4.1). */}
+          <Link href="/components" className="text-(--primary) underline underline-offset-2">
             Browse {publishedComponents} &rarr;
           </Link>
         </p>

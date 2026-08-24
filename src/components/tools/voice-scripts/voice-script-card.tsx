@@ -25,7 +25,8 @@ export function VoiceScriptCard({
     <article className="flex flex-col rounded-xl border border-(--border) bg-(--card) p-5 transition-colors hover:border-(--muted-foreground)/50">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <h3 className="font-medium">{script.name}</h3>
+          {/* h2: the only heading above these cards is the page h1. */}
+          <h2 className="font-medium">{script.name}</h2>
           {category && (
             <span className="mt-1 inline-block rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
               {category.name}

@@ -115,14 +115,30 @@ export function MessageActions({
 
   return (
     <div className={`flex items-center gap-0.5 ${className}`}>
+      {/* aria-label on all three, not just in compact mode: `compact` hides the
+          text and leaves a button whose only content is an svg, so without it
+          a screen reader announces an unnamed button. Harmless when the text is
+          showing — an explicit label simply wins over the inner text. */}
       {onCopy && (
-        <button type="button" onClick={copy} disabled={disabled} className={`${base} ${disabledCls}`}>
+        <button
+          type="button"
+          onClick={copy}
+          disabled={disabled}
+          aria-label={copied ? "Copied" : "Copy"}
+          className={`${base} ${disabledCls}`}
+        >
           <CopyIcon />
           {!compact && (copied ? "Copied" : "Copy")}
         </button>
       )}
       {onRegenerate && (
-        <button type="button" onClick={onRegenerate} disabled={disabled} className={`${base} ${disabledCls}`}>
+        <button
+          type="button"
+          onClick={onRegenerate}
+          disabled={disabled}
+          aria-label="Regenerate"
+          className={`${base} ${disabledCls}`}
+        >
           <RegenerateIcon />
           {!compact && "Regenerate"}
         </button>
@@ -137,7 +153,7 @@ export function MessageActions({
             }}
             disabled={disabled}
             aria-label="Good response"
-            className={`${base} ${disabledCls} ${vote === "up" ? "text-emerald-600 dark:text-emerald-400" : ""}`}
+            className={`${base} ${disabledCls} ${vote === "up" ? "text-emerald-700 dark:text-emerald-400" : ""}`}
           >
             <ThumbsUpIcon filled={vote === "up"} />
           </button>
@@ -156,7 +172,13 @@ export function MessageActions({
         </>
       )}
       {onShare && (
-        <button type="button" onClick={onShare} disabled={disabled} className={`${base} ${disabledCls}`}>
+        <button
+          type="button"
+          onClick={onShare}
+          disabled={disabled}
+          aria-label="Share"
+          className={`${base} ${disabledCls}`}
+        >
           <ShareIcon />
           {!compact && "Share"}
         </button>

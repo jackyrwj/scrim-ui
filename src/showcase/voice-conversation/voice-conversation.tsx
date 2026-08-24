@@ -59,7 +59,14 @@ function SpeakingIcon() {
   return (
     <>
       <style>{`@keyframes aiui-spk{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}`}</style>
-      <span className="inline-flex h-3.5 items-center gap-[2px] text-violet-500" aria-label="Speaking">
+      {/* role="img" is what makes aria-label legal here: on a bare <span> with
+          no role, aria-label is a prohibited attribute and is ignored, so the
+          animated bars had no accessible name at all. */}
+      <span
+        role="img"
+        aria-label="Speaking"
+        className="inline-flex h-3.5 items-center gap-[2px] text-violet-500"
+      >
         {[0, 1, 2, 3].map((i) => (
           <span
             key={i}

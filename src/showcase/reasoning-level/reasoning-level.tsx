@@ -59,7 +59,11 @@ export function ReasoningLevel({
               className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                 active
                   ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                  : /* zinc-600, not zinc-500: an unselected label sits on the
+                       zinc-100 track, where zinc-500 measures 4.40:1 and fails
+                       AA. zinc-600 is 7.03:1. The white pill and its shadow —
+                       not a washed-out label — are what mark the selection. */
+                    "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200"
               }`}
             >
               {level.label}

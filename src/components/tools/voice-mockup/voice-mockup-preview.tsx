@@ -58,7 +58,8 @@ function waveformState(stage: VoiceStage): WaveformState {
 }
 
 function StatusChip({ stage }: { stage: VoiceStage }) {
-  let cls = "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400";
+  /* zinc-600: 11px on the zinc-100 chip, where zinc-500 is 4.39:1. */
+  let cls = "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400";
   if (stage === "listening" || stage === "speaking") {
     cls = "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300";
   } else if (stage === "thinking") {

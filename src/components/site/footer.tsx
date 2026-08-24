@@ -34,8 +34,13 @@ export function SiteFooter() {
           </div>
 
           {/* Browse */}
+          {/* h2, not h3, in all three columns: the footer renders on every
+              page, and pages whose main content has no h2 (/tools, /patterns,
+              /categories) went h1 → h3 here, which axe flags as heading-order.
+              These are top-level sections of the document, so h2 is also the
+              honest level. */}
           <div>
-            <h3 className="text-sm font-semibold">Browse</h3>
+            <h2 className="text-sm font-semibold">Browse</h2>
             <ul className="mt-3 space-y-2">
               {browseLinks.map((link) => (
                 <li key={link.href}>
@@ -52,7 +57,7 @@ export function SiteFooter() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-sm font-semibold">Resources</h3>
+            <h2 className="text-sm font-semibold">Resources</h2>
             <ul className="mt-3 space-y-2">
               {resourceLinks.map((link) => (
                 <li key={link.href}>
@@ -72,7 +77,7 @@ export function SiteFooter() {
 
           {/* About */}
           <div>
-            <h3 className="text-sm font-semibold">About</h3>
+            <h2 className="text-sm font-semibold">About</h2>
             <ul className="mt-3 space-y-2 text-sm text-(--muted-foreground)">
               <li>Free &amp; open source</li>
               <li>Built with Next.js + Tailwind</li>

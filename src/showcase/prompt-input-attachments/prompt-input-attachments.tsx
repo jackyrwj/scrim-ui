@@ -106,7 +106,9 @@ function FileChip({
     >
       {file.type === "image" ? <ImageIcon /> : <FileIcon />}
       <span className="max-w-36 truncate">{file.name}</span>
-      {file.size && <span className="text-zinc-500 dark:text-zinc-400">{file.size}</span>}
+      {/* zinc-600 / red-700: an errored attachment row is drawn on red-50,
+          where zinc-500 is 4.41:1 and red-600 is 4.36:1 — both under AA. */}
+      {file.size && <span className="text-zinc-600 dark:text-zinc-400">{file.size}</span>}
 
       {status === "uploading" && file.progress !== undefined && (
         <>
@@ -127,7 +129,7 @@ function FileChip({
             <button
               type="button"
               onClick={() => onRetry(file.id)}
-              className="rounded px-1.5 py-0.5 font-medium text-red-600 transition-colors hover:bg-red-100 dark:text-red-300 dark:hover:bg-red-900/40"
+              className="rounded px-1.5 py-0.5 font-medium text-red-700 transition-colors hover:bg-red-100 dark:text-red-300 dark:hover:bg-red-900/40"
             >
               Retry
             </button>

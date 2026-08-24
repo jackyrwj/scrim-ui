@@ -64,8 +64,12 @@ export function PlaygroundHub() {
         </Link>
       </div>
 
-      {/* Tabs */}
-      <div className="mt-8 flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Component">
+      {/* A group, not a tablist. role="tablist" requires role="tab" children
+          wired to role="tabpanel" via aria-controls, plus arrow-key roving
+          focus — none of which this has. The Chips already carry aria-pressed,
+          which describes what they actually are. A wrong role is worse for a
+          screen reader than no role. */}
+      <div className="mt-8 flex flex-wrap items-center gap-1.5" role="group" aria-label="Component">
         {TABS.map((t) => (
           <Chip key={t.id} active={active === t.id} onClick={() => setActive(t.id)}>
             {t.label}

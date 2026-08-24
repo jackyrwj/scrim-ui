@@ -34,6 +34,9 @@ export function ToolToggle({
   onToggle,
   className = "",
 }: ToolToggleProps) {
+  /* Prefix for the per-row label/description ids the switches point at. */
+  const uid = React.useId();
+
   return (
     <div className={`rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
       <div className="border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
@@ -50,16 +53,31 @@ export function ToolToggle({
               </span>
             )}
             <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+              <p
+                id={`${uid}-${tool.id}-name`}
+                className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200"
+              >
                 {tool.name}
               </p>
-              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{tool.description}</p>
+              <p
+                id={`${uid}-${tool.id}-desc`}
+                className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400"
+              >
+                {tool.description}
+              </p>
             </div>
+            {/* The switch is a bare coloured pill, so without these it has no
+                accessible name at all — a screen reader announces "switch, on"
+                with no clue which tool it governs. Pointing at the visible
+                label rather than duplicating the string in an aria-label keeps
+                the two from drifting apart. */}
             <button
               type="button"
               role="switch"
               aria-checked={tool.enabled}
               aria-disabled={tool.disabled}
+              aria-labelledby={`${uid}-${tool.id}-name`}
+              aria-describedby={`${uid}-${tool.id}-desc`}
               onClick={() => !tool.disabled && onToggle?.(tool.id, !tool.enabled)}
               className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
                 tool.enabled ? "bg-violet-600" : "bg-zinc-200 dark:bg-zinc-700"

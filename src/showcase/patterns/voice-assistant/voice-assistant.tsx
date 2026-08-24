@@ -70,7 +70,11 @@ function stageText(stage: Stage, streaming: boolean) {
 
 function StatusChip({ stage, streaming }: { stage: Stage; streaming: boolean }) {
   let label = "Idle";
-  let cls = "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400";
+  /* zinc-600, not zinc-500: at 11px on the zinc-100 chip that measured
+     4.39:1 and failed AA. The three active states below already pair a -100
+     background with -700 text; this keeps idle the quietest of the four while
+     still clearing the floor (7.03:1). */
+  let cls = "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400";
   if (streaming) {
     label = "Speaking";
     cls = "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300";

@@ -116,7 +116,7 @@ export function CodeExecution({
       </pre>
 
       {(output || error) && (
-        <pre className={`overflow-x-auto px-3 py-2.5 text-[12px] leading-5 ${failed ? "bg-red-950/40 text-red-300" : "bg-zinc-50 text-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-300"}`}>
+        <pre className={`overflow-x-auto px-3 py-2.5 text-[12px] leading-5 ${failed ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300" : "bg-zinc-50 text-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-300"}`}>
           {failed ? error : output}
         </pre>
       )}

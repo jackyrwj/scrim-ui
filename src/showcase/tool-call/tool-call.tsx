@@ -76,7 +76,9 @@ function StatusPill({ status, onCancel }: { status: ToolStatus; onCancel?: () =>
         onClick={onCancel}
         disabled={!onCancel}
         title="Cancel"
-        className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 transition-colors hover:bg-zinc-200 disabled:hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:disabled:hover:bg-zinc-800"
+        /* min-h-6: py-0.5 on 11px text left a 20.5px-tall tap target, under the
+           24x24 minimum. The pill's look is unchanged at this size. */
+        className="inline-flex min-h-6 items-center gap-1.5 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 transition-colors hover:bg-zinc-200 disabled:hover:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:disabled:hover:bg-zinc-800"
       >
         <span className="h-2.5 w-2.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
         Running

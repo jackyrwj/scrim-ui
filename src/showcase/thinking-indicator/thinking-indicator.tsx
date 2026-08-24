@@ -21,7 +21,10 @@ export type ThinkingIndicatorProps = {
 const KEYFRAMES = `
 @keyframes aiui-think-bounce{0%,80%,100%{opacity:.25;transform:scale(.85)}40%{opacity:1;transform:scale(1)}}
 @keyframes aiui-think-caret{50%{opacity:0}}
-@keyframes aiui-think-pulse{0%,100%{opacity:.4}50%{opacity:1}}
+/* .85, not .4: this one pulses real text, and at .4 the label rendered
+   1.68:1 against the bubble — unreadable for part of every cycle. The dots
+   above may fade further because they are decorative and aria-hidden. */
+@keyframes aiui-think-pulse{0%,100%{opacity:.85}50%{opacity:1}}
 `;
 
 function Dots() {
@@ -70,7 +73,8 @@ export function ThinkingIndicator({
         {variant === "caret" && <Caret />}
         {variant === "label" && (
           <span
-            className="inline-block"
+            /* zinc-600 so the trough of the pulse still clears AA (5.05:1). */
+            className="inline-block text-zinc-600 dark:text-zinc-300"
             style={{ animation: "aiui-think-pulse 1.4s infinite ease-in-out" }}
           >
             {label}…

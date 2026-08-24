@@ -15,7 +15,13 @@
   --background: #ffffff;
   --foreground: #09090b;
   --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  /* Darkened from #71717a (zinc-500), which measured 4.39:1 against --muted
+     and so failed WCAG AA on the 11px chips and captions that use this pair
+     all over the site. This value clears the 4.5 floor on every background it
+     actually lands on: 4.80 on --muted, 5.01 on --muted/50, 5.28 on white.
+     Dark mode was never in violation (#a1a1aa on --muted is 6.91) and is
+     unchanged. Re-measure with scripts/contrast.mjs before touching either. */
+  --muted-foreground: #6b6b74;
   --border: #e4e4e7;
   --card: #ffffff;
   --accent: #18181b;

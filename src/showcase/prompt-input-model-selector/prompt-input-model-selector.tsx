@@ -134,6 +134,12 @@ export function PromptInputModelSelector({
 
   return (
     <div className={`w-full ${className}`}>
+      {/* axe reports the dimmed model hint here as a 2.34:1 contrast failure.
+          Leave it. WCAG 2.1 SC 1.4.3 exempts "text that is part of an inactive
+          user interface component" from the contrast minimum, and axe cannot
+          see that this subtree is disabled. Darkening it would make the
+          disabled state read as enabled — a real regression in service of a
+          misapplied rule. */}
       <div
         className={`rounded-2xl border bg-white shadow-sm transition-colors dark:bg-zinc-900 ${
           disabled

@@ -89,8 +89,13 @@ export function deriveScheme(brandHex: string, mode: ThemeMode): ColorScheme {
     const assistantBubble = "#f1f5f9";
     const assistantBubbleText = ensureContrast("#1e293b", assistantBubble);
     const streamingCursor = brandHex;
-    const thinkingIndicator = hslToHex((h + 30) % 360, 55, 50);
-    const toolCallAccent = hslToHex((h + 180) % 360, 40, 45);
+    /* Both of these are rendered as *text* in the preview and in every theme
+       the tool exports, so they go through ensureContrast like the bubble text
+       does. Left raw, a complementary hue at 45% lightness measured 2.77:1 on
+       white for the default brand — the tool was handing people a palette that
+       fails AA. */
+    const thinkingIndicator = ensureContrast(hslToHex((h + 30) % 360, 55, 50), background);
+    const toolCallAccent = ensureContrast(hslToHex((h + 180) % 360, 40, 45), background);
     const sourceCardBorder = hslToHex(h, clamp(brand.s, 30, 50), 78);
     const inputBackground = "#f8fafc";
     const inputBorder = "#e2e8f0";
@@ -113,8 +118,8 @@ export function deriveScheme(brandHex: string, mode: ThemeMode): ColorScheme {
   const assistantBubble = "#1e293b";
   const assistantBubbleText = ensureContrast("#e2e8f0", assistantBubble);
   const streamingCursor = hslToHex(h, clamp(brand.s, 50, 80), 65);
-  const thinkingIndicator = hslToHex((h + 30) % 360, 50, 60);
-  const toolCallAccent = hslToHex((h + 180) % 360, 35, 55);
+  const thinkingIndicator = ensureContrast(hslToHex((h + 30) % 360, 50, 60), background);
+  const toolCallAccent = ensureContrast(hslToHex((h + 180) % 360, 35, 55), background);
   const sourceCardBorder = hslToHex(h, clamp(brand.s, 25, 45), 35);
   const inputBackground = "#1e293b";
   const inputBorder = "#334155";

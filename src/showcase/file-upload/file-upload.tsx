@@ -162,7 +162,7 @@ export function FileUpload({
               </p>
             )}
             {status === "done" && (
-              <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
+              <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-400">
                 Ready to use in context
               </p>
             )}

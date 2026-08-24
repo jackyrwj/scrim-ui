@@ -93,15 +93,17 @@ export function ErrorMessage({
           </button>
         )}
 
+        {/* zinc-600 on both captions below: they sit on the tinted error
+            surface, where zinc-500 measures 4.49:1 — a hair under AA at 12px. */}
         {retrying && (
-          <div className="mt-2 inline-flex h-7 items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <div className="mt-2 inline-flex h-7 items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
             <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-700 dark:border-t-zinc-300" />
             Retrying…
           </div>
         )}
 
         {!retrying && retryCountdown > 0 && (
-          <div className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+          <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-400">
             Try again in {retryCountdown}s
           </div>
         )}

@@ -33,9 +33,12 @@ export function Playground({
 
       {/* Controls */}
       <div className="h-fit rounded-xl border border-(--border) bg-(--card) p-4">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-(--muted-foreground)">
+        {/* h2, not h3: on a component page this sits under the page's h2s,
+            but /tools/playground has only an h1 above it, and h1 → h3 is a
+            skipped level. h2 is correct in both. */}
+        <h2 className="text-xs font-semibold uppercase tracking-wide text-(--muted-foreground)">
           Controls
-        </h3>
+        </h2>
         <div className="mt-4 space-y-4">{controls}</div>
       </div>
     </div>

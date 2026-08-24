@@ -123,7 +123,7 @@ export function ResearchAssistantPattern() {
           {/* Answer */}
           {phase === 2 && (
             <div className="space-y-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-              <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+              <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>

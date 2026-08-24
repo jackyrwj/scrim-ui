@@ -83,13 +83,15 @@ function CodeBlock({ lang, code }: { lang: string; code: string }) {
   return (
     <div className="my-3 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
       <div className="flex items-center justify-between bg-zinc-100 px-3 py-1.5 dark:bg-zinc-800/80">
-        <span className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        {/* zinc-600: this header sits on bg-zinc-100, where zinc-500 is
+            4.39:1 — under AA at 11px. Dark mode is unaffected. */}
+        <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
           {lang || "text"}
         </span>
         <button
           type="button"
           onClick={copy}
-          className="inline-flex h-6 items-center gap-1 rounded-md px-1.5 text-[11px] text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
+          className="inline-flex h-6 items-center gap-1 rounded-md px-1.5 text-[11px] text-zinc-600 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
             <rect x="9" y="9" width="13" height="13" rx="2" />

@@ -163,8 +163,11 @@ export function ThemeGenerator() {
         <div className="space-y-4">
           <Section title="Brand Color">
             <div className="flex items-center gap-3">
+              {/* Two controls edit one value, so each needs its own name —
+                  the section heading above them cannot label both. */}
               <input
                 type="color"
+                aria-label="Brand color, swatch picker"
                 value={config.brandColor}
                 onChange={(e) =>
                   setConfig((c) => ({ ...c, brandColor: e.target.value }))
@@ -173,6 +176,7 @@ export function ThemeGenerator() {
               />
               <input
                 type="text"
+                aria-label="Brand color, hex value"
                 value={config.brandColor}
                 onChange={(e) => {
                   const v = e.target.value;

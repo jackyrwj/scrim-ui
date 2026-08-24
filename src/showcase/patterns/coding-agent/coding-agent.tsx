@@ -65,7 +65,10 @@ function DiffBlock() {
                 : l.type === "del"
                   ? "bg-red-950/50 text-red-300"
                   : l.type === "hunk"
-                    ? "text-zinc-500"
+                    ? /* zinc-400: on the zinc-950 code surface, zinc-500 is
+                         4.12:1. -400 is 7.76:1 and still reads dimmer than the
+                         zinc-300 code lines around it. */
+                      "text-zinc-400"
                     : "text-zinc-300"
             }`}
           >
