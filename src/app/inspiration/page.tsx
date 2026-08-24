@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { inspirationEntries } from "@/lib/inspiration";
-import { BrandIcon } from "@/components/brands/brand-icon";
+import { InspirationCard } from "@/components/inspiration/entry-card";
 
 export const metadata: Metadata = {
   title: "Inspiration — AI UI Patterns & Decision Guides",
   description:
     "Evidence-driven articles on AI interfaces: element-by-element breakdowns of ChatGPT, Claude, Perplexity, Cursor and more, plus decision guides on when to stream, how to cite, how to show progress — each grounded in official docs with a live demo you can copy.",
-};
-
-const KIND_LABEL: Record<string, string> = {
-  "case-study": "Case study",
-  guide: "Guide",
 };
 
 export default function InspirationPage() {
@@ -27,42 +21,7 @@ export default function InspirationPage() {
 
       <div className="mt-10 grid gap-3 sm:grid-cols-2">
         {inspirationEntries.map((entry) => (
-          <Link
-            key={entry.slug}
-            href={`/inspiration/${entry.slug}`}
-            className="group flex flex-col rounded-xl border border-(--border) bg-(--card) p-6 transition-colors hover:bg-(--muted)/60"
-          >
-            <div className="flex items-center justify-between">
-              <span className="rounded-full border border-(--border) px-2 py-0.5 text-[11px] font-medium text-(--muted-foreground)">
-                {KIND_LABEL[entry.kind] ?? entry.kind}
-              </span>
-              <span className="text-xs text-(--muted-foreground)">
-                {entry.componentSlugs.length} components
-              </span>
-            </div>
-
-            {entry.product ? (
-              <span className="mt-3 flex items-center gap-2 font-medium group-hover:underline">
-                <BrandIcon name={entry.product} size={18} />
-                {entry.product}
-              </span>
-            ) : (
-              <span className="mt-3 flex items-center gap-2 font-medium text-(--muted-foreground) group-hover:underline">
-                Decision guide
-              </span>
-            )}
-
-            <h2 className="mt-1.5 text-lg font-semibold leading-6 tracking-tight">
-              {entry.title}
-            </h2>
-            <p className="mt-2 line-clamp-3 text-sm leading-6 text-(--muted-foreground)">
-              {entry.summary}
-            </p>
-            <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium">
-              Read {entry.kind === "guide" ? "guide" : "breakdown"}{" "}
-              <span aria-hidden>→</span>
-            </span>
-          </Link>
+          <InspirationCard key={entry.slug} entry={entry} />
         ))}
       </div>
 

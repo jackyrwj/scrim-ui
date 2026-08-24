@@ -3,7 +3,8 @@ import { components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
 import { featuredTools, toolLabel } from "@/lib/tools";
-import { BrandIcon } from "@/components/brands/brand-icon";
+import { ResourceCard } from "@/components/resources/resource-card";
+import { InspirationCard } from "@/components/inspiration/entry-card";
 import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-scroll";
 import { ToolPreview } from "@/components/site/tool-preview";
 import { ComponentPreview } from "@/components/site/component-preview";
@@ -28,8 +29,15 @@ const FEATURED_ICONS = [
 export default function Home() {
   const published = components.filter((c) => c.status === "published");
   const totalVariants = published.reduce((sum, c) => sum + c.variants.length, 0);
-  const featuredResources = resources.filter((r) =>
-    ["Vercel AI SDK", "assistant-ui", "v0"].includes(r.name),
+  /* Six, spread across what the directory covers: two chat-UI libraries, a
+     headless kit, the component library everyone starts from, and the two
+     generators people actually reach for. */
+  const featuredResources = ["Vercel AI SDK", "assistant-ui", "CopilotKit", "shadcn/ui", "v0", "Lovable"].map(
+    (name) => {
+      const entry = resources.find((r) => r.name === name);
+      if (!entry) throw new Error(`Homepage features a resource that is no longer listed: ${name}`);
+      return entry;
+    },
   );
   const popular = published.filter((c) =>
     ["prompt-input", "streaming-message", "user-message", "markdown-message", "tool-call", "code-execution"].includes(c.slug),
@@ -40,8 +48,12 @@ export default function Home() {
     return entry;
   });
   const componentName = (slug: string) => components.find((c) => c.slug === slug)?.name ?? slug;
-  const caseStudies = inspirationEntries.filter((e) => e.kind === "case-study");
-  const guides = inspirationEntries.filter((e) => e.kind === "guide");
+  /* Case studies first: a breakdown of an app the reader already uses is the
+     entry point, and the guides read better once you have seen one. */
+  const featuredInspiration = [
+    ...inspirationEntries.filter((e) => e.kind === "case-study"),
+    ...inspirationEntries.filter((e) => e.kind !== "case-study"),
+  ].slice(0, 6);
 
   const stats = [
     { value: `${published.length}+`, label: "Components" },
@@ -293,31 +305,17 @@ export default function Home() {
               View all →
             </Link>
           </div>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {/* The card from /resources, not a summary of it: the badges, the
+              "why we list it" line and the separate link to the official site
+              are what make the entry judgeable rather than just named. */}
+          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {featuredResources.map((r) => (
-              <a
-                key={r.url}
-                href={r.url}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="group rounded-xl border border-(--border) p-5 transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
-                style={{ boxShadow: "var(--shadow-sm)" }}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2.5 font-medium group-hover:underline">
-                    <BrandIcon name={r.name} />
-                    {r.name}
-                  </span>
-                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-                    {r.free ? "Free" : "Paid"}
-                  </span>
-                </div>
-                <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">
-                  {r.description}
-                </p>
-              </a>
+              // grid, not block: stretches the card to the row height.
+              <div key={r.url} className="aos-stagger-item grid">
+                <ResourceCard entry={r} headingLevel="h3" />
+              </div>
             ))}
-          </div>
+          </StaggerChildren>
         </AnimateOnScroll>
       </section>
 
@@ -340,42 +338,13 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            {caseStudies.map((entry) => (
-              <Link
-                key={entry.slug}
-                href={`/inspiration/${entry.slug}`}
-                className="inline-flex items-center gap-2 rounded-full border border-(--border) px-4 py-2 text-sm transition-all hover:border-(--primary)/30 hover:bg-(--primary-muted) hover:scale-[1.02]"
-              >
-                <BrandIcon name={entry.product ?? ""} size={16} />
-                {entry.product}
-                <span aria-hidden>→</span>
-              </Link>
+          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredInspiration.map((entry) => (
+              <div key={entry.slug} className="aos-stagger-item grid">
+                <InspirationCard entry={entry} headingLevel="h3" />
+              </div>
             ))}
-          </div>
-
-          {guides.length > 0 && (
-            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {guides.map((entry) => (
-                <Link
-                  key={entry.slug}
-                  href={`/inspiration/${entry.slug}`}
-                  className="group rounded-xl border border-(--border) bg-(--card) p-5 transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
-                  style={{ boxShadow: "var(--shadow-sm)" }}
-                >
-                  <span className="inline-flex rounded-full px-2 py-0.5 text-[11px] font-medium" style={{ background: "var(--primary-muted)", color: "var(--primary)" }}>
-                    Guide
-                  </span>
-                  <span className="mt-2 block font-medium group-hover:underline">
-                    {entry.title}
-                  </span>
-                  <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">
-                    {entry.summary}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          )}
+          </StaggerChildren>
         </AnimateOnScroll>
       </section>
     </div>
