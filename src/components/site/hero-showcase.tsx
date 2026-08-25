@@ -504,11 +504,7 @@ export function HeroShowcase() {
                       </div>
                     )}
 
-                    {slide.id === "voice-mockup" && (
-                      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800">
-                        <VoiceMockupPreview config={voiceConfig} />
-                      </div>
-                    )}
+                    {slide.id === "voice-mockup" && <VoiceMockupPreview config={voiceConfig} />}
 
                   </div>
                 </div>
