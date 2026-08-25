@@ -403,13 +403,15 @@ function segmentedBody(config: ModelSwitcherConfig): string {
     <div
       role="radiogroup"
       style={{
-        display: "inline-flex",
+        display: "flex",
         width: ${config.fullWidth ? `"100%"` : `"auto"`},
+        maxWidth: "100%",
         padding: 3,
         gap: 2,
         borderRadius: ${config.radius + 3},
         border: "1px solid ${c.border}",
         background: ${q(c.chip)},
+        overflowX: "auto",
       }}
     >
       {MODELS.map((model) => {

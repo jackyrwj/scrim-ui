@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { trackEvent } from "@/lib/analytics";
 
 type SearchItem = {
   title: string;
@@ -55,7 +56,21 @@ export function Search({ items }: { items: SearchItem[] }) {
     if (open) setTimeout(() => inputRef.current?.focus(), 0);
   }, [open]);
 
+  /* Report the query once the user stops typing, not on every keystroke.
+     A query with zero results is the interesting one: it is a reader telling
+     us, in their own words, about a page we have not written yet. */
+  const resultCount = filtered.length;
+  useEffect(() => {
+    const term = query.trim();
+    if (term.length < 2) return;
+    const timer = setTimeout(() => {
+      trackEvent("search", { search_term: term.toLowerCase(), results: resultCount });
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [query, resultCount]);
+
   const navigate = (href: string) => {
+    trackEvent("search_result_click", { item: href, search_term: query.trim().toLowerCase() });
     close();
     if (href.startsWith("http")) {
       window.open(href, "_blank", "noreferrer noopener");

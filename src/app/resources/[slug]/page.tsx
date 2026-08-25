@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, ImageOff } from "lucide-react";
+import { OutboundLink } from "@/components/site/outbound-link";
 import {
   getResource,
   getResourceCategory,
@@ -126,15 +127,14 @@ export default async function ResourceDetailPage({ params }: Props) {
           <Fact label="Built for AI">{entry.ai_native ? "AI-native" : "General purpose"}</Fact>
           <Fact label="Listing">{entry.source === "official" ? "Official site" : "Community"}</Fact>
         </dl>
-        <a
+        <OutboundLink
           href={entry.url}
-          target="_blank"
-          rel="noreferrer noopener"
+          item={resourceSlug(entry.name)}
           className="inline-flex items-center gap-1.5 rounded-lg bg-(--foreground) px-4 py-2 text-sm font-medium text-(--background) transition-opacity hover:opacity-90"
         >
           Visit website
           <ExternalLink className="size-4" aria-hidden />
-        </a>
+        </OutboundLink>
       </div>
 
       {/* Preview */}

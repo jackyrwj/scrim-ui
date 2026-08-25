@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { copyText } from "@/lib/clipboard";
 
@@ -14,12 +15,13 @@ export function CopyButton({
   disabled?: boolean;
 }) {
   const [copied, setCopied] = React.useState(false);
+  const pathname = usePathname();
 
   async function copy() {
     if (disabled) return;
     await copyText(code);
     setCopied(true);
-    trackEvent("copy_code", { label });
+    trackEvent("copy_code", { label, item: pathname });
     setTimeout(() => setCopied(false), 2000);
   }
 

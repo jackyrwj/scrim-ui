@@ -379,7 +379,11 @@ function SegmentedVariant({
         borderRadius: config.radius + 3,
         border: `1px solid ${c.border}`,
         background: c.chip,
-        overflow: "hidden",
+        // Segmented is designed for two to four short names (see
+        // VARIANT_HINTS); once there are more, or the container is narrower
+        // than the natural row, scrolling beats squeezing every button down
+        // until its label and badge overlap the next one.
+        overflowX: "auto",
       }}
     >
       {config.models.map((m) => {
@@ -394,8 +398,7 @@ function SegmentedVariant({
             onClick={() => onSelect(m.id)}
             style={{
               display: "inline-flex",
-              flex: config.fullWidth ? 1 : "0 1 auto",
-              minWidth: 0,
+              flex: config.fullWidth ? 1 : "0 0 auto",
               height: s.height,
               alignItems: "center",
               justifyContent: "center",
@@ -408,8 +411,6 @@ function SegmentedVariant({
               fontSize: s.font,
               fontWeight: active ? 600 : 500,
               whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
               cursor: "pointer",
               transition: "background 150ms ease, color 150ms ease",
             }}

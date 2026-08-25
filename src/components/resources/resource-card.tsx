@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { resourceSlug, type ResourceEntry } from "@/lib/resources";
 import { BrandIcon } from "@/components/brands/brand-icon";
+import { OutboundLink } from "@/components/site/outbound-link";
 
 /**
  * One resource, as it appears anywhere on the site.
@@ -120,10 +121,9 @@ export function ResourceCard({
         )}
         <div className="mt-auto flex items-center justify-between gap-3 pt-3 text-[11px] text-(--muted-foreground)">
           <span>source: {entry.source}</span>
-          <a
+          <OutboundLink
             href={entry.url}
-            target="_blank"
-            rel="noreferrer noopener"
+            item={resourceSlug(entry.name)}
             className="relative z-10 inline-flex items-center gap-0.5 transition-colors hover:text-(--foreground)"
           >
             Official site
@@ -131,7 +131,7 @@ export function ResourceCard({
               className="size-3 transition-transform duration-300 group-hover:translate-x-px group-hover:-translate-y-px"
               aria-hidden
             />
-          </a>
+          </OutboundLink>
         </div>
       </div>
     </article>
