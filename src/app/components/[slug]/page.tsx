@@ -80,7 +80,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
       {/* Usage guidelines */}
       <section className="mt-14">
-        <h2 className="text-xl font-semibold tracking-tight">Usage Guidelines</h2>
+        <h2 className="text-xl font-semibold tracking-tight">When to use it</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-(--muted-foreground)">
           {config.usage.map((line) => (
             <li key={line}>{line}</li>
@@ -90,7 +90,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
       {/* Common mistakes */}
       <section className="mt-14">
-        <h2 className="text-xl font-semibold tracking-tight">Common UX Mistakes</h2>
+        <h2 className="text-xl font-semibold tracking-tight">What breaks in production</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-(--muted-foreground)">
           {config.mistakes.map((line) => (
             <li key={line}>{line}</li>
