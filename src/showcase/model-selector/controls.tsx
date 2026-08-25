@@ -1,14 +1,18 @@
 "use client";
 
 import * as React from "react";
+import { withModelIcons } from "@/components/brands/brand-icon";
 import { ModelSelector } from "./model-selector";
 import type { ComponentControls, ControlValues } from "@/lib/component-controls";
 
-/** `id | name | hint | badge,badge` per line. */
+/** `id | name | hint | badge,badge` per line. Real model names so the
+ * preview exercises the provider-mark resolution; unrecognized names simply
+ * render with no mark. */
 const MODELS = [
-  "atlas | Atlas | Flagship model — best for complex reasoning | Reasoning,Tools",
-  "nova | Nova | Balanced speed and quality for daily work | Fast",
-  "pulse | Pulse | Lightning fast and cheap for simple tasks | Cheapest",
+  "claude | Claude Sonnet 4 | Balanced speed and reasoning | Default",
+  "gpt | GPT-4o | Multimodal, fast | Popular",
+  "gemini | Gemini 2.5 Pro | 1M token context |",
+  "deepseek | DeepSeek-V4-Pro | Lowest cost per token | Cheap",
 ].join("\n");
 
 function parse(text: string) {
@@ -32,7 +36,7 @@ export const modelSelectorControls: ComponentControls = {
   importFrom: "./model-selector",
   controls: [
     { kind: "text", name: "options", label: "Models (id | name | hint | badges)", value: MODELS, multiline: true },
-    { kind: "text", name: "value", label: "Selected id", value: "nova" },
+    { kind: "text", name: "value", label: "Selected id", value: "claude" },
     { kind: "text", name: "placeholder", label: "Placeholder", value: "Choose a model" },
     { kind: "boolean", name: "defaultOpen", label: "Open by default", value: false },
   ],
@@ -51,13 +55,13 @@ export const modelSelectorControls: ComponentControls = {
       id: "default",
       title: "Closed",
       note: "The resting state — current model and its headline badge.",
-      values: { defaultOpen: false, value: "nova" },
+      values: { defaultOpen: false, value: "claude" },
     },
     {
       id: "open",
       title: "Expanded",
       note: "Each option carries a name, a one-line hint and capability badges.",
-      values: { defaultOpen: true, value: "nova" },
+      values: { defaultOpen: true, value: "claude" },
     },
   ],
   remountOn: ["defaultOpen"],
@@ -71,7 +75,7 @@ function LiveModelSelector({ v }: { v: ControlValues }) {
   const [value, setValue] = React.useState(String(v.value));
   return (
     <ModelSelector
-      options={parse(String(v.options))}
+      options={withModelIcons(parse(String(v.options)))}
       value={value}
       placeholder={String(v.placeholder)}
       defaultOpen={Boolean(v.defaultOpen)}

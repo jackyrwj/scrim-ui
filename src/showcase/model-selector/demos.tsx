@@ -1,36 +1,46 @@
 "use client";
 
 import * as React from "react";
+import { withModelIcons } from "@/components/brands/brand-icon";
 import { ModelSelector, type ModelOption } from "./model-selector";
 
-const models: ModelOption[] = [
+// Real model names exercise the brand-mark resolution (see ModelIcon): each
+// row carries its provider's mark, injected through the component's `icon`
+// slot. Swap the names for whatever your own product actually offers.
+const models: ModelOption[] = withModelIcons([
   {
-    id: "atlas",
-    name: "Atlas",
-    hint: "Flagship model — best for complex reasoning",
-    badges: ["Reasoning", "Tools"],
+    id: "claude",
+    name: "Claude Sonnet 4",
+    hint: "Balanced speed and reasoning",
+    badges: ["Default"],
   },
   {
-    id: "nova",
-    name: "Nova",
-    hint: "Balanced speed and quality for daily work",
-    badges: ["Fast"],
+    id: "gpt",
+    name: "GPT-4o",
+    hint: "Multimodal, fast",
+    badges: ["Popular"],
   },
   {
-    id: "pulse",
-    name: "Pulse",
-    hint: "Lightning fast and cheap for simple tasks",
-    badges: ["Cheapest"],
+    id: "gemini",
+    name: "Gemini 2.5 Pro",
+    hint: "1M token context",
+    badges: [],
   },
-];
+  {
+    id: "deepseek",
+    name: "DeepSeek-V4-Pro",
+    hint: "Lowest cost per token",
+    badges: ["Cheap"],
+  },
+]);
 
 export function DemoDefault() {
-  const [value, setValue] = React.useState("nova");
+  const [value, setValue] = React.useState("claude");
   return <ModelSelector options={models} value={value} onSelect={setValue} />;
 }
 
 export function DemoOpen() {
-  return <ModelSelector options={models} value="atlas" defaultOpen />;
+  return <ModelSelector options={models} value="gpt" defaultOpen />;
 }
 
 export function DemoSettings() {
