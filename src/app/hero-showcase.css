@@ -126,6 +126,29 @@
   box-shadow:
     var(--shadow-lg),
     0 60px 100px -50px rgb(0 0 0 / 0.45);
+  /* Lets the zoom ease back to 1 when hovering pauses it. */
+  transition: transform 900ms var(--ease-out-expo);
+}
+
+/* --- Idle zoom (Ken Burns) -------------------------------------------
+   A slow push on the whole shot, layered under the camera tilt so it
+   composes rather than fights (the drift still owns the tiny wobble).
+   The frame is the right home: it carries no per-shot transform, and the
+   camera's base scale(0.9) means the push starts inside the viewport and
+   grows toward its edges — the classic Ken Burns crop. Hovering pauses
+   it (only data-tilt="rest" animates) and the transition eases the frame
+   back to 1. Toggle: delete this block to return to drift-only. */
+.hs-camera[data-tilt="rest"] .hs-frame {
+  animation: hs-zoom 16s ease-in-out infinite alternate;
+}
+
+@keyframes hs-zoom {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(0.6%, -0.5%, 0);
+  }
 }
 
 /* --- Shot list ---------------------------------------------------- */
@@ -180,7 +203,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hs-camera,
-  .hs-drift {
+  .hs-drift,
+  .hs-frame {
     transform: none !important;
     transition: none;
     animation: none;
