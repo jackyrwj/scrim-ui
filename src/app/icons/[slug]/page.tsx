@@ -7,6 +7,7 @@ import { iconGuide, iconSlug, getIconEntry, relatedIcons } from "@/lib/icon-guid
 import { getCategory, components } from "@/lib/registry";
 import { categoryIconFor } from "@/lib/icons";
 import { IconEditor } from "@/components/icons/icon-editor";
+import { SITE_REPO } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -140,7 +141,7 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
           , ISC licence, &copy; Lucide Contributors. The icon is theirs; pairing it with
           &ldquo;{entry.concept}&rdquo; is ours, and{" "}
           <a
-            href="https://github.com/jackyrwj/scrim-ui/issues"
+            href={`${SITE_REPO}/issues`}
             target="_blank"
             rel="noreferrer"
             className="underline underline-offset-2 transition-colors hover:text-(--foreground)"

@@ -7,6 +7,7 @@ import { components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
+import { SITE_REPO } from "@/lib/site";
 
 const navItems = [
   { href: "/tools", label: "Tools" },
@@ -63,6 +64,21 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2">
           <Search items={searchItems} />
+          {/* Every component page tells the reader to copy a file rather than
+              install a package, so the repo is the only place they can check
+              what they are copying. Icon-only, and sized to match the theme
+              toggle it sits beside. */}
+          <a
+            href={SITE_REPO}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Scrim UI on GitHub"
+            className="flex h-8 w-8 items-center justify-center rounded-md border border-(--border) text-(--muted-foreground) transition-colors hover:text-(--foreground)"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5a12 12 0 0 0-3.79 23.4c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6.01 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.23 0 4.63-2.81 5.65-5.49 5.95.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 12 .5Z" />
+            </svg>
+          </a>
           <ThemeToggle />
           <MobileNav />
         </div>

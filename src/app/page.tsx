@@ -77,8 +77,8 @@ export default function Home() {
               The interface layer for AI products
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
-              Free in-browser tools and copy-ready components for building AI interfaces —
-              prompt inputs, agent states, tool calls, citations, reasoning, voice and memory.
+              Free in-browser tools and copy-ready components for AI interfaces —
+              prompt inputs, agent states, tool calls and citations.
             </p>
 
             {/* One call to action. The nav above already carries the six

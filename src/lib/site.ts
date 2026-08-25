@@ -6,11 +6,9 @@
  * a different host than the canonical URLs is worse than no sitemap, and
  * three copies is how that happens.
  *
- * Overridable by env so the value can change without a deploy of new code —
- * which matters here, because the domain in the default is not registered
- * yet. Vercel exposes the deployment host as VERCEL_PROJECT_PRODUCTION_URL;
- * set NEXT_PUBLIC_SITE_URL to that (or to anything else) to point every
- * absolute URL somewhere else.
+ * Overridable by env so previews and forks can point every absolute URL at
+ * their own host without a code change. Vercel exposes the deployment host
+ * as VERCEL_PROJECT_PRODUCTION_URL; set NEXT_PUBLIC_SITE_URL to that.
  */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://scrimui.dev").replace(
   /\/$/,
@@ -18,3 +16,10 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://scrimui.de
 );
 
 export const SITE_NAME = "Scrim UI";
+
+/**
+ * The public repository. Linked from the header and from the "report a
+ * problem" affordance on icon pages, so it lives next to the origin rather
+ * than being spelled out at each call site.
+ */
+export const SITE_REPO = "https://github.com/jackyrwj/scrim-ui";
