@@ -162,6 +162,10 @@
   transform: scale(0.91) rotateX(6deg) rotateY(9deg) rotateZ(1.5deg);
 }
 
+.hs-camera[data-tilt="rest"][data-shot="voice-mockup"] {
+  transform: scale(0.9) rotateX(5deg) rotateY(-10deg) rotateZ(2deg);
+}
+
 /* Before it has been scrolled to: pushed back and further off-axis. */
 .hs-camera[data-tilt="enter"] {
   transform: scale(0.94) rotateX(13deg) rotateY(-13deg) rotateZ(-3deg) translateY(22px);

@@ -24,6 +24,13 @@ import {
   type ModelSwitcherConfig,
   type SwitcherVariant,
 } from "@/components/tools/model-switcher/types";
+import { VoiceMockupPreview } from "@/components/tools/voice-mockup/voice-mockup-preview";
+import {
+  defaultConfig as voiceDefaults,
+  STAGE_LABELS,
+  type VoiceMockupConfig,
+  type VoiceStage,
+} from "@/components/tools/voice-mockup/types";
 
 /* ------------------------------------------------------------------ */
 /* Media queries, read without an effect so no state is set on mount   */
@@ -44,7 +51,26 @@ function mediaStore(query: string) {
 
 const narrowStore = mediaStore("(max-width: 640px)");
 const reducedStore = mediaStore("(prefers-reduced-motion: reduce)");
+const darkStore = {
+  subscribe(onChange: () => void) {
+    const el = document.documentElement;
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.type === "attributes" && m.attributeName === "class") {
+          onChange();
+          return;
+        }
+      }
+    });
+    observer.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  },
+  get() {
+    return document.documentElement.classList.contains("dark");
+  },
+};
 const serverFalse = () => false;
+const serverDark = () => false;
 
 /* ------------------------------------------------------------------ */
 /* Slide 1 — AI Chat Mockup Generator                                  */
@@ -92,7 +118,7 @@ function buildChatConfig(state: ChatState, narrow: boolean, reduced: boolean): M
 /* Slide definitions                                                   */
 /* ------------------------------------------------------------------ */
 
-type SlideId = "chat-mockup" | "model-switcher";
+type SlideId = "chat-mockup" | "model-switcher" | "voice-mockup";
 
 const SLIDES: {
   id: SlideId;
@@ -123,6 +149,15 @@ const SLIDES: {
     narrowWidth: 340,
     fitHeight: true,
   },
+  {
+    id: "voice-mockup",
+    slug: "voice-mockup",
+    tab: "Voice Mockup",
+    headline: "Mock up a voice assistant, from listening to speaking.",
+    width: 700,
+    narrowWidth: 390,
+    fitHeight: true,
+  },
 ];
 
 /** Every step: move the cursor to a control, click it, hold for `dwell` ms. */
@@ -142,6 +177,11 @@ const SCRIPTS: Record<SlideId, Step[]> = {
     { key: "variant-command", dwell: 2400 },
     { key: "variant-pills", dwell: 1600 },
   ],
+  "voice-mockup": [
+    { key: "voice-listening", dwell: 1800 },
+    { key: "voice-thinking", dwell: 1500 },
+    { key: "voice-speaking", dwell: 2400 },
+  ],
 };
 
 function slideDuration(id: SlideId): number {
@@ -157,6 +197,7 @@ function slideDuration(id: SlideId): number {
 export function HeroShowcase() {
   const narrow = React.useSyncExternalStore(narrowStore.subscribe, narrowStore.get, serverFalse);
   const reduced = React.useSyncExternalStore(reducedStore.subscribe, reducedStore.get, serverFalse);
+  const dark = React.useSyncExternalStore(darkStore.subscribe, darkStore.get, serverDark);
 
   const [slideIndex, setSlideIndex] = React.useState(0);
   const [step, setStep] = React.useState(0);
@@ -169,6 +210,16 @@ export function HeroShowcase() {
     variant: "dropdown",
     fullWidth: false,
   }));
+  const [voice, setVoice] = React.useState<VoiceMockupConfig>(() => ({
+    ...voiceDefaults,
+    device: "tablet",
+    showControls: true,
+  }));
+
+  const voiceConfig = React.useMemo(
+    () => ({ ...voice, theme: (dark ? "dark" : "light") as VoiceMockupConfig["theme"] }),
+    [voice, dark],
+  );
 
   const rootRef = React.useRef<HTMLDivElement>(null);
   const frameRef = React.useRef<HTMLDivElement>(null);
@@ -198,6 +249,10 @@ export function HeroShowcase() {
       setSwitcher((c) => ({ ...c, variant: key.slice(8) as SwitcherVariant }));
       return;
     }
+    if (key.startsWith("voice-")) {
+      setVoice((c) => ({ ...c, stage: key.slice(6) as VoiceStage }));
+      return;
+    }
   }, []);
 
   /* --- Reset a slide's state when it comes back around ------------ */
@@ -205,6 +260,7 @@ export function HeroShowcase() {
   const resetSlide = React.useCallback((id: SlideId) => {
     if (id === "chat-mockup") setChat(CHAT_INITIAL);
     if (id === "model-switcher") setSwitcher((c) => ({ ...c, variant: "dropdown" }));
+    if (id === "voice-mockup") setVoice((c) => ({ ...c, stage: "idle" }));
   }, []);
 
   /* --- Only animate while actually on screen ---------------------- */
@@ -323,20 +379,31 @@ export function HeroShowcase() {
   }, [switcher]);
 
   const controls: { key: string; label: string; active: boolean }[] =
-    slide.id === "chat-mockup"
-      ? [
-          { key: "chat-reasoning", label: "Reasoning", active: chat.reasoning },
-          { key: "chat-tools", label: "Tool call", active: chat.tools },
-          { key: "chat-sources", label: "Sources", active: chat.sources },
-          { key: "chat-streaming", label: "Streaming", active: chat.streaming },
-        ]
-      : /* only two slides now, so this is the model switcher */
-        [
-          { key: "variant-dropdown", label: "Dropdown", active: switcher.variant === "dropdown" },
-          { key: "variant-segmented", label: "Segmented", active: switcher.variant === "segmented" },
-          { key: "variant-pills", label: "Pills", active: switcher.variant === "pills" },
-          { key: "variant-command", label: "Command list", active: switcher.variant === "command" },
-        ];
+    (() => {
+      switch (slide.id) {
+        case "chat-mockup":
+          return [
+            { key: "chat-reasoning", label: "Reasoning", active: chat.reasoning },
+            { key: "chat-tools", label: "Tool call", active: chat.tools },
+            { key: "chat-sources", label: "Sources", active: chat.sources },
+            { key: "chat-streaming", label: "Streaming", active: chat.streaming },
+          ];
+        case "model-switcher":
+          return [
+            { key: "variant-dropdown", label: "Dropdown", active: switcher.variant === "dropdown" },
+            { key: "variant-segmented", label: "Segmented", active: switcher.variant === "segmented" },
+            { key: "variant-pills", label: "Pills", active: switcher.variant === "pills" },
+            { key: "variant-command", label: "Command list", active: switcher.variant === "command" },
+          ];
+        case "voice-mockup":
+          return [
+            { key: "voice-idle", label: STAGE_LABELS.idle, active: voice.stage === "idle" },
+            { key: "voice-listening", label: STAGE_LABELS.listening, active: voice.stage === "listening" },
+            { key: "voice-thinking", label: STAGE_LABELS.thinking, active: voice.stage === "thinking" },
+            { key: "voice-speaking", label: STAGE_LABELS.speaking, active: voice.stage === "speaking" },
+          ];
+      }
+    })();
 
   return (
     <div
@@ -437,6 +504,12 @@ export function HeroShowcase() {
                       </div>
                     )}
 
+                    {slide.id === "voice-mockup" && (
+                      <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl dark:border-zinc-800">
+                        <VoiceMockupPreview config={voiceConfig} />
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>
@@ -484,7 +557,28 @@ export function HeroShowcase() {
         {SLIDES.map((s, i) => {
           const active = i === slideIndex;
           return (
-            <li key={s.id} aria-current={active ? "step" : undefined}>
+            <li
+              key={s.id}
+              aria-current={active ? "step" : undefined}
+              role="button"
+              tabIndex={0}
+              className="cursor-pointer outline-offset-4"
+              onClick={() => {
+                if (i === slideIndex) return;
+                resetSlide(SLIDES[i].id);
+                setSlideIndex(i);
+                setStep(0);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  if (i === slideIndex) return;
+                  resetSlide(SLIDES[i].id);
+                  setSlideIndex(i);
+                  setStep(0);
+                }
+              }}
+            >
               <div className="relative h-px w-full overflow-hidden bg-(--border)">
                 {active && !reduced && (
                   <span
@@ -510,11 +604,21 @@ export function HeroShowcase() {
                 >
                   0{i + 1}
                 </span>
-                <span className={active ? "text-(--foreground)" : "text-(--muted-foreground)"}>
+                <span
+                  className={`transition-colors ${
+                    active ? "text-(--foreground)" : "text-(--muted-foreground) hover:text-(--foreground)"
+                  }`}
+                >
                   {s.tab}
                 </span>
               </p>
-              <p className="mt-1 text-[13px] leading-5 text-(--muted-foreground)">{s.headline}</p>
+              <p
+                className={`mt-1 text-[13px] leading-5 transition-colors ${
+                  active ? "text-(--muted-foreground)" : "text-(--muted-foreground) hover:text-(--foreground)"
+                }`}
+              >
+                {s.headline}
+              </p>
             </li>
           );
         })}
