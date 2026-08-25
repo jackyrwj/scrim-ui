@@ -6,6 +6,8 @@ import { components } from "@/lib/registry";
 import { pageConfigs } from "@/showcase/registry";
 import { BrandIcon } from "@/components/brands/brand-icon";
 import { PreviewFrame } from "@/components/component-page/preview-frame";
+import { JsonLd } from "@/components/site/json-ld";
+import { articleSchema } from "@/lib/structured-data";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -44,6 +46,8 @@ export default async function InspirationArticlePage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
+      <JsonLd data={articleSchema(entry)} />
+
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-(--muted-foreground)">
         <Link href="/inspiration" className="transition-colors hover:text-(--foreground)">

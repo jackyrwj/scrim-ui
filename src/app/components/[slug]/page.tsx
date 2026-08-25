@@ -7,6 +7,8 @@ import { components, getComponent, getRelated } from "@/lib/registry";
 import { pageConfigs } from "@/showcase/registry";
 import { CodeBlock } from "@/components/component-page/code-block";
 import { ComponentExplorer } from "@/components/component-page/explorer";
+import { JsonLd } from "@/components/site/json-ld";
+import { componentSchema } from "@/lib/structured-data";
 
 export function generateStaticParams() {
   return components.filter((c) => c.status === "published").map((c) => ({ slug: c.slug }));
@@ -42,6 +44,8 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+      <JsonLd data={componentSchema(entry)} />
+
       {/* Header */}
       <nav className="mb-6 text-sm text-(--muted-foreground)">
         <Link href="/components" className="hover:text-(--foreground)">Components</Link>
