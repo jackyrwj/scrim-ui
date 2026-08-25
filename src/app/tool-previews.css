@@ -81,23 +81,6 @@
 }
 .tp-hue { animation: tp-hue 9s var(--ease-smooth) infinite; }
 
-/* --- flow diagram: dashes march along the edges, nodes light up ---- */
-/* Marching dashes rather than a dot on an offset-path: `offset-path` on
-   SVG children is still uneven across browsers, dashoffset is not. */
-@keyframes tp-flow {
-  to { stroke-dashoffset: -16; }
-}
-@keyframes tp-active {
-  0%, 6%    { fill: var(--card); }
-  14%, 30%  { fill: var(--primary-muted); }
-  38%, 100% { fill: var(--card); }
-}
-.tp-flow {
-  stroke-dasharray: 4 4;
-  animation: tp-flow 0.9s linear infinite;
-}
-.tp-active { animation: tp-active 4.8s var(--ease-smooth) infinite; }
-
 /* --- voice mockup: waveform ---------------------------------------- */
 @keyframes tp-bar {
   0%, 100% { transform: scaleY(0.22); }

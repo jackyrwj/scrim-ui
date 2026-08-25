@@ -72,15 +72,6 @@ export const tools: Tool[] = [
     status: "published",
   },
   {
-    slug: "flow-diagram",
-    name: "AI Conversation Flow Diagram",
-    description:
-      "Build visual conversation flows with user messages, AI responses, tool calls and approval gates. Export as SVG or PNG.",
-    tagline: "Build and export conversation flow diagrams as SVG or PNG",
-    status: "published",
-    featured: true,
-  },
-  {
     slug: "voice-mockup",
     name: "Voice Assistant Mockup Generator",
     description:

@@ -68,13 +68,13 @@ export default function Home() {
               from lg up and needs the room. The paragraph under it keeps its
               own narrower max-width — 1024px of prose is not readable. */}
           <div className="mx-auto max-w-5xl text-center">
-            {/* A claim, not the wordmark. The name is already in the header,
-                the title tag and the footer; spending the page's one h1 on it
-                repeated a term only people who already know the site would
-                search for, and left the strongest heading on the page saying
-                nothing about what is here. */}
+            {/* States what this is, which is what every peer's headline does
+                — twelve were checked and not one frames the reader as lacking
+                something. "The UI layer your AI product is missing" made a
+                claim about the visitor rather than about the product, and left
+                a first-time reader still not knowing this is components. */}
             <h1 className="display-title display-title--hero text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              The UI layer your AI product is missing
+              The interface layer for AI products
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
               Free in-browser tools and copy-ready components for building AI interfaces —

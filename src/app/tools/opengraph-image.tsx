@@ -17,7 +17,7 @@ export default function Image() {
       <OgCard
         eyebrow="Tools"
         title="Mock up an AI interface in your browser"
-        description="Chat and voice mockups, a theme generator, conversation flow diagrams and a token counter. No signup, no install — export a PNG or copy the component."
+        description="Chat and voice mockups, a theme generator, a token counter and a device framer. No signup, no install — export a PNG or copy the component."
       />
     ),
     size,

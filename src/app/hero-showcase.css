@@ -139,10 +139,6 @@
   transform: scale(0.91) rotateX(6deg) rotateY(9deg) rotateZ(1.5deg);
 }
 
-.hs-camera[data-tilt="rest"][data-shot="flow-diagram"] {
-  transform: scale(0.93) rotateX(9deg) rotateY(-6deg) rotateZ(1deg);
-}
-
 /* Before it has been scrolled to: pushed back and further off-axis. */
 .hs-camera[data-tilt="enter"] {
   transform: scale(0.94) rotateX(13deg) rotateY(-13deg) rotateZ(-3deg) translateY(22px);

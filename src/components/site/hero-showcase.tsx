@@ -24,9 +24,6 @@ import {
   type ModelSwitcherConfig,
   type SwitcherVariant,
 } from "@/components/tools/model-switcher/types";
-import { layoutNodes } from "@/components/tools/flow-diagram/layout-engine";
-import { renderFlowSvg } from "@/components/tools/flow-diagram/render-svg";
-import type { FlowNode } from "@/components/tools/flow-diagram/types";
 
 /* ------------------------------------------------------------------ */
 /* Media queries, read without an effect so no state is set on mount   */
@@ -90,63 +87,12 @@ function buildChatConfig(state: ChatState, narrow: boolean, reduced: boolean): M
   };
 }
 
-/* ------------------------------------------------------------------ */
-/* Slide 3 — AI Conversation Flow Diagram                              */
-/* ------------------------------------------------------------------ */
-
-const FLOW_PRESETS: { key: string; label: string; nodes: FlowNode[] }[] = [
-  {
-    key: "flow-simple",
-    label: "Simple reply",
-    nodes: [
-      { id: "f1", type: "user-message", label: "User asks a question", description: "" },
-      { id: "f2", type: "ai-response", label: "Model answers", description: "Streams the reply" },
-    ],
-  },
-  {
-    key: "flow-tools",
-    label: "With a tool call",
-    nodes: [
-      { id: "g1", type: "user-message", label: "User asks a question", description: "" },
-      { id: "g2", type: "ai-response", label: "Model plans the work", description: "Picks the tools" },
-      { id: "g3", type: "tool-call", label: "Search the web", description: "External API call" },
-      { id: "g4", type: "ai-response", label: "Model answers with sources", description: "" },
-    ],
-  },
-  {
-    key: "flow-approval",
-    label: "With an approval gate",
-    nodes: [
-      { id: "h1", type: "user-message", label: "User asks for a change", description: "" },
-      { id: "h2", type: "tool-call", label: "Draft the action", description: "" },
-      {
-        id: "h3",
-        type: "approval-gate",
-        label: "Run the action?",
-        description: "",
-        branches: [
-          {
-            id: "h3a",
-            label: "Approved",
-            nodes: [{ id: "h4", type: "tool-call", label: "Execute it", description: "" }],
-          },
-          {
-            id: "h3b",
-            label: "Rejected",
-            nodes: [{ id: "h5", type: "ai-response", label: "Explain what was skipped", description: "" }],
-          },
-        ],
-      },
-      { id: "h6", type: "ai-response", label: "Report the result", description: "" },
-    ],
-  },
-];
 
 /* ------------------------------------------------------------------ */
 /* Slide definitions                                                   */
 /* ------------------------------------------------------------------ */
 
-type SlideId = "chat-mockup" | "model-switcher" | "flow-diagram";
+type SlideId = "chat-mockup" | "model-switcher";
 
 const SLIDES: {
   id: SlideId;
@@ -177,15 +123,6 @@ const SLIDES: {
     narrowWidth: 340,
     fitHeight: true,
   },
-  {
-    id: "flow-diagram",
-    slug: "flow-diagram",
-    tab: "Flow Diagram",
-    headline: "Map an agent flow, export it as SVG.",
-    width: 700,
-    narrowWidth: 340,
-    fitHeight: true,
-  },
 ];
 
 /** Every step: move the cursor to a control, click it, hold for `dwell` ms. */
@@ -204,10 +141,6 @@ const SCRIPTS: Record<SlideId, Step[]> = {
     { key: "variant-segmented", dwell: 1700 },
     { key: "variant-pills", dwell: 1700 },
     { key: "variant-command", dwell: 2000 },
-  ],
-  "flow-diagram": [
-    { key: "flow-tools", dwell: 2000 },
-    { key: "flow-approval", dwell: 2600 },
   ],
 };
 
@@ -236,7 +169,6 @@ export function HeroShowcase() {
     variant: "dropdown",
     fullWidth: false,
   }));
-  const [flowPreset, setFlowPreset] = React.useState(0);
 
   const rootRef = React.useRef<HTMLDivElement>(null);
   const frameRef = React.useRef<HTMLDivElement>(null);
@@ -266,10 +198,6 @@ export function HeroShowcase() {
       setSwitcher((c) => ({ ...c, variant: key.slice(8) as SwitcherVariant }));
       return;
     }
-    if (key.startsWith("flow-")) {
-      const index = FLOW_PRESETS.findIndex((p) => p.key === key);
-      if (index >= 0) setFlowPreset(index);
-    }
   }, []);
 
   /* --- Reset a slide's state when it comes back around ------------ */
@@ -277,7 +205,6 @@ export function HeroShowcase() {
   const resetSlide = React.useCallback((id: SlideId) => {
     if (id === "chat-mockup") setChat(CHAT_INITIAL);
     if (id === "model-switcher") setSwitcher((c) => ({ ...c, variant: "dropdown" }));
-    if (id === "flow-diagram") setFlowPreset(0);
   }, []);
 
   /* --- Only animate while actually on screen ---------------------- */
@@ -380,16 +307,6 @@ export function HeroShowcase() {
 
   /* --- Slide content ---------------------------------------------- */
 
-  /* The tool renders the diagram at 100% width, which makes a tall
-     narrow flow enormous. In the hero it is pinned to a fixed height
-     instead, so every preset lands at the same visual weight. */
-  const flowSvg = React.useMemo(() => {
-    const { positioned, edges, merges, viewBox } = layoutNodes(FLOW_PRESETS[flowPreset].nodes);
-    return renderFlowSvg(positioned, edges, merges, viewBox, "").replace(
-      'style="width:100%;height:auto"',
-      `style="height:${narrow ? 240 : 430}px;width:auto;display:block"`,
-    );
-  }, [flowPreset, narrow]);
 
   const chatConfig = React.useMemo(
     () => buildChatConfig(chat, narrow, reduced),
@@ -413,14 +330,13 @@ export function HeroShowcase() {
           { key: "chat-sources", label: "Sources", active: chat.sources },
           { key: "chat-streaming", label: "Streaming", active: chat.streaming },
         ]
-      : slide.id === "model-switcher"
-        ? [
-            { key: "variant-dropdown", label: "Dropdown", active: switcher.variant === "dropdown" },
-            { key: "variant-segmented", label: "Segmented", active: switcher.variant === "segmented" },
-            { key: "variant-pills", label: "Pills", active: switcher.variant === "pills" },
-            { key: "variant-command", label: "Command list", active: switcher.variant === "command" },
-          ]
-        : FLOW_PRESETS.map((p, i) => ({ key: p.key, label: p.label, active: flowPreset === i }));
+      : /* only two slides now, so this is the model switcher */
+        [
+          { key: "variant-dropdown", label: "Dropdown", active: switcher.variant === "dropdown" },
+          { key: "variant-segmented", label: "Segmented", active: switcher.variant === "segmented" },
+          { key: "variant-pills", label: "Pills", active: switcher.variant === "pills" },
+          { key: "variant-command", label: "Command list", active: switcher.variant === "command" },
+        ];
 
   return (
     <div
@@ -521,12 +437,6 @@ export function HeroShowcase() {
                       </div>
                     )}
 
-                    {slide.id === "flow-diagram" && (
-                      <div
-                        className="mx-auto w-fit rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xl dark:border-zinc-800"
-                        dangerouslySetInnerHTML={{ __html: flowSvg }}
-                      />
-                    )}
                   </div>
                 </div>
               </div>

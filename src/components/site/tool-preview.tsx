@@ -13,7 +13,6 @@ const previews: Record<string, () => React.ReactElement> = {
   "model-switcher": ModelSwitcherPreview,
   "chat-mockup": ChatMockupPreview,
   "theme-generator": ThemeGeneratorPreview,
-  "flow-diagram": FlowDiagramPreview,
   "voice-mockup": VoiceMockupPreview,
   "token-counter": TokenCounterPreview,
   "screenshot-mockup": ScreenshotMockupPreview,
@@ -140,52 +139,6 @@ function ThemeGeneratorPreview() {
           ))}
         </div>
       </div>
-    </Stage>
-  );
-}
-
-function FlowDiagramPreview() {
-  /* A step, a decision diamond, two outcomes. An earlier version drew the
-     split *and* the merge back together, but at this size the four elbows
-     read as a dashed box around the nodes rather than as a flow. */
-  const node = (x: number, y: number, delay: string) => (
-    <g key={`${x}-${y}`}>
-      <rect
-        x={x}
-        y={y}
-        width={58}
-        height={18}
-        rx={5}
-        className="tp-active"
-        fill="var(--card)"
-        stroke="var(--muted-foreground)"
-        strokeOpacity={0.35}
-        style={{ animationDelay: delay }}
-      />
-      <rect x={x + 12} y={y + 7.5} width={34} height={3} rx={1.5} fill="var(--muted-foreground)" opacity={0.45} />
-    </g>
-  );
-  return (
-    <Stage>
-      <svg viewBox="0 0 200 114" className="w-full" role="presentation">
-        <g stroke="var(--primary)" strokeWidth={1.5} fill="none" opacity={0.5}>
-          <path className="tp-flow" d="M100 30 V40" />
-          <path className="tp-flow" d="M100 64 V74 H47 V86" />
-          <path className="tp-flow" d="M100 74 H153 V86" />
-        </g>
-        {node(71, 12, "0s")}
-        <polygon
-          points="100,40 114,52 100,64 86,52"
-          className="tp-active"
-          fill="var(--card)"
-          stroke="var(--muted-foreground)"
-          strokeOpacity={0.35}
-          strokeWidth={1}
-          style={{ animationDelay: "1.2s" }}
-        />
-        {node(18, 86, "2.4s")}
-        {node(124, 86, "2.4s")}
-      </svg>
     </Stage>
   );
 }
