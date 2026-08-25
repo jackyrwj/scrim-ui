@@ -21,6 +21,11 @@ export const metadata: Metadata = {
   },
   description:
     "Beautiful, copy-ready UI patterns and components for AI products. Prompt inputs, streaming messages, tool calls, citations, agent states, reasoning and more.",
+  /* Every page declares its own address on the canonical host. metadataBase
+     alone does NOT emit this tag — it only absolutises relative URLs — and
+     without it the project's permanent *.vercel.app alias serves a second,
+     identical copy of the whole site with nothing to say which one counts. */
+  alternates: { canonical: "./" },
   verification: {
     google: "q9XeVxN3vnRIl6aeqoyMgat1_ehAk9hSGrAw0X5li2w",
   },
