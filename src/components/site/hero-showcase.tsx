@@ -449,7 +449,7 @@ export function HeroShowcase() {
                 {/* Control rail — the same switches the real tool page has */}
                 <div className="hs-rail flex shrink-0 gap-2 overflow-x-auto border-b border-(--border) p-3 sm:w-52 sm:flex-col sm:overflow-visible sm:border-b-0 sm:border-r sm:p-4">
                   <p className="hidden text-[11px] font-medium tracking-wide text-(--muted-foreground) uppercase sm:block">
-                    {slide.id === "chat-mockup" ? "Include" : slide.id === "model-switcher" ? "Variant" : "Preset"}
+                    {slide.id === "chat-mockup" ? "Include" : slide.id === "model-switcher" ? "Variant" : "Stage"}
                   </p>
                   {controls.map((c) => (
                     <button
