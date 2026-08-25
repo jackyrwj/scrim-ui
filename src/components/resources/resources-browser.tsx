@@ -12,7 +12,7 @@ export function ResourcesBrowser({
   entries: ResourceEntry[];
   categories: ResourceCategory[];
 }) {
-  /** `/resources?category=…` — the link a detail page's breadcrumb and its
+  /** `?category=…` — kept so /resources/category/<slug> pages and the
    *  "browse all" footer come back on. Only used as the initial selection;
    *  clicking a filter afterwards does not rewrite the URL. */
   const requested = useSearchParams().get("category");

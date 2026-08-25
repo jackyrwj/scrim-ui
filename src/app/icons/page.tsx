@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { resources } from "@/lib/resources";
 import { createElement } from "react";
 import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { categoryIconFor } from "@/lib/icons";
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
 const nameOf = (slug: string) => components.find((c) => c.slug === slug)?.name ?? slug;
 
 export default function IconsPage() {
+  const assetCount = resources.filter((r) => r.category === "assets").length;
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <header className="mx-auto max-w-2xl text-center">
@@ -25,6 +28,28 @@ export default function IconsPage() {
           This is that opinion — one icon picked per concept, with the components that use it.
         </p>
       </header>
+
+      {/* What this page is and is not. uwarp-style directories answer "where
+          do I find icons"; this answers "which icon means tool call". Both are
+          worth having, and a reader who wants the first one should not have to
+          work out that it lives somewhere else on the site. */}
+      <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-3 rounded-xl border border-(--border) bg-(--muted)/40 p-4 text-[13px] leading-5 sm:flex-row sm:items-center sm:gap-6">
+        <p className="flex-1 text-(--muted-foreground)">
+          <span className="font-medium text-(--foreground)">Here</span> — one icon chosen per
+          AI concept, sized, stroked and coloured before you copy it.
+        </p>
+        <span aria-hidden className="hidden w-px self-stretch bg-(--border) sm:block" />
+        <p className="flex-1 text-(--muted-foreground)">
+          <span className="font-medium text-(--foreground)">Elsewhere</span> — whole icon sets
+          and illustration libraries.{" "}
+          <Link
+            href="/resources/category/assets"
+            className="text-(--primary) underline underline-offset-2"
+          >
+            Browse {assetCount} &rarr;
+          </Link>
+        </p>
+      </div>
 
       <div className="mt-12 space-y-10">
         {categories.map((cat) => {

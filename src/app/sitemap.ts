@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { components, categories, patterns } from "@/lib/registry";
 import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
-import { resources, resourceSlug } from "@/lib/resources";
+import { resources, resourceCategories, resourceSlug } from "@/lib/resources";
 import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { SITE_URL as BASE_URL } from "@/lib/site";
 
@@ -69,6 +69,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
+  const resourceCategoryPages: MetadataRoute.Sitemap = resourceCategories.map((c) => ({
+    url: `${BASE_URL}/resources/category/${c.slug}`,
+    lastModified: now,
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
   return [
-    ...iconPages,...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
+    ...iconPages,
+    ...resourceCategoryPages,...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
 }

@@ -85,7 +85,7 @@ export default async function ResourceDetailPage({ params }: Props) {
         </Link>
         <span aria-hidden>/</span>
         <Link
-          href={`/resources?category=${entry.category}`}
+          href={`/resources/category/${entry.category}`}
           className="transition-colors hover:text-(--foreground)"
         >
           {category?.name ?? entry.category}
@@ -185,7 +185,7 @@ export default async function ResourceDetailPage({ params }: Props) {
             ))}
           </div>
           <Link
-            href={`/resources?category=${entry.category}`}
+            href={`/resources/category/${entry.category}`}
             className="mt-4 inline-block text-sm font-medium transition-colors hover:text-(--muted-foreground)"
           >
             Browse all {category?.name ?? entry.category} →
