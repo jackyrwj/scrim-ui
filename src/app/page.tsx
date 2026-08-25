@@ -14,7 +14,7 @@ import { PatternPreview } from "@/components/site/pattern-preview";
 import { IconCard } from "@/components/icons/icon-card";
 import { createElement } from "react";
 import { patternIconFor } from "@/lib/icons";
-import { iconGuide } from "@/lib/icon-guide";
+import { iconGuide, iconSlug } from "@/lib/icon-guide";
 
 /* One icon per idea the site is about, spread across categories so the row
    reads as a map rather than a sample of one corner. */
@@ -246,6 +246,7 @@ export default function Home() {
               <div key={e.concept} className="aos-stagger-item grid">
                 <IconCard
                   concept={e.concept}
+                  slug={iconSlug(e.concept)}
                   meaning={e.meaning}
                   name={e.icon.displayName ?? "Icon"}
                   components={e.components.map((slug) => ({ slug, name: componentName(slug) }))}

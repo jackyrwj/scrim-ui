@@ -21,12 +21,15 @@ import { trackEvent } from "@/lib/analytics";
  */
 export function IconCard({
   concept,
+  slug,
   meaning,
   name,
   components,
   children,
 }: {
   concept: string;
+  /** Passed in rather than derived here, so the card stays a dumb renderer. */
+  slug: string;
   meaning: string;
   /** Lucide's export name, e.g. "Wrench". Used for the JSX snippet. */
   name: string;
@@ -84,10 +87,10 @@ export function IconCard({
   }
 
   const btn =
-    "rounded-md px-2 py-1 text-[11px] font-medium text-(--muted-foreground) transition-colors hover:bg-(--muted) hover:text-(--foreground) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)";
+    "relative z-10 rounded-md px-2 py-1 text-[11px] font-medium text-(--muted-foreground) transition-colors hover:bg-(--muted) hover:text-(--foreground) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)";
 
   return (
-    <div className="group flex flex-col gap-3 rounded-xl border border-(--border) bg-(--card) p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40">
+    <div className="group relative flex flex-col gap-3 rounded-xl border border-(--border) bg-(--card) p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40">
       <div className="flex items-start gap-3">
         <span
           ref={holderRef}
@@ -96,7 +99,13 @@ export function IconCard({
           {children}
         </span>
         <div className="min-w-0">
-          <p className="text-sm font-medium">{concept}</p>
+          {/* Stretched link: the whole card opens the icon's page, while the
+              copy buttons below stay separately clickable via z-10. */}
+          <p className="text-sm font-medium">
+            <Link href={`/icons/${slug}`} className="after:absolute after:inset-0 after:content-['']">
+              {concept}
+            </Link>
+          </p>
           <p className="mt-0.5 text-xs leading-relaxed text-(--muted-foreground)">{meaning}</p>
         </div>
         {/* Full foreground, not muted: --muted-foreground on --muted measures
@@ -113,7 +122,7 @@ export function IconCard({
             <Link
               key={c.slug}
               href={`/components/${c.slug}`}
-              className="rounded-md border border-(--border) px-1.5 py-0.5 text-[10px] text-(--muted-foreground) transition-colors hover:border-(--primary)/40 hover:text-(--foreground)"
+              className="relative z-10 rounded-md border border-(--border) px-1.5 py-0.5 text-[10px] text-(--muted-foreground) transition-colors hover:border-(--primary)/40 hover:text-(--foreground)"
             >
               {c.name}
             </Link>

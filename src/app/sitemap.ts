@@ -3,6 +3,7 @@ import { components, categories, patterns } from "@/lib/registry";
 import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
 import { resources, resourceSlug } from "@/lib/resources";
+import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { SITE_URL as BASE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -61,5 +62,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
+  const iconPages: MetadataRoute.Sitemap = iconGuide.map((e) => ({
+    url: `${BASE_URL}/icons/${iconSlug(e.concept)}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
+  return [
+    ...iconPages,...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
 }

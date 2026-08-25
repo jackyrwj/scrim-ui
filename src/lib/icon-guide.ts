@@ -310,3 +310,41 @@ export const iconGuide: IconGuideEntry[] = [
     components: [],
   },
 ];
+
+/**
+ * The URL slug for a concept, derived rather than stored.
+ *
+ * Same reasoning as resourceSlug: a second field to keep in sync is a field
+ * that goes out of sync. The assertion below runs at module load, so two
+ * concepts that collide fail the build rather than silently shadowing each
+ * other at /icons/<slug>.
+ */
+export function iconSlug(concept: string): string {
+  return concept
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+{
+  const seen = new Map<string, string>();
+  for (const entry of iconGuide) {
+    const slug = iconSlug(entry.concept);
+    const clash = seen.get(slug);
+    if (clash) {
+      throw new Error(
+        `Two icon concepts share the slug "${slug}": "${clash}" and "${entry.concept}". Rename one.`,
+      );
+    }
+    seen.set(slug, entry.concept);
+  }
+}
+
+export function getIconEntry(slug: string): IconGuideEntry | undefined {
+  return iconGuide.find((e) => iconSlug(e.concept) === slug);
+}
+
+/** The rest of the concepts in the same category — what a reader compares against. */
+export function relatedIcons(entry: IconGuideEntry): IconGuideEntry[] {
+  return iconGuide.filter((e) => e.category === entry.category && e.concept !== entry.concept);
+}

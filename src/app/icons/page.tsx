@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createElement } from "react";
-import { iconGuide } from "@/lib/icon-guide";
+import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { categoryIconFor } from "@/lib/icons";
 import { categories, components } from "@/lib/registry";
 import { IconCard } from "@/components/icons/icon-card";
@@ -49,6 +49,7 @@ export default function IconsPage() {
                   <IconCard
                     key={e.concept}
                     concept={e.concept}
+                    slug={iconSlug(e.concept)}
                     meaning={e.meaning}
                     name={e.icon.displayName ?? "Icon"}
                     components={e.components.map((slug) => ({ slug, name: nameOf(slug) }))}
