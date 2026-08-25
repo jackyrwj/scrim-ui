@@ -23,7 +23,7 @@ export function InspirationCard({
   return (
     <Link
       href={`/inspiration/${entry.slug}`}
-      className="group flex h-full flex-col rounded-xl border border-(--border) bg-(--card) p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:bg-(--muted)/60"
+      className="group flex h-full flex-col rounded-xl border border-(--border) bg-(--card) p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:bg-(--muted)/60"
     >
       <div className="flex items-center justify-between">
         <span className="rounded-full border border-(--border) px-2 py-0.5 text-[11px] font-medium text-(--muted-foreground)">

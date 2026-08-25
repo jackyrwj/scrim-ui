@@ -58,8 +58,8 @@ export function ResourceCard({
   const Heading = headingLevel;
   return (
     <article
-      className={`group relative flex h-full flex-col rounded-xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:shadow-[var(--shadow-sm)] ${
-        preview ? "overflow-hidden" : "p-5"
+      className={`group relative @container flex h-full flex-col rounded-xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:shadow-[var(--shadow-sm)] ${
+        preview ? "overflow-hidden" : "p-4"
       }`}
     >
       {preview && (
@@ -74,9 +74,13 @@ export function ResourceCard({
           />
         </div>
       )}
-      <div className={`flex flex-1 flex-col ${preview ? "p-5" : ""}`}>
-        <div className="flex items-start justify-between gap-3">
-          <Heading className="flex items-center gap-2.5 font-medium leading-snug">
+      <div className={`flex flex-1 flex-col ${preview ? "p-4" : ""}`}>
+        {/* Below ~320px of card — the 4-column grid on the homepage — a name
+            competing with two badges for one row broke names mid-word
+            ("assistant-/ui"). There the badges take their own line and the
+            name gets the full width; wider cards keep them on one row. */}
+        <div className="@max-[320px]:flex-col @max-[320px]:items-start flex items-start justify-between gap-x-3 gap-y-1.5">
+          <Heading className="flex min-w-0 items-center gap-2.5 font-medium leading-snug">
             <span className="transition-transform duration-300 group-hover:scale-110">
               <BrandIcon name={entry.name} />
             </span>

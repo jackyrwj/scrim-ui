@@ -80,7 +80,7 @@ export function ComponentPreview({ slug }: { slug: string }) {
 function Stage({ children }: { children: React.ReactNode }) {
   return (
     <div className="absolute inset-0 grid place-items-center p-3">
-      <div className="w-[262px]">{children}</div>
+      <div className="cp-stage w-[262px]">{children}</div>
     </div>
   );
 }

@@ -13,6 +13,21 @@
   aspect-ratio: 12 / 5;
   background: var(--muted);
   border-bottom: 1px solid var(--border);
+  /* The stage below is a fixed 262px so every preview keeps the same optical
+     scale. In a 4-column grid the card is narrower than that, so the stage
+     has to shrink rather than be clipped — a container query keeps that
+     decision with the preview instead of tying it to a page breakpoint. */
+  container-type: inline-size;
+}
+
+.cp-stage {
+  transform-origin: center;
+}
+
+@container (max-width: 320px) {
+  .cp-stage {
+    transform: scale(0.86);
+  }
 }
 
 /* Resting motion, on the same terms as the tool cards: it runs without

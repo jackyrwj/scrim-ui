@@ -27,6 +27,8 @@ const FEATURED_ICONS = [
   "Citation",
   "Approval gate",
   "Context window",
+  "Web search",
+  "Memory",
 ];
 
 export default function Home() {
@@ -34,7 +36,7 @@ export default function Home() {
   /* Six, spread across what the directory covers: two chat-UI libraries, a
      headless kit, the component library everyone starts from, and the two
      generators people actually reach for. */
-  const featuredResources = ["Vercel AI SDK", "assistant-ui", "CopilotKit", "shadcn/ui", "v0", "Lovable"].map(
+  const featuredResources = ["Vercel AI SDK", "assistant-ui", "CopilotKit", "shadcn/ui", "v0", "Lovable", "LangChain", "Cursor"].map(
     (name) => {
       const entry = resources.find((r) => r.name === name);
       if (!entry) throw new Error(`Homepage features a resource that is no longer listed: ${name}`);
@@ -42,7 +44,7 @@ export default function Home() {
     },
   );
   const popular = published.filter((c) =>
-    ["prompt-input", "streaming-message", "user-message", "markdown-message", "tool-call", "code-execution"].includes(c.slug),
+    ["prompt-input", "streaming-message", "user-message", "markdown-message", "tool-call", "code-execution", "reasoning", "citation-ui"].includes(c.slug),
   );
   const featuredIcons = FEATURED_ICONS.map((concept) => {
     const entry = iconGuide.find((e) => e.concept === concept);
@@ -55,7 +57,7 @@ export default function Home() {
   const featuredInspiration = [
     ...inspirationEntries.filter((e) => e.kind === "case-study"),
     ...inspirationEntries.filter((e) => e.kind !== "case-study"),
-  ].slice(0, 6);
+  ].slice(0, 8);
 
   return (
     <div>
@@ -97,7 +99,7 @@ export default function Home() {
       {/* Model vendors — recognition strip: the interface layer works with
           the models a product already uses, not a proprietary lineup. */}
       <section>
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
           <div className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
             {MODEL_VENDORS.map((v) => (
               <span
@@ -117,7 +119,7 @@ export default function Home() {
 
       {/* Tools */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>
@@ -129,7 +131,7 @@ export default function Home() {
               All {publishedTools.length} tools →
             </Link>
           </div>
-          <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {featuredTools.map((tool) => (
               <div key={tool.slug} className="aos-stagger-item grid">
                 <ToolCard tool={tool} />
@@ -141,14 +143,14 @@ export default function Home() {
 
       {/* Popular components */}
       <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex items-end justify-between gap-4">
             <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
             <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               All {published.length} components →
             </Link>
           </div>
-          <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {popular.map((c) => (
               <Link
                 key={c.slug}
@@ -157,7 +159,7 @@ export default function Home() {
                 style={{ boxShadow: "var(--shadow-sm)" }}
               >
                 <ComponentPreview slug={c.slug} />
-                <div className="flex flex-1 flex-col p-5">
+                <div className="flex flex-1 flex-col p-4">
                   <div className="flex items-center justify-between">
                     <span className="font-medium group-hover:underline">{c.name}</span>
                     <div className="flex items-center gap-1.5">
@@ -189,7 +191,7 @@ export default function Home() {
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-subtle)" }}
         />
-        <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6">
+        <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Patterns</h2>
@@ -204,7 +206,7 @@ export default function Home() {
           {/* Same rendered tile as /patterns. A pattern is a layout, and the
               layout is the thing you are choosing between — a text card made
               five whole screens look interchangeable. */}
-          <StaggerChildren className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {patterns.map((p) => (
               <Link
                 key={p.slug}
@@ -213,7 +215,7 @@ export default function Home() {
                 style={{ boxShadow: "var(--shadow-sm)" }}
               >
                 <PatternPreview slug={p.slug} />
-                <div className="flex flex-1 flex-col p-5">
+                <div className="flex flex-1 flex-col p-4">
                   <span className="flex items-center gap-2">
                     {createElement(patternIconFor(p.slug), {
                       size: 15,
@@ -236,10 +238,10 @@ export default function Home() {
 
       {/* Icons */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Icons</h2>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Icons</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 One Lucide icon picked per AI concept — copy the SVG, the JSX, or the file.
               </p>
@@ -250,7 +252,7 @@ export default function Home() {
           </div>
           {/* The real card from /icons, buttons and all: an icon you cannot
               copy is just decoration, and the copy is the whole offer. */}
-          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {featuredIcons.map((e) => (
               // grid, not block: stretches the card to the row height so the
               // copy row sits on the same line across the grid.
@@ -272,10 +274,10 @@ export default function Home() {
 
       {/* Resources */}
       <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Resources</h2>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Resources</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 A curated directory of libraries, generators and guides for building AI interfaces.
               </p>
@@ -288,7 +290,7 @@ export default function Home() {
               directory cannot afford to show 102 times. The badges, the
               "why we list it" line and the separate link to the official
               site are what make the entry judgeable rather than named. */}
-          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {featuredResources.map((r) => (
               // grid, not block: stretches the card to the row height.
               <div key={r.url} className="aos-stagger-item grid">
@@ -301,10 +303,10 @@ export default function Home() {
 
       {/* Inspiration */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight">Inspiration</h2>
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Inspiration</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Product breakdowns and decision guides for AI interfaces — grounded in
                 official docs, with a live demo of each pattern you can copy.
@@ -318,7 +320,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <StaggerChildren className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {featuredInspiration.map((entry) => (
               <div key={entry.slug} className="aos-stagger-item grid">
                 <InspirationCard entry={entry} headingLevel="h3" />
@@ -334,7 +336,7 @@ export default function Home() {
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-glow)" }}
         />
-        <AnimateOnScroll className="relative mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
+        <AnimateOnScroll className="relative mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 sm:py-20">
           <h2 className="display-title text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
             Everything here is free and copy-ready
           </h2>

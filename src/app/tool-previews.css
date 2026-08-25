@@ -10,7 +10,7 @@
 .tp {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   background:
     radial-gradient(ellipse at 50% 120%, var(--primary-muted) 0%, transparent 65%),
     var(--muted);

@@ -110,8 +110,16 @@ export const tools: Tool[] = [
 
 export const publishedTools = tools.filter((t) => t.status === "published");
 
-/** The tools the homepage gallery puts forward, in array order. */
-export const featuredTools = publishedTools.filter((t) => t.featured).slice(0, 6);
+/** The tools the homepage gallery puts forward, in array order.
+ *
+ *  Flagged ones first, then topped up from the rest so the gallery always
+ *  fills whole rows — five tools in a three-column grid left a hole in the
+ *  bottom-right corner, which reads as missing content rather than as a
+ *  curated selection. */
+export const featuredTools = [
+  ...publishedTools.filter((t) => t.featured),
+  ...publishedTools.filter((t) => !t.featured),
+].slice(0, 6);
 
 export function toolHref(tool: Tool): string {
   return `/tools/${tool.slug}`;
