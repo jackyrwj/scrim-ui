@@ -19,7 +19,12 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
     const entry = getComponent(slug);
     if (!entry) return {};
     return {
-      title: `${entry.name} UI — React + Tailwind Component`,
+      /* searchTitle leads with the phrase a developer actually types; the
+         generic pattern is the fallback for entries that have not been given
+         one. The old pattern spent 26 of ~48 usable characters on
+         "React + Tailwind Component" — boilerplate repeated on all 29 pages,
+         which crowded out the words that distinguish them. */
+      title: entry.searchTitle ?? `${entry.name} UI — React + Tailwind Component`,
       description: entry.description,
     };
   });
