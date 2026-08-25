@@ -147,6 +147,30 @@ function Badge({
 }
 
 /* ------------------------------------------------------------------ */
+/* Section header — a provider label above the first row of a group.   */
+/* ------------------------------------------------------------------ */
+
+function GroupLabel({ label, font, color }: { label: string; font: number; color: string }) {
+  return (
+    <li
+      role="presentation"
+      style={{
+        margin: "8px 10px 2px",
+        fontSize: font,
+        fontWeight: 600,
+        color,
+        letterSpacing: "0.04em",
+        textTransform: "uppercase",
+        lineHeight: 1.4,
+        listStyle: "none",
+      }}
+    >
+      {label}
+    </li>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Option row — used by the dropdown panel and the command list        */
 /* ------------------------------------------------------------------ */
 
@@ -306,19 +330,26 @@ function DropdownVariant({
               padding: 4,
             }}
           >
-            {config.models.map((m) => (
-              <li key={m.id} style={{ borderRadius: config.radius, overflow: "hidden" }}>
-                <OptionRow
-                  model={m}
-                  active={m.id === selected.id}
-                  config={config}
-                  onSelect={(id) => {
-                    onSelect(id);
-                    setOpen(false);
-                  }}
-                />
-              </li>
-            ))}
+            {config.models.map((m, i) => {
+              const header =
+                m.group && (i === 0 || config.models[i - 1].group !== m.group);
+              return (
+                <React.Fragment key={m.id}>
+                  {header && <GroupLabel label={m.group!} font={s.hintFont} color={c.muted} />}
+                  <li style={{ borderRadius: config.radius, overflow: "hidden" }}>
+                    <OptionRow
+                      model={m}
+                      active={m.id === selected.id}
+                      config={config}
+                      onSelect={(id) => {
+                        onSelect(id);
+                        setOpen(false);
+                      }}
+                    />
+                  </li>
+                </React.Fragment>
+              );
+            })}
           </ul>
         </>
       )}
@@ -524,16 +555,23 @@ function CommandVariant({
             No models match “{query}”.
           </p>
         ) : (
-          matches.map((m) => (
-            <div key={m.id} style={{ borderRadius: config.radius, overflow: "hidden" }}>
-              <OptionRow
-                model={m}
-                active={m.id === config.selectedId}
-                config={config}
-                onSelect={onSelect}
-              />
-            </div>
-          ))
+          matches.map((m, i) => {
+            const header =
+              m.group && (i === 0 || matches[i - 1].group !== m.group);
+            return (
+              <React.Fragment key={m.id}>
+                {header && <GroupLabel label={m.group!} font={s.hintFont} color={c.muted} />}
+                <div style={{ borderRadius: config.radius, overflow: "hidden" }}>
+                  <OptionRow
+                    model={m}
+                    active={m.id === config.selectedId}
+                    config={config}
+                    onSelect={onSelect}
+                  />
+                </div>
+              </React.Fragment>
+            );
+          })
         )}
       </div>
     </div>

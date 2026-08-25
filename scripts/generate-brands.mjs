@@ -129,6 +129,9 @@ const COLOR_OVERRIDES = {
   // Simple Icons carries Anthropic's black wordmark; the coral is the mark
   // everyone associates with Claude.
   anthropic: "D97757",
+  // OpenAI's current wordmark is black, but the green is the colour everyone
+  // associates with ChatGPT. Recognition is the point of the mark here.
+  openai: "10A37F",
 };
 
 /**

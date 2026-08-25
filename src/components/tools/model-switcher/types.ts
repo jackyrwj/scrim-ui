@@ -14,6 +14,12 @@ export type ModelItem = {
   badge: string;
   /** Hex color for the leading dot. */
   dot: string;
+  /**
+   * Non-interactive section header above this row, e.g. a provider name.
+   * Rows sharing a group sit under one label (dropdown and command variants);
+   * omit for a flat list.
+   */
+  group?: string;
 };
 
 export type ModelSwitcherConfig = {
@@ -68,35 +74,47 @@ export const defaultConfig: ModelSwitcherConfig = {
   showDots: true,
   showCheck: true,
   triggerPrefix: "",
-  selectedId: "gpt",
+  selectedId: "gpt5",
   models: [
     {
-      id: "gpt",
+      id: "gpt5",
+      name: "GPT-5",
+      hint: "Flagship · fastest and most capable",
+      badge: "Default",
+      dot: "#10a37f",
+      group: "OpenAI",
+    },
+    {
+      id: "gpt4o",
       name: "GPT-4o",
-      hint: "OpenAI · multimodal",
+      hint: "Balanced and multimodal",
       badge: "",
       dot: "#10a37f",
+      group: "OpenAI",
     },
     {
-      id: "claude",
-      name: "Claude Sonnet 4",
-      hint: "Anthropic · long context",
+      id: "opus45",
+      name: "Claude Opus 4.5",
+      hint: "Deepest reasoning, slower",
+      badge: "Pro",
+      dot: "#d97757",
+      group: "Anthropic",
+    },
+    {
+      id: "sonnet45",
+      name: "Claude Sonnet 4.5",
+      hint: "Balanced speed and quality",
       badge: "Default",
       dot: "#d97757",
+      group: "Anthropic",
     },
     {
-      id: "gemini",
-      name: "Gemini 2.5 Pro",
-      hint: "Google · 1M token context",
+      id: "gemini3pro",
+      name: "Gemini 3 Pro",
+      hint: "Best for long context and tools",
       badge: "",
       dot: "#4285f4",
-    },
-    {
-      id: "deepseek",
-      name: "DeepSeek-V4-Pro",
-      hint: "DeepSeek · lowest cost per token",
-      badge: "Cheap",
-      dot: "#4d6bfe",
+      group: "Google",
     },
   ],
 };

@@ -138,9 +138,9 @@ const SCRIPTS: Record<SlideId, Step[]> = {
     { key: "chat-sources", dwell: 2200 },
   ],
   "model-switcher": [
-    { key: "variant-segmented", dwell: 1700 },
-    { key: "variant-pills", dwell: 1700 },
-    { key: "variant-command", dwell: 2000 },
+    { key: "variant-dropdown", dwell: 1800 },
+    { key: "variant-command", dwell: 2400 },
+    { key: "variant-pills", dwell: 1600 },
   ],
 };
 

@@ -17,7 +17,9 @@ function modelsBlock(config: ModelSwitcherConfig): string {
       const mark = resolveModelBrand(m.name);
       return `  { id: ${q(m.id)}, name: ${q(m.name)}, hint: ${q(m.hint)}, badge: ${q(
         m.badge,
-      )}, dot: ${q(m.dot)}${hasMarks ? `, mark: ${mark ? q(mark) : "null"}` : ""} },`;
+      )}, dot: ${q(m.dot)}${hasMarks ? `, mark: ${mark ? q(mark) : "null"}` : ""}${
+        m.group ? `, group: ${q(m.group)}` : ""
+      } },`;
     })
     .join("\n");
 }
@@ -31,6 +33,11 @@ function markProp(config: ModelSwitcherConfig, expr: string): string {
 function usedMarks(config: ModelSwitcherConfig): string[] {
   const keys = config.models.map((m) => resolveModelBrand(m.name)).filter((k): k is string => !!k);
   return [...new Set(keys)];
+}
+
+/** Whether any model in this config carries a provider group. */
+function usedGroups(config: ModelSwitcherConfig): boolean {
+  return config.models.some((m) => m.group);
 }
 
 function helpers(config: ModelSwitcherConfig): string {
@@ -87,6 +94,28 @@ function Dot({ color, mark }: { color: string; mark: string | null }) {
   );
 }`);
     }
+  }
+
+  if (usedGroups(config)) {
+    parts.push(`function GroupLabel({ label }: { label: string }) {
+  return (
+    <li
+      role="presentation"
+      style={{
+        margin: "8px 10px 2px",
+        fontSize: ${s.hintFont},
+        fontWeight: 600,
+        color: ${q(c.muted)},
+        letterSpacing: "0.04em",
+        textTransform: "uppercase",
+        lineHeight: 1.4,
+        listStyle: "none",
+      }}
+    >
+      {label}
+    </li>
+  );
+}`);
   }
 
   if (config.showBadges) {
@@ -330,17 +359,22 @@ ${badge}        </span>
               padding: 4,
             }}
           >
-            {MODELS.map((model) => (
-              <li key={model.id}>
-                <OptionRow
-                  model={model}
-                  active={model.id === selected.id}
-                  onSelect={(id) => {
-                    select(id);
-                    setOpen(false);
-                  }}
-                />
-              </li>
+            {MODELS.map((model, i) => (
+              <React.Fragment key={model.id}>
+                {model.group && (i === 0 || MODELS[i - 1].group !== model.group) && (
+                  <GroupLabel label={model.group} />
+                )}
+                <li>
+                  <OptionRow
+                    model={model}
+                    active={model.id === selected.id}
+                    onSelect={(id) => {
+                      select(id);
+                      setOpen(false);
+                    }}
+                  />
+                </li>
+              </React.Fragment>
             ))}
           </ul>
         </>
@@ -519,13 +553,17 @@ function commandBody(config: ModelSwitcherConfig): string {
         />
       </div>
       <div role="listbox" style={{ padding: 4 }}>
-        {matches.map((model) => (
-          <OptionRow
-            key={model.id}
-            model={model}
-            active={model.id === selectedId}
-            onSelect={select}
-          />
+        {matches.map((model, i) => (
+          <React.Fragment key={model.id}>
+            {model.group && (i === 0 || matches[i - 1].group !== model.group) && (
+              <GroupLabel label={model.group} />
+            )}
+            <OptionRow
+              model={model}
+              active={model.id === selectedId}
+              onSelect={select}
+            />
+          </React.Fragment>
         ))}
         {matches.length === 0 && (
           <p style={{ margin: 0, padding: ${s.paddingX}, fontSize: ${s.hintFont}, color: ${q(
@@ -577,6 +615,8 @@ export type ModelItem = {
   mark: string | null;`
     : ""
 }
+  /** Provider section header; rows sharing a group sit under one label. */
+  group?: string;
 };
 
 export const MODELS: ModelItem[] = [

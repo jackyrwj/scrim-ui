@@ -10,6 +10,8 @@ import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-s
 import { ToolCard } from "@/components/site/tool-card";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { HeroShowcase } from "@/components/site/hero-showcase";
+import { BrandIcon } from "@/components/brands/brand-icon";
+import { MODEL_VENDORS } from "@/lib/model-vendors";
 import { PatternPreview } from "@/components/site/pattern-preview";
 import { IconCard } from "@/components/icons/icon-card";
 import { createElement } from "react";
@@ -102,6 +104,30 @@ export default function Home() {
           </div>
 
         </div>
+      </section>
+
+      {/* Model vendors — recognition strip: the interface layer works with
+          the models a product already uses, not a proprietary lineup. */}
+      <section className="border-b border-(--border)">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+          <p className="text-center text-sm text-(--muted-foreground)">
+            Components for the models you already use
+          </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
+            {MODEL_VENDORS.map((v) => (
+              <span
+                key={v.name}
+                title={v.blurb}
+                className="flex items-center gap-2 text-(--muted-foreground)"
+              >
+                {/* Brand color, not muted — the strip is for recognition, and
+                    eight spaced marks read fine where fifty would not. */}
+                <BrandIcon name={v.name} size={18} />
+                <span className="text-sm font-medium">{v.name}</span>
+              </span>
+            ))}
+          </div>
+        </AnimateOnScroll>
       </section>
 
       {/* Tools */}
