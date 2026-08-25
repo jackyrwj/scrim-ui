@@ -144,6 +144,31 @@ body {
   text-shadow: var(--display-shadow);
 }
 
+/* The hero headline, on one line from lg up.
+   ------------------------------------------------------------------
+   Measured, not guessed: "The UI layer your AI product is missing" in
+   Geist Semibold at tracking-tight is 16.2em wide. Sizing off the
+   viewport rather than picking a fixed px means it cannot overflow at
+   any width — 5.4vw of a 1024px viewport is 55px, which needs 896px of
+   the ~976px available, and it stops growing at 3.75rem so it never
+   outruns the 1024px container.
+
+   This is coupled to the length of that sentence. A longer headline
+   needs a smaller vw figure, or it will wrap again and the nowrap will
+   push it out of the viewport instead. Below lg it wraps normally: 39
+   characters on one line on a phone would be 10px type. */
+.display-title--hero {
+  text-wrap: balance;
+}
+
+@media (min-width: 1024px) {
+  .display-title--hero {
+    white-space: nowrap;
+    font-size: min(3.75rem, 5.4vw);
+    line-height: 1.05;
+  }
+}
+
 @keyframes shimmer {
   0% { background-position: 200% center; }
   100% { background-position: -200% center; }
