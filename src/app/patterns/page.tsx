@@ -3,7 +3,7 @@ import * as path from "node:path";
 import { createElement } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { patterns, components, getComponent } from "@/lib/registry";
+import { patterns, getComponent } from "@/lib/registry";
 import { patternConfigs } from "@/showcase/patterns/registry";
 import { patternIconFor } from "@/lib/icons";
 import { PatternPreview } from "@/components/site/pattern-preview";
@@ -103,8 +103,6 @@ function PatternCard({ slug, featured }: { slug: string; featured: boolean }) {
 }
 
 export default function PatternsPage() {
-  const publishedComponents = components.filter((c) => c.status === "published").length;
-
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <header className="mx-auto max-w-2xl text-center">
@@ -117,27 +115,6 @@ export default function PatternsPage() {
           documented individually on this site.
         </p>
       </header>
-
-      {/* The distinction the page lives or dies on. Readers arrive from
-          /components and need to know in one line whether this is more of the
-          same at a bigger size, or something else. */}
-      <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-3 rounded-xl border border-(--border) bg-(--muted)/40 p-4 text-[13px] leading-5 sm:flex-row sm:items-center sm:gap-6">
-        <p className="flex-1 text-(--muted-foreground)">
-          <span className="font-medium text-(--foreground)">Component</span> — one control, like
-          the composer or a tool call.{" "}
-          {/* Underlined always, not just on hover: this link sits inside a
-              paragraph and its colour is only 1.08:1 against the surrounding
-              text, so colour alone does not mark it as a link (WCAG 1.4.1). */}
-          <Link href="/components" className="text-(--primary) underline underline-offset-2">
-            Browse {publishedComponents} &rarr;
-          </Link>
-        </p>
-        <span aria-hidden className="hidden w-px self-stretch bg-(--border) sm:block" />
-        <p className="flex-1 text-(--muted-foreground)">
-          <span className="font-medium text-(--foreground)">Pattern</span> — the screen those
-          controls live in, wired together and ready to remix.
-        </p>
-      </div>
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
         {patterns.map((p, i) => (

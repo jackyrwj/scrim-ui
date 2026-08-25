@@ -94,30 +94,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Model vendors — recognition strip: the interface layer works with
-          the models a product already uses, not a proprietary lineup. */}
-      <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-          <p className="text-center text-sm text-(--muted-foreground)">
-            Components for the models you already use
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
-            {MODEL_VENDORS.map((v) => (
-              <span
-                key={v.name}
-                title={v.blurb}
-                className="flex items-center gap-2 text-(--muted-foreground)"
-              >
-                {/* Brand color, not muted — the strip is for recognition, and
-                    eight spaced marks read fine where fifty would not. */}
-                <BrandIcon name={v.name} size={18} />
-                <span className="text-sm font-medium">{v.name}</span>
-              </span>
-            ))}
-          </div>
-        </AnimateOnScroll>
-      </section>
-
       {/* Tools */}
       <section className="bg-(--muted)/30">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
@@ -362,6 +338,28 @@ export default function Home() {
           </div>
         </AnimateOnScroll>
       </section>
+      {/* Model vendors — recognition strip moved to the bottom: the interface
+          layer works with the models a product already uses, not a proprietary
+          lineup. */}
+      <section className="border-t border-(--border)">
+        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+          <div className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
+            {MODEL_VENDORS.map((v) => (
+              <span
+                key={v.name}
+                title={v.blurb}
+                className="flex items-center gap-2 text-(--muted-foreground)"
+              >
+                {/* Brand color, not muted — the strip is for recognition, and
+                    eight spaced marks read fine where fifty would not. */}
+                <BrandIcon name={v.name} size={18} />
+                <span className="text-sm font-medium">{v.name}</span>
+              </span>
+            ))}
+          </div>
+        </AnimateOnScroll>
+      </section>
+
     </div>
   );
 }
