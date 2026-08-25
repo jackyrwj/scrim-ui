@@ -60,7 +60,7 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-(--border)">
+      <section className="relative overflow-hidden">
         <div
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-glow)" }}
