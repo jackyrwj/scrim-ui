@@ -173,9 +173,9 @@ const SCRIPTS: Record<SlideId, Step[]> = {
     { key: "chat-sources", dwell: 2200 },
   ],
   "model-switcher": [
-    { key: "variant-dropdown", dwell: 1800 },
-    { key: "variant-command", dwell: 2400 },
-    { key: "variant-pills", dwell: 1600 },
+    { key: "variant-pills", dwell: 1800 },
+    { key: "variant-dropdown", dwell: 2200 },
+    { key: "variant-command", dwell: 1800 },
   ],
   "voice-mockup": [
     { key: "voice-listening", dwell: 1800 },
@@ -207,7 +207,6 @@ export function HeroShowcase() {
   const [chat, setChat] = React.useState<ChatState>(CHAT_INITIAL);
   const [switcher, setSwitcher] = React.useState<ModelSwitcherConfig>(() => ({
     ...switcherDefaults,
-    variant: "dropdown",
     fullWidth: false,
   }));
   const [voice, setVoice] = React.useState<VoiceMockupConfig>(() => ({
@@ -259,7 +258,7 @@ export function HeroShowcase() {
 
   const resetSlide = React.useCallback((id: SlideId) => {
     if (id === "chat-mockup") setChat(CHAT_INITIAL);
-    if (id === "model-switcher") setSwitcher((c) => ({ ...c, variant: "dropdown" }));
+    if (id === "model-switcher") setSwitcher((c) => ({ ...c, variant: "pills" }));
     if (id === "voice-mockup") setVoice((c) => ({ ...c, stage: "idle" }));
   }, []);
 

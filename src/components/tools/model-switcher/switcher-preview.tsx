@@ -371,13 +371,15 @@ function SegmentedVariant({
     <div
       role="radiogroup"
       style={{
-        display: "inline-flex",
+        display: "flex",
         width: config.fullWidth ? "100%" : "auto",
+        maxWidth: "100%",
         padding: 3,
         gap: 2,
         borderRadius: config.radius + 3,
         border: `1px solid ${c.border}`,
         background: c.chip,
+        overflow: "hidden",
       }}
     >
       {config.models.map((m) => {
@@ -392,7 +394,8 @@ function SegmentedVariant({
             onClick={() => onSelect(m.id)}
             style={{
               display: "inline-flex",
-              flex: config.fullWidth ? 1 : "0 0 auto",
+              flex: config.fullWidth ? 1 : "0 1 auto",
+              minWidth: 0,
               height: s.height,
               alignItems: "center",
               justifyContent: "center",
@@ -405,6 +408,8 @@ function SegmentedVariant({
               fontSize: s.font,
               fontWeight: active ? 600 : 500,
               whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               cursor: "pointer",
               transition: "background 150ms ease, color 150ms ease",
             }}

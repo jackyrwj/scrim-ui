@@ -63,7 +63,7 @@ export const SIZE_LABELS: Record<SwitcherSize, string> = {
 };
 
 export const defaultConfig: ModelSwitcherConfig = {
-  variant: "dropdown",
+  variant: "pills",
   size: "md",
   theme: "light",
   accent: "#7c3aed",

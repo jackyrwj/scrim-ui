@@ -85,14 +85,15 @@ export default function Home() {
 
             {/* One call to action. The nav above already carries the six
                 destinations; a row of buttons repeating them only made the
-                reader choose before they had seen anything. */}
+                reader choose before they had seen anything. The hero demos
+                tools, so the button leads to the copy-ready components. */}
             <div className="mt-7 flex justify-center">
               <Link
-                href="/tools"
+                href="/components"
                 className="inline-flex h-11 items-center rounded-lg px-6 text-sm font-medium text-(--primary-foreground) transition-all hover:opacity-90 active:scale-[0.98]"
                 style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}
               >
-                Open the tools
+                Browse components
               </Link>
             </div>
           </div>
