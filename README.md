@@ -11,6 +11,8 @@ inputs, agent states, tool calls, citations, reasoning, voice and memory.
 
 [scrimui.dev](https://scrimui.dev)
 
+<img src="screenshots/demo.gif" width="480" alt="Scrim UI hero showcase cycling through the chat mockup and model switcher tools">
+
 </div>
 
 ---
@@ -20,6 +22,16 @@ products invented a whole vocabulary of interface in three years — streaming,
 tool calls, reasoning traces, approval gates, context windows, memory — and
 nobody wrote it down. This is the attempt: what each concept is called, what
 icon it gets, what it looks like, what code it is, and when to use it.
+
+## What it looks like
+
+The homepage demo is live DOM — the same components the tool pages ship — driven by a scripted cursor. Hover anywhere to take over.
+
+<img src="screenshots/hero.png" width="800" alt="Scrim UI homepage hero showing the chat mockup and model switcher tour">
+
+The [model switcher](https://scrimui.dev/tools/model-switcher) groups models by provider and regenerates the exported component as you change the props:
+
+<img src="screenshots/model-switcher.png" width="800" alt="Scrim UI model switcher tool page">
 
 ## Install a component
 
