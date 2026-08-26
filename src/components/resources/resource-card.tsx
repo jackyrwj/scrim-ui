@@ -40,6 +40,7 @@ export function ResourceCard({
   entry,
   headingLevel = "h2",
   preview,
+  showNotes = true,
 }: {
   entry: ResourceEntry;
   /** h2 on /resources, where the page h1 is the only heading above these;
@@ -53,6 +54,11 @@ export function ResourceCard({
    *  screenshots is 9.6MB of page — a directory you filter and scan is not
    *  the place to spend that. */
   preview?: string | null;
+  /** The "Why we list it" line. On by default; the homepage turns it off —
+   *  eight of them is 134 words of the same text that already carries an
+   *  <h2> on /resources/[slug], and it made the cards the tallest thing on
+   *  the page. The field itself stays: /resources searches against it. */
+  showNotes?: boolean;
 }) {
   const href = `/resources/${resourceSlug(entry.name)}`;
   const Heading = headingLevel;
@@ -103,7 +109,7 @@ export function ResourceCard({
         <p className="mt-1.5 text-sm leading-6 text-(--muted-foreground)">
           {entry.description}
         </p>
-        {entry.notes && (
+        {showNotes && entry.notes && (
           <p className="mt-2 text-sm leading-6">
             <span className="font-medium text-(--foreground)">
               Why we list it:{" "}

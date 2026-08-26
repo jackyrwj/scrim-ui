@@ -260,7 +260,6 @@ export default function Home() {
                 <IconCard
                   concept={e.concept}
                   slug={iconSlug(e.concept)}
-                  meaning={e.meaning}
                   name={e.icon.displayName ?? "Icon"}
                   components={e.components.map((slug) => ({ slug, name: componentName(slug) }))}
                 >
@@ -294,7 +293,12 @@ export default function Home() {
             {featuredResources.map((r) => (
               // grid, not block: stretches the card to the row height.
               <div key={r.url} className="aos-stagger-item grid">
-                <ResourceCard entry={r} headingLevel="h3" preview={previewPath(resourceSlug(r.name))} />
+                <ResourceCard
+                  entry={r}
+                  headingLevel="h3"
+                  preview={previewPath(resourceSlug(r.name))}
+                  showNotes={false}
+                />
               </div>
             ))}
           </StaggerChildren>

@@ -30,7 +30,10 @@ export function IconCard({
   concept: string;
   /** Passed in rather than derived here, so the card stays a dumb renderer. */
   slug: string;
-  meaning: string;
+  /** Omitted by the homepage, which shows eight cards as a teaser and leaves
+   *  the sentence to /icons and /icons/[slug] — where it is also the page's
+   *  meta description. Nothing unique to the site is lost by dropping it. */
+  meaning?: string;
   /** Lucide's export name, e.g. "Wrench". Used for the JSX snippet. */
   name: string;
   components: { slug: string; name: string }[];
@@ -106,7 +109,19 @@ export function IconCard({
               {concept}
             </Link>
           </p>
-          <p className="mt-0.5 text-xs leading-relaxed text-(--muted-foreground)">{meaning}</p>
+          {/* Two lines, always: clamped so one long meaning cannot set the
+              row's height, and reserved so the component tags below start at
+              the same y in every card — a clamp alone still lets a short
+              meaning ride up and knock the tag row out of line.
+
+              CSS clipping, not a truncated string: the full text stays in the
+              markup, so this costs nothing at /icons/[slug], where the same
+              sentence is the page's meta description. */}
+          {meaning && (
+            <p className="mt-0.5 line-clamp-2 min-h-[2lh] text-xs leading-relaxed text-(--muted-foreground)">
+              {meaning}
+            </p>
+          )}
         </div>
         {/* Full foreground, not muted: --muted-foreground on --muted measures
             4.39:1, under the 4.5:1 floor. It is also the name you copy, so it
