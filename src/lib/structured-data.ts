@@ -1,5 +1,5 @@
 import { SITE_URL } from "./site";
-import type { ComponentEntry } from "./registry";
+import { displayName, type ComponentEntry } from "./registry";
 import type { InspirationEntry } from "./inspiration";
 
 /**
@@ -24,7 +24,7 @@ export function componentSchema(entry: ComponentEntry) {
     "@context": "https://schema.org",
     "@type": "SoftwareSourceCode",
     "@id": `${url}#code`,
-    name: `${entry.name} UI`,
+    name: displayName(entry),
     description: entry.description,
     url,
     /* The copyable file is TypeScript for React, styled with Tailwind. */

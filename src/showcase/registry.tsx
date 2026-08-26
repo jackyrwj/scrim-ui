@@ -10,6 +10,7 @@ import { reasoningStepsPageConfig } from "./reasoning-steps/page-config";
 import { contextFilesPageConfig } from "./context-files/page-config";
 import { codeExecutionPageConfig } from "./code-execution/page-config";
 import { toolCallPageConfig } from "./tool-call/page-config";
+import { generativeUiPageConfig } from "./generative-ui/page-config";
 import { reasoningPageConfig } from "./reasoning/page-config";
 import { sourceCardPageConfig } from "./source-card/page-config";
 import { citationUiPageConfig } from "./citation-ui/page-config";
@@ -46,6 +47,7 @@ export const pageConfigs: Record<string, ComponentPageConfig> = {
   "context-files": contextFilesPageConfig,
   "code-execution": codeExecutionPageConfig,
   "tool-call": toolCallPageConfig,
+  "generative-ui": generativeUiPageConfig,
   reasoning: reasoningPageConfig,
   "source-card": sourceCardPageConfig,
   "citation-ui": citationUiPageConfig,

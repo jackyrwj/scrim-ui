@@ -37,6 +37,7 @@ const previews: Record<string, () => React.ReactElement> = {
   "reasoning-steps": ReasoningStepsPreview,
   /* Tool Calls */
   "tool-call": ToolCallPreview,
+  "generative-ui": GenerativeUiPreview,
   "search-tool-call": SearchToolCallPreview,
   "code-execution": CodeExecutionPreview,
   /* Sources & Citations */
@@ -218,6 +219,38 @@ function ToolCallPreview() {
         <div className="space-y-1 border-t border-(--border) bg-(--muted) px-2.5 py-2">
           <div className="h-1 w-[86%] rounded-full bg-(--border)" />
           <div className="h-1 w-[62%] rounded-full bg-(--border)" />
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- generative-ui: the widget on top, attribution underneath ------ */
+function GenerativeUiPreview() {
+  return (
+    <Stage>
+      <Panel className="overflow-hidden">
+        {/* A card, not text lines: the whole point of the component is that
+            the model's answer arrives as product UI. Lines here would make
+            the tile indistinguishable from the message previews. */}
+        <div className="flex items-center gap-2 px-2.5 py-2.5">
+          <span
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg text-white"
+            style={{ background: "linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary), black 25%))" }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" width="13" height="13">
+              <path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.6 1.5A3.75 3.75 0 0 0 6.5 19Z" />
+            </svg>
+          </span>
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="text-[13px] font-semibold leading-none tabular-nums text-(--foreground)">29°</div>
+            <Line w="64%" />
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5 border-t border-(--border) bg-(--muted) px-2.5 py-1.5">
+          <span className="text-[9px]" style={{ color: "var(--primary)" }}>✦</span>
+          <span className="font-mono text-[9px] text-(--muted-foreground)">getWeather</span>
+          <span className="ml-auto text-[9px] text-(--muted-foreground)">Data ▾</span>
         </div>
       </Panel>
     </Stage>

@@ -242,6 +242,18 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Generative UI",
+    slug: "generative-ui",
+    category: "tool-calls",
+    searchTitle: "Generative UI — Render React from a Tool Call",
+    description:
+      "Render a React component from a tool result instead of text — a skeleton in the widget's own shape, and a text fallback when the client has no renderer.",
+    frameworks: ["react", "tailwind"],
+    variants: ["streaming", "ready", "unsupported"],
+    tags: ["generative ui", "tool", "streaming", "widget"],
+    status: "published",
+  },
+  {
     name: "Source Card",
     slug: "source-card",
     category: "sources",
@@ -478,6 +490,17 @@ export function getComponent(slug: string) {
 
 export function getPattern(slug: string) {
   return patterns.find((p) => p.slug === slug);
+}
+
+/**
+ * The page heading and the structured-data name: "Tool Call" reads as a
+ * component, "Tool Call UI" reads as the page about it. Guarded because three
+ * entries already carry the word — "Citation UI" was rendering as
+ * "Citation UI UI" — and a component named after the pattern should not be
+ * renamed just to satisfy a suffix.
+ */
+export function displayName(entry: ComponentEntry) {
+  return /\bUI$/.test(entry.name) ? entry.name : `${entry.name} UI`;
 }
 
 export function getRelated(entry: ComponentEntry, limit = 4) {

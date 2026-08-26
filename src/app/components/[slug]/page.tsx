@@ -3,7 +3,7 @@ import * as path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { components, getComponent, getRelated } from "@/lib/registry";
+import { components, displayName, getComponent, getRelated } from "@/lib/registry";
 import { pageConfigs } from "@/showcase/registry";
 import { CodeBlock } from "@/components/component-page/code-block";
 import { ComponentExplorer } from "@/components/component-page/explorer";
@@ -22,9 +22,9 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
       /* searchTitle leads with the phrase a developer actually types; the
          generic pattern is the fallback for entries that have not been given
          one. The old pattern spent 26 of ~48 usable characters on
-         "React + Tailwind Component" — boilerplate repeated on all 29 pages,
+         "React + Tailwind Component" — boilerplate repeated on every page,
          which crowded out the words that distinguish them. */
-      title: entry.searchTitle ?? `${entry.name} UI — React + Tailwind Component`,
+      title: entry.searchTitle ?? `${displayName(entry)} — React + Tailwind Component`,
       description: entry.description,
     };
   });
@@ -57,7 +57,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         <span className="mx-2">/</span>
         <span className="text-(--foreground)">{entry.name}</span>
       </nav>
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name} UI</h1>
+      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{displayName(entry)}</h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{entry.description}</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {entry.tags.map((t) => (
