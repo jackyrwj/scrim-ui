@@ -33,9 +33,20 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# ...but an .env.example holds no secrets and is the only place the required
+# keys are written down. The rule above matches at every depth, so both the
+# site's and each template's need naming: without the negations the site loses
+# its setup documentation and the template page lists a file the deploy for it
+# does not have.
+!.env.example
+!templates/*/.env.example
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Assembled by scripts/build-demo.mjs — never committed.
+.demo-build/
