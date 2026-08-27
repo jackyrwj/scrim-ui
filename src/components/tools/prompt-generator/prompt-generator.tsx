@@ -121,7 +121,7 @@ export function PromptGenerator() {
                 <input
                   value={config.model}
                   onChange={(e) => setConfig({ ...config, model: e.target.value })}
-                  placeholder="e.g. Claude Sonnet 4.5"
+                  placeholder="e.g. Claude Sonnet 5"
                   className={inputCls}
                 />
               </Field>

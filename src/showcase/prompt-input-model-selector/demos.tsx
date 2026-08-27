@@ -44,8 +44,8 @@ export function DemoManyModels() {
     <PromptInputModelSelector
       models={[
         ...withModelIcons([
-          { id: "gpt-5", name: "GPT-5", badges: ["Fast"], description: "Broad tooling support." },
-          { id: "gemini-3", name: "Gemini 3", badges: ["Long context"], description: "Very large context window." },
+          { id: "gpt-5.6", name: "GPT-5.6 Sol", badges: ["Fast"], description: "Broad tooling support." },
+          { id: "gemini-3.1", name: "Gemini 3.1 Pro", badges: ["Long context"], description: "Very large context window." },
           { id: "llama-4", name: "Llama 4", badges: ["Open"], description: "Self-hostable open weights." },
           { id: "deepseek-v4", name: "DeepSeek V4", badges: ["Cheap"], description: "Lowest cost per token." },
         ]),

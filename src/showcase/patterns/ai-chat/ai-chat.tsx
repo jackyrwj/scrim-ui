@@ -16,9 +16,9 @@ type Turn = {
 };
 
 const MODELS = [
-  { id: "sonnet", name: "Claude Sonnet", hint: "Balanced", icon: <ClaudeMark /> },
-  { id: "opus", name: "Claude Opus", hint: "Reasoning", icon: <ClaudeMark /> },
-  { id: "haiku", name: "Claude Haiku", hint: "Fast", icon: <ClaudeMark /> },
+  { id: "sonnet", name: "Claude Sonnet 5", hint: "Balanced", icon: <ClaudeMark /> },
+  { id: "opus", name: "Claude Opus 5", hint: "Reasoning", icon: <ClaudeMark /> },
+  { id: "haiku", name: "Claude Haiku 4.5", hint: "Fast", icon: <ClaudeMark /> },
 ];
 
 const SOURCES: Citation[] = [
@@ -153,7 +153,7 @@ export function AIChatPattern() {
           )}
         </nav>
         <div className="border-t border-zinc-200 p-3 text-xs text-zinc-500 dark:text-zinc-400 dark:border-zinc-800">
-          <div className="mb-1 font-medium text-zinc-500 dark:text-zinc-400">Claude Sonnet</div>
+          <div className="mb-1 font-medium text-zinc-500 dark:text-zinc-400">Claude Sonnet 5</div>
           <div className="flex items-center gap-1">
             <SearchIcon />
             Search &amp; web browsing enabled

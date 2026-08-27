@@ -36,6 +36,9 @@ import {
   Quote,
   RefreshCw,
   ShieldCheck,
+  ShieldX,
+  Flag,
+  BadgeQuestionMark,
   SquareTerminal,
   TextCursor,
   TextCursorInput,
@@ -308,6 +311,28 @@ export const iconGuide: IconGuideEntry[] = [
     icon: Hash,
     category: "model-settings",
     components: [],
+  },
+  /* safety */
+  {
+    concept: "Refusal",
+    meaning: "The assistant declining a request, with the redirect still on the table",
+    icon: ShieldX,
+    category: "safety",
+    components: ["refusal-message"],
+  },
+  {
+    concept: "Moderation flag",
+    meaning: "The content filter interrupting a prompt or a stream",
+    icon: Flag,
+    category: "safety",
+    components: ["moderation-flag"],
+  },
+  {
+    concept: "Confidence",
+    meaning: "How sure the answer is, flagged where the claim is made",
+    icon: BadgeQuestionMark,
+    category: "safety",
+    components: ["confidence-answer"],
   },
 ];
 

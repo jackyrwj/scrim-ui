@@ -13,7 +13,7 @@ const A: Candidate = {
 
 const B: Candidate = {
   id: "cand_b",
-  model: "gpt-5.2",
+  model: "gpt-5.6-terra",
   text: "This is a common issue with RAG pipelines. There are several possible causes:\n\n1. Chunking strategy — your chunks may be too large or too small.\n2. Embedding quality — consider a different embedding model.\n3. Retrieval parameters — try adjusting top-k or the similarity threshold.\n4. Re-ranking — a cross-encoder re-ranker often improves paragraph-level precision.\n\nI would start by inspecting the retrieved chunks directly to confirm which stage is at fault, then tune from there.",
 };
 

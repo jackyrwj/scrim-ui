@@ -90,8 +90,8 @@ const brandLookup: Record<string, string> = {
   "daisyui": "daisyui",
   "deepseek": "deepseek",
   "deepseekapidocs": "deepseek",
-  "deepseekr1": "deepseek",
-  "deepseekv3": "deepseek",
+  "deepseekv4": "deepseek",
+  "deepseekv4pro": "deepseek",
   "dify": "dify",
   "dovetail": "dovetail",
   "excalidraw": "excalidraw",
@@ -193,7 +193,7 @@ const modelPrefixes: [string, string][] = [
 
 /**
  * Resolve a MODEL name to a brandData key, e.g. "Claude Opus 5" -> "anthropic",
- * "GPT-4o" -> "openai". Falls back to the plain brand lookup first, so an exact
+ * "GPT-5.6 Sol" -> "openai". Falls back to the plain brand lookup first, so an exact
  * provider name still works.
  */
 export function resolveModelBrand(name: string): string | undefined {

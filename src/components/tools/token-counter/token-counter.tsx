@@ -143,8 +143,8 @@ export function TokenCounter() {
           <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
             <p className="max-w-md text-xs leading-5 text-(--muted-foreground)">
               {encoderState === "ready"
-                ? "GPT-4o family counts come from the real o200k_base tokenizer. Claude, Gemini and DeepSeek have no public tokenizer, so those rows are scaled from it."
-                : "Approximate counts using word-based heuristics. Load the real tokenizer for exact GPT-4o family counts."}
+                ? "GPT-5.6 family counts come from the real o200k_base tokenizer. Claude, Gemini and DeepSeek have no public tokenizer, so those rows are scaled from it."
+                : "Approximate counts using word-based heuristics. Load the real tokenizer for exact GPT-5.6 family counts."}
             </p>
             {encoderState !== "ready" && (
               <button

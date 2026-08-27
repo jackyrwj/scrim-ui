@@ -99,7 +99,7 @@ export function BrandIcon({
 }
 
 /**
- * Provider mark for a MODEL name — "Claude Opus 5", "GPT-4o", "Gemini 3".
+ * Provider mark for a MODEL name — "Claude Opus 5", "GPT-5.6 Sol", "Gemini 3.1 Pro".
  * Resolves through the model-prefix table rather than the exact brand lookup.
  *
  * Renders nothing for a name we can't place, because model lists are often

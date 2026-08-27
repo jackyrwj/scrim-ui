@@ -1,20 +1,20 @@
 import type { ModelInfo, TextStats, ModelEstimate } from "./types";
 
 export const MODEL_PRICING: ModelInfo[] = [
-  { name: "GPT-4o", family: "OpenAI", inputPrice: 2.5, outputPrice: 10, multiplier: 1.33, tokenizer: "o200k_base", ratioToO200k: 1 },
-  { name: "GPT-4o mini", family: "OpenAI", inputPrice: 0.15, outputPrice: 0.6, multiplier: 1.33, tokenizer: "o200k_base", ratioToO200k: 1 },
-  { name: "o3-mini", family: "OpenAI", inputPrice: 1.1, outputPrice: 4.4, multiplier: 1.33, tokenizer: "o200k_base", ratioToO200k: 1 },
-  { name: "Claude Sonnet 4", family: "Anthropic", inputPrice: 3, outputPrice: 15, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
-  { name: "Claude Haiku 3.5", family: "Anthropic", inputPrice: 0.8, outputPrice: 4, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
-  { name: "Claude Opus 4", family: "Anthropic", inputPrice: 15, outputPrice: 75, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
-  { name: "Gemini 2.5 Flash", family: "Google", inputPrice: 0.15, outputPrice: 0.6, multiplier: 1.4, tokenizer: null, ratioToO200k: 1.05 },
-  { name: "Gemini 2.5 Pro", family: "Google", inputPrice: 1.25, outputPrice: 10, multiplier: 1.4, tokenizer: null, ratioToO200k: 1.05 },
-  { name: "DeepSeek-V4-Flash", family: "DeepSeek", inputPrice: 0.44, outputPrice: 1.32, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.1 },
-  { name: "DeepSeek-V4-Pro", family: "DeepSeek", inputPrice: 1.32, outputPrice: 3.96, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.1 },
+  { name: "GPT-5.6 Sol", family: "OpenAI", inputPrice: 2, outputPrice: 10, multiplier: 1.33, tokenizer: "o200k_base", ratioToO200k: 1 },
+  { name: "GPT-5.6 Terra", family: "OpenAI", inputPrice: 2, outputPrice: 12, multiplier: 1.33, tokenizer: "o200k_base", ratioToO200k: 1 },
+  { name: "GPT-5.6 Luna", family: "OpenAI", inputPrice: 0.2, outputPrice: 1.2, multiplier: 1.33, tokenizer: "o200k_base", ratioToO200k: 1 },
+  { name: "Claude Fable 5", family: "Anthropic", inputPrice: 10, outputPrice: 50, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
+  { name: "Claude Sonnet 5", family: "Anthropic", inputPrice: 2, outputPrice: 10, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
+  { name: "Claude Haiku 4.5", family: "Anthropic", inputPrice: 1, outputPrice: 5, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.15 },
+  { name: "Gemini 3.1 Pro", family: "Google", inputPrice: 2, outputPrice: 12, multiplier: 1.4, tokenizer: null, ratioToO200k: 1.05 },
+  { name: "Gemini 3.7 Flash", family: "Google", inputPrice: 0.75, outputPrice: 3.75, multiplier: 1.4, tokenizer: null, ratioToO200k: 1.05 },
+  { name: "DeepSeek-V4-Flash", family: "DeepSeek", inputPrice: 0.13, outputPrice: 0.26, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.1 },
+  { name: "DeepSeek-V4-Pro", family: "DeepSeek", inputPrice: 1.74, outputPrice: 3.48, multiplier: 1.35, tokenizer: null, ratioToO200k: 1.1 },
 ];
 
 /* ------------------------------------------------------------------ */
-/* Real tokenizer — o200k_base, the encoding the GPT-4o family uses.   */
+/* Real tokenizer — o200k_base, the encoding the GPT family uses.      */
 /* Loaded on demand: the rank table is a few megabytes, so nobody pays */
 /* for it until they ask for an exact count.                           */
 /* ------------------------------------------------------------------ */

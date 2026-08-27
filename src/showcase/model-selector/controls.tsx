@@ -9,9 +9,9 @@ import type { ComponentControls, ControlValues } from "@/lib/component-controls"
  * preview exercises the provider-mark resolution; unrecognized names simply
  * render with no mark. */
 const MODELS = [
-  "claude | Claude Sonnet 4 | Balanced speed and reasoning | Default",
-  "gpt | GPT-4o | Multimodal, fast | Popular",
-  "gemini | Gemini 2.5 Pro | 1M token context |",
+  "claude | Claude Sonnet 5 | Balanced speed and reasoning | Default",
+  "gpt | GPT-5.6 Sol | Multimodal, fast | Popular",
+  "gemini | Gemini 3.1 Pro | 1M token context |",
   "deepseek | DeepSeek-V4-Pro | Lowest cost per token | Cheap",
 ].join("\n");
 

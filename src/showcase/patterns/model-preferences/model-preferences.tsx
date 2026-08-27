@@ -14,9 +14,9 @@ import { MemoryList, type MemoryItem } from "../../memory-list/memory-list";
 /* ------------------------------------------------------------------ */
 
 const MODELS: ModelOption[] = [
-  { id: "sonnet", name: "Claude Sonnet", hint: "Balanced speed and quality", badges: ["Default"], icon: <ClaudeMark /> },
-  { id: "opus", name: "Claude Opus", hint: "Best for hard problems", badges: ["Deep thinking"], icon: <ClaudeMark /> },
-  { id: "haiku", name: "Claude Haiku", hint: "Fastest responses", badges: ["Fast"], icon: <ClaudeMark /> },
+  { id: "sonnet", name: "Claude Sonnet 5", hint: "Balanced speed and quality", badges: ["Default"], icon: <ClaudeMark /> },
+  { id: "opus", name: "Claude Opus 5", hint: "Best for hard problems", badges: ["Deep thinking"], icon: <ClaudeMark /> },
+  { id: "haiku", name: "Claude Haiku 4.5", hint: "Fastest responses", badges: ["Fast"], icon: <ClaudeMark /> },
 ];
 
 function initTools(): ToolSetting[] {

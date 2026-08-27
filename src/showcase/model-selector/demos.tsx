@@ -10,19 +10,19 @@ import { ModelSelector, type ModelOption } from "./model-selector";
 const models: ModelOption[] = withModelIcons([
   {
     id: "claude",
-    name: "Claude Sonnet 4",
+    name: "Claude Sonnet 5",
     hint: "Balanced speed and reasoning",
     badges: ["Default"],
   },
   {
     id: "gpt",
-    name: "GPT-4o",
+    name: "GPT-5.6 Sol",
     hint: "Multimodal, fast",
     badges: ["Popular"],
   },
   {
     id: "gemini",
-    name: "Gemini 2.5 Pro",
+    name: "Gemini 3.1 Pro",
     hint: "1M token context",
     badges: [],
   },

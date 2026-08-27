@@ -109,8 +109,8 @@ const ALIASES = {
   "grok": "grok",
   "xai": "grok",
   "deepseek api docs": "deepseek",
-  "deepseek-r1": "deepseek",
-  "deepseek-v3": "deepseek",
+  "deepseek-v4": "deepseek",
+  "deepseek-v4-pro": "deepseek",
   "llama": "meta",
   "qwen": "qwen",
   "tongyi qianwen": "qwen",
@@ -171,7 +171,7 @@ function appearances(hex) {
 
 /**
  * Model name -> brand. Product names carry a version ("Claude Opus 5",
- * "Gemini 3", "GPT-4o"), so the exact-match lookup used for brand names cannot
+ * "Gemini 3.1 Pro", "GPT-5.6 Sol"), so the exact-match lookup used for brand names cannot
  * resolve them; these match on a leading token instead. Longest prefix wins, so
  * a more specific entry can override a shorter one.
  */
@@ -277,7 +277,7 @@ ${Object.entries(MODEL_PREFIXES)
 
 /**
  * Resolve a MODEL name to a brandData key, e.g. "Claude Opus 5" -> "anthropic",
- * "GPT-4o" -> "openai". Falls back to the plain brand lookup first, so an exact
+ * "GPT-5.6 Sol" -> "openai". Falls back to the plain brand lookup first, so an exact
  * provider name still works.
  */
 export function resolveModelBrand(name: string): string | undefined {

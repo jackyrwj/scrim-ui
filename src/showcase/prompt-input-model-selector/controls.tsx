@@ -14,8 +14,8 @@ const CLAUDE = [
 
 const MANY = [
   CLAUDE,
-  "gpt-5 | GPT-5 | Fast | Broad tooling support.",
-  "gemini-3 | Gemini 3 | Long context | Very large context window.",
+  "gpt-5.6 | GPT-5.6 Sol | Fast | Broad tooling support.",
+  "gemini-3.1 | Gemini 3.1 Pro | Long context | Very large context window.",
   "llama-4 | Llama 4 | Open | Self-hostable open weights.",
   "deepseek-v4 | DeepSeek V4 | Cheap | Lowest cost per token.",
 ].join("\n");

@@ -58,7 +58,7 @@ export const tools: Tool[] = [
     slug: "token-counter",
     name: "Prompt Token Counter",
     description:
-      "Paste text and see estimated token counts and API costs for GPT-4o, Claude, Gemini, DeepSeek and more. All counting runs locally.",
+      "Paste text and see estimated token counts and API costs for GPT-5.6, Claude, Gemini, DeepSeek and more. All counting runs locally.",
     tagline: "Estimated token counts and API costs for GPT, Claude, Gemini and DeepSeek",
     status: "published",
     featured: true,

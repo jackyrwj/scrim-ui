@@ -48,7 +48,7 @@ export function createMessage(role: MockupRole, text = ""): MockupMessage {
 export const defaultConfig: MockupConfig = {
   title: "Acme Assistant",
   subtitle: "AI research assistant",
-  modelName: "Claude Sonnet",
+  modelName: "Claude Sonnet 5",
   device: "desktop",
   theme: "light",
   streaming: false,

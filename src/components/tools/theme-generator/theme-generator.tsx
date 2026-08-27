@@ -32,8 +32,8 @@ function ChatPreview({ scheme }: { scheme: ColorScheme }) {
           className="ml-auto inline-flex items-center gap-1.5 text-xs"
           style={{ color: scheme.mutedText }}
         >
-          <ModelIcon name="GPT-4o" size={11} tone="current" />
-          GPT-4o
+          <ModelIcon name="GPT-5.6 Sol" size={11} tone="current" />
+          GPT-5.6
         </span>
       </div>
 

@@ -34,7 +34,7 @@ export function DemoSuccess() {
       duration="1.2s"
       defaultOpen
       input={`{\n  "query": "latest AI model releases 2026"\n}`}
-      output={`{\n  "results": 12,\n  "top": [\n    "Claude Opus 5 launched with ...",\n    "Google previews Gemini 3 ..."\n  ]\n}`}
+      output={`{\n  "results": 12,\n  "top": [\n    "Claude Opus 5 launched with ...",\n    "Google ships Gemini 3.7 Flash ..."\n  ]\n}`}
     />
   );
 }

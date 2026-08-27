@@ -9,12 +9,12 @@
  * tooltip on the strip.
  */
 export const MODEL_VENDORS = [
-  { name: "OpenAI", blurb: "GPT-5 · GPT-4o · o3" },
-  { name: "Anthropic", blurb: "Claude Opus · Sonnet · Haiku" },
-  { name: "Google", blurb: "Gemini 3 Pro · Flash" },
-  { name: "Meta", blurb: "Llama · open weights" },
-  { name: "Mistral", blurb: "Large · Small" },
-  { name: "DeepSeek", blurb: "V3 · R1 · open weights" },
-  { name: "Grok", blurb: "Grok 4" },
-  { name: "Qwen", blurb: "Qwen3 · multilingual" },
+  { name: "OpenAI", blurb: "GPT-5.6 · Sol · Terra · Luna" },
+  { name: "Anthropic", blurb: "Claude Fable 5 · Opus 5 · Sonnet 5 · Haiku" },
+  { name: "Google", blurb: "Gemini 3.1 Pro · 3.7 Flash" },
+  { name: "Meta", blurb: "Llama 4 · open weights" },
+  { name: "Mistral", blurb: "Large 3 · Medium 3.5" },
+  { name: "DeepSeek", blurb: "V4 Pro · V4 Flash · open weights" },
+  { name: "Grok", blurb: "Grok 4.6" },
+  { name: "Qwen", blurb: "Qwen 3.8 · multilingual" },
 ];

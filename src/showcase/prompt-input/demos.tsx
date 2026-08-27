@@ -5,10 +5,10 @@ import { PromptInput, type Attachment } from "./prompt-input";
 import { withModelIcons } from "@/components/brands/brand-icon";
 
 const demoModels = withModelIcons([
-  { id: "gpt-5", name: "GPT-5", hint: "Fast" },
-  { id: "claude-sonnet", name: "Claude Sonnet", hint: "Balanced" },
-  { id: "claude-opus", name: "Claude Opus", hint: "Reasoning" },
-  { id: "gemini-pro", name: "Gemini Pro", hint: "Long context" },
+  { id: "gpt-5.6", name: "GPT-5.6 Sol", hint: "Fast" },
+  { id: "claude-sonnet", name: "Claude Sonnet 5", hint: "Balanced" },
+  { id: "claude-opus", name: "Claude Opus 5", hint: "Reasoning" },
+  { id: "gemini-pro", name: "Gemini 3.1 Pro", hint: "Long context" },
 ]);
 
 export function DemoDefault() {
