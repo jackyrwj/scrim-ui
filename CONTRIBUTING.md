@@ -76,10 +76,18 @@ every component using that concept changes with it.
 npx tsc --noEmit
 npm run lint
 node scripts/contrast.mjs     # if you touched globals.css
+npm run content-dates         # if you added or changed content
 npm run build
 ```
 
-All four have to pass. The build is the real check — it prerenders 253 routes
+`content-dates` reads git history for the real date each
+page's source last changed and writes `src/lib/content-dates.json`, which the
+sitemap serves as `lastmod`. It runs here rather than at build time because
+Vercel clones shallowly and would report one commit date for every file. Skip
+it and new pages fall back to the build date — correct, but coarse; commit the
+regenerated JSON with your change.
+
+All of the above have to pass. The build is the real check — it prerenders 253 routes
 including every OG card and registry entry, and it is where a stray import in a
 showcase component gets caught.
 
