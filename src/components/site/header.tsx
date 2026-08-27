@@ -7,19 +7,26 @@ import { components, patterns } from "@/lib/registry";
 import { resources } from "@/lib/resources";
 import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
+import { publishedTemplates } from "@/lib/templates";
 import { SITE_REPO } from "@/lib/site";
 
 const navItems = [
   { href: "/tools", label: "Tools" },
   { href: "/components", label: "Components" },
   { href: "/patterns", label: "Patterns" },
+  { href: "/templates", label: "Templates" },
   { href: "/icons", label: "Icons" },
   { href: "/resources", label: "Resources" },
   { href: "/inspiration", label: "Inspiration" },
+  { href: "/pro", label: "Pro" },
 ];
 
 function buildSearchItems() {
-  const items: { title: string; href: string; type: "Component" | "Pattern" | "Resource" | "Inspiration" | "Tool"; description?: string }[] = [];
+  const items: { title: string; href: string; type: "Component" | "Pattern" | "Resource" | "Inspiration" | "Tool" | "Template"; description?: string }[] = [];
+
+  for (const t of publishedTemplates) {
+    items.push({ title: `${t.name} Template`, href: `/templates/${t.slug}`, type: "Template", description: t.description });
+  }
 
   for (const c of components.filter((c) => c.status === "published")) {
     items.push({ title: c.name, href: `/components/${c.slug}`, type: "Component", description: c.description });

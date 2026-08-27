@@ -7,7 +7,7 @@ import { trackEvent } from "@/lib/analytics";
 type SearchItem = {
   title: string;
   href: string;
-  type: "Component" | "Pattern" | "Resource" | "Inspiration" | "Tool";
+  type: "Component" | "Pattern" | "Resource" | "Inspiration" | "Tool" | "Template";
   description?: string;
 };
 

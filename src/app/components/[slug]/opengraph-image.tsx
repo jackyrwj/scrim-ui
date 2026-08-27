@@ -22,6 +22,11 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         eyebrow={getCategory(entry?.category ?? "")?.name ?? "Component"}
         title={entry?.name ?? "Component"}
         description={entry?.description}
+        /* Correct today by default — there are no Pro components yet — but
+           the day one ships, its card must not go out saying "Free". */
+        tagline={
+          entry?.tier === "pro" ? "Pro · full source · one-time" : "Free · copy-ready · no signup"
+        }
       />
     ),
     size,

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { components, categories } from "@/lib/registry";
 import { categoryIconFor, iconFor } from "@/lib/icons";
 import { ComponentPreview } from "@/components/site/component-preview";
+import { ProBadge } from "@/components/pro/pro-badge";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -34,12 +35,14 @@ function ComponentCard({
   description,
   variants,
   published: isPublished,
+  pro,
 }: {
   slug: string;
   name: string;
   description: string;
   variants: number;
   published: boolean;
+  pro: boolean;
 }) {
   const body = (
     <>
@@ -58,7 +61,12 @@ function ComponentCard({
               "shrink-0 text-(--muted-foreground) transition-colors group-hover:text-(--primary)",
           })}
           <span className="truncate text-sm font-medium group-hover:underline">{name}</span>
-          {isPublished ? (
+          {/* Pro outranks the variant count for the same corner: one tells the
+              reader whether they can use this at all, the other is a detail
+              they will see on the page anyway. */}
+          {isPublished && pro ? (
+            <ProBadge className="ml-auto" />
+          ) : isPublished ? (
             variants > 1 && (
               <span className="ml-auto shrink-0 rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
                 {variants} variants
@@ -96,8 +104,8 @@ function ComponentCard({
 export default function ComponentsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <header className="mx-auto max-w-2xl text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+      <header className="max-w-2xl">
+        <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           {published()} AI UI Components
         </h1>
         <p className="mt-3 text-lg text-(--muted-foreground)">
@@ -109,7 +117,7 @@ export default function ComponentsPage() {
       {/* Category jump bar. The page is ten screens of cards now rather than
           two of names, so the categories that used to be section labels also
           have to work as navigation. */}
-      <nav aria-label="Jump to category" className="mt-10 flex flex-wrap justify-center gap-2">
+      <nav aria-label="Jump to category" className="mt-10 flex flex-wrap gap-2">
         {categories.map((cat) => {
           const count = components.filter((c) => c.category === cat.slug).length;
           if (count === 0) return null;
@@ -170,6 +178,7 @@ export default function ComponentsPage() {
                     description={c.description}
                     variants={c.variants.length}
                     published={c.status === "published"}
+                    pro={c.tier === "pro"}
                   />
                 ))}
               </div>

@@ -7,8 +7,12 @@ import { components, displayName, getComponent, getRelated } from "@/lib/registr
 import { pageConfigs } from "@/showcase/registry";
 import { CodeBlock } from "@/components/component-page/code-block";
 import { ComponentExplorer } from "@/components/component-page/explorer";
+import { InstallCommand } from "@/components/component-page/install-command";
 import { JsonLd } from "@/components/site/json-ld";
+import { ProBadge } from "@/components/pro/pro-badge";
+import { ProSource } from "@/components/pro/pro-source";
 import { componentSchema } from "@/lib/structured-data";
+import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return components.filter((c) => c.status === "published").map((c) => ({ slug: c.slug }));
@@ -38,14 +42,32 @@ function readShowcaseSource(slug: string, file: string): string {
   }
 }
 
+/** How long a Pro component's file is, without putting the file itself on the
+ *  page. The lock quotes this; the code arrives from /api/pro/source. */
+function sourceLineCount(slug: string, file: string): number {
+  try {
+    return fs.readFileSync(path.join(process.cwd(), "src", "showcase", slug, file), "utf8").split("\n").length;
+  } catch {
+    return 0;
+  }
+}
+
 export default async function ComponentPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const entry = getComponent(slug);
   const config = pageConfigs[slug];
   if (!entry || entry.status !== "published" || !config) notFound();
 
-  const source = readShowcaseSource(slug, config.sourceFile);
+  /* Read only for free components. A Pro file must not be read into this
+     render at all: everything a server component touches and passes down
+     ends up in the RSC payload of a public page. */
+  const pro = entry.tier === "pro";
+  const source = pro ? null : readShowcaseSource(slug, config.sourceFile);
   const related = getRelated(entry);
+  /* Free items are prerendered flat files under /r; Pro items are served by
+     the key-checked route instead, so the two never share a URL. */
+  const registryUrl = `${SITE_URL}/r/${entry.slug}.json`;
+  const proRegistryUrl = `${SITE_URL}/r/pro/${entry.slug}.json`;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
@@ -57,7 +79,10 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         <span className="mx-2">/</span>
         <span className="text-(--foreground)">{entry.name}</span>
       </nav>
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{displayName(entry)}</h1>
+      <h1 className="flex flex-wrap items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+        {displayName(entry)}
+        {pro && <ProBadge className="translate-y-1" />}
+      </h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{entry.description}</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {entry.tags.map((t) => (
@@ -67,12 +92,33 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         ))}
       </div>
 
+      {/* The registry has served every published component at /r/<slug>.json
+          since it was built, but nothing on the page said so — the only
+          discoverable way to use a component was copying its source by hand.
+          Placed above the preview, where the reader is still deciding
+          whether to take the component at all. */}
+      {!pro && (
+        <div className="mt-6">
+          <InstallCommand url={registryUrl} />
+        </div>
+      )}
+
       {/* Presets, controls, preview and generated code in one surface. This
           replaced a hero preview, a list of static variants each with its own
           collapsed snippet, and — for three components out of thirty — a
           separate hand-written playground. See lib/component-controls.ts. */}
       <section className="mt-10">
-        <ComponentExplorer schema={config.explorer.schema} render={config.explorer.render} />
+        <ComponentExplorer
+          schema={config.explorer.schema}
+          render={config.explorer.render}
+          component={{
+            name: displayName(entry),
+            slug: entry.slug,
+            description: entry.description,
+            registryUrl,
+            docsUrl: `${SITE_URL}/components/${entry.slug}`,
+          }}
+        />
       </section>
 
       {/* The component file itself, as opposed to the call site the Explorer
@@ -81,10 +127,19 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       <section id="source" className="mt-14 scroll-mt-20">
         <h2 className="text-xl font-semibold tracking-tight">Component source</h2>
         <p className="mb-3 mt-1 text-sm text-(--muted-foreground)">
-          Single-file React + Tailwind component. No dependencies — drop it into any project with
-          Tailwind configured.
+          {pro
+            ? "Single-file React + Tailwind component, no dependencies. Included with Pro — the source and its install command unlock together."
+            : "Single-file React + Tailwind component. No dependencies — drop it into any project with Tailwind configured."}
         </p>
-        <CodeBlock code={source} filename={config.sourceFile} />
+        {source === null ? (
+          <ProSource
+            slug={entry.slug}
+            lines={sourceLineCount(entry.slug, config.sourceFile)}
+            registryUrl={proRegistryUrl}
+          />
+        ) : (
+          <CodeBlock code={source} filename={config.sourceFile} />
+        )}
       </section>
 
       {/* Usage guidelines */}
