@@ -31,6 +31,7 @@ const previews: Record<string, () => React.ReactElement> = {
   "message-actions": MessageActionsPreview,
   "error-message": ErrorMessagePreview,
   "markdown-message": MarkdownMessagePreview,
+  "streaming-markdown": StreamingMarkdownPreview,
   /* Reasoning & Progress */
   reasoning: ReasoningPreview,
   "thinking-indicator": ThinkingIndicatorPreview,
@@ -43,12 +44,23 @@ const previews: Record<string, () => React.ReactElement> = {
   /* Sources & Citations */
   "source-card": SourceCardPreview,
   "citation-ui": CitationUiPreview,
+  "citation-popover": CitationPopoverPreview,
+  "source-list": SourceListPreview,
   /* Agents */
   "agent-status": AgentStatusPreview,
   "approval-request": ApprovalRequestPreview,
+  "approval-gate": ApprovalGatePreview,
+  "agent-plan": AgentPlanPreview,
+  "agent-handoff": AgentHandoffPreview,
+  /* Evaluation & Feedback */
+  "response-rating": ResponseRatingPreview,
+  "inline-correction": InlineCorrectionPreview,
+  "output-comparison": OutputComparisonPreview,
+  "eval-results": EvalResultsPreview,
   /* Files & Context */
   "file-upload": FileUploadPreview,
   "context-files": ContextFilesPreview,
+  "context-usage": ContextUsagePreview,
   /* Memory */
   "memory-list": MemoryListPreview,
   "memory-suggestion": MemorySuggestionPreview,
@@ -57,6 +69,7 @@ const previews: Record<string, () => React.ReactElement> = {
   "model-selector": ModelSelectorPreview,
   "reasoning-level": ReasoningLevelPreview,
   "tool-toggle": ToolTogglePreview,
+  "cost-meter": CostMeterPreview,
   /* Voice */
   "voice-input": VoiceInputPreview,
   "voice-waveform": VoiceWaveformPreview,
@@ -1143,6 +1156,442 @@ function VoiceConversationPreview() {
           </div>
         </div>
       </div>
+    </Stage>
+  );
+}
+
+/* ================================================================== */
+/* The twelve added after the second breadth round.                    */
+/*                                                                     */
+/* Same rule as the ones above: the preview draws the one thing that   */
+/* makes the component worth a page. A card that renders a plausible   */
+/* panel for every component teaches the reader nothing about which    */
+/* one to open, so each of these leads with its argument — the open    */
+/* fence, the struck-through marker, the deadline, the skipped step.   */
+/* ================================================================== */
+
+/* --- streaming-markdown: an answer mid-stream, fence still open ---- */
+function StreamingMarkdownPreview() {
+  return (
+    <Stage>
+      <Panel className="space-y-1.5 p-3">
+        <div className="text-[10px] font-semibold text-(--foreground)">Rate limiting</div>
+        <div className="flex items-center gap-1.5">
+          <span className="h-1 w-1 shrink-0 rounded-full bg-(--muted-foreground) opacity-55" />
+          <Line w="72%" />
+        </div>
+        {/* The unterminated fence is the whole point: no closing pair has
+            arrived, and the block renders as a block anyway. A renderer that
+            waits for the second ``` shows three stray backticks here. */}
+        <div className="rounded-md bg-(--muted) px-2 py-1.5 font-mono text-[8px] leading-[1.7] text-(--muted-foreground)">
+          <div>await limiter.take(</div>
+          <div>
+            &nbsp;&nbsp;key
+            <Caret />
+          </div>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- source-list: every candidate, floor and all ------------------- */
+function SourceListPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        {[
+          { score: "0.84", w: "82%" },
+          { score: "0.71", w: "64%" },
+        ].map((row) => (
+          <Panel key={row.score} className="flex items-center gap-2 px-2 py-1.5">
+            <Tile size={14}>
+              <Glyph d={G.file} size={8} />
+            </Tile>
+            <div className="min-w-0 flex-1">
+              <Line w={row.w} />
+            </div>
+            <span className="shrink-0 font-mono text-[8px] tabular-nums text-(--muted-foreground)">
+              {row.score}
+            </span>
+          </Panel>
+        ))}
+        {/* The candidates that lost. They stay on screen because the floor is
+            tuned by looking at what sits just under it. */}
+        <div className="flex items-center gap-1 rounded-lg border border-dashed border-(--border) px-2 py-1 text-[8px] text-(--muted-foreground)">
+          <Glyph d={G.chevron} size={8} />3 below the floor — not sent
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- citation-popover: a real marker, and an invented one ---------- */
+function CitationPopoverPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-1">
+          <Line w="34%" />
+          <span
+            className="grid h-[11px] w-[11px] shrink-0 place-items-center rounded-[4px] text-[7px] font-semibold text-(--primary-foreground)"
+            style={{ background: "var(--primary)" }}
+          >
+            1
+          </span>
+          <Line w="24%" />
+          {/* [4] resolves to nothing. Rendered struck through rather than as
+              a chip, so a number the model invented cannot pass for one it
+              actually retrieved. */}
+          <span className="shrink-0 text-[8px] text-(--muted-foreground) line-through opacity-60">
+            [4]
+          </span>
+        </div>
+        <Panel className="w-[168px] space-y-1 p-2">
+          <div className="text-[8px] font-medium text-(--foreground)">Pricing.pdf · p. 3</div>
+          <Line w="100%" tint="fg" />
+          <Line w="70%" />
+        </Panel>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- approval-gate: the same ask, with a deadline on it ------------ */
+function ApprovalGatePreview() {
+  return (
+    <Stage>
+      <Panel className="p-3">
+        <div className="flex items-center gap-1.5">
+          <Tile size={16} className="bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
+            <Glyph d={G.shield} size={9} />
+          </Tile>
+          <span className="min-w-0 truncate text-[10px] font-medium text-(--foreground)">
+            Charge card · $240.00
+          </span>
+          {/* What separates this from the plain approval card: the request
+              expires, and the run stops waiting whether or not anyone looked. */}
+          <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-[8px] tabular-nums text-amber-600 dark:text-amber-400">
+            <Glyph d={G.clock} size={8} />
+            0:24 left
+          </span>
+        </div>
+        <div className="mt-2.5 flex items-center gap-1.5">
+          <span className="inline-flex items-center gap-1 rounded-md bg-emerald-700 px-2 py-0.5 text-[8px] font-medium text-white">
+            <Glyph d={G.check} size={7} />
+            Approve
+          </span>
+          <span className="rounded-md border border-(--border) px-2 py-0.5 text-[8px] font-medium text-(--muted-foreground)">
+            Deny
+          </span>
+          <span className="ml-auto text-[8px] text-(--muted-foreground)">run-4c1</span>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- agent-plan: revised mid-run, with the dropped step still there  */
+function AgentPlanPreview() {
+  const steps = [
+    { text: "Read the schema", state: "done" as const, w: "58%" },
+    { text: "Draft the migration", state: "active" as const, w: "72%" },
+    { text: "Backfill rows", state: "skipped" as const, w: "46%" },
+  ];
+  return (
+    <Stage>
+      <Panel className="p-2.5">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[9px] font-medium text-(--foreground)">Plan</span>
+          {/* A counter, not a diff. The reader needs to know the plan moved. */}
+          <Pill tone="muted">rev 2</Pill>
+        </div>
+        <div className="mt-2 space-y-1.5">
+          {steps.map((step) => (
+            <div key={step.text} className="flex items-center gap-1.5">
+              {step.state === "done" && (
+                <span
+                  className="grid h-3 w-3 shrink-0 place-items-center rounded-full text-white"
+                  style={{ background: "var(--primary)" }}
+                >
+                  <Glyph d={G.check} size={7} />
+                </span>
+              )}
+              {step.state === "active" && (
+                <span className="cp-dot grid h-3 w-3 shrink-0 place-items-center rounded-full border-2 border-(--primary)" />
+              )}
+              {step.state === "skipped" && (
+                <span className="grid h-3 w-3 shrink-0 place-items-center rounded-full border border-dashed border-(--border)" />
+              )}
+              {/* Dropped work does not disappear — it goes grey and stays in
+                  position, because a step that vanishes cannot be audited. */}
+              <Line
+                w={step.w}
+                tint={step.state === "skipped" ? "border" : step.state === "active" ? "primary" : "fg"}
+              />
+              {step.state === "skipped" && (
+                <span className="shrink-0 text-[8px] text-(--muted-foreground)">skipped</span>
+              )}
+            </div>
+          ))}
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- agent-handoff: what crossed, and what did not ----------------- */
+function AgentHandoffPreview() {
+  return (
+    <Stage>
+      <Panel className="p-3">
+        <div className="flex items-center gap-1.5">
+          <Tile size={16}>
+            <Glyph d={G.bot} size={9} />
+          </Tile>
+          <span className="text-[9px] font-medium text-(--foreground)">Researcher</span>
+          <span className="shrink-0 text-(--muted-foreground)">
+            <Glyph d="M5 12h14M13 6l6 6-6 6" size={9} />
+          </span>
+          <Tile size={16} className="bg-(--primary-muted) text-(--primary-muted-foreground)">
+            <Glyph d={G.bot} size={9} />
+          </Tile>
+          <span className="text-[9px] font-medium text-(--foreground)">Writer</span>
+          <span className="ml-auto shrink-0">
+            <Pill tone="info">handing off</Pill>
+          </span>
+        </div>
+        <div className="mt-2 space-y-1">
+          <div className="flex items-center gap-1.5 text-[8px] text-(--muted-foreground)">
+            <Glyph d={G.check} size={7} />
+            <span>Carried: task, 6 sources</span>
+          </div>
+          {/* The half nobody renders. Context that silently failed to cross
+              is why the second agent redoes a decision the first already made. */}
+          <div className="flex items-center gap-1.5 text-[8px] text-amber-600 dark:text-amber-400">
+            <Glyph d={G.alert} size={7} />
+            <span>Not carried: chunk size, 2 rejected drafts</span>
+          </div>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- response-rating: the down vote, with reasons inline ----------- */
+function ResponseRatingPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-1.5">
+          <span className="grid h-4 w-4 place-items-center rounded-md border border-(--border) bg-(--card) text-(--muted-foreground)">
+            <Glyph d={G.thumbUp} size={8} />
+          </span>
+          {/* Already recorded. The panel below asks for detail it does not
+              need, which is why it can be skipped. */}
+          <span className="grid h-4 w-4 place-items-center rounded-md bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400">
+            <span className="rotate-180">
+              <Glyph d={G.thumbUp} size={8} />
+            </span>
+          </span>
+          <span className="text-[8px] text-(--muted-foreground)">What went wrong?</span>
+        </div>
+        <Panel className="p-2">
+          <div className="flex flex-wrap items-center gap-1">
+            <span
+              className="rounded-full px-1.5 py-px text-[8px] font-medium text-(--primary-foreground)"
+              style={{ background: "var(--primary)" }}
+            >
+              Incorrect
+            </span>
+            <span className="rounded-full border border-(--border) px-1.5 py-px text-[8px] text-(--muted-foreground)">
+              Too long
+            </span>
+            <span className="rounded-full border border-(--border) px-1.5 py-px text-[8px] text-(--muted-foreground)">
+              Unsafe
+            </span>
+            <span className="ml-auto text-[8px] text-(--muted-foreground)">Skip</span>
+          </div>
+        </Panel>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- inline-correction: the pair, never the overwrite -------------- */
+function InlineCorrectionPreview() {
+  return (
+    <Stage>
+      <Panel className="space-y-1.5 p-2.5">
+        {/* The original stays. The two together are the training example;
+            either one alone is half of it. */}
+        <div className="flex items-center gap-1.5 opacity-55">
+          <span className="shrink-0 text-[8px] text-(--muted-foreground)">was</span>
+          <div className="h-1 flex-1 rounded-full bg-(--border)" />
+          <span className="h-px w-[38%] shrink-0 -translate-x-[38%] bg-(--muted-foreground)" />
+        </div>
+        <div className="flex items-start gap-1.5">
+          <span
+            className="mt-px w-[2px] shrink-0 self-stretch rounded-full"
+            style={{ background: "var(--primary)" }}
+          />
+          <div className="min-w-0 flex-1 space-y-1">
+            <Line w="100%" tint="fg" />
+            <Line w="58%" tint="fg" />
+          </div>
+        </div>
+        <div className="flex items-center gap-1 text-[8px] text-(--muted-foreground)">
+          <Pill tone="primary">corrected</Pill>
+          <span>not sent as a message</span>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- output-comparison: blind, equal height ------------------------ */
+function OutputComparisonPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        <div className="grid grid-cols-2 gap-1.5">
+          {["A", "B"].map((label) => (
+            <Panel key={label} className="space-y-1 p-2">
+              <div className="flex items-center gap-1">
+                <span className="grid h-3 w-3 place-items-center rounded-[3px] bg-(--muted) text-[7px] font-semibold text-(--muted-foreground)">
+                  {label}
+                </span>
+                {/* The model name is deliberately absent until a choice is
+                    made — a visible name measures the reader's priors. */}
+                <span className="text-[7px] text-(--muted-foreground)">hidden</span>
+              </div>
+              {/* Both panes are the same height on purpose: a taller answer
+                  wins comparisons it did not earn. */}
+              <div className="space-y-1">
+                <Line w="100%" />
+                <Line w={label === "A" ? "84%" : "92%"} />
+                <Line w={label === "A" ? "60%" : "48%"} />
+              </div>
+            </Panel>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="flex-1 rounded-md border border-(--border) py-0.5 text-center text-[8px] font-medium text-(--muted-foreground)">
+            A is better
+          </span>
+          <span className="rounded-md border border-(--border) px-2 py-0.5 text-[8px] font-medium text-(--muted-foreground)">
+            Tie
+          </span>
+          <span className="flex-1 rounded-md border border-(--border) py-0.5 text-center text-[8px] font-medium text-(--muted-foreground)">
+            B is better
+          </span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- eval-results: regressions first, sample counts visible -------- */
+function EvalResultsPreview() {
+  const rows = [
+    { w: "52%", delta: "−21%", tone: "bad" as const, n: "n=120" },
+    { w: "44%", delta: "+4%", tone: "good" as const, n: "n=120" },
+    { w: "48%", delta: "too few", tone: "muted" as const, n: "n=6" },
+  ];
+  return (
+    <Stage>
+      <Panel className="divide-y divide-(--border)">
+        {rows.map((row) => (
+          <div key={row.w} className="flex items-center gap-2 px-2.5 py-[7px]">
+            <div className="min-w-0 flex-1">
+              <Line w={row.w} />
+            </div>
+            <span className="shrink-0 font-mono text-[8px] tabular-nums text-(--muted-foreground)">
+              {row.n}
+            </span>
+            {/* A delta with no sample count behind it is a rumour, so the
+                two never appear apart — and a change under the noise floor
+                is reported as unreadable rather than as an improvement. */}
+            <Pill tone={row.tone}>{row.delta}</Pill>
+          </div>
+        ))}
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- context-usage: what fits, what is reserved, what goes first --- */
+function ContextUsagePreview() {
+  return (
+    <Stage>
+      <Panel className="p-2.5">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[9px] font-medium text-(--foreground)">Context</span>
+          <span className="font-mono text-[8px] tabular-nums text-(--muted-foreground)">
+            38k / 120k
+          </span>
+          <span className="ml-auto">
+            <Pill tone="muted">~ estimated</Pill>
+          </span>
+        </div>
+        <div className="mt-2 flex h-1.5 overflow-hidden rounded-full bg-(--muted)">
+          <span className="w-[18%]" style={{ background: "var(--primary)" }} />
+          <span className="w-[22%]" style={{ background: "var(--primary)", opacity: 0.55 }} />
+          <span className="w-[9%]" style={{ background: "var(--primary)", opacity: 0.3 }} />
+          {/* Free space is striped, not solid: a solid block reads as one
+              more segment, and this is the part nothing has claimed. */}
+          <span
+            className="flex-1"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(45deg, var(--border) 0 2px, transparent 2px 4px)",
+            }}
+          />
+          <span className="w-[12%] border-l border-(--card)" style={{ background: "var(--border)" }} />
+        </div>
+        {/* The actionable half: not "context is full" but which block leaves. */}
+        <div className="mt-2 flex items-center gap-1.5 text-[8px] text-(--muted-foreground)">
+          <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--primary)", opacity: 0.55 }} />
+          <span>Retrieved passages — dropped first</span>
+          <span className="ml-auto shrink-0">14k reserved</span>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- cost-meter: cached tokens priced apart, and an honest tilde --- */
+function CostMeterPreview() {
+  return (
+    <Stage>
+      <Panel className="p-2.5">
+        <div className="flex items-center gap-1.5">
+          <Tile size={16}>
+            <Glyph d={G.clock} size={9} />
+          </Tile>
+          <span className="text-[9px] font-medium text-(--foreground)">This conversation</span>
+          <span className="ml-auto font-mono text-[10px] font-semibold tabular-nums text-(--foreground)">
+            $0.0312
+          </span>
+        </div>
+        <div className="mt-2 grid grid-cols-3 gap-1.5">
+          {[
+            { label: "fresh in", value: "2.5k" },
+            /* Cached input is a different rate, so it is a different number.
+               Folding it into the input count overstates the bill by 10x. */
+            { label: "cached", value: "16k" },
+            { label: "out", value: "1.2k" },
+          ].map((stat) => (
+            <div key={stat.label} className="rounded-md bg-(--muted) px-1.5 py-1">
+              <div className="font-mono text-[9px] tabular-nums text-(--foreground)">{stat.value}</div>
+              <div className="text-[7px] text-(--muted-foreground)">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-(--muted)">
+          <div className="cp-line h-full w-[41%] rounded-full" style={{ background: "var(--primary)" }} />
+        </div>
+      </Panel>
     </Stage>
   );
 }

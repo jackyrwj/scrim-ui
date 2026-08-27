@@ -1,3 +1,5 @@
+import type { Tier } from "./pro";
+
 export type Category = {
   slug: string;
   name: string;
@@ -17,6 +19,11 @@ export type ComponentEntry = {
   variants: string[];
   tags: string[];
   status: "published" | "planned";
+  /** Absent means "free" — the field is opt-in so the 29 published free
+   *  components did not all need editing to say what they already were.
+   *  A "pro" entry keeps its page public and indexable; only the source and
+   *  the install command are withheld. See lib/pro.ts. */
+  tier?: Tier;
 };
 
 export const categories: Category[] = [
@@ -51,6 +58,11 @@ export const categories: Category[] = [
     description: "Agent status, queues, handoffs and human-in-the-loop approvals.",
   },
   {
+    slug: "feedback",
+    name: "Evaluation & Feedback",
+    description: "Ratings, corrections, side-by-side output comparison and eval results.",
+  },
+  {
     slug: "files",
     name: "Files & Context",
     description: "File uploads, attachments, context and token usage.",
@@ -68,7 +80,7 @@ export const categories: Category[] = [
   {
     slug: "model-settings",
     name: "Model & Settings",
-    description: "Model selectors, reasoning levels, tool toggles and generation controls.",
+    description: "Model selectors, reasoning levels, tool toggles, generation controls and spend.",
   },
 ];
 
@@ -170,6 +182,19 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Streaming Markdown",
+    slug: "streaming-markdown",
+    category: "messages",
+    searchTitle: "Streaming Markdown Renderer — No Flicker Mid-Token",
+    description:
+      "Markdown that renders correctly while it is still arriving — bold, code spans, links and tables settle without ever flashing raw syntax or reflowing.",
+    frameworks: ["react", "tailwind"],
+    variants: ["streaming", "settled"],
+    tags: ["markdown", "streaming", "message", "rendering"],
+    tier: "pro",
+    status: "published",
+  },
+  {
     name: "Thinking / Reasoning",
     slug: "reasoning",
     category: "reasoning",
@@ -266,6 +291,18 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Source List",
+    slug: "source-list",
+    category: "sources",
+    searchTitle: "RAG Retrieved Sources Panel — React",
+    description:
+      "The passages retrieval actually returned, with similarity scores and a visible relevance floor — including the case where nothing cleared it.",
+    frameworks: ["react", "tailwind"],
+    variants: ["ranked", "below-floor", "empty"],
+    tags: ["retrieval", "rag", "sources", "ranking"],
+    status: "published",
+  },
+  {
     name: "Citation UI",
     slug: "citation-ui",
     category: "sources",
@@ -275,6 +312,19 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["inline", "badge", "hover-card"],
     tags: ["citation", "inline", "reference"],
+    status: "published",
+  },
+  {
+    name: "Citation Popover",
+    slug: "citation-popover",
+    category: "sources",
+    searchTitle: "RAG Citation Popover — Passage on Hover",
+    description:
+      "A citation marker that shows the passage it came from — fixed positioning that survives a scrolling answer, touch and keyboard, and an honest state for a number the model invented.",
+    frameworks: ["react", "tailwind"],
+    variants: ["resolved", "unresolved", "scored"],
+    tags: ["citation", "popover", "rag", "source", "grounding"],
+    tier: "pro",
     status: "published",
   },
   {
@@ -302,6 +352,91 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Approval Gate",
+    slug: "approval-gate",
+    category: "agents",
+    searchTitle: "Human in the Loop Gate — Resumable Approval",
+    description:
+      "The approval card as a lifecycle: a decision that survives a closed tab, is idempotent across two open ones, and says what happened when it lands after the request expired.",
+    frameworks: ["react", "tailwind"],
+    variants: ["pending", "submitting", "decided-elsewhere", "expired", "reconnecting"],
+    tags: ["approval", "human-in-the-loop", "agent", "resumable"],
+    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Agent Plan",
+    slug: "agent-plan",
+    category: "agents",
+    searchTitle: "AI Agent Task Plan Checklist — React",
+    description:
+      "The checklist an agent writes for itself and then edits mid-run — steps added, skipped and re-ordered, without the list jumping under the reader.",
+    frameworks: ["react", "tailwind"],
+    variants: ["planning", "running", "revised", "done"],
+    tags: ["agent", "plan", "tasks", "checklist"],
+    status: "published",
+  },
+  {
+    name: "Agent Handoff",
+    slug: "agent-handoff",
+    category: "agents",
+    searchTitle: "Multi-Agent Handoff UI — React",
+    description:
+      "One agent passing work to another — who asked, what was carried across, and what the receiving agent was not told.",
+    frameworks: ["react", "tailwind"],
+    variants: ["handing-off", "accepted", "returned"],
+    tags: ["agent", "handoff", "multi-agent", "routing"],
+    status: "published",
+  },
+  {
+    name: "Response Rating",
+    slug: "response-rating",
+    category: "feedback",
+    searchTitle: "AI Response Rating UI — Thumbs & Reasons",
+    description:
+      "Thumbs up and down that ask the one follow-up question worth asking — with a state for feedback that has been sent and cannot be taken back.",
+    frameworks: ["react", "tailwind"],
+    variants: ["idle", "reasons", "submitted"],
+    tags: ["feedback", "rating", "thumbs", "eval"],
+    status: "published",
+  },
+  {
+    name: "Inline Correction",
+    slug: "inline-correction",
+    category: "feedback",
+    searchTitle: "Inline AI Answer Correction — React",
+    description:
+      "Fix the answer where it is wrong, in place — the edit becomes training data, so the component keeps the original alongside it rather than overwriting it.",
+    frameworks: ["react", "tailwind"],
+    variants: ["reading", "editing", "corrected"],
+    tags: ["feedback", "correction", "edit", "eval"],
+    status: "published",
+  },
+  {
+    name: "Output Comparison",
+    slug: "output-comparison",
+    category: "feedback",
+    searchTitle: "A/B Model Output Comparison UI — React",
+    description:
+      "Two answers, side by side, with the model names hidden until a winner is picked — because a visible label is the thing being measured.",
+    frameworks: ["react", "tailwind"],
+    variants: ["blind", "revealed", "tie"],
+    tags: ["feedback", "comparison", "ab-test", "eval"],
+    status: "published",
+  },
+  {
+    name: "Eval Results",
+    slug: "eval-results",
+    category: "feedback",
+    searchTitle: "LLM Eval Results Table — Pass Rates & Deltas",
+    description:
+      "Pass rates per test case across two runs, with the regressions surfaced first and a sample size honest enough to say when a delta means nothing.",
+    frameworks: ["react", "tailwind"],
+    variants: ["summary", "regressions", "running"],
+    tags: ["eval", "results", "regression", "testing"],
+    status: "published",
+  },
+  {
     name: "File Upload",
     slug: "file-upload",
     category: "files",
@@ -323,6 +458,18 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["default", "full", "empty"],
     tags: ["file", "context", "panel", "tokens"],
+    status: "published",
+  },
+  {
+    name: "Context Usage",
+    slug: "context-usage",
+    category: "files",
+    searchTitle: "Context Window Usage Meter — React",
+    description:
+      "How much of the context window is gone and to what — system prompt, files, history — plus what gets dropped first when the next message does not fit.",
+    frameworks: ["react", "tailwind"],
+    variants: ["healthy", "tight", "overflowing"],
+    tags: ["context", "tokens", "window", "usage"],
     status: "published",
   },
   {
@@ -398,6 +545,19 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Cost Meter",
+    slug: "cost-meter",
+    category: "model-settings",
+    searchTitle: "LLM Token & Cost Meter — Live Spend UI",
+    description:
+      "Live spend per message and per conversation — cached input priced apart from fresh, reasoning tokens shown without double-counting, and a visible ~ when a provider did not report enough to be sure.",
+    frameworks: ["react", "tailwind"],
+    variants: ["message", "conversation", "approximate", "streaming"],
+    tags: ["cost", "tokens", "usage", "pricing", "meter"],
+    tier: "pro",
+    status: "published",
+  },
+  {
     name: "Voice Input",
     slug: "voice-input",
     category: "voice",
@@ -440,6 +600,7 @@ export type PatternEntry = {
   slug: string;
   description: string;
   elements: string[];
+  tier?: Tier;
 };
 
 export const patterns: PatternEntry[] = [

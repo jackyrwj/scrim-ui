@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { components, getCategory } from "@/lib/registry";
+import { components, patterns, getCategory } from "@/lib/registry";
 import { SITE_URL } from "@/lib/site";
 
 /**
@@ -19,10 +19,32 @@ import { SITE_URL } from "@/lib/site";
  */
 export const dynamicParams = false;
 
-const published = components.filter((c) => c.status === "published");
+/* Free components only. A Pro item served here would be the whole gate
+   undone — /r/<slug>.json is a public, prerendered flat file with the source
+   inlined in it. Pro items get a key-checked dynamic endpoint of their own;
+   until then they are simply absent, and dynamicParams=false turns a request
+   for one into a 404 rather than a half-answer. */
+const published = components.filter((c) => c.status === "published" && c.tier !== "pro");
+
+/**
+ * Components and patterns share one flat namespace, because `shadcn add`
+ * takes one name and does not know which of the two it is asking for. A slug
+ * used twice would make one of them unreachable, silently — so it fails the
+ * build instead.
+ */
+const collisions = patterns.filter((p) => published.some((c) => c.slug === p.slug));
+if (collisions.length > 0) {
+  throw new Error(
+    `Pattern slugs collide with component slugs: ${collisions.map((p) => p.slug).join(", ")}.`,
+  );
+}
 
 export function generateStaticParams() {
-  return [{ name: "registry.json" }, ...published.map((c) => ({ name: `${c.slug}.json` }))];
+  return [
+    { name: "registry.json" },
+    ...published.map((c) => ({ name: `${c.slug}.json` })),
+    ...patterns.map((p) => ({ name: `${p.slug}.json` })),
+  ];
 }
 
 /**
@@ -43,6 +65,78 @@ function readSource(slug: string) {
     );
   }
   return content;
+}
+
+/**
+ * A pattern's source, with its imports pointed at the installed components.
+ *
+ * A pattern is a composition — the coding-agent screen is AgentStatus plus
+ * ToolCall plus ApprovalRequest — and in this repo it reaches them by
+ * relative path (`../../tool-call/tool-call`). That path is meaningless in
+ * someone else's project, where the CLI will have put those files at
+ * `components/ui/`. So the imports are rewritten and the same slugs become
+ * the item's registryDependencies: `shadcn add ai-chat` then installs the
+ * screen *and* the three components it is built from.
+ *
+ * Anything left over — another relative import, or a bare package — throws,
+ * on the same principle as readSource: better a failed build than a registry
+ * entry that installs something that cannot compile.
+ */
+function readPatternSource(slug: string): { content: string; deps: string[] } {
+  const file = path.join(process.cwd(), "src", "showcase", "patterns", slug, `${slug}.tsx`);
+  const original = fs.readFileSync(file, "utf8");
+
+  const deps = new Set<string>();
+  const content = original.replace(
+    /from "\.\.\/\.\.\/([a-z0-9-]+)\/\1"/g,
+    (_match, dep: string) => {
+      deps.add(dep);
+      return `from "@/components/ui/${dep}"`;
+    },
+  );
+
+  const unresolved = [...content.matchAll(/from "([^"]+)"/g)]
+    .map((m) => m[1])
+    .filter((s) => s !== "react" && !s.startsWith("@/components/ui/"));
+  if (unresolved.length > 0) {
+    throw new Error(
+      `Pattern ${slug} imports ${unresolved.join(", ")}, which will not resolve in a consumer's project. Rewrite the import or declare it on the registry item.`,
+    );
+  }
+
+  const missing = [...deps].filter((d) => !published.some((c) => c.slug === d));
+  if (missing.length > 0) {
+    throw new Error(
+      `Pattern ${slug} depends on ${missing.join(", ")}, which ${missing.length === 1 ? "is" : "are"} not a published component. Publish it before publishing the pattern.`,
+    );
+  }
+
+  return { content, deps: [...deps] };
+}
+
+function patternItem(slug: string) {
+  const entry = patterns.find((p) => p.slug === slug)!;
+  const { content, deps } = readPatternSource(slug);
+  return {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: entry.slug,
+    type: "registry:block",
+    title: entry.name,
+    description: entry.description,
+    author: `Scrim UI (${SITE_URL})`,
+    categories: ["pattern"],
+    docs: `${SITE_URL}/patterns/${entry.slug}`,
+    dependencies: [],
+    registryDependencies: deps.map((d) => `${SITE_URL}/r/${d}.json`),
+    files: [
+      {
+        path: `src/showcase/patterns/${entry.slug}/${entry.slug}.tsx`,
+        content,
+        type: "registry:block",
+        target: `components/blocks/${entry.slug}.tsx`,
+      },
+    ],
+  };
 }
 
 function item(slug: string) {
@@ -74,27 +168,58 @@ function index() {
     $schema: "https://ui.shadcn.com/schema/registry.json",
     name: "scrim-ui",
     homepage: SITE_URL,
-    items: published.map((c) => ({
-      name: c.slug,
-      type: "registry:ui",
-      title: c.name,
-      description: c.description,
-      categories: [getCategory(c.category)?.slug ?? c.category],
-      files: [
-        {
-          path: `src/showcase/${c.slug}/${c.slug}.tsx`,
-          type: "registry:ui",
-          target: `components/ui/${c.slug}.tsx`,
-        },
-      ],
-    })),
+    items: [
+      ...published.map((c) => ({
+        name: c.slug,
+        type: "registry:ui",
+        title: c.name,
+        description: c.description,
+        categories: [getCategory(c.category)?.slug ?? c.category],
+        files: [
+          {
+            path: `src/showcase/${c.slug}/${c.slug}.tsx`,
+            type: "registry:ui",
+            target: `components/ui/${c.slug}.tsx`,
+          },
+        ],
+      })),
+      ...patterns.map((p) => ({
+        name: p.slug,
+        type: "registry:block",
+        title: p.name,
+        description: p.description,
+        categories: ["pattern"],
+        files: [
+          {
+            path: `src/showcase/patterns/${p.slug}/${p.slug}.tsx`,
+            type: "registry:block",
+            target: `components/blocks/${p.slug}.tsx`,
+          },
+        ],
+      })),
+    ],
   };
 }
 
 export async function GET(_request: Request, { params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
   const slug = name.replace(/\.json$/, "");
-  const body = slug === "registry" ? index() : item(slug);
+  /* dynamicParams=false already 404s an unlisted slug in a production build,
+     but `item()` would throw on one in dev — and a Pro slug is exactly the
+     request most worth answering deliberately rather than with a 500. */
+  const known =
+    slug === "registry" ||
+    published.some((c) => c.slug === slug) ||
+    patterns.some((p) => p.slug === slug);
+  if (!known) {
+    return Response.json({ error: "Not found." }, { status: 404 });
+  }
+  const body =
+    slug === "registry"
+      ? index()
+      : patterns.some((p) => p.slug === slug)
+        ? patternItem(slug)
+        : item(slug);
   return Response.json(body, {
     headers: { "cache-control": "public, max-age=0, must-revalidate" },
   });

@@ -146,16 +146,24 @@ export function generateSnippet(schema: ComponentControls, values: ControlValues
   if (schema.snippet) return schema.snippet(values);
 
   const props: string[] = [];
+  const derived = schema.derive?.(values);
+  const derivedProps = derived?.props ?? {};
 
   for (const control of schema.controls) {
+    /* A control that `derive` also emits is an editor input, not a prop: the
+       reader edits `models` as `id | name | hint` lines and derive turns that
+       into a MODELS array in the preamble. Emitting both put the same
+       attribute on the element twice — the raw DSL string and the array —
+       which is not valid JSX. The derived form wins; the control's own value
+       has already done its job by producing it. */
+    if (control.name in derivedProps) continue;
     const rendered = renderProp(control, values[control.name] ?? control.value);
     if (rendered) props.push(rendered);
   }
   for (const f of schema.fixed ?? []) {
     props.push(`${f.name}={${f.expr}}`);
   }
-  const derived = schema.derive?.(values);
-  for (const [name, expr] of Object.entries(derived?.props ?? {})) {
+  for (const [name, expr] of Object.entries(derivedProps)) {
     props.push(`${name}={${expr}}`);
   }
   for (const h of schema.handlers ?? []) {
