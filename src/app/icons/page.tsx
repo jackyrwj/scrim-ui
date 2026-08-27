@@ -19,8 +19,8 @@ export default function IconsPage() {
   const assetCount = resources.filter((r) => r.category === "assets").length;
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <header className="mx-auto max-w-2xl text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+      <header className="max-w-2xl">
+        <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           {iconGuide.length} AI Interface Icons
         </h1>
         <p className="mt-3 text-lg text-(--muted-foreground)">
@@ -33,7 +33,7 @@ export default function IconsPage() {
           do I find icons"; this answers "which icon means tool call". Both are
           worth having, and a reader who wants the first one should not have to
           work out that it lives somewhere else on the site. */}
-      <div className="mx-auto mt-8 flex max-w-2xl flex-col gap-3 rounded-xl border border-(--border) bg-(--muted)/40 p-4 text-[13px] leading-5 sm:flex-row sm:items-center sm:gap-6">
+      <div className="mt-8 flex max-w-2xl flex-col gap-3 rounded-xl border border-(--border) bg-(--muted)/40 p-4 text-[13px] leading-5 sm:flex-row sm:items-center sm:gap-6">
         <p className="flex-1 text-(--muted-foreground)">
           <span className="font-medium text-(--foreground)">Here</span> — one icon chosen per
           AI concept, sized, stroked and coloured before you copy it.

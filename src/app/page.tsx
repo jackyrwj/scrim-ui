@@ -122,7 +122,7 @@ export default function Home() {
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>
+              <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Free, in-browser tools for designing AI interfaces.
               </p>
@@ -145,7 +145,7 @@ export default function Home() {
       <section className="border-b border-(--border)">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
+            <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
             <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               All {published.length} components →
             </Link>
@@ -194,7 +194,7 @@ export default function Home() {
         <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Patterns</h2>
+              <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Patterns</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Complete, remix-ready interfaces — not just single components.
               </p>
@@ -241,7 +241,7 @@ export default function Home() {
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Icons</h2>
+              <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Icons</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 One Lucide icon picked per AI concept — copy the SVG, the JSX, or the file.
               </p>
@@ -276,7 +276,7 @@ export default function Home() {
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Resources</h2>
+              <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Resources</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 A curated directory of libraries, generators and guides for building AI interfaces.
               </p>
@@ -310,7 +310,7 @@ export default function Home() {
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
-              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Inspiration</h2>
+              <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Inspiration</h2>
               <p className="mt-2 text-(--muted-foreground)">
                 Product breakdowns and decision guides for AI interfaces — grounded in
                 official docs, with a live demo of each pattern you can copy.

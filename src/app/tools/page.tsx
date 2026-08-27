@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ToolsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Tools</h1>
+      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">Tools</h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
         Free, in-browser tools for designing AI product interfaces. No signup, no install —
         everything runs locally in your browser.

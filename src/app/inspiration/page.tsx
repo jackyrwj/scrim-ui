@@ -11,12 +11,10 @@ export const metadata: Metadata = {
 export default function InspirationPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Inspiration</h1>
+      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">Inspiration</h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        Evidence-driven articles on AI interfaces — product breakdowns that analyse a
-        specific app element by element, and decision guides that answer one open
-        question with concrete recommendations. Every claim is grounded in the
-        product&rsquo;s official docs and paired with a live demo you can copy.
+        Product breakdowns and decision guides for AI interfaces — every claim grounded in
+        the product&rsquo;s docs, every idea paired with a live demo you can copy.
       </p>
 
       <div className="mt-10 grid gap-3 sm:grid-cols-2">

@@ -105,14 +105,13 @@ function PatternCard({ slug, featured }: { slug: string; featured: boolean }) {
 export default function PatternsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <header className="mx-auto max-w-2xl text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+      <header className="max-w-2xl">
+        <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           {patterns.length} AI Interface Patterns
         </h1>
         <p className="mt-3 text-lg text-(--muted-foreground)">
-          A pattern is a whole screen, not one control — the chat, the research run, the agent
-          loop. Each one is a single React + Tailwind file you copy, assembled from components
-          documented individually on this site.
+          A pattern is a whole screen, not one control — a single React + Tailwind file, built
+          from the components on this site.
         </p>
       </header>
 
