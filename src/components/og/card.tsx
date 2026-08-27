@@ -21,11 +21,17 @@ export function OgCard({
   eyebrow,
   title,
   description,
+  tagline = "Free · copy-ready · no signup",
 }: {
   /** What kind of page this is — "Component", "Pattern", "Tool". */
   eyebrow?: string;
   title: string;
   description?: string;
+  /** The footer claim. Defaults to the free library's, because that is what
+   *  almost every page on the site is — but a Pro page must override it. A
+   *  card reading "Free" under a $49 template is the kind of detail that
+   *  costs more trust than the share was ever going to earn. */
+  tagline?: string;
 }) {
   return (
     <div
@@ -124,7 +130,7 @@ export function OgCard({
       >
         <div style={{ display: "flex" }}>scrimui.dev</div>
         <div style={{ display: "flex", color: VIOLET, fontWeight: 500 }}>
-          Free · copy-ready · no signup
+          {tagline}
         </div>
       </div>
     </div>

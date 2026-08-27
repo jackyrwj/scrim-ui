@@ -4,6 +4,7 @@
 @import "./component-previews.css";
 @import "./code.css";
 @import "./pattern-previews.css";
+@import "./template-previews.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

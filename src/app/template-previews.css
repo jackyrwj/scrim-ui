@@ -1,0 +1,46 @@
+/* ------------------------------------------------------------------ */
+/* Static thumbnails for the /templates cards.                         */
+/*                                                                     */
+/* Its own shell rather than .cp because a template card is not shaped  */
+/* like a component card. Components sit four to a row, so .cp is a     */
+/* wide banner with a fixed 262px stage centred in it. A template card  */
+/* is a full-width row — the same banner there is 370px of mostly       */
+/* nothing, and a 262px mock floating in the middle of it reads as a    */
+/* rendering bug. So this is a column beside the copy: narrow, taller   */
+/* than it is wide-ish, and filled edge to edge by the mock.            */
+/*                                                                     */
+/* The resting-motion rules are the same ones .cp carries, and for the  */
+/* same reasons: nothing runs before the card is revealed, and nothing  */
+/* runs at all under prefers-reduced-motion. The animations themselves  */
+/* (cp-grow, cp-caret, cp-pulse) are shared — a second set of           */
+/* keyframes doing the same thing is how two previews drift apart.      */
+/* ------------------------------------------------------------------ */
+
+.tp {
+  position: relative;
+  overflow: hidden;
+  background: var(--muted);
+  /* Wide on a phone, where the card stacks and the mock is a banner: at
+     4/3 the transcript ran out of content long before the composer, which
+     reads as a half-loaded screenshot rather than a quiet one. */
+  aspect-ratio: 16 / 9;
+}
+
+@media (min-width: 640px) {
+  .tp {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: 190px;
+  }
+}
+
+.aos-stagger-item:not(.aos-visible) .tp *,
+.aos-hidden:not(.aos-visible) .tp * {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tp * { animation: none !important; }
+  .tp .cp-caret { opacity: 1; }
+  .tp .cp-line  { transform: none; }
+}
