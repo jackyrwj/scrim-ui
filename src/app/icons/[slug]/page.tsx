@@ -7,7 +7,7 @@ import { iconGuide, iconSlug, getIconEntry, relatedIcons } from "@/lib/icon-guid
 import { getCategory, components } from "@/lib/registry";
 import { categoryIconFor } from "@/lib/icons";
 import { IconEditor } from "@/components/icons/icon-editor";
-import { SITE_REPO } from "@/lib/site";
+import { SITE_REPO, SITE_URL } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -77,7 +77,13 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
       </header>
 
       <div className="mt-8">
-        <IconEditor name={name}>
+        <IconEditor
+          name={name}
+          concept={entry.concept}
+          meaning={entry.meaning}
+          docsUrl={`${SITE_URL}/icons/${slug}`}
+          usedBy={used.map((c) => c.name)}
+        >
           {/* Rendered here, on the server. The editor changes its attributes
               rather than re-rendering it — see the note in icon-editor.tsx. */}
           {createElement(entry.icon, { size: 48, strokeWidth: 2, "aria-hidden": true })}

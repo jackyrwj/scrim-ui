@@ -6,6 +6,7 @@ import { pageConfigs } from "@/showcase/registry";
 import { components } from "@/lib/registry";
 import { ComponentExplorer } from "@/components/component-page/explorer";
 import { Chip } from "../tool-ui";
+import { SITE_URL } from "@/lib/site";
 
 /**
  * Every component's Explorer, behind one picker.
@@ -59,7 +60,18 @@ export function PlaygroundHub() {
       <p className="mt-2 text-xs leading-5 text-(--muted-foreground)">{entry.description}</p>
 
       <div className="mt-6">
-        <ComponentExplorer key={entry.slug} schema={explorer.schema} render={explorer.render} />
+        <ComponentExplorer
+          key={entry.slug}
+          schema={explorer.schema}
+          render={explorer.render}
+          component={{
+            name: entry.name,
+            slug: entry.slug,
+            description: entry.description,
+            registryUrl: `${SITE_URL}/r/${entry.slug}.json`,
+            docsUrl: `${SITE_URL}/components/${entry.slug}`,
+          }}
+        />
       </div>
     </div>
   );

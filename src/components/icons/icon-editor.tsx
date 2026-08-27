@@ -3,6 +3,8 @@
 import * as React from "react";
 import { copyText } from "@/lib/clipboard";
 import { trackEvent } from "@/lib/analytics";
+import { buildIconPrompt } from "@/lib/agent-prompt";
+import { AgentPromptCard } from "@/components/component-page/agent-prompt-card";
 
 /**
  * The icon, editable.
@@ -30,10 +32,21 @@ const TONES: Tone[] = [
 
 export function IconEditor({
   name,
+  concept,
+  meaning,
+  docsUrl,
+  usedBy,
   children,
 }: {
   /** Lucide's export name, e.g. "Wrench" — used for the import line. */
   name: string;
+  /** The concept this glyph stands for, for the agent prompt. */
+  concept: string;
+  /** Why this glyph and not another. */
+  meaning: string;
+  docsUrl: string;
+  /** Components on this site that use it for the same concept. */
+  usedBy: string[];
   /** The icon element, already rendered by the server. */
   children: React.ReactNode;
 }) {
@@ -85,6 +98,22 @@ export function IconEditor({
   ]
     .filter((l) => l !== null)
     .join("\n");
+
+  const prompt = React.useMemo(
+    () =>
+      buildIconPrompt({
+        name,
+        concept,
+        meaning,
+        docsUrl,
+        size,
+        stroke,
+        toneClass: tone.jsx,
+        toneLabel: tone.label,
+        usedBy,
+      }),
+    [name, concept, meaning, docsUrl, size, stroke, tone, usedBy],
+  );
 
   async function copy(kind: "svg" | "jsx") {
     await copyText(kind === "svg" ? markup() : jsx);
@@ -193,6 +222,17 @@ export function IconEditor({
       >
         <code className="font-mono">{jsx}</code>
       </pre>
+
+      {/* The same three settings, addressed to an agent instead of to a
+          clipboard. It carries the one thing Lucide cannot tell it: that this
+          concept is drawn with this glyph. */}
+      <div className="border-t border-(--border)">
+        <AgentPromptCard
+          prompt={prompt}
+          summary="Agent prompt"
+          hint="Follows the size, stroke and colour above — adjust them and the prompt changes with it."
+        />
+      </div>
     </div>
   );
 }

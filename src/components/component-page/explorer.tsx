@@ -12,6 +12,8 @@ import {
   type ControlValues,
 } from "@/lib/component-controls";
 import { tokenize } from "@/lib/code-highlight";
+import { buildAgentPrompt } from "@/lib/agent-prompt";
+import { installCommand, usePackageManager } from "@/lib/package-managers";
 import { CodeTokens } from "./code-block";
 import { CodeCopyButton } from "./code-copy-button";
 
@@ -24,9 +26,9 @@ import { CodeCopyButton } from "./code-copy-button";
  * together in their head, and the code was dead text: you could not change it
  * and see what happened.
  *
- * Now: presets across the top (the old variants), controls down the side, and
- * a Preview/Code pair of tabs. Every edit regenerates both. Copy takes exactly
- * what is on screen.
+ * Now: a Preview/Usage/Agent tab strip over the stage, and one column down
+ * the side holding presets (the old variants) above the props they set.
+ * Every edit regenerates both. Copy takes exactly what is on screen.
  *
  * Not a code *editor*. Sandpack or react-live would let the reader type real
  * JSX, at the cost of shipping a bundler or an eval runtime — a megabyte or
@@ -34,18 +36,31 @@ import { CodeCopyButton } from "./code-copy-button";
  * paste into your own project. Controls give the same "change it and watch"
  * loop, stay type-safe, and cost nothing to load.
  */
-type TabId = "preview" | "usage";
+type TabId = "preview" | "usage" | "agent";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "preview", label: "Preview" },
   { id: "usage", label: "Usage" },
+  { id: "agent", label: "Agent prompt" },
 ];
+
+/** Identity and links for the prompt. Passed down rather than looked up so
+ *  the Explorer stays a generic renderer over a schema. */
+export type ExplorerComponent = {
+  name: string;
+  slug: string;
+  description: string;
+  registryUrl: string;
+  docsUrl: string;
+};
 
 export function ComponentExplorer({
   schema,
   render,
+  component,
 }: {
   schema: ComponentControls;
+  component: ExplorerComponent;
   /** Builds the live element from the current values. Passed in rather than
    *  looked up so the component itself is statically imported by the page and
    *  the Explorer stays generic. */
@@ -66,6 +81,22 @@ export function ComponentExplorer({
   const snippet = React.useMemo(() => generateSnippet(schema, values), [schema, values]);
   const tokens = React.useMemo(() => tokenize(snippet), [snippet]);
 
+  /* The prompt is derived from the same values as the preview and the
+     snippet, for the same reason they are: a reader who spends two minutes
+     setting controls should not then have to describe those settings to an
+     agent in prose. It recomputes on every control change. */
+  const manager = usePackageManager();
+  const prompt = React.useMemo(
+    () =>
+      buildAgentPrompt({
+        ...component,
+        installCommand: installCommand(manager, component.registryUrl),
+        schema,
+        values,
+      }),
+    [component, manager, schema, values],
+  );
+
   // A component seeded by a `defaultOpen`-style prop will not react to that
   // prop changing, so those edits remount it instead of updating it.
   const remountKey = [
@@ -77,41 +108,6 @@ export function ComponentExplorer({
 
   return (
     <div className="overflow-hidden rounded-xl border border-(--border)">
-      {/* Presets — the old variants, now one click each */}
-      {schema.presets.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 border-b border-(--border) bg-(--muted)/40 px-3 py-2.5">
-          {schema.presets.map((p) => {
-            const active = activePreset?.id === p.id;
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => setValues(presetValues(schema, p))}
-                aria-pressed={active}
-                title={p.note}
-                className={`rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
-                  active
-                    ? "bg-(--foreground) text-(--background)"
-                    : "text-(--muted-foreground) hover:bg-(--muted) hover:text-(--foreground)"
-                }`}
-              >
-                {p.title}
-              </button>
-            );
-          })}
-          <button
-            type="button"
-            onClick={() => {
-              setValues(initial);
-              setRun((r) => r + 1);
-            }}
-            className="ml-auto rounded-lg px-2 py-1 text-xs text-(--muted-foreground) transition-colors hover:bg-(--muted) hover:text-(--foreground)"
-          >
-            Reset
-          </button>
-        </div>
-      )}
-
       <div className="grid lg:grid-cols-[1fr_260px]">
         {/* Stage */}
         <div className="min-w-0 border-(--border) lg:border-r">
@@ -143,7 +139,7 @@ export function ComponentExplorer({
             <div className="flex min-h-[300px] items-center justify-center bg-(--muted)/30 px-4 py-8 sm:px-6">
               <div className="w-full max-w-xl">{render(values, remountKey)}</div>
             </div>
-          ) : (
+          ) : tab === "usage" ? (
             <div
               className="group relative min-h-[300px]"
               style={{ background: "var(--code-bg)", color: "var(--code-fg)" }}
@@ -170,11 +166,61 @@ export function ComponentExplorer({
                 below.
               </p>
             </div>
+          ) : (
+            <AgentPromptPanel prompt={prompt} />
           )}
         </div>
 
-        {/* Controls */}
+        {/* Controls.
+            Presets sit here, directly above the props, because setting props
+            is all they do — one click writes values into the fields below.
+            They used to run full-width across the top, left over from when
+            they were the variant switcher and the only navigation this card
+            had. Once Preview/Usage/Agent arrived underneath, that read as a
+            level above the tabs rather than an input to them, and the cause
+            (click a preset) sat a full card-width away from the effect (the
+            fields change). Adjacent, the relationship explains itself. */}
         <div className="space-y-3.5 p-4">
+          {schema.presets.length > 0 && (
+            <div className="space-y-2 border-b border-(--border) pb-3.5">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-(--muted-foreground)">
+                  Presets
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setValues(initial);
+                    setRun((r) => r + 1);
+                  }}
+                  className="-mr-1 rounded-lg px-1.5 py-0.5 text-[11px] text-(--muted-foreground) transition-colors hover:bg-(--muted) hover:text-(--foreground)"
+                >
+                  Reset
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {schema.presets.map((p) => {
+                  const active = activePreset?.id === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setValues(presetValues(schema, p))}
+                      aria-pressed={active}
+                      title={p.note}
+                      className={`rounded-lg px-2 py-1 text-left text-[11px] font-medium leading-4 transition-colors ${
+                        active
+                          ? "bg-(--foreground) text-(--background)"
+                          : "bg-(--muted)/60 text-(--muted-foreground) hover:bg-(--muted) hover:text-(--foreground)"
+                      }`}
+                    >
+                      {p.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           <p className="text-[11px] font-medium uppercase tracking-wide text-(--muted-foreground)">
             Props
           </p>
@@ -279,6 +325,37 @@ function Control({
           {String(value)}
         </span>
       )}
+    </div>
+  );
+}
+
+/**
+ * The generated prompt, shown rather than hidden behind a button.
+ *
+ * A bare "Copy prompt" control would have been less code, but the whole
+ * point is that the text tracks the controls — and a reader cannot trust
+ * that, or learn what the prompt actually asks an agent to do, without
+ * seeing it change. Read-only and monospaced: it is output, not an input.
+ */
+function AgentPromptPanel({ prompt }: { prompt: string }) {
+  return (
+    <div
+      className="group relative min-h-[300px]"
+      style={{ background: "var(--code-bg)", color: "var(--code-fg)" }}
+    >
+      <div className="absolute right-2 top-2 z-10">
+        <CodeCopyButton code={prompt} label="Copy agent prompt" />
+      </div>
+      <pre
+        className="max-h-[420px] overflow-auto px-4 py-3.5 text-[12.5px] leading-6"
+        style={{ background: "var(--code-bg)" }}
+      >
+        <code className="whitespace-pre-wrap font-mono">{prompt}</code>
+      </pre>
+      <p className="px-4 pb-3.5 text-[11px] text-(--tok-comment)">
+        Paste into Claude Code, Cursor or any coding agent. It follows the props above — change a
+        control and the prompt changes with it.
+      </p>
     </div>
   );
 }

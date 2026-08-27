@@ -9,6 +9,9 @@ import { patternIconFor } from "@/lib/icons";
 import { patternConfigs } from "@/showcase/patterns/registry";
 import { CopyButton } from "@/components/component-page/copy-button";
 import { CodeBlock } from "@/components/component-page/code-block";
+import { InstallCommand } from "@/components/component-page/install-command";
+import { PatternAgentPrompt } from "@/components/component-page/pattern-agent-prompt";
+import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return patterns.map((p) => ({ slug: p.slug }));
@@ -72,6 +75,25 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
         <span aria-hidden>·</span>
         <span>React + Tailwind, no dependencies</span>
       </p>
+
+      {/* A pattern installs like a component, plus the components it is built
+          from — the CLI resolves those from the item's registryDependencies,
+          so one command produces a screen that compiles. */}
+      <div className="mt-6 space-y-3">
+        <InstallCommand url={`${SITE_URL}/r/${entry.slug}.json`} />
+        <PatternAgentPrompt
+          pattern={{
+            name: entry.name,
+            slug: entry.slug,
+            description: entry.description,
+            docsUrl: `${SITE_URL}/patterns/${entry.slug}`,
+            registryUrl: `${SITE_URL}/r/${entry.slug}.json`,
+            elements: config.elements,
+            usage: config.usage,
+            mistakes: config.mistakes,
+          }}
+        />
+      </div>
 
       {/* Live preview */}
       <section className="mt-10">
