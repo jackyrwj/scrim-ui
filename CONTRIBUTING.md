@@ -29,6 +29,10 @@ Everything else follows from the same idea:
 
 ## Adding a component
 
+This workflow is for free MIT components only. Pro work belongs in the private
+`scrim-ui-pro` repository; do not open a public pull request containing a Pro
+implementation, demo, controls, or page config.
+
 Six places, in this order:
 
 1. **`src/lib/registry.ts`** — add a `ComponentEntry`: `name`, `slug`,
@@ -75,6 +79,7 @@ every component using that concept changes with it.
 ```bash
 npx tsc --noEmit
 npm run lint
+npm run check:public
 node scripts/contrast.mjs     # if you touched globals.css
 npm run content-dates         # if you added or changed content
 npm run build

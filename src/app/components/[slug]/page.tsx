@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { components, displayName, getComponent, getRelated } from "@/lib/registry";
+import { getGuidesForComponent } from "@/lib/inspiration";
 import { pageConfigs } from "@/showcase/registry";
 import { CodeBlock } from "@/components/component-page/code-block";
 import { ComponentExplorer } from "@/components/component-page/explorer";
@@ -11,6 +12,7 @@ import { InstallCommand } from "@/components/component-page/install-command";
 import { JsonLd } from "@/components/site/json-ld";
 import { ProBadge } from "@/components/pro/pro-badge";
 import { ProSource } from "@/components/pro/pro-source";
+import { getProComponentCatalog } from "@/lib/pro-catalog";
 import { componentSchema } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
 
@@ -42,28 +44,24 @@ function readShowcaseSource(slug: string, file: string): string {
   }
 }
 
-/** How long a Pro component's file is, without putting the file itself on the
- *  page. The lock quotes this; the code arrives from /api/pro/source. */
-function sourceLineCount(slug: string, file: string): number {
-  try {
-    return fs.readFileSync(path.join(process.cwd(), "src", "showcase", slug, file), "utf8").split("\n").length;
-  } catch {
-    return 0;
-  }
-}
-
 export default async function ComponentPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const entry = getComponent(slug);
-  const config = pageConfigs[slug];
-  if (!entry || entry.status !== "published" || !config) notFound();
+  if (!entry || entry.status !== "published") notFound();
 
-  /* Read only for free components. A Pro file must not be read into this
-     render at all: everything a server component touches and passes down
-     ends up in the RSC payload of a public page. */
   const pro = entry.tier === "pro";
-  const source = pro ? null : readShowcaseSource(slug, config.sourceFile);
+  const proCatalog = pro ? getProComponentCatalog(slug) : undefined;
+  const config = pro ? undefined : pageConfigs[slug];
+  if ((pro && !proCatalog) || (!pro && !config)) notFound();
+
+  /* Free source is read from this public repository. Pro source is absent
+     from the repository and arrives only through the entitlement-gated
+     artifact route. */
+  const source = pro ? null : readShowcaseSource(slug, config!.sourceFile);
+  const usage = proCatalog?.usage ?? config?.usage ?? [];
+  const mistakes = proCatalog?.mistakes ?? config?.mistakes ?? [];
   const related = getRelated(entry);
+  const guides = getGuidesForComponent(entry.slug);
   /* Free items are prerendered flat files under /r; Pro items are served by
      the key-checked route instead, so the two never share a URL. */
   const registryUrl = `${SITE_URL}/r/${entry.slug}.json`;
@@ -96,29 +94,36 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
           since it was built, but nothing on the page said so — the only
           discoverable way to use a component was copying its source by hand.
           Placed above the preview, where the reader is still deciding
-          whether to take the component at all. */}
-      {!pro && (
-        <div className="mt-6">
-          <InstallCommand url={registryUrl} />
-        </div>
-      )}
-
-      {/* Presets, controls, preview and generated code in one surface. This
-          replaced a hero preview, a list of static variants each with its own
-          collapsed snippet, and — for three components out of thirty — a
-          separate hand-written playground. See lib/component-controls.ts. */}
-      <section className="mt-10">
-        <ComponentExplorer
-          schema={config.explorer.schema}
-          render={config.explorer.render}
-          component={{
-            name: displayName(entry),
-            slug: entry.slug,
-            description: entry.description,
-            registryUrl,
-            docsUrl: `${SITE_URL}/components/${entry.slug}`,
-          }}
-        />
+          whether to take the component at all. The Explorer renders its
+          agent prompt card directly under the command — the same stack the
+          pattern pages use: install, prompt, then the interactive surface
+          (presets, controls, preview and generated code in one surface —
+          see lib/component-controls.ts). */}
+      <section className="mt-6 space-y-3">
+        {!pro && <InstallCommand url={registryUrl} />}
+        {pro ? (
+          <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-(--border) bg-(--muted)/30 px-6 text-center">
+            <ProBadge />
+            <h2 className="mt-4 text-lg font-semibold">The implementation stays private</h2>
+            <p className="mt-2 max-w-lg text-sm leading-6 text-(--muted-foreground)">
+              This public build contains the product description, API shape and production guidance,
+              but not a second copy of the paid component. Pro members can inspect, copy and install
+              the complete source below.
+            </p>
+          </div>
+        ) : (
+          <ComponentExplorer
+            schema={config!.explorer.schema}
+            render={config!.explorer.render}
+            component={{
+              name: displayName(entry),
+              slug: entry.slug,
+              description: entry.description,
+              registryUrl,
+              docsUrl: `${SITE_URL}/components/${entry.slug}`,
+            }}
+          />
+        )}
       </section>
 
       {/* The component file itself, as opposed to the call site the Explorer
@@ -134,11 +139,11 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         {source === null ? (
           <ProSource
             slug={entry.slug}
-            lines={sourceLineCount(entry.slug, config.sourceFile)}
+            lines={proCatalog?.lines ?? 0}
             registryUrl={proRegistryUrl}
           />
         ) : (
-          <CodeBlock code={source} filename={config.sourceFile} />
+          <CodeBlock code={source} filename={config!.sourceFile} />
         )}
       </section>
 
@@ -146,7 +151,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       <section className="mt-14">
         <h2 className="text-xl font-semibold tracking-tight">When to use it</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-(--muted-foreground)">
-          {config.usage.map((line) => (
+          {usage.map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>
@@ -156,11 +161,37 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
       <section className="mt-14">
         <h2 className="text-xl font-semibold tracking-tight">What breaks in production</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-(--muted-foreground)">
-          {config.mistakes.map((line) => (
+          {mistakes.map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>
       </section>
+
+      {/* Up-links to decision guides. Guides link down via componentSlugs;
+          this is the reverse edge, so a reader deciding WHETHER to use the
+          component (not just how) has somewhere to go. */}
+      {guides.length > 0 && (
+        <section className="mt-14">
+          <h2 className="text-xl font-semibold tracking-tight">Guides</h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {guides.map((g) => (
+              <Link
+                key={g.slug}
+                href={`/inspiration/${g.slug}`}
+                className="group rounded-xl border border-(--border) p-4 transition-colors hover:bg-(--muted)/60"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-medium group-hover:underline">{g.title}</span>
+                  <span className="shrink-0 rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
+                    Guide
+                  </span>
+                </div>
+                <p className="mt-1 line-clamp-2 text-sm text-(--muted-foreground)">{g.summary}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Related */}
       <section className="mt-14 border-t border-(--border) pt-10">

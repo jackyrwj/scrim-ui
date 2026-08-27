@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/header";
@@ -88,6 +89,17 @@ const themeScript = `
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const accountAuthConfigured = Boolean(
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY,
+  );
+  const content = (
+    <>
+      <PreviewMotion />
+      <SiteHeader />
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
+    </>
+  );
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -101,10 +113,11 @@ export default function RootLayout({
         <GoogleAnalytics />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
-        <PreviewMotion />
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
+        {accountAuthConfigured ? (
+          <ClerkProvider afterSignOutUrl="/">{content}</ClerkProvider>
+        ) : (
+          content
+        )}
       </body>
     </html>
   );

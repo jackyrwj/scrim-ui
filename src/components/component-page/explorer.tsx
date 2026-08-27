@@ -14,6 +14,7 @@ import {
 import { tokenize } from "@/lib/code-highlight";
 import { buildAgentPrompt } from "@/lib/agent-prompt";
 import { installCommand, usePackageManager } from "@/lib/package-managers";
+import { AgentPromptCard } from "./agent-prompt-card";
 import { CodeTokens } from "./code-block";
 import { CodeCopyButton } from "./code-copy-button";
 
@@ -26,9 +27,11 @@ import { CodeCopyButton } from "./code-copy-button";
  * together in their head, and the code was dead text: you could not change it
  * and see what happened.
  *
- * Now: a Preview/Usage/Agent tab strip over the stage, and one column down
- * the side holding presets (the old variants) above the props they set.
- * Every edit regenerates both. Copy takes exactly what is on screen.
+ * Now: a Preview/Usage tab strip over the stage, one column down the side
+ * holding presets (the old variants) above the props they set, and the agent
+ * prompt as a separate disclosure above the card, right under the install
+ * command — the same module patterns use. Every edit regenerates preview,
+ * snippet and prompt together. Copy takes exactly what is on screen.
  *
  * Not a code *editor*. Sandpack or react-live would let the reader type real
  * JSX, at the cost of shipping a bundler or an eval runtime — a megabyte or
@@ -36,12 +39,11 @@ import { CodeCopyButton } from "./code-copy-button";
  * paste into your own project. Controls give the same "change it and watch"
  * loop, stay type-safe, and cost nothing to load.
  */
-type TabId = "preview" | "usage" | "agent";
+type TabId = "preview" | "usage";
 
 const TABS: { id: TabId; label: string }[] = [
   { id: "preview", label: "Preview" },
   { id: "usage", label: "Usage" },
-  { id: "agent", label: "Agent prompt" },
 ];
 
 /** Identity and links for the prompt. Passed down rather than looked up so
@@ -107,7 +109,18 @@ export function ComponentExplorer({
   const activePreset = schema.presets.find((p) => matchesPreset(schema, p, values));
 
   return (
-    <div className="overflow-hidden rounded-xl border border-(--border)">
+    <div className="space-y-3">
+      {/* The prompt as its own module, the way patterns present it, rather
+          than a third tab — sitting directly under the install command. It
+          still lives inside this client component because it follows the
+          controls; a separate island could not see them. Collapsed by
+          default: forty lines addressed to a machine should not stand
+          between the reader and the preview. */}
+      <AgentPromptCard
+        prompt={prompt}
+        hint="Follows the props below — change a control and the prompt changes with it, so an agent reproduces that configuration instead of the defaults."
+      />
+      <div className="overflow-hidden rounded-xl border border-(--border)">
       <div className="grid lg:grid-cols-[1fr_260px]">
         {/* Stage */}
         <div className="min-w-0 border-(--border) lg:border-r">
@@ -139,7 +152,7 @@ export function ComponentExplorer({
             <div className="flex min-h-[300px] items-center justify-center bg-(--muted)/30 px-4 py-8 sm:px-6">
               <div className="w-full max-w-xl">{render(values, remountKey)}</div>
             </div>
-          ) : tab === "usage" ? (
+          ) : (
             <div
               className="group relative min-h-[300px]"
               style={{ background: "var(--code-bg)", color: "var(--code-fg)" }}
@@ -166,8 +179,6 @@ export function ComponentExplorer({
                 below.
               </p>
             </div>
-          ) : (
-            <AgentPromptPanel prompt={prompt} />
           )}
         </div>
 
@@ -240,6 +251,7 @@ export function ComponentExplorer({
             </p>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
@@ -325,37 +337,6 @@ function Control({
           {String(value)}
         </span>
       )}
-    </div>
-  );
-}
-
-/**
- * The generated prompt, shown rather than hidden behind a button.
- *
- * A bare "Copy prompt" control would have been less code, but the whole
- * point is that the text tracks the controls — and a reader cannot trust
- * that, or learn what the prompt actually asks an agent to do, without
- * seeing it change. Read-only and monospaced: it is output, not an input.
- */
-function AgentPromptPanel({ prompt }: { prompt: string }) {
-  return (
-    <div
-      className="group relative min-h-[300px]"
-      style={{ background: "var(--code-bg)", color: "var(--code-fg)" }}
-    >
-      <div className="absolute right-2 top-2 z-10">
-        <CodeCopyButton code={prompt} label="Copy agent prompt" />
-      </div>
-      <pre
-        className="max-h-[420px] overflow-auto px-4 py-3.5 text-[12.5px] leading-6"
-        style={{ background: "var(--code-bg)" }}
-      >
-        <code className="whitespace-pre-wrap font-mono">{prompt}</code>
-      </pre>
-      <p className="px-4 pb-3.5 text-[11px] text-(--tok-comment)">
-        Paste into Claude Code, Cursor or any coding agent. It follows the props above — change a
-        control and the prompt changes with it.
-      </p>
     </div>
   );
 }

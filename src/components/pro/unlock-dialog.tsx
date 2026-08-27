@@ -3,8 +3,8 @@
 import * as React from "react";
 import Link from "next/link";
 import { trackEvent } from "@/lib/analytics";
-import { CHECKOUT_URL, PRO_PLAN, PRO_PRICE } from "@/lib/pro";
-import { setLicense, verifyLicense } from "@/lib/pro-access";
+import { PRO_PLAN, PRO_PRICE } from "@/lib/pro";
+import { setLicense, useProAccess, verifyLicense } from "@/lib/pro-access";
 
 /**
  * What a locked surface opens: what Pro includes, what it costs, and a place
@@ -30,6 +30,7 @@ export function UnlockDialog({
   const [key, setKey] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
   const [pending, setPending] = React.useState(false);
+  const access = useProAccess();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -127,30 +128,17 @@ export function UnlockDialog({
             <div className="mt-1 text-3xl font-bold tracking-tight">{PRO_PRICE}</div>
           </div>
 
-          {/* Until a checkout exists this points at /pro, which says so
-              plainly. A button that opens nothing is worse than one that
-              explains itself. */}
-          {CHECKOUT_URL ? (
-            <a
-              href={CHECKOUT_URL}
-              onClick={() => trackEvent("pro_checkout_click", { item })}
-              className="mt-5 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
-            >
-              Get Pro
-            </a>
-          ) : (
-            <Link
-              href="/pro"
-              onClick={() => trackEvent("pro_checkout_click", { item })}
-              className="mt-5 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
-            >
-              Get Pro
-            </Link>
-          )}
+          <Link
+            href={access.authenticated ? "/pro" : "/sign-in"}
+            onClick={() => trackEvent("pro_checkout_click", { item })}
+            className="mt-5 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
+          >
+            {access.authenticated ? `Get Pro — ${PRO_PRICE}` : "Sign in to get Pro"}
+          </Link>
 
           <form onSubmit={submit} className="mt-5 border-t border-(--border) pt-5">
             <label htmlFor="license-key" className="text-xs font-medium text-(--muted-foreground)">
-              Already bought Pro? Paste your licence key.
+              Have an older licence key? Paste it here.
             </label>
             <div className="mt-2 flex gap-2">
               <input

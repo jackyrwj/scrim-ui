@@ -4,7 +4,6 @@
 @import "./component-previews.css";
 @import "./code.css";
 @import "./pattern-previews.css";
-@import "./template-previews.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -207,4 +206,15 @@ body {
     transform: none;
     transition: none;
   }
+}
+
+/* Template demos embedded in /templates cards (TemplateCardDemo): the demo
+   fills the card edge to edge, so its own window frame — border, radius,
+   shadow — would double up against the card's. Strip it; the window chrome
+   inside the frame is what carries the "this is an app" signal. The chain
+   is band > scale wrapper > scaled box > demo root > frame. */
+.tcd > div > div > div > div:first-child {
+  border: none;
+  border-radius: 0;
+  box-shadow: none !important;
 }

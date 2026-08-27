@@ -133,8 +133,8 @@ function PromptInputPreview() {
             @
           </span>
           <span className="inline-flex items-center gap-1 rounded-md border border-(--border) px-1.5 py-0.5 text-[9px] text-(--muted-foreground)">
-            <ModelIcon name="Claude Sonnet 4.5" size={8} />
-            Sonnet 4.5
+            <ModelIcon name="Claude Sonnet 5" size={8} />
+            Sonnet 5
           </span>
           <span className="ml-auto">
             <SendButton />
@@ -505,8 +505,8 @@ function PromptInputModelSelectorPreview() {
       <Panel>
         <div className="flex items-center gap-1.5 border-b border-(--border) px-2.5 py-1.5">
           <span className="inline-flex items-center gap-1 rounded-md bg-(--muted) px-1.5 py-0.5 text-[9px] font-medium text-(--foreground)">
-            <ModelIcon name="Claude Sonnet 4.5" size={8} />
-            Sonnet 4.5
+            <ModelIcon name="Claude Sonnet 5" size={8} />
+            Sonnet 5
             <span className="text-(--muted-foreground)">
               <Glyph d={G.chevron} size={8} />
             </span>
@@ -983,8 +983,8 @@ function ModelSelectorPreview() {
     <Stage>
       <div className="space-y-1.5">
         <Panel className="flex items-center gap-1.5 px-2.5 py-1.5">
-          <ModelIcon name="Claude Sonnet 4.5" size={9} />
-          <span className="text-[10px] font-medium text-(--foreground)">Claude Sonnet 4.5</span>
+          <ModelIcon name="Claude Sonnet 5" size={9} />
+          <span className="text-[10px] font-medium text-(--foreground)">Claude Sonnet 5</span>
           <Pill>Fast</Pill>
           <span className="ml-auto text-(--muted-foreground)">
             <Glyph d={G.chevron} size={9} />
@@ -992,8 +992,8 @@ function ModelSelectorPreview() {
         </Panel>
         <Panel className="divide-y divide-(--border) overflow-hidden">
           {[
-            ["GPT-5", true],
-            ["Gemini 3 Pro", false],
+            ["GPT-5.6 Sol", true],
+            ["Gemini 3.1 Pro", false],
           ].map(([name, active]) => (
             <div key={String(name)} className="flex items-center gap-1.5 px-2.5 py-1.5">
               <ModelIcon name={String(name)} size={9} />
@@ -1425,10 +1425,12 @@ function InlineCorrectionPreview() {
       <Panel className="space-y-1.5 p-2.5">
         {/* The original stays. The two together are the training example;
             either one alone is half of it. */}
-        <div className="flex items-center gap-1.5 opacity-55">
+        <div className="flex items-center gap-1.5 opacity-60">
           <span className="shrink-0 text-[8px] text-(--muted-foreground)">was</span>
-          <div className="h-1 flex-1 rounded-full bg-(--border)" />
-          <span className="h-px w-[38%] shrink-0 -translate-x-[38%] bg-(--muted-foreground)" />
+          <span className="relative block h-1 flex-1">
+            <span className="absolute inset-0 rounded-full bg-(--border)" />
+            <span className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-(--muted-foreground)" />
+          </span>
         </div>
         <div className="flex items-start gap-1.5">
           <span

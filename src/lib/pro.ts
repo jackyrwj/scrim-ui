@@ -32,20 +32,18 @@ export type Tier = "free" | "pro";
  * render time (see /pro) rather than written here, so the page cannot drift
  * out of date and cannot oversell.
  *
- * Scope has one limit, and it is why there is no line here about Pro BLOCKS:
- * a category with nothing in it reads as inventory, not scope. "Every Pro
- * block, full source" is legally true of an empty shelf and worthless to the
- * person who just paid to see it — a buyer who clicks that line and finds
- * nothing has not been oversold, they have been shortchanged, and they will
- * read the rest of the list as sales copy. "Everything added to Pro later"
- * already covers blocks for everyone buying today, so nothing about the
- * licence shrank when the line went. Add it back the day the first one ships,
- * not before.
+ * Scope has one limit, and it is why every category line here was earned by a
+ * shipped item rather than written in advance: a category with nothing in it
+ * reads as inventory, not scope. "Every Pro block, full source" is legally
+ * true of an empty shelf and worthless to the person who just paid to see it
+ * — a buyer who clicks that line and finds nothing has not been oversold,
+ * they have been shortchanged, and they will read the rest of the list as
+ * sales copy. (Blocks shipped and were later removed as redundant with the
+ * templates — a template buyer already owns the frame code.)
  *
- * Components stay on the list because the shelf is no longer empty: the
- * streaming Markdown renderer, the citation popover, the approval gate and
- * the cost meter. The test is whether the category is empty, not whether it
- * is short.
+ * Components stay on the list on the same test: the streaming Markdown
+ * renderer, the citation popover, the approval gate and the cost meter. The
+ * test is whether the category is empty, not whether it is short.
  */
 
 export const FREE_PLAN = {
@@ -56,6 +54,7 @@ export const FREE_PLAN = {
   features: [
     "Every free component, full source",
     "MIT licensed — commercial use, no attribution",
+    "Stays free forever — nothing published moves behind the lock",
     "shadcn CLI install, or just copy the file",
     "No dependencies to add, no theme layer to fight",
     "No account, no email, no sign-up",
@@ -64,16 +63,8 @@ export const FREE_PLAN = {
 
 export const PRO_PLAN = {
   name: "Pro",
-  /**
-   * Cents, so the display and the checkout agree on one number.
-   *
-   * $99, per the ladder in docs/pro-roadmap.md: five templates and the first
-   * batch of Pro components. The $79 rung was earned and never taken, so this
-   * is one raise rather than two — which matters, because /pro tells buyers
-   * the price rises as items land, and a promise like that is spent the first
-   * time it is not kept.
-   */
-  priceCents: 9900,
+  /** Cents, so the display and the checkout agree on one number. */
+  priceCents: 4900,
   currency: "USD",
   /** One-time. A subscription would promise a release cadence not yet earned. */
   billing: "One-time payment",

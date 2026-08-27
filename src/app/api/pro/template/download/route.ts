@@ -1,7 +1,6 @@
 import { getTemplate } from "@/lib/templates";
-import { readTemplateFiles } from "@/lib/template-files.server";
-import { checkLicense } from "@/lib/licenses.server";
-import { createZip } from "@/lib/zip.server";
+import { checkProAccess } from "@/lib/pro-access.server";
+import { proArtifactErrorResponse, readProTemplateZip } from "@/lib/pro-artifacts.server";
 
 /**
  * The whole template as one archive.
@@ -29,7 +28,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unknown template." }, { status: 404 });
   }
 
-  const check = await checkLicense(key);
+  const check = await checkProAccess({ key });
   if (!check.valid) {
     return Response.json(
       { error: check.error },
@@ -37,24 +36,19 @@ export async function POST(request: Request) {
     );
   }
 
-  /* Nested under the template's own directory, for the same reason the
-     registry targets are: unzipping must not scatter twenty-three files into
-     whatever directory the buyer happened to be in. */
-  const zip = createZip(
-    readTemplateFiles(entry.slug).map((file) => ({
-      path: `${entry.dir}/${file.path}`,
-      content: file.content,
-    })),
-  );
-
-  return new Response(new Uint8Array(zip), {
-    headers: {
-      "content-type": "application/zip",
-      "content-length": String(zip.length),
-      /* The client saves from a blob and names the file itself, so this is a
-         fallback for anyone calling the endpoint directly. */
-      "content-disposition": `attachment; filename="${entry.dir}.zip"`,
-      "cache-control": "no-store",
-    },
-  });
+  try {
+    const zip = await readProTemplateZip(entry.slug);
+    return new Response(zip, {
+      headers: {
+        "content-type": "application/zip",
+        "content-length": String(zip.byteLength),
+        /* The client saves from a blob and names the file itself, so this is a
+           fallback for anyone calling the endpoint directly. */
+        "content-disposition": `attachment; filename="${entry.dir}.zip"`,
+        "cache-control": "no-store",
+      },
+    });
+  } catch (error) {
+    return proArtifactErrorResponse(error);
+  }
 }

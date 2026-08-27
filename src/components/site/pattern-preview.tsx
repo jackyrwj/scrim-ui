@@ -371,8 +371,8 @@ function ModelPreferencesPreview() {
         <div className="flex-1 space-y-2 p-2">
           {/* model row */}
           <div className="flex items-center gap-1.5 rounded-md border border-(--border) px-1.5 py-1">
-            <ModelIcon name="Claude Sonnet 4.5" size={9} />
-            <span className="text-[8px] leading-3 text-(--muted-foreground)">Sonnet 4.5</span>
+            <ModelIcon name="Claude Sonnet 5" size={9} />
+            <span className="text-[8px] leading-3 text-(--muted-foreground)">Sonnet 5</span>
             <span className="ml-auto text-[7px] leading-3 text-(--muted-foreground)">▾</span>
           </div>
           {/* reasoning level, segmented */}

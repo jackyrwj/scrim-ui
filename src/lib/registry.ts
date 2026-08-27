@@ -82,6 +82,11 @@ export const categories: Category[] = [
     name: "Model & Settings",
     description: "Model selectors, reasoning levels, tool toggles, generation controls and spend.",
   },
+  {
+    slug: "safety",
+    name: "Safety & Refusal",
+    description: "Refusals that explain and redirect, moderation interruptions, and confidence-qualified answers.",
+  },
 ];
 
 export const components: ComponentEntry[] = [
@@ -119,6 +124,19 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["default", "compact"],
     tags: ["prompt", "input", "model", "selector"],
+    status: "published",
+  },
+  {
+    name: "Prompt Editor",
+    slug: "prompt-editor",
+    category: "prompt-input",
+    searchTitle: "Prompt Template Editor — Variable Highlighting & Version Diff",
+    description:
+      "A prompt template editor with {{variables}} highlighted as you type, a rendered preview, and a line diff against the previous version.",
+    frameworks: ["react", "tailwind"],
+    variants: ["editing", "typo", "versioned", "bare"],
+    tags: ["prompt", "editor", "template", "variables", "diff"],
+    tier: "pro",
     status: "published",
   },
   {
@@ -437,6 +455,19 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Edit Diff View",
+    slug: "edit-diff-view",
+    category: "feedback",
+    searchTitle: "AI Edit Diff Review UI — Accept or Reject Hunks",
+    description:
+      "A streamed AI edit as hunks you accept or reject one by one — id-keyed decisions, word-level marks, and buttons that stay disabled while a hunk is still arriving.",
+    frameworks: ["react", "tailwind"],
+    variants: ["settled", "streaming", "line-diff", "whole-file"],
+    tags: ["diff", "review", "edit", "accept-reject", "streaming"],
+    tier: "pro",
+    status: "published",
+  },
+  {
     name: "File Upload",
     slug: "file-upload",
     category: "files",
@@ -591,6 +622,66 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["transcript", "playing"],
     tags: ["voice", "conversation", "transcript", "speaking"],
+    status: "published",
+  },
+  {
+    name: "Refusal Message",
+    slug: "refusal-message",
+    category: "safety",
+    searchTitle: "AI Refusal Response UI — Explain & Redirect",
+    description:
+      "How to say no without ending the conversation — the refusal, a plain-language reason, and one redirect the reader can click.",
+    frameworks: ["react", "tailwind"],
+    variants: ["with-redirect", "no-reason", "bare"],
+    tags: ["safety", "refusal", "policy", "moderation"],
+    status: "published",
+  },
+  {
+    name: "Moderation Flag",
+    slug: "moderation-flag",
+    category: "safety",
+    searchTitle: "Content Moderation Flag UI — Mid-Stream Stop",
+    description:
+      "What to show when the content filter fires — a stopped stream that keeps its partial text, or a blocked prompt, with a false-positive path.",
+    frameworks: ["react", "tailwind"],
+    variants: ["output-stopped", "input-blocked"],
+    tags: ["safety", "moderation", "content filter", "flag"],
+    status: "published",
+  },
+  {
+    name: "Confidence Answer",
+    slug: "confidence-answer",
+    category: "safety",
+    searchTitle: "AI Confidence Indicator — Hedged Answers",
+    description:
+      "An answer that says how sure it is — a warning badge only when there is something to warn about, and a hedge that names what to verify.",
+    frameworks: ["react", "tailwind"],
+    variants: ["high", "medium", "low"],
+    tags: ["safety", "confidence", "uncertainty", "hedge", "accuracy"],
+    status: "published",
+  },
+  {
+    name: "Voice Call Controls",
+    slug: "voice-call-controls",
+    category: "voice",
+    searchTitle: "Voice Call Controls UI — Mute & End Call",
+    description:
+      "The chrome around a live voice call — an unmistakable mute toggle, a running call timer, and an end button that's always one tap away.",
+    frameworks: ["react", "tailwind"],
+    variants: ["live", "muted"],
+    tags: ["voice", "call", "mute", "controls", "end call"],
+    status: "published",
+  },
+  {
+    name: "Memory Toast",
+    slug: "memory-toast",
+    category: "memory",
+    searchTitle: "Memory Updated Toast — ChatGPT-Style Notice",
+    description:
+      "The 'Memory updated' receipt — shows the exact fact that was saved, with one-tap Undo and a quiet link to manage memories.",
+    frameworks: ["react", "tailwind"],
+    variants: ["saved", "updated", "forgotten"],
+    tags: ["memory", "toast", "notification", "undo", "saved"],
     status: "published",
   },
 ];

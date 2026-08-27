@@ -202,7 +202,7 @@ type FieldState = "empty" | "arriving" | "settled";
 
 const HOLD_MS = 4200;
 
-export function StructuredExtractionDemo() {
+export function StructuredExtractionDemo({ caption = true }: { caption?: boolean }) {
   const frameRef = React.useRef<HTMLDivElement>(null);
 
   const [sampleIndex, setSampleIndex] = React.useState(0);
@@ -440,13 +440,15 @@ export function StructuredExtractionDemo() {
         </div>
       </div>
 
-      <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
-        Watch the <strong className="font-medium text-(--foreground)">Total</strong> row: rule, then
-        shimmer, then the number — never a smaller number on its way to the real one. Text reveals
-        under a caret because a half-typed name still reads as a name; money does not, because a
-        half-arrived total is wrong rather than partial. Scripted at reading speed; there is no model
-        behind this page.
-      </p>
+      {caption && (
+        <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
+          Watch the <strong className="font-medium text-(--foreground)">Total</strong> row: rule, then
+          shimmer, then the number — never a smaller number on its way to the real one. Text reveals
+          under a caret because a half-typed name still reads as a name; money does not, because a
+          half-arrived total is wrong rather than partial. Scripted at reading speed; there is no model
+          behind this page.
+        </p>
+      )}
     </div>
   );
 }

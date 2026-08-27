@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getComponent } from "@/lib/registry";
 import { getTemplate, templates } from "@/lib/templates";
-import { listTemplateFiles } from "@/lib/template-files.server";
+import { getProTemplateCatalog } from "@/lib/pro-catalog";
 import { ProBadge } from "@/components/pro/pro-badge";
 import { ProTemplate } from "@/components/pro/pro-template";
 import { TemplateDemo, hasTemplateDemo } from "@/components/templates/template-demo";
@@ -29,9 +29,9 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
   const entry = getTemplate(slug);
   if (!entry || entry.status !== "published") notFound();
 
-  /* Paths and line counts only. The contents never touch this render — see
-     lib/template-files.server.ts for why the split is where it is. */
-  const files = listTemplateFiles(entry.slug);
+  /* Paths and line counts come from the generated public catalog. The paid
+     contents live in the private artifact origin and never touch this render. */
+  const files = getProTemplateCatalog(entry.slug)?.files ?? [];
   const components = entry.componentSlugs.map(getComponent).filter((c) => c !== undefined);
 
   return (

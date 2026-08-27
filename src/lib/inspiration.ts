@@ -423,6 +423,493 @@ export const inspirationEntries: InspirationEntry[] = [
     ],
   },
   {
+    slug: "notion-ai",
+    product: "Notion AI",
+    kind: "case-study",
+    title: "The AI that stayed inside the document",
+    summary:
+      "Notion never built a chat destination. The model lives in the editor — space to draft, highlight to edit, accept or discard — and its answers cite the workspace pages they came from.",
+    disclaimer:
+      "An independent reading of Notion AI's interface, grounded in Notion's official help center. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
+    sections: [
+      {
+        heading: "Draft in place, not in a chat window",
+        elementSlug: "prompt-input",
+        points: [
+          "The prompt appears on the page itself — press space on a new line and the AI writes directly into the document.",
+          "Context comes from the workspace: @-mention pages, people and dates instead of pasting content into a side panel.",
+        ],
+        evidence: {
+          quote:
+            "To draft or generate new text, press the space key on a new line and enter a prompt. Notion AI writes directly on the page, and you can @-mention pages, people, and dates to give it context.",
+          sourceLabel: "Notion Help Center — Use Notion AI to write better, more efficient notes and docs",
+          url: "https://www.notion.com/help/guides/notion-ai-for-docs",
+        },
+      },
+      {
+        heading: "An edit is a review loop",
+        elementSlug: "message-actions",
+        points: [
+          "Editing a selection is not an overwrite — the suggestion arrives as something you accept, discard, or send back for another try.",
+          "The original text survives until the reader explicitly keeps the new one; the AI proposes, the writer disposes.",
+        ],
+        evidence: {
+          quote:
+            "Give it a prompt like fix grammar, make it shorter, or change the tone, then accept, discard, or ask it to try again.",
+          sourceLabel: "Notion Help Center — Use Notion AI to write better, more efficient notes and docs",
+          url: "https://www.notion.com/help/guides/notion-ai-for-docs",
+        },
+      },
+      {
+        heading: "One agent across the workspace and beyond",
+        elementSlug: "search-tool-call",
+        points: [
+          "The same agent summarizes the page you're on or ranges across Notion and connected tools — the surface doesn't change, only the scope.",
+          "Multi-step tasks run from the same entry point; there is no separate 'agent mode' to learn.",
+        ],
+        evidence: {
+          quote:
+            "Ask it to summarize the current page, find something across Notion and connected tools like Slack or Google Drive, or take a multi-step task from start to finish.",
+          sourceLabel: "Notion Help Center — Use Notion AI to write better, more efficient notes and docs",
+          url: "https://www.notion.com/help/guides/notion-ai-for-docs",
+        },
+      },
+      {
+        heading: "Answers cite the pages they came from",
+        elementSlug: "citation-ui",
+        points: [
+          "Answers pulled from connected apps carry citations back to the original material — provenance is part of the answer, not an afterthought.",
+          "The claim and its source travel together, so trust is checkable without leaving the thread.",
+        ],
+        evidence: {
+          quote:
+            "With Notion AI Connectors, your questions can also pull in relevant information from your connected apps, with citations to the sources used.",
+          sourceLabel: "Notion Help Center — Notion AI Connectors overview",
+          url: "https://www.notion.com/help/notion-ai-connectors",
+        },
+      },
+      {
+        heading: "Scope is a control, not a prompt trick",
+        elementSlug: "context-files",
+        points: [
+          "An 'All sources' picker in the chat box narrows which page or source the AI analyzes — the user sets the boundary explicitly.",
+          "Scoping is UI, not prompt engineering: the reader never has to write 'only look at X' and hope.",
+        ],
+        evidence: {
+          quote:
+            "Look for the All sources option at the bottom of your Notion AI chat box. Select the page or source you want Notion AI to analyze for a specific answer.",
+          sourceLabel: "Notion Help Center — Everything you can do with Notion AI",
+          url: "https://www.notion.com/help/guides/everything-you-can-do-with-notion-ai",
+        },
+      },
+      {
+        heading: "Citations you can inspect",
+        elementSlug: "citation-popover",
+        points: [
+          "In AI Meeting Notes, hovering a citation previews the exact transcript snippet behind it — verification is a hover, not a hunt.",
+          "Clicking jumps to the line in the transcript; the popover and the source never disagree because they are the same reference.",
+        ],
+        evidence: {
+          quote:
+            "You’ll also find citations to your transcript in your meeting notes summary. Hover over a citation to see the snippet of your transcript that’s been referenced.",
+          sourceLabel: "Notion Help Center — Notion AI FAQs",
+          url: "https://www.notion.com/help/notion-ai-faqs",
+        },
+      },
+    ],
+    takeaways: [
+      "Put the model where the work already is; a separate chat window is a context switch you imposed on the user.",
+      "AI edits should arrive as proposals with accept/discard — never silent overwrites.",
+      "Citations belong in the answer itself, inspectable on hover and jumpable on click.",
+      "Make scope an explicit control; 'All sources' beats praying the prompt was clear.",
+    ],
+    componentSlugs: ["prompt-input", "citation-ui", "citation-popover"],
+    sources: [
+      {
+        label: "Notion Help Center — Use Notion AI to write better, more efficient notes and docs",
+        url: "https://www.notion.com/help/guides/notion-ai-for-docs",
+      },
+      {
+        label: "Notion Help Center — Notion AI Connectors overview",
+        url: "https://www.notion.com/help/notion-ai-connectors",
+      },
+      {
+        label: "Notion Help Center — Everything you can do with Notion AI",
+        url: "https://www.notion.com/help/guides/everything-you-can-do-with-notion-ai",
+      },
+      {
+        label: "Notion Help Center — Notion AI FAQs",
+        url: "https://www.notion.com/help/notion-ai-faqs",
+      },
+    ],
+  },
+  {
+    slug: "lovable",
+    product: "Lovable",
+    kind: "case-study",
+    title: "Chat-first building with the code always in reach",
+    summary:
+      "Lovable builds apps from a conversation, but the interface keeps a way out of the chat: plan before build, visual edits without prompting, real code in a real editor, and a revert for everything.",
+    disclaimer:
+      "An independent reading of Lovable's interface, grounded in Lovable's official documentation. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
+    sections: [
+      {
+        heading: "Plan mode decides, Build mode executes",
+        elementSlug: "approval-gate",
+        points: [
+          "Two chat modes separate deliberation from execution — Plan mode can inspect files and logs but never touches code until the plan is approved.",
+          "The approval is the boundary: thinking is free, changing things costs a confirmation.",
+        ],
+        evidence: {
+          quote: "Plan mode never modifies your code.",
+          sourceLabel: "Lovable Docs — Plan mode",
+          url: "https://docs.lovable.dev/features/plan-mode",
+        },
+      },
+      {
+        heading: "Edit the page, not the prompt",
+        points: [
+          "Visual edits target an element directly from the preview toolbar — click it, change the text in place, no prompt required.",
+          "For targeted changes the selected element becomes the context; the chat is reserved for changes you can't point at.",
+        ],
+        evidence: {
+          quote: "Use Edit text inline to change words on the page without writing a prompt.",
+          sourceLabel: "Lovable Docs — Visual edits",
+          url: "https://docs.lovable.dev/features/visual-edit",
+        },
+      },
+      {
+        heading: "Knowledge the agent can't forget",
+        elementSlug: "memory-list",
+        points: [
+          "A plain-text knowledge field carries standing instructions with every message — conventions are written once, not repeated per chat.",
+          "Persistent context is visible and editable, so the user always knows what the agent assumes.",
+        ],
+        evidence: {
+          quote: "Knowledge is always included in context.",
+          sourceLabel: "Lovable Docs — Knowledge",
+          url: "https://docs.lovable.dev/features/knowledge",
+        },
+      },
+      {
+        heading: "Real code, one click away",
+        points: [
+          "The code editor exposes the actual generated code with manual edits applied instantly — the chat is an interface to real files, not a black box.",
+          "GitHub sync runs both ways: Lovable commits to the repo, and pushes to the branch flow back into the project.",
+        ],
+        evidence: {
+          quote: "Everything Lovable builds is real, standard code, and the code editor is where you see it.",
+          sourceLabel: "Lovable Docs — Code mode",
+          url: "https://docs.lovable.dev/features/code-mode",
+        },
+      },
+      {
+        heading: "Every change is revertible",
+        points: [
+          "Each agent change auto-creates a version; any earlier state can be previewed and restored without losing the conversation that produced it.",
+          "Fearless iteration is a UI feature: the revert button is what makes 'just try it' safe to say.",
+        ],
+        evidence: {
+          quote: "Every change Lovable makes to your project creates a version automatically.",
+          sourceLabel: "Lovable Docs — Project history",
+          url: "https://docs.lovable.dev/features/projects/history",
+        },
+      },
+      {
+        heading: "Publish is a snapshot, not a pipeline",
+        points: [
+          "One button in the editor's top-right deploys a snapshot of the current version to a live URL.",
+          "Later edits stay private until republished — what users see is always a deliberate release.",
+        ],
+        evidence: {
+          quote: "Each time you publish, Lovable deploys a snapshot of your project to a live URL.",
+          sourceLabel: "Lovable Docs — Publish",
+          url: "https://docs.lovable.dev/features/publish",
+        },
+      },
+    ],
+    takeaways: [
+      "Separate deciding from doing: a plan mode that never modifies code earns the trust to execute later.",
+      "Let users point at what they mean — visual edits beat prompt gymnastics for local changes.",
+      "Persistent context should be visible and editable, not inferred and hidden.",
+      "Versioning turns agent mistakes into a shrug; auto-version every change and make restore one click.",
+    ],
+    componentSlugs: ["approval-gate", "memory-list", "prompt-input"],
+    sources: [
+      {
+        label: "Lovable Docs — Plan mode",
+        url: "https://docs.lovable.dev/features/plan-mode",
+      },
+      {
+        label: "Lovable Docs — Visual edits",
+        url: "https://docs.lovable.dev/features/visual-edit",
+      },
+      {
+        label: "Lovable Docs — Knowledge",
+        url: "https://docs.lovable.dev/features/knowledge",
+      },
+      {
+        label: "Lovable Docs — Code mode",
+        url: "https://docs.lovable.dev/features/code-mode",
+      },
+      {
+        label: "Lovable Docs — Project history",
+        url: "https://docs.lovable.dev/features/projects/history",
+      },
+      {
+        label: "Lovable Docs — Publish",
+        url: "https://docs.lovable.dev/features/publish",
+      },
+    ],
+  },
+  {
+    slug: "gemini",
+    product: "Gemini",
+    kind: "case-study",
+    title: "The assistant that keeps its drafts on the table",
+    summary:
+      "Gemini treats one answer as a starting point: alternate drafts to flip between, sources a click away, tools you can invoke by name, and a research plan you edit before it runs.",
+    disclaimer:
+      "An independent reading of Gemini's interface, grounded in Google's official help pages. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
+    sections: [
+      {
+        heading: "One answer, several drafts",
+        elementSlug: "output-comparison",
+        points: [
+          "For many prompts Gemini generates alternate drafts, and a control above the response lets the reader flip between them.",
+          "The first answer is presented as a sample, not a verdict — regenerating is browsing, not admitting failure.",
+        ],
+        evidence: {
+          quote:
+            "For some prompts, you can review other drafts that Gemini creates. This option is only available for the latest response. Above the response, click View other drafts or Show drafts.",
+          sourceLabel: "Google Help — Use Gemini Apps",
+          url: "https://support.google.com/gemini/answer/13275745?hl=en",
+        },
+      },
+      {
+        heading: "Sources inline and in a side panel",
+        elementSlug: "source-list",
+        points: [
+          "Source markers appear inside the response and a Sources button opens a side panel of links — two depths of verification.",
+          "Skimmers get provenance in place; doubters get the full list without leaving the page.",
+        ],
+        evidence: {
+          quote:
+            "When sources are available, you can find the Sources button at the bottom of the response or in-line throughout the response. On the right, a side panel will open with the relevant links.",
+          sourceLabel: "Google Help — View related sources from Gemini Apps",
+          url: "https://support.google.com/gemini/answer/14143489?hl=en",
+        },
+      },
+      {
+        heading: "Tools you can call by name",
+        elementSlug: "tool-call",
+        points: [
+          "Typing @ and picking an app forces the tool call — the user can invoke Gmail, Drive or YouTube directly instead of hoping the model infers it.",
+          "Left alone, Gemini auto-invokes available apps; the @ is the explicit override.",
+        ],
+        evidence: {
+          quote: "To specify an app for Gemini to use, enter @ and select the app.",
+          sourceLabel: "Google Help — Use & manage Connected Apps in Gemini",
+          url: "https://support.google.com/gemini/answer/13695044?hl=en",
+        },
+      },
+      {
+        heading: "Gems: saved behavior, not saved prompts",
+        points: [
+          "Gems package instructions and file knowledge into a reusable agent — customization is a named, editable object rather than a prompt pasted at the top of every chat.",
+          "Gemini offers to rewrite weak instructions; the product helps write its own configuration.",
+        ],
+        evidence: {
+          quote:
+            "You can create and save Gems to customize responses in Gemini Apps to your specific needs.",
+          sourceLabel: "Google Help — Use Gems in Gemini Apps",
+          url: "https://support.google.com/gemini/answer/15146780?hl=en",
+        },
+      },
+      {
+        heading: "Deep Research shows the plan first",
+        elementSlug: "agent-plan",
+        points: [
+          "Before running for minutes in the background, Deep Research presents an editable research plan — the user corrects the approach before the compute is spent.",
+          "Long tasks announce their shape up front and notify on completion; waiting is designed, not endured.",
+        ],
+        evidence: {
+          quote:
+            "Gemini will create a research plan for your topic. To update the research plan before you create a report, click Edit plan.",
+          sourceLabel: "Google Help — Use Deep Research in Gemini Apps",
+          url: "https://support.google.com/gemini/answer/15719111?hl=en",
+        },
+      },
+      {
+        heading: "Uncertainty, said out loud",
+        elementSlug: "confidence-answer",
+        points: [
+          "The product's own documentation instructs double-checking and describes disclaimers inside the experience — fallibility is part of the interface, not a footnote.",
+          "The honest pattern: name the limitation where the answer is read, in language a non-engineer can act on.",
+        ],
+        evidence: {
+          quote:
+            "Gemini Apps can make mistakes. When using Gemini Apps, double-check responses and don’t rely on responses from Gemini Apps for professional advice.",
+          sourceLabel: "Google Help — Use Gemini Apps",
+          url: "https://support.google.com/gemini/answer/13275745?hl=en",
+        },
+      },
+    ],
+    takeaways: [
+      "Offer drafts: presenting the first answer as one of several resets the reader's expectation of authority.",
+      "Two depths of sources — inline markers for skimmers, a panel for doubters.",
+      "Let users invoke tools explicitly (@app) instead of relying on model inference alone.",
+      "For long tasks, show an editable plan before spending the compute.",
+    ],
+    componentSlugs: ["output-comparison", "agent-plan", "confidence-answer"],
+    sources: [
+      {
+        label: "Google Help — Use Gemini Apps",
+        url: "https://support.google.com/gemini/answer/13275745?hl=en",
+      },
+      {
+        label: "Google Help — View related sources from Gemini Apps",
+        url: "https://support.google.com/gemini/answer/14143489?hl=en",
+      },
+      {
+        label: "Google Help — Use & manage Connected Apps in Gemini",
+        url: "https://support.google.com/gemini/answer/13695044?hl=en",
+      },
+      {
+        label: "Google Help — Use Gems in Gemini Apps",
+        url: "https://support.google.com/gemini/answer/15146780?hl=en",
+      },
+      {
+        label: "Google Help — Use Deep Research in Gemini Apps",
+        url: "https://support.google.com/gemini/answer/15719111?hl=en",
+      },
+    ],
+  },
+  {
+    slug: "replit",
+    product: "Replit",
+    kind: "case-study",
+    title: "The agent that keeps a save point under every step",
+    summary:
+      "Replit Agent builds whole apps from a chat, and the interface answers the fear that creates: checkpoints you can roll back to, a plan you approve before building, and a preview running beside the conversation.",
+    disclaimer:
+      "An independent reading of Replit's interface, grounded in Replit's official documentation. Quotes are verbatim from the linked official pages. The product UI may differ from what is described.",
+    sections: [
+      {
+        heading: "Checkpoints, in video-game terms",
+        points: [
+          "The Agent snapshots the whole project at milestones — files, config, and conversation context — without being asked.",
+          "The docs explain recovery as a save point in a video game: recovery framing a non-developer already understands.",
+        ],
+        evidence: {
+          quote:
+            "Think of checkpoints as save points in a video game - you can always go back to a working version of your app.",
+          sourceLabel: "Replit Docs — Checkpoints and Rollbacks",
+          url: "https://docs.replit.com/features/version-control/checkpoints-and-rollbacks",
+        },
+      },
+      {
+        heading: "Rollback restores everything, not just code",
+        points: [
+          "One click in the Agent tab restores the entire environment to a previous checkpoint — including the AI conversation context that produced it.",
+          "Reverting the state without reverting the conversation would lose the record of why; both travel together.",
+        ],
+        evidence: {
+          quote:
+            "Rollback functionality allows you to restore your Replit App to any previous checkpoint state with a single click.",
+          sourceLabel: "Replit Docs — Checkpoints and Rollbacks",
+          url: "https://docs.replit.com/features/version-control/checkpoints-and-rollbacks",
+        },
+      },
+      {
+        heading: "Plan mode before Build mode",
+        points: [
+          "A mode selector in the chat input separates ideation from execution — Plan mode guarantees nothing changes while you think.",
+          "The guarantee is stated as a product promise, which is what makes brainstorming with an agent safe.",
+        ],
+        evidence: {
+          quote:
+            "Unlike Build mode, Plan mode focuses on planning and ideation, helping you think through projects before writing code.",
+          sourceLabel: "Replit Docs — Plan Mode",
+          url: "https://docs.replit.com/features/agent/plan-mode",
+        },
+      },
+      {
+        heading: "The plan is approved before the build",
+        elementSlug: "agent-plan",
+        points: [
+          "Agent presents an ordered, editable task list and waits — building starts only after explicit approval.",
+          "The user corrects the plan while corrections are still cheap: before the code exists.",
+        ],
+        evidence: {
+          quote:
+            "Agent creates an ordered task list you can review and refine. When you’re happy with the plan, approve it and Agent starts building.",
+          sourceLabel: "Replit Docs — Replit Agent",
+          url: "https://docs.replit.com/features/agent/overview",
+        },
+      },
+      {
+        heading: "The app runs beside the conversation",
+        points: [
+          "The Preview pane renders the running app with browser-like devtools, in the same workspace as the chat — testing never requires a context switch.",
+          "Build and verify share one screen; the loop between 'change it' and 'see it' has no window-hopping in it.",
+        ],
+        evidence: {
+          quote: "The Preview tool renders the page just as you would see in a browser.",
+          sourceLabel: "Replit Docs — Preview",
+          url: "https://docs.replit.com/features/editor/preview",
+        },
+      },
+      {
+        heading: "The agent tests in front of you",
+        elementSlug: "agent-status",
+        points: [
+          "App testing is visible work: the agent's own cursor clicks around the app, exercising the interface it just built.",
+          "Watching verification happen is worth more than a 'tested' badge — the reader can see what was actually tried.",
+        ],
+        evidence: {
+          quote:
+            "Watch Agent's cursor as it clicks around your app, testing functionality",
+          sourceLabel: "Replit Docs — App Testing",
+          url: "https://docs.replit.com/features/agent/app-testing",
+        },
+      },
+    ],
+    takeaways: [
+      "Explain recovery in terms your audience already has — 'save point in a video game' beats 'snapshot restore'.",
+      "Rollback must restore context as well as code, or the record of why disappears.",
+      "Guarantee a no-side-effects mode for thinking; approval gates work because Plan mode made deciding safe.",
+      "Let the user watch the agent verify its own work — visible testing beats a trust-me badge.",
+    ],
+    componentSlugs: ["agent-plan", "agent-status"],
+    sources: [
+      {
+        label: "Replit Docs — Checkpoints and Rollbacks",
+        url: "https://docs.replit.com/features/version-control/checkpoints-and-rollbacks",
+      },
+      {
+        label: "Replit Docs — Plan Mode",
+        url: "https://docs.replit.com/features/agent/plan-mode",
+      },
+      {
+        label: "Replit Docs — Replit Agent",
+        url: "https://docs.replit.com/features/agent/overview",
+      },
+      {
+        label: "Replit Docs — Preview",
+        url: "https://docs.replit.com/features/editor/preview",
+      },
+      {
+        label: "Replit Docs — Publishing",
+        url: "https://docs.replit.com/features/publishing/overview",
+      },
+      {
+        label: "Replit Docs — App Testing",
+        url: "https://docs.replit.com/features/agent/app-testing",
+      },
+    ],
+  },
+  {
     slug: "streaming-vs-full-reply",
     kind: "guide",
     title: "Streaming vs. waiting for the full reply",
@@ -952,4 +1439,13 @@ export const inspirationEntries: InspirationEntry[] = [
 
 export function getInspirationEntry(slug: string): InspirationEntry | undefined {
   return inspirationEntries.find((entry) => entry.slug === slug);
+}
+
+/** Decision guides that reference a component, for the component page's
+ *  up-link block (guides link down via componentSlugs; this is the reverse
+ *  edge, so internal linking is a two-way street). */
+export function getGuidesForComponent(componentSlug: string): InspirationEntry[] {
+  return inspirationEntries.filter(
+    (entry) => entry.kind === "guide" && entry.componentSlugs.includes(componentSlug),
+  );
 }

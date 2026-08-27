@@ -9,9 +9,9 @@ import type { Tier } from "./pro";
  * means for the composer, where the model id is validated, what happens when
  * the provider rate-limits you mid-stream.
  *
- * Metadata only. The files live under `templates/<dir>/` in this repo and are
- * read by lib/template-files.server.ts — a template is source, not a build
- * artifact, and a second copy of it here would drift immediately.
+ * Metadata only. Paid files live in the private Pro repository. Its artifact
+ * build publishes a metadata-only catalog for this site and protected source
+ * payloads for entitled buyers.
  */
 
 export type TemplateEntry = {

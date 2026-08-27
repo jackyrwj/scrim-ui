@@ -39,8 +39,8 @@ import { sliceTo, useInView, useReducedMotion } from "./use-demo-motion";
 const MODELS = [
   { id: "anthropic/claude-sonnet-5", name: "Claude Sonnet 5", hint: "Balanced — the default" },
   { id: "anthropic/claude-opus-5", name: "Claude Opus 5", hint: "Deepest reasoning" },
-  { id: "openai/gpt-5.5", name: "GPT-5.5", hint: "Fast and broad" },
-  { id: "google/gemini-3.5-flash", name: "Gemini 3.5 Flash", hint: "Cheapest, long context" },
+  { id: "openai/gpt-5.6-terra", name: "GPT-5.6 Terra", hint: "Fast and broad" },
+  { id: "google/gemini-3.7-flash", name: "Gemini 3.7 Flash", hint: "Cheapest, long context" },
 ];
 
 const QUESTION = "What's the weather in Shenzhen — do I need a coat?";
@@ -93,7 +93,7 @@ const CONVERSATIONS = [
   "Draft the release notes",
 ];
 
-export function AiChatDemo() {
+export function AiChatDemo({ caption = true }: { caption?: boolean }) {
   const [step, setStep] = React.useState(0);
   /* Tagged with the step it belongs to, so moving on resets the reveal
      without an effect having to zero it. */
@@ -296,11 +296,13 @@ export function AiChatDemo() {
         </div>
       </div>
 
-      <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
-        A scripted replay of one turn — the six components above are the real ones the template
-        ships, mounted here, but there is no model behind this page. The template you download talks
-        to yours.
-      </p>
+      {caption && (
+        <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
+          A scripted replay of one turn — the six components above are the real ones the template
+          ships, mounted here, but there is no model behind this page. The template you download talks
+          to yours.
+        </p>
+      )}
     </div>
   );
 }

@@ -100,10 +100,69 @@ export type Purchase = {
   /** The Checkout Session id. Idempotency key and success-page lookup both. */
   orderId: string;
   email: string;
+  clientReferenceId: string | null;
+  metadataUserId: string | null;
+  metadataProductKey: string | null;
+  paymentIntentId: string | null;
+  customerId: string | null;
+  invoiceId: string | null;
+  mode: string | null;
+  amountSubtotal: number | null;
   amountTotal: number | null;
   currency: string | null;
   livemode: boolean;
 };
+
+export type PurchaseContract = {
+  amountSubtotal: number;
+  currency: string;
+  productKey: string;
+};
+
+export type ContractOutcome = { ok: true } | { ok: false; reason: string };
+
+/**
+ * A genuine Stripe signature proves who sent an event, not what was bought.
+ * Keep fulfilment tied to the authenticated account and product that created
+ * the server-side Checkout Session.
+ *
+ * `amount_subtotal`, rather than `amount_total`, is the advertised $49 price:
+ * automatic tax may legitimately make the final total higher. A total below
+ * the subtotal is rejected as well, so a discount cannot silently turn into a
+ * full-price Pro entitlement.
+ */
+export function verifyPurchaseContract(
+  purchase: Purchase,
+  expected: PurchaseContract,
+): ContractOutcome {
+  if (purchase.mode !== "payment") {
+    return { ok: false, reason: "Checkout is not a one-time payment." };
+  }
+  if (purchase.amountSubtotal !== expected.amountSubtotal) {
+    return { ok: false, reason: "Checkout subtotal does not match." };
+  }
+  if (purchase.currency?.toLowerCase() !== expected.currency.toLowerCase()) {
+    return { ok: false, reason: "Checkout currency does not match." };
+  }
+  if (purchase.amountTotal === null || purchase.amountTotal < expected.amountSubtotal) {
+    return { ok: false, reason: "Checkout total is below the Pro price." };
+  }
+  if (!purchase.clientReferenceId || purchase.metadataUserId !== purchase.clientReferenceId) {
+    return { ok: false, reason: "Checkout is not tied to an authenticated account." };
+  }
+  if (purchase.metadataProductKey !== expected.productKey) {
+    return { ok: false, reason: "Checkout product metadata does not match." };
+  }
+  return { ok: true };
+}
+
+function objectId(value: unknown): string | null {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object" && "id" in value && typeof value.id === "string") {
+    return value.id;
+  }
+  return null;
+}
 
 /**
  * A completed one-time purchase, or null if this event is not one.
@@ -125,12 +184,35 @@ export function purchaseFromEvent(event: VerifiedEvent): Purchase | null {
   const id = typeof session.id === "string" ? session.id : "";
   if (!id || !email) return null;
 
+  const metadata = session.metadata as Record<string, unknown> | null | undefined;
+
   return {
     provider: "stripe",
     orderId: id,
     email,
+    clientReferenceId:
+      typeof session.client_reference_id === "string" ? session.client_reference_id : null,
+    metadataUserId: typeof metadata?.user_id === "string" ? metadata.user_id : null,
+    metadataProductKey:
+      typeof metadata?.product_key === "string" ? metadata.product_key : null,
+    paymentIntentId: objectId(session.payment_intent),
+    customerId: objectId(session.customer),
+    invoiceId: objectId(session.invoice),
+    mode: typeof session.mode === "string" ? session.mode : null,
+    amountSubtotal: typeof session.amount_subtotal === "number" ? session.amount_subtotal : null,
     amountTotal: typeof session.amount_total === "number" ? session.amount_total : null,
     currency: typeof session.currency === "string" ? session.currency : null,
     livemode: Boolean(event.livemode ?? session.livemode ?? false),
   };
+}
+
+export type Refund = { paymentIntentId: string };
+
+/** Only a fully refunded charge revokes access; partial refunds do not. */
+export function refundFromEvent(event: VerifiedEvent): Refund | null {
+  if (event.type !== "charge.refunded") return null;
+  const charge = event.data.object;
+  if (charge.refunded !== true) return null;
+  const paymentIntentId = objectId(charge.payment_intent);
+  return paymentIntentId ? { paymentIntentId } : null;
 }

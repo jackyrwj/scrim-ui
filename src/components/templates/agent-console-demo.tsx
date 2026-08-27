@@ -149,7 +149,7 @@ type Run = {
 
 const START: Run = { cursor: 0, decision: null, generation: 0 };
 
-export function AgentConsoleDemo() {
+export function AgentConsoleDemo({ caption = true }: { caption?: boolean }) {
   const frameRef = React.useRef<HTMLDivElement>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -402,12 +402,14 @@ export function AgentConsoleDemo() {
         </div>
       </div>
 
-      <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
-        The approval is real — the run will sit there until you allow or deny it, and it answers
-        differently either way. Everything else is scripted: there is no model and no route behind
-        this page. In the template the run lives in a server-side event log, which is what{" "}
-        <strong className="font-medium text-(--foreground)">Reload</strong> above is standing in for.
-      </p>
+      {caption && (
+        <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
+          The approval is real — the run will sit there until you allow or deny it, and it answers
+          differently either way. Everything else is scripted: there is no model and no route behind
+          this page. In the template the run lives in a server-side event log, which is what{" "}
+          <strong className="font-medium text-(--foreground)">Reload</strong> above is standing in for.
+        </p>
+      )}
     </div>
   );
 }

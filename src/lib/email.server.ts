@@ -25,6 +25,30 @@ export function emailConfigured(): boolean {
   return Boolean(RESEND_KEY && FROM);
 }
 
+export async function sendAccountPurchaseEmail(to: string): Promise<boolean> {
+  const dashboardUrl = `${SITE_URL}/dashboard`;
+  const text = `Thanks for buying ${SITE_NAME} Pro.
+
+Your Pro access is now active on your ${SITE_NAME} account (${to}).
+
+Open your dashboard:
+  ${dashboardUrl}
+
+Sign in with the same email address you used at checkout. From the dashboard you can view purchases, download invoices, and create an API token for the CLI.`;
+
+  return send(
+    to,
+    `Your ${SITE_NAME} Pro access is ready`,
+    text,
+    layout(
+      `Your ${SITE_NAME} Pro access is ready`,
+      `<p style="font-size:14px;line-height:1.6">Your Pro access is now active on the account for <strong>${escapeHtml(to)}</strong>.</p>
+  <p style="margin:24px 0"><a href="${dashboardUrl}" style="display:inline-block;background:#111;color:#fff;text-decoration:none;border-radius:8px;padding:11px 16px;font-size:14px;font-weight:600">Open dashboard</a></p>
+  <p style="font-size:13px;line-height:1.6;color:#555">Sign in with the same email address you used at checkout. Your dashboard contains purchase history, invoice links, and CLI API-token management.</p>`,
+    ),
+  );
+}
+
 async function send(to: string, subject: string, text: string, html: string): Promise<boolean> {
   if (!emailConfigured()) {
     /* Loud, and with the key in it. If email is not wired up yet, the server
@@ -61,6 +85,16 @@ function layout(heading: string, body: string): string {
     ${SITE_NAME} — <a href="${SITE_URL}" style="color:#666">${SITE_URL.replace(/^https?:\/\//, "")}</a>
   </p>
 </div>`;
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]!);
 }
 
 function keyBlock(key: string): string {

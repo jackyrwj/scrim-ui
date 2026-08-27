@@ -1,37 +1,48 @@
-# What the licence covers
+# What the licences cover
 
-The site says "free to copy" on every component page. Until now there was no
-licence file, and no licence means all rights reserved — so the promise on the
-page and the legal position of the repository disagreed. This is that promise
-written down, and its limits.
+Scrim UI has two source distributions with different ownership and licence
+boundaries. Repository visibility is the boundary: this public repository is
+Scrim UI Free; paid implementation is built from a separate private repository.
 
-## MIT — the code
+## Scrim UI Free — MIT
 
-`LICENSE` (MIT) covers the source in this repository: the components under
-`src/showcase/`, the tools under `src/components/tools/`, and the site itself.
+`LICENSE` covers the software source that is actually present in this public
+repository, including:
 
-Copy a component into your project and you owe nothing — no attribution in your
-UI, no link back, no notice to us. That is the entire point of the format: one
-file, no dependency, yours once you paste it.
+- free components under `src/showcase/`;
+- browser tools under `src/components/tools/`; and
+- the public website, catalog, account, checkout, and entitlement code.
 
-## Not covered
+Copy a free component into a project and you owe nothing beyond retaining the
+MIT notice when distributing a substantial portion of the covered software.
+There is no attribution requirement in the product UI.
 
-Three things in this repository are **not** MIT, because they are not code:
+## Scrim UI Pro — commercial
 
-- **The editorial content.** The inspiration articles under `src/lib/inspiration.ts`,
-  the "why we list it" notes and curation in `src/lib/resources.ts`, the usage
-  and mistakes lists in each `page-config.tsx`, and the concept-to-icon mapping
-  in `src/lib/icon-guide.ts`. Those are written judgements, not a library.
-- **The name and the mark.** "Scrim UI" and the mark in
-  `src/components/site/scrim-mark.tsx` identify this project. Fork the code
-  freely; run it under your own name.
-- **The screenshots in `public/previews/`.** Captures of third-party websites,
-  included here to illustrate a directory listing. They belong to the sites
-  they show.
+Pro component and template implementations are not part of this repository and
+are not offered under MIT. Buyers receive them from an entitlement-gated
+private artifact service under [the Scrim UI Pro Commercial License](PRO-LICENSE.md).
 
-## Third-party
+This public repository may contain names, descriptions, file paths, line counts,
+screenshots, and purpose-built marketing demos for Pro products. Those materials
+do not include or grant rights to the paid implementation.
 
-- **Lucide** icons, ISC licence, © Lucide Contributors. The icons are theirs;
-  the concept-to-icon mapping is ours. The full notice is on `/icons`.
-- Every entry in the resources directory belongs to its own publisher. Listing
-  something is not affiliation or endorsement, which the detail pages say too.
+Changing the licence boundary applies to future distributions. Source that was
+previously distributed under MIT remains subject to the licence attached to
+that copy.
+
+## Not covered by MIT
+
+- **Editorial content.** The inspiration articles, curation notes, usage and
+  mistakes guidance, and concept-to-icon mapping are written judgements rather
+  than reusable software.
+- **The name and the mark.** "Scrim UI" and its mark identify this project.
+  Fork the MIT code freely; publish it under your own name.
+- **Third-party screenshots.** Captures in `public/previews/` belong to the
+  sites they depict and are included only to illustrate directory listings.
+
+## Third-party material
+
+- Lucide icons use the ISC licence, © Lucide Contributors.
+- Entries in the resources directory belong to their respective publishers.
+  Listing does not imply affiliation or endorsement.

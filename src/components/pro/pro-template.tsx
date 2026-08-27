@@ -1,11 +1,12 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { CodeBlock } from "@/components/component-page/code-block";
 import { InstallCommand } from "@/components/component-page/install-command";
-import { useLicense } from "@/lib/pro-access";
+import { useProAccess } from "@/lib/pro-access";
 import { PRO_PRICE } from "@/lib/pro";
 import { UnlockDialog } from "./unlock-dialog";
 
@@ -17,8 +18,8 @@ export type TemplateFileMeta = { path: string; lines: number };
  * The file LIST is rendered whether or not you own the template, and that is
  * the point — "app/api/chat/route.ts, 68 lines" tells a buyer more about what
  * they are getting than any feature bullet, and a path name gives nothing
- * away. Only the contents are held back, and they are fetched, never sent
- * down with the page. (See lib/template-files.server.ts.)
+ * away. The contents stay in the private artifact origin and are fetched only
+ * after the public server verifies access.
  */
 export function ProTemplate({
   slug,
@@ -29,7 +30,7 @@ export function ProTemplate({
   files: TemplateFileMeta[];
   registryUrl: string;
 }) {
-  const license = useLicense();
+  const access = useProAccess();
   const pathname = usePathname();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(files[0]?.path ?? "");
@@ -40,17 +41,17 @@ export function ProTemplate({
 
   /* Keyed by licence and compared at render, so a changed key invalidates
      without an effect that calls setState — see pro-source.tsx. */
-  const contents = fetched && fetched.key === license ? fetched.files : null;
-  const error = failed && failed.key === license ? failed.message : null;
-  const loading = Boolean(license) && !contents && !error;
+  const contents = fetched && fetched.key === access.identity ? fetched.files : null;
+  const error = failed && failed.key === access.identity ? failed.message : null;
+  const loading = access.unlocked && !contents && !error;
 
   React.useEffect(() => {
-    if (!license || !loading) return;
+    if (!access.unlocked || !access.identity || !loading) return;
     let cancelled = false;
     fetch("/api/pro/template", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, key: license }),
+      body: JSON.stringify({ slug, key: access.key }),
     })
       .then(async (response) => {
         const data: unknown = await response.json().catch(() => null);
@@ -58,37 +59,37 @@ export function ProTemplate({
         if (response.ok) {
           const list = (data as { files: { path: string; content: string }[] }).files;
           setFetched({
-            key: license,
+            key: access.identity!,
             files: Object.fromEntries(list.map((f) => [f.path, f.content])),
           });
         } else {
           setFailed({
-            key: license,
+            key: access.identity!,
             message: (data as { error?: string } | null)?.error ?? "Could not load the template.",
           });
         }
       })
       .catch(() => {
-        if (!cancelled) setFailed({ key: license, message: "Could not reach the server." });
+        if (!cancelled) setFailed({ key: access.identity!, message: "Could not reach the server." });
       });
     return () => {
       cancelled = true;
     };
-  }, [license, loading, slug]);
+  }, [access.identity, access.key, access.unlocked, loading, slug]);
 
   /* Fetched and saved from a blob rather than linked: the licence goes in the
      POST body, and an <a href> carrying a key would leak it into history and
      the referrer. The cost is that the click has to await the bytes, hence
      the pending label. */
   async function download() {
-    if (!license) return;
+    if (!access.unlocked) return;
     setDownloading(true);
     setDownloadError(null);
     try {
       const response = await fetch("/api/pro/template/download", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ slug, key: license }),
+        body: JSON.stringify({ slug, key: access.key }),
       });
       if (!response.ok) {
         const data: unknown = await response.json().catch(() => null);
@@ -117,7 +118,17 @@ export function ProTemplate({
     <>
       {contents ? (
         <div className="mb-6 space-y-3">
-          <InstallCommand url={`${registryUrl}?key=${encodeURIComponent(license ?? "")}`} />
+          {access.mode === "license" ? (
+            <InstallCommand url={`${registryUrl}?key=${encodeURIComponent(access.key ?? "")}`} />
+          ) : (
+            <p className="text-sm text-(--muted-foreground)">
+              Create a private CLI token in your{" "}
+              <Link href="/dashboard" className="font-medium text-(--foreground) underline underline-offset-4">
+                dashboard
+              </Link>
+              .
+            </p>
+          )}
           {/* The second way out, and for a template arguably the first: this
               is a standalone app with its own package.json, so the natural
               move is unzip, install, run — not merge twenty-three files into
@@ -165,10 +176,10 @@ export function ProTemplate({
           <button
             type="button"
             onClick={() => setDialogOpen(true)}
-            disabled={loading}
+            disabled={access.checking || loading}
             className="mt-1 h-10 rounded-xl bg-(--accent) px-5 text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? "Checking licence..." : "Unlock Pro"}
+            {access.checking || loading ? "Checking access..." : "Unlock Pro"}
           </button>
           {error && (
             <p role="alert" className="text-xs text-red-500">

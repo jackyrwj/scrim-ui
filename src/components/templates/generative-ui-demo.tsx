@@ -35,8 +35,8 @@ import { useInView, useReducedMotion } from "./use-demo-motion";
    from the site would couple the two builds to save four lines. */
 const MODELS = [
   { id: "anthropic/claude-sonnet-5", name: "Claude Sonnet 5", hint: "Balanced — the default" },
-  { id: "openai/gpt-5.5", name: "GPT-5.5", hint: "Fast and broad" },
-  { id: "google/gemini-3.5-flash", name: "Gemini 3.5 Flash", hint: "Cheapest, long context" },
+  { id: "openai/gpt-5.6-terra", name: "GPT-5.6 Terra", hint: "Fast and broad" },
+  { id: "google/gemini-3.7-flash", name: "Gemini 3.7 Flash", hint: "Cheapest, long context" },
 ];
 
 type Weather = {
@@ -120,7 +120,7 @@ const TIMELINE: { phase: Phase; ms: number }[] = [
 const ORDER: Phase[] = TIMELINE.map((t) => t.phase);
 const at = (phase: Phase, min: Phase) => ORDER.indexOf(phase) >= ORDER.indexOf(min);
 
-export function GenerativeUiDemo() {
+export function GenerativeUiDemo({ caption = true }: { caption?: boolean }) {
   const frameRef = React.useRef<HTMLDivElement>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -296,13 +296,15 @@ export function GenerativeUiDemo() {
         </div>
       </div>
 
-      <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
-        The third widget is the one worth reading:{" "}
-        <code className="font-mono text-[11px]">showItinerary</code> is a name the server can produce
-        and this build cannot draw, so it degrades to prose with the raw result behind a toggle
-        rather than to a blank card. The question at the bottom is live — it is a client-side tool,
-        and it waits for you. Everything else is scripted; there is no model behind this page.
-      </p>
+      {caption && (
+        <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
+          The third widget is the one worth reading:{" "}
+          <code className="font-mono text-[11px]">showItinerary</code> is a name the server can produce
+          and this build cannot draw, so it degrades to prose with the raw result behind a toggle
+          rather than to a blank card. The question at the bottom is live — it is a client-side tool,
+          and it waits for you. Everything else is scripted; there is no model behind this page.
+        </p>
+      )}
     </div>
   );
 }

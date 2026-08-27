@@ -42,10 +42,9 @@ npx shadcn@latest add https://scrimui.dev/r/prompt-input.json
 All 29 components are in the registry; the index is at
 [`/r/registry.json`](https://scrimui.dev/r/registry.json).
 
-Or skip the CLI entirely — every component page has the full source and a copy
-button, and every component is **one file that imports nothing but React**. No
-package to add, no version to track, no breaking change to absorb. Paste it and
-it is yours.
+Or skip the CLI entirely — every free component page has the full MIT source
+and a copy button. Pro implementations are built in a separate private
+repository and delivered only after an entitlement check.
 
 ## What is here
 
@@ -101,13 +100,20 @@ src/
     inspiration.ts         the articles
 ```
 
+Pro names, descriptions and file manifests live in `src/lib/pro-catalog.json`.
+The paid implementations do not live under this Git root. See
+[`LICENSING.md`](LICENSING.md) and run `npm run check:public` before publishing.
+
 ## Licence
 
-Code is [MIT](LICENSE). Copy a component and you owe nothing — no attribution,
-no link back.
+The software source present in this public repository is [MIT](LICENSE). Copy a
+free component and you owe nothing — no attribution in your product and no link
+back.
 
-The editorial content, the name and mark, and the third-party screenshots are
-not MIT; [LICENSING.md](LICENSING.md) says exactly what is and is not covered.
+Pro source is distributed separately under the
+[commercial licence](PRO-LICENSE.md). Editorial content, the name and mark,
+and third-party screenshots are also outside MIT; [LICENSING.md](LICENSING.md)
+defines the exact boundary.
 
 Icons are from [Lucide](https://lucide.dev) under the ISC licence. The icons
 are theirs; the concept-to-icon mapping is ours.

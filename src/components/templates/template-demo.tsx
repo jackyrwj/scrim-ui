@@ -18,7 +18,7 @@ import { GenerativeUiDemo } from "./generative-ui-demo";
  * empty frame saying "preview coming soon" is worse than the honest absence:
  * it is a promise made on the page where someone is deciding whether to pay.
  */
-const demos: Record<string, () => React.ReactElement> = {
+const demos: Record<string, (props: { caption?: boolean }) => React.ReactElement> = {
   "ai-chat": AiChatDemo,
   "rag-qa": RagQaDemo,
   "agent-console": AgentConsoleDemo,

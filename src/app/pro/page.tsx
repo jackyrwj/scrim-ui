@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { components } from "@/lib/registry";
 import { publishedTemplates } from "@/lib/templates";
-import { CHECKOUT_URL, FREE_PLAN, FREE_PRICE, PRO_PLAN, PRO_PRICE } from "@/lib/pro";
+import { FREE_PLAN, FREE_PRICE, PRO_PLAN, PRO_PRICE } from "@/lib/pro";
+import { hasActiveEntitlement } from "@/lib/account-store.server";
+import { clerkConfigured, getViewer } from "@/lib/auth.server";
+import { databaseConfigured } from "@/lib/db.server";
+import { stripeApiConfigured } from "@/lib/stripe-client.server";
 import { ProBadge } from "@/components/pro/pro-badge";
 import { LicenseForm } from "@/components/pro/license-form";
 import { RecoverForm } from "@/components/pro/recover-form";
@@ -18,7 +22,6 @@ export const metadata: Metadata = {
    this describes what is in the box TODAY, which does. Deriving it means the
    page cannot promise a component that has not shipped, and cannot forget to
    mention one that has. */
-const freeComponents = components.filter((c) => c.status === "published" && c.tier !== "pro");
 const proComponents = components.filter((c) => c.status === "published" && c.tier === "pro");
 
 function CheckIcon() {
@@ -29,15 +32,25 @@ function CheckIcon() {
   );
 }
 
-export default function ProPage() {
+export default async function ProPage() {
+  const authReady = clerkConfigured();
+  const viewer = authReady ? await getViewer() : null;
+  const checkoutReady = authReady && databaseConfigured() && stripeApiConfigured();
+  let hasPro = false;
+  if (viewer && databaseConfigured()) {
+    try {
+      hasPro = await hasActiveEntitlement(viewer.id);
+    } catch (error) {
+      console.error("[pricing] Could not load account entitlement:", error);
+    }
+  }
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
       <div className="text-center">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Pricing</h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-(--muted-foreground)">
-          The free library stays free — all {freeComponents.length} components, MIT, forever. Pro is
-          the layer above: the pieces that take a week to get right, and the templates that are an
-          application rather than a component.
+          The free library stays free. Pro is the layer above: the pieces that take a week to get
+          right, and the templates that are an application rather than a component.
         </p>
       </div>
 
@@ -89,102 +102,68 @@ export default function ProPage() {
             ))}
           </ul>
 
-          {/* Said plainly while checkout is not live. A "Get Pro" button that
-              silently does nothing costs more trust than an honest sentence. */}
-          {CHECKOUT_URL ? (
-            <a
-              href={CHECKOUT_URL}
+          {hasPro ? (
+            <Link
+              href="/dashboard"
               className="mt-7 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
             >
-              Get Pro — {PRO_PRICE}
-            </a>
+              Open dashboard
+            </Link>
+          ) : !viewer && authReady ? (
+            <Link
+              href="/sign-in"
+              className="mt-7 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
+            >
+              Sign in to get Pro
+            </Link>
+          ) : checkoutReady ? (
+            <form action="/api/checkout/session" method="post" className="mt-7">
+              <button className="flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90">
+                Get Pro — {PRO_PRICE}
+              </button>
+            </form>
           ) : (
             <div className="mt-7 rounded-xl border border-dashed border-(--border) px-4 py-3 text-center text-sm text-(--muted-foreground)">
-              Checkout is not live yet.
+              Account checkout is not configured yet.
             </div>
           )}
         </div>
       </div>
 
-      {/* Counted, never claimed. A buyer deciding on {PRO_PRICE} deserves the
-          inventory rather than the brochure — and stating it plainly costs
-          less than being caught overselling it. */}
-      <div className="mt-8 rounded-2xl border border-(--border) bg-(--muted)/30 p-6">
-        <h2 className="text-sm font-semibold">What is in Pro today</h2>
-        <div className="mt-4 grid gap-4 sm:grid-cols-3">
-          <div>
-            <div className="text-2xl font-bold tabular-nums">{publishedTemplates.length}</div>
-            <div className="text-sm text-(--muted-foreground)">
-              {publishedTemplates.length === 1 ? "template" : "templates"}
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold tabular-nums">{proComponents.length}</div>
-            <div className="text-sm text-(--muted-foreground)">
-              Pro {proComponents.length === 1 ? "component" : "components"}
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold tabular-nums">{freeComponents.length}</div>
-            <div className="text-sm text-(--muted-foreground)">free components, included</div>
-          </div>
-        </div>
-        <p className="mt-4 text-sm leading-6 text-(--muted-foreground)">
-          Pro is early, and priced that way. Buying now is a bet on what comes next — which is why
-          the licence covers everything added later at no extra cost, and why the price rises as
-          items land rather than after you have paid.
-        </p>
-      </div>
-
-      {publishedTemplates.length > 0 && (
-        <div className="mt-14">
-          <h2 className="text-xl font-semibold tracking-tight">Templates</h2>
-          <p className="mb-5 mt-1 text-sm text-(--muted-foreground)">
-            Complete applications, not snippets — the reason Pro exists.
-          </p>
-          <div className="space-y-3">
+      {/* Counted, never claimed: the inventory a buyer gets today, derived
+          from the registry at render time so it can never oversell. */}
+      {(publishedTemplates.length > 0 || proComponents.length > 0) && (
+        <div className="mt-12">
+          <h2 className="text-xl font-semibold tracking-tight">In Pro today</h2>
+          <div className="mt-5 space-y-2">
             {publishedTemplates.map((t) => (
               <Link
                 key={t.slug}
                 href={`/templates/${t.slug}`}
-                className="group block rounded-xl border border-(--border) p-4 transition-colors hover:bg-(--muted)/60"
+                className="group flex items-center justify-between gap-3 rounded-xl border border-(--border) px-4 py-3 transition-colors hover:bg-(--muted)/60"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium group-hover:underline">{t.name} Template</span>
-                  <ProBadge />
-                </div>
-                <p className="mt-1 text-sm text-(--muted-foreground)">{t.description}</p>
+                <span className="font-medium group-hover:underline">{t.name} Template</span>
+                <ProBadge />
               </Link>
             ))}
-          </div>
-        </div>
-      )}
-
-      {proComponents.length > 0 && (
-        <div className="mt-14">
-          <h2 className="text-xl font-semibold tracking-tight">Pro components</h2>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {proComponents.map((c) => (
               <Link
                 key={c.slug}
                 href={`/components/${c.slug}`}
-                className="group rounded-xl border border-(--border) p-4 transition-colors hover:bg-(--muted)/60"
+                className="group flex items-center justify-between gap-3 rounded-xl border border-(--border) px-4 py-3 transition-colors hover:bg-(--muted)/60"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-medium group-hover:underline">{c.name}</span>
-                  <ProBadge />
-                </div>
-                <p className="mt-1 line-clamp-2 text-sm text-(--muted-foreground)">{c.description}</p>
+                <span className="font-medium group-hover:underline">{c.name}</span>
+                <ProBadge />
               </Link>
             ))}
           </div>
         </div>
       )}
 
-      <div className="mt-14 rounded-2xl border border-(--border) p-6">
-        <h2 className="text-sm font-semibold">Already have a licence?</h2>
+      <div className="mt-12 rounded-2xl border border-(--border) p-6">
+        <h2 className="text-sm font-semibold">Legacy licence key</h2>
         <p className="mt-1 text-sm text-(--muted-foreground)">
-          Paste your key once and every Pro item on the site unlocks in this browser.
+          Keys issued before accounts remain valid. New purchases are linked to your account instead.
         </p>
         <div className="mt-4">
           <LicenseForm />
@@ -201,37 +180,6 @@ export default function ProPage() {
           <div className="mt-3">
             <RecoverForm />
           </div>
-        </div>
-      </div>
-
-      <div className="mt-14 space-y-6 border-t border-(--border) pt-10">
-        <div>
-          <h3 className="text-sm font-semibold">Is the free library going to shrink?</h3>
-          <p className="mt-1 text-sm text-(--muted-foreground)">
-            No. Everything published free stays free and stays MIT, and new free components keep
-            shipping. Pro is additive — nothing that is on the site today moves behind the lock.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold">Will the price go up?</h3>
-          <p className="mt-1 text-sm text-(--muted-foreground)">
-            Yes, as more Pro items ship. If you buy now you keep everything added later at no extra
-            cost — that is the whole trade for buying early.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold">What does the licence cover?</h3>
-          <p className="mt-1 text-sm text-(--muted-foreground)">
-            One developer, unlimited projects, including client work and commercial products. You
-            cannot resell or redistribute the components as a component library of your own.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-sm font-semibold">Do I need an account?</h3>
-          <p className="mt-1 text-sm text-(--muted-foreground)">
-            No. There are no passwords and no login — the licence key is the whole system, and it
-            works on every machine you paste it into.
-          </p>
         </div>
       </div>
     </div>

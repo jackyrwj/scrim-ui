@@ -9,6 +9,7 @@ import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
 import { publishedTemplates } from "@/lib/templates";
 import { SITE_REPO } from "@/lib/site";
+import { AccountNav } from "@/components/account/account-nav";
 
 const navItems = [
   { href: "/tools", label: "Tools" },
@@ -18,7 +19,7 @@ const navItems = [
   { href: "/icons", label: "Icons" },
   { href: "/resources", label: "Resources" },
   { href: "/inspiration", label: "Inspiration" },
-  { href: "/pro", label: "Pro" },
+  { href: "/pro", label: "Pricing" },
 ];
 
 function buildSearchItems() {
@@ -50,6 +51,9 @@ function buildSearchItems() {
 
 export function SiteHeader() {
   const searchItems = buildSearchItems();
+  const accountAuthConfigured = Boolean(
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY && process.env.CLERK_SECRET_KEY,
+  );
 
   return (
     <header className="sticky top-0 z-50 border-b border-(--border) bg-(--background)/80 backdrop-blur-md">
@@ -71,6 +75,7 @@ export function SiteHeader() {
         </nav>
         <div className="flex items-center gap-2">
           <Search items={searchItems} />
+          {accountAuthConfigured && <AccountNav />}
           {/* Every component page tells the reader to copy a file rather than
               install a package, so the repo is the only place they can check
               what they are copying. Icon-only, and sized to match the theme

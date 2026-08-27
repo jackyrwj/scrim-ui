@@ -21,6 +21,10 @@ const STORAGE_KEY = "scrim-ui:license";
 
 let current: string | null = null;
 const listeners = new Set<() => void>();
+type AccountState = { checked: boolean; authenticated: boolean; hasPro: boolean };
+const SERVER_ACCOUNT_STATE: AccountState = { checked: false, authenticated: false, hasPro: false };
+let accountState: AccountState = { checked: false, authenticated: false, hasPro: false };
+let accountRequest: Promise<void> | null = null;
 
 function emit() {
   for (const l of listeners) l();
@@ -73,6 +77,91 @@ export function useLicense(): string | null {
   );
   React.useEffect(restore, []);
   return key;
+}
+
+async function loadAccountAccess(force = false) {
+  if (accountRequest) return accountRequest;
+  if (!force && accountState.checked) return;
+  accountRequest = fetch("/api/account/entitlement", { cache: "no-store" })
+    .then(async (response) => {
+      const data = (await response.json().catch(() => null)) as {
+        authenticated?: boolean;
+        hasPro?: boolean;
+      } | null;
+      accountState = {
+        checked: true,
+        authenticated: Boolean(data?.authenticated),
+        hasPro: response.ok && Boolean(data?.hasPro),
+      };
+      emit();
+    })
+    .catch(() => {
+      accountState = { checked: true, authenticated: false, hasPro: false };
+      emit();
+    })
+    .finally(() => {
+      accountRequest = null;
+    });
+  return accountRequest;
+}
+
+export type ProAccess = {
+  checking: boolean;
+  unlocked: boolean;
+  authenticated: boolean;
+  mode: "account" | "license" | null;
+  key: string | null;
+  identity: string | null;
+};
+
+/** Browser access prefers the signed-in account and falls back to old keys. */
+export function useProAccess(): ProAccess {
+  const key = useLicense();
+  const account = React.useSyncExternalStore(
+    subscribe,
+    () => accountState,
+    () => SERVER_ACCOUNT_STATE,
+  );
+  React.useEffect(() => {
+    /* Recheck on every gated-page mount so an SPA sign-in or a just-completed
+       checkout cannot leave a stale anonymous/free result in the module. */
+    void loadAccountAccess(true);
+  }, []);
+
+  if (account.hasPro) {
+    return {
+      checking: false,
+      unlocked: true,
+      authenticated: true,
+      mode: "account",
+      key: null,
+      identity: "account",
+    };
+  }
+  if (key) {
+    return {
+      checking: false,
+      unlocked: true,
+      authenticated: account.authenticated,
+      mode: "license",
+      key,
+      identity: `license:${key}`,
+    };
+  }
+  return {
+    checking: !account.checked,
+    unlocked: false,
+    authenticated: account.authenticated,
+    mode: null,
+    key: null,
+    identity: null,
+  };
+}
+
+export async function refreshAccountAccess() {
+  accountState = { ...accountState, checked: false };
+  emit();
+  await loadAccountAccess(true);
 }
 
 export type VerifyResult = { valid: true; plan: string } | { valid: false; error: string };

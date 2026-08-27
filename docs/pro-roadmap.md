@@ -11,30 +11,28 @@ Ordered by what a buyer would miss most, not by what is quickest to build.
 | | Count |
 | --- | --- |
 | Pro templates | **5** (ai-chat, rag-qa, agent-console, structured-extraction, generative-ui) |
-| Pro components | **4** (streaming-markdown, citation-popover, approval-gate, cost-meter) |
-| Pro blocks | **0** |
+| Pro components | **6** (streaming-markdown, citation-popover, approval-gate, cost-meter, edit-diff-view, prompt-editor) |
 | Free components, published | 38 |
 
-Nine items. Every decision below follows from that sentence — and the sentence
-has changed twice now, so re-read it before trusting anything written under it.
+Eleven items. Every decision below follows from that sentence — and the sentence
+has changed four times now, so re-read it before trusting anything written under it.
 
 ### The thing to fix before charging anyone — **done**
 
 `PRO_PLAN.features` in `src/lib/pro.ts` promised seven things, and one of them
-was an empty category: Pro **blocks**. There are still none.
+was an empty category: Pro **blocks**. The blocks then shipped — and were
+removed again within the day, for the better reason: they were *redundant*,
+not empty. Every block was an extraction from a template the same buyer
+already owns at the same price, so the layer added a second way to buy the
+same code and a ninth nav tab to explain it with. Pro is templates and
+components; that is the whole shape.
 
 A customer who pays and finds half the list empty has not been oversold, they
 have been shortchanged. Either the list shrinks to what is real, or the items
 ship before checkout opens. The list shrinking is not a retreat — a short,
-true list outsells a long one that a buyer can immediately catch out.
-
-So the blocks half of "Every Pro component and block, full source" is gone and
-the components half stays, because the streaming Markdown renderer shipped
-(see below) and the test is whether a category is empty, not whether it is
-short. Six entries, all true today, and the licence did not change:
-"everything added to Pro later, at no extra cost" already covers blocks for
-anyone buying now, so the line goes back the day the first one ships and not
-before.
+true list outsells a long one that a buyer can immediately catch out. The same
+test, applied in the other direction, is what removed the blocks: a line that
+adds no capability adds no line.
 
 The same claim was hardcoded in two places that do not read `PRO_PLAN` — the
 unlock dialog's summary line and, worst of all, the `/pro/success` receipt —
@@ -44,11 +42,11 @@ and both now say what the list says.
 
 ## Price
 
-**Two tiers: $0 and $99. Pro is everything — no feature splitting.**
+**Two tiers: $0 and $49. Pro is everything — no feature splitting.**
 
 | | Free | Pro |
 | --- | --- | --- |
-| Price | $0, forever | **$99**, once |
+| Price | $0, forever | **$49**, once |
 | Components | All free ones, MIT | Free ones + every Pro one |
 | Templates | — | All of them |
 | Later additions | Free ones keep coming | Included, no extra cost |
@@ -58,36 +56,22 @@ One paid tier, not three. A $49 / $99 / $199 ladder would mean deciding which
 buyer gets the good version, and at this size that decision costs more in
 hesitation at the pricing page than it could ever earn.
 
-The reasoning behind $49, so it survives being revisited:
+Why $49:
 
-**One-time and lifetime means early buyers are funding the work.** They pay for
-a promise that has, right now, one piece of evidence behind it. The low price
-is what they get for carrying that risk. Raising it later is easy and fair;
-starting high and cutting is a betrayal of the people who believed first.
+**One-time and lifetime means early buyers are funding the work.** The low
+price is what they get for buying while the Pro catalogue is still young.
 
 **$49 is a decision, $99 is a justification.** A developer expenses $99 or
 sleeps on it. What is scarce right now is not margin, it is *buyers* — the
 first twenty people's feedback and testimonials are worth more than the price
 difference on twenty sales.
 
-**A rising price is the only urgency that is not a lie.** No countdown timers,
-no fake scarcity. But it works exactly once: `/pro` now tells buyers the price
-will rise, so it has to actually rise, or the next announcement is worth
-nothing.
+There is no paid-tier ladder: Free stays Free and Pro contains the complete
+paid catalogue. The Pro price can be revisited later without splitting the
+entitlement or changing what existing buyers own, but **the current price is
+$49 once**.
 
-| Price | Raise it when |
-| --- | --- |
-| ~~$49~~ | ~~1 template~~ |
-| ~~$79~~ | ~~3 templates + the streaming Markdown renderer~~ — earned, never taken |
-| **$99** | **Now** — 5 templates + the first batch of Pro components |
-| ? | Nothing is promised above this. The next rung has to be earned before it is written down. |
-
-The $79 rung passed without the price moving, so this is one raise rather than
-two. That is the better outcome: `/pro` tells buyers the price rises as items
-land, and the credibility of that sentence is worth more than the fifty
-dollars a second announcement would have bought.
-
-One thing this ladder cannot fix: there is still no checkout. `CHECKOUT_URL`
+One thing this price cannot fix: there is still no checkout. `CHECKOUT_URL`
 is empty and the button falls back to `/pro`. A price is a claim about a
 transaction that does not exist yet, and until it does, every rung above is
 theory.
@@ -230,13 +214,22 @@ whose `](` has not arrived. A naive renderer flashes raw syntax on every
 token, and the obvious fix — waiting for a complete block — destroys the
 streaming feel you were trying to sell.
 
-### AI edit diff view
+### AI edit diff view — **shipped** as `edit-diff-view`
 
 Accept and reject changes hunk by hunk.
 
 *What breaks:* diffs that arrive *while streaming*, so hunk boundaries move
 under the user's cursor. Plus the ordinary hard parts of any diff UI — word
 level within line level, and partial acceptance leaving a coherent document.
+
+*Shipped.* Without the host template after all — every trap listed above lives
+in the data model, not the surrounding app. The answer is an append-only
+segment list: `context` segments verbatim, `edit` segments with caller-given
+ids, decisions keyed by id so an accept cannot slide onto a different hunk when
+the stream re-splits. Incomplete hunks (`complete: false`) render their caret
+with disabled buttons, and `buildMergedDocument` treats rejected and undecided
+identically — both keep the original — so no state of the UI can leak half an
+edit into the output.
 
 ### Citation source popover — **shipped** as `citation-popover`
 
@@ -300,7 +293,7 @@ turns running and then jumps to $0.01 has already lost the reader.
 The rate table stays at the call site. A component that ships its own prices
 is a component that is quietly wrong after the next provider announcement.
 
-### Prompt editor
+### Prompt editor — **shipped** as `prompt-editor`
 
 Variable highlighting, template preview, diffing between versions.
 
@@ -308,19 +301,25 @@ Variable highlighting, template preview, diffing between versions.
 included because it is genuinely useful, not because it is hard. If the list
 needs cutting, it goes first.
 
+*Shipped*, and the low-end call was right. The transparent-textarea-over-pre
+trick is well known; the care went into the four places it silently fails —
+typographic drift between the layers (one shared class constant), scroll sync,
+the trailing newline that collapses in a pre, and unknown `{{variables}}`,
+which get a warning tint and survive `renderTemplate` untouched rather than
+vanishing into a silent hole.
+
 ---
 
 ## Order of work
 
-The sequence, given the price ladder:
+The sequence:
 
 1. ~~**Truthful feature list.**~~ Done.
 2. ~~**Streaming Markdown renderer.**~~ Shipped.
 3. ~~**RAG template.**~~ Shipped.
 4. ~~**Citation popover.**~~ Shipped as `citation-popover`, promoted out of the
    RAG template.
-5. ~~**Re-price.**~~ Done — **$99**, skipping the $79 rung, which had been
-   earned and left on the table.
+5. ~~**Set the launch price.**~~ Done — **$49 once**.
 
 Everything above this line was the plan as written in the first draft. The
 plan is now finished, which is the point at which a roadmap is most dangerous:
@@ -328,23 +327,32 @@ there is nothing left in it to disagree with.
 
 ### What is actually next
 
-**Checkout.** `CHECKOUT_URL` is empty. Nine Pro items and a price is not a
-product until someone can pay. This outranks every item below it and it is not
-close.
+**Checkout.** The machinery is built and committed: the Stripe webhook issues
+keys into Upstash, Resend delivers them, the success page shows the key
+immediately, and every unconfigured piece degrades to something honest. What
+remains is account setup, not code — a Payment Link, its webhook secret, the
+Upstash pair, and a verified sending domain. Eleven Pro items and a price is
+not a product until someone can pay, and someone is now four environment
+variables away from being able to.
 
-**The two remaining Pro components.** The AI edit diff view is the last hard
-one on the list — hunk boundaries that move under the cursor while the diff is
-still streaming — and it has no host yet, which is an argument for building the
-template that needs it first rather than the component in isolation. The prompt
-editor was flagged in the first draft as the honest low end; that has not
-changed, and it is still the first thing to cut.
+**The two remaining Pro components — shipped.** The AI edit diff view shipped
+as `edit-diff-view`, without the host template the first draft argued for: the
+four traps (hunks that re-split mid-stream, deciding on an incomplete hunk,
+partial acceptance, word-level noise) all turned out to live in the segment
+model, not in any surrounding app. Id-keyed decisions over an append-only
+segment list, and the hard part stops being hard. The prompt editor shipped as
+`prompt-editor` — flagged as the honest low end, and it was, which is exactly
+why it cost an afternoon instead of a week.
 
-**Blocks: still zero, and still unspecified.** No block has ever been named in
-this document, which is why the category has stayed empty rather than late. A
-block is a composed *section*, not a bigger component — a chat page shell, a
-document-reader-plus-conversation split, an agent console frame. All three
-already exist inside shipped templates, so this is extraction work rather than
-design work. The feature-list line comes back the day the first one ships.
+**Blocks: shipped and removed, and both calls were right.** The category's
+problem was never design — once the three were named (chat page shell,
+document-reader split, agent console frame), extraction was a day's work. What
+a day of looking at the finished pages showed is that the layer was
+*duplicative*: Pro is one price for everything, so a block was the template's
+own frame code sold back to the same buyer, distinguished only by having the
+AI wiring stripped out. The extraction work was not wasted — it proved the
+templates' frames are clean enough to lift — but the shelf it built is gone,
+and the nav is back to eight tabs.
 
 **Breadth is a separate argument, and it belongs to the free tier — first
 round done.** The counter-position at the top of this document — depth over

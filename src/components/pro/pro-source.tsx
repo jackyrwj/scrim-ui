@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CodeBlock } from "@/components/component-page/code-block";
 import { InstallCommand } from "@/components/component-page/install-command";
-import { useLicense } from "@/lib/pro-access";
+import { useProAccess } from "@/lib/pro-access";
 import { PRO_PRICE } from "@/lib/pro";
 import { UnlockDialog } from "./unlock-dialog";
 
@@ -32,7 +33,7 @@ export function ProSource({
   /** The key-checked registry endpoint, without the key. */
   registryUrl: string;
 }) {
-  const license = useLicense();
+  const access = useProAccess();
   const pathname = usePathname();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   /* Both results are keyed by the licence they belong to, so a new key
@@ -43,45 +44,55 @@ export function ProSource({
   const [fetched, setFetched] = React.useState<{ key: string; filename: string; source: string } | null>(null);
   const [failed, setFailed] = React.useState<{ key: string; message: string } | null>(null);
 
-  const source = fetched && fetched.key === license ? fetched : null;
-  const error = failed && failed.key === license ? failed.message : null;
-  const loading = Boolean(license) && !source && !error;
+  const source = fetched && fetched.key === access.identity ? fetched : null;
+  const error = failed && failed.key === access.identity ? failed.message : null;
+  const loading = access.unlocked && !source && !error;
 
   React.useEffect(() => {
-    if (!license || !loading) return;
+    if (!access.unlocked || !access.identity || !loading) return;
     let cancelled = false;
     fetch("/api/pro/source", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, key: license }),
+      body: JSON.stringify({ slug, key: access.key }),
     })
       .then(async (response) => {
         const data: unknown = await response.json().catch(() => null);
         if (cancelled) return;
         if (response.ok) {
           const { filename, source: text } = data as { filename: string; source: string };
-          setFetched({ key: license, filename, source: text });
+          setFetched({ key: access.identity!, filename, source: text });
         } else {
           setFailed({
-            key: license,
+            key: access.identity!,
             message: (data as { error?: string } | null)?.error ?? "Could not load the source.",
           });
         }
       })
       .catch(() => {
-        if (!cancelled) setFailed({ key: license, message: "Could not reach the server." });
+        if (!cancelled) setFailed({ key: access.identity!, message: "Could not reach the server." });
       });
     return () => {
       cancelled = true;
     };
-  }, [license, loading, slug]);
+  }, [access.identity, access.key, access.unlocked, loading, slug]);
 
   if (source) {
     return (
       <div className="space-y-6">
         {/* The buyer's own key, in their own install command. /r/pro checks it
             on every fetch, so the command is as portable as the licence is. */}
-        <InstallCommand url={`${registryUrl}?key=${encodeURIComponent(license ?? "")}`} />
+        {access.mode === "license" ? (
+          <InstallCommand url={`${registryUrl}?key=${encodeURIComponent(access.key ?? "")}`} />
+        ) : (
+          <p className="text-sm text-(--muted-foreground)">
+            Need the CLI install command? Create a private API token in your{" "}
+            <Link href="/dashboard" className="font-medium text-(--foreground) underline underline-offset-4">
+              dashboard
+            </Link>
+            .
+          </p>
+        )}
         <CodeBlock code={source.source} filename={source.filename} />
       </div>
     );
@@ -115,10 +126,10 @@ export function ProSource({
           <button
             type="button"
             onClick={() => setDialogOpen(true)}
-            disabled={loading}
+            disabled={access.checking || loading}
             className="mt-1 h-10 rounded-xl bg-(--accent) px-5 text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90 disabled:opacity-50"
           >
-            {loading ? "Checking licence..." : "Unlock Pro"}
+            {access.checking || loading ? "Checking access..." : "Unlock Pro"}
           </button>
           {error && (
             <p role="alert" className="text-xs text-red-500">

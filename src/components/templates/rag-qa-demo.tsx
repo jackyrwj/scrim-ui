@@ -108,7 +108,7 @@ function useReducedMotion(): boolean {
   );
 }
 
-export function RagQaDemo() {
+export function RagQaDemo({ caption = true }: { caption?: boolean }) {
   const [step, setStep] = React.useState(0);
   const [inView, setInView] = React.useState(false);
   const [progress, setProgress] = React.useState({ step: 0, value: 0 });
@@ -344,12 +344,14 @@ export function RagQaDemo() {
         </div>
       </div>
 
-      <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
-        A scripted replay — there is no model behind this page. The citations are live, though:
-        click one, or a row in the source list, and the passage is marked in the document. That is
-        the interaction the template ships, driven by chunk offsets carried all the way from
-        ingestion.
-      </p>
+      {caption && (
+        <p className="mt-3 text-xs leading-5 text-(--muted-foreground)">
+          A scripted replay — there is no model behind this page. The citations are live, though:
+          click one, or a row in the source list, and the passage is marked in the document. That is
+          the interaction the template ships, driven by chunk offsets carried all the way from
+          ingestion.
+        </p>
+      )}
     </div>
   );
 }

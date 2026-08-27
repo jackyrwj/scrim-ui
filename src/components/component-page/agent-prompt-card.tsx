@@ -4,13 +4,18 @@ import * as React from "react";
 import { CodeCopyButton } from "./code-copy-button";
 
 /**
- * A generated agent prompt, on a page that has no Explorer to put it in.
+ * A generated agent prompt, presented as a module of its own.
  *
- * The component pages carry theirs as a third tab beside Preview and Usage,
- * because there it has to sit next to the controls it follows. Patterns and
- * icons have no such surface, so the prompt gets a disclosure of its own:
- * collapsed by default, since a reader who wants the file itself should not
- * have to scroll past forty lines of instructions addressed to a machine.
+ * Component pages used to carry theirs as a third tab beside Preview and
+ * Usage inside the Explorer; now the Explorer renders this card directly
+ * under the install command, above the interactive surface (it still has to
+ * be inside the Explorer, because the prompt follows the control values,
+ * and a separate island could not see them). Patterns and icons have no
+ * Explorer at all, so for them this card is the only surface.
+ *
+ * A disclosure, collapsed by default, since a reader who wants the file
+ * itself should not have to scroll past forty lines of instructions
+ * addressed to a machine.
  *
  * Open, rather than a bare "Copy prompt" button, because a reader is about to
  * hand this to an agent with write access to their repo. They should be able
