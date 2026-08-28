@@ -9,7 +9,7 @@ import { InspirationCard } from "@/components/inspiration/entry-card";
 import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-scroll";
 import { ToolCard } from "@/components/site/tool-card";
 import { ComponentPreview } from "@/components/site/component-preview";
-import { AiChatDemo } from "@/components/templates/ai-chat-demo";
+import { HeroTemplateCarousel } from "@/components/site/hero-template-carousel";
 import { BrandIcon } from "@/components/brands/brand-icon";
 import { MODEL_VENDORS } from "@/lib/model-vendors";
 import { PatternPreview } from "@/components/site/pattern-preview";
@@ -99,17 +99,12 @@ export default function Home() {
           </div>
 
           {/* The hero's proof is a real template, playing itself. The scripted
-              tool tour this replaced animated controls at the visitor; this is
-              the actual AI Chat template UI mounting the actual components it
-              ships, on its own timeline. */}
+              tool tour this replaced animated controls at the visitor; this
+              mounts the actual template UI on its own timeline — three
+              templates, swiped between, each replaying a scripted run with
+              the real components it ships. */}
           <div className="mx-auto mt-8 max-w-4xl sm:mt-10">
-            <AiChatDemo caption={false} />
-            <p className="mt-3 text-center text-xs leading-5 text-(--muted-foreground)">
-              <Link href="/templates/ai-chat" className="font-medium text-(--foreground) underline-offset-4 hover:underline">
-                AI Chat
-              </Link>{" "}
-              — the first Pro template, replaying one scripted turn (reasoning → tool call → answer).
-            </p>
+            <HeroTemplateCarousel />
           </div>
 
         </div>
