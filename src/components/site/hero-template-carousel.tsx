@@ -74,6 +74,11 @@ export function HeroTemplateCarousel() {
   const reduced = useReducedMotion();
   const [index, setIndex] = React.useState(0);
   const [drifting, setDrifting] = React.useState(true);
+  /* Snap-on is its own switch, not "not drifting": a hover also stops the
+     drift, and turning snap on where the strip happens to be stopped makes
+     the browser snap on the spot — the teleport. Only deliberate moves
+     earn snap. */
+  const [snapping, setSnapping] = React.useState(false);
   const [inView, setInView] = React.useState(true);
   const scrollerRef = React.useRef<HTMLDivElement>(null);
   const resumeTimer = React.useRef(0);
@@ -173,11 +178,21 @@ export function HeroTemplateCarousel() {
     setDrifting(false);
   }
 
+  /* What a deliberate move gets that a hover does not: snap back on, so
+     the move ends centred. Enabling snap mid-transit makes the browser
+     snap immediately — that teleport is exactly what a hover must not
+     do. */
+  function pauseToSettle() {
+    pauseDrift();
+    setSnapping(true);
+  }
+
   function scheduleResume() {
     window.clearTimeout(resumeTimer.current);
     resumeTimer.current = window.setTimeout(() => {
       if (!hoveringRef.current && !draggingRef.current) {
         setDrifting(true);
+        setSnapping(false);
       }
     }, RESUME_AFTER_MS);
   }
@@ -201,7 +216,7 @@ export function HeroTemplateCarousel() {
       const forward = target + cycle;
       target = Math.abs(forward - el.scrollLeft) < Math.abs(target - el.scrollLeft) ? forward : target;
     }
-    pauseDrift();
+    pauseToSettle();
     el.scrollTo({ left: target, behavior: reduced ? "auto" : "smooth" });
   }
 
@@ -221,7 +236,7 @@ export function HeroTemplateCarousel() {
           }}
           onPointerDown={() => {
             draggingRef.current = true;
-            pauseDrift();
+            pauseToSettle();
             /* A flung drag can end outside the window, where no
                pointerup lands on the strip — watch from up top, or
                the drag flag outlives the drag and the drift never
@@ -233,7 +248,7 @@ export function HeroTemplateCarousel() {
              one is the page scrolling past and should not disturb it. */
           onWheel={(e) => {
             if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
-            pauseDrift();
+            pauseToSettle();
             scheduleResume();
           }}
           tabIndex={0}
@@ -253,10 +268,12 @@ export function HeroTemplateCarousel() {
           /* The side padding is half the leftover width, so the first and
              last slides can scroll to the centre like every other one —
              without it they would park hard against the strip's edges.
-             Snap is off while drifting so the two never fight, and back
-             on the moment the visitor takes over. */
+             Snap is off while drifting (they would fight) and off under a
+             hovering cursor (engaging it mid-transit snaps on the spot —
+             the teleport); deliberate moves turn it on to settle, and
+             reduced motion keeps it on because nothing moves anyway. */
           className={`flex items-start gap-4 overflow-x-auto overscroll-x-contain rounded-xl px-[7%] outline-none focus-visible:ring-2 focus-visible:ring-(--primary)/40 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5 sm:px-[15%] ${
-            drifting && !reduced ? "snap-none" : "snap-x snap-mandatory"
+            !reduced && !snapping ? "snap-none" : "snap-x snap-mandatory"
           }`}
         >
           {/* The second pass is the loop made flesh: identical pixels
