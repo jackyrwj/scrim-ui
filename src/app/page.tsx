@@ -103,7 +103,7 @@ export default function Home() {
               mounts the actual template UI on its own timeline — three
               templates, swiped between, each replaying a scripted run with
               the real components it ships. */}
-          <div className="mx-auto mt-8 max-w-4xl sm:mt-10">
+          <div className="mx-auto mt-8 max-w-5xl sm:mt-10">
             <HeroTemplateCarousel />
           </div>
 
