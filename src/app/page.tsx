@@ -17,6 +17,8 @@ import { IconCard } from "@/components/icons/icon-card";
 import { createElement } from "react";
 import { patternIconFor } from "@/lib/icons";
 import { iconGuide, iconSlug } from "@/lib/icon-guide";
+import { InstallCommand } from "@/components/component-page/install-command";
+import { SITE_URL } from "@/lib/site";
 
 /* One icon per idea the site is about, spread across categories so the row
    reads as a map rather than a sample of one corner. */
@@ -84,6 +86,13 @@ export default function Home() {
               Free in-browser tools and copy-ready components for AI interfaces —
               prompt inputs, agent states, tool calls and citations.
             </p>
+
+            {/* Every peer's hero answers "how do I get it" with one command;
+                this is ours. The same InstallCommand as on component pages, so
+                the visitor's package-manager preference carries over. */}
+            <div className="mx-auto mt-6 max-w-lg text-left">
+              <InstallCommand url={`${SITE_URL}/r/all.json`} />
+            </div>
 
             {/* The main event: a live, scripted tour of three real tools.
                 Wider than the prose above it — it is the thing being read. */}

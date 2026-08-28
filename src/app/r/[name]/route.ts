@@ -42,9 +42,36 @@ if (collisions.length > 0) {
 export function generateStaticParams() {
   return [
     { name: "registry.json" },
+    { name: "all.json" },
     ...published.map((c) => ({ name: `${c.slug}.json` })),
     ...patterns.map((p) => ({ name: `${p.slug}.json` })),
   ];
+}
+
+/**
+ * "Install everything", as one command on the homepage.
+ *
+ * The item's only payload is its dependency list: the CLI resolves each
+ * dependency URL to the same /r/<slug>.json a single-component install would
+ * fetch, so every free component lands in components/ui/ exactly as if it had
+ * been added by name. `files` is optional in the item schema — the item itself
+ * installs nothing. Pro items are deliberately absent; they install through
+ * the key-checked endpoint, and a public collection cannot carry a key.
+ */
+function allItem() {
+  return {
+    $schema: "https://ui.shadcn.com/schema/registry-item.json",
+    name: "all",
+    type: "registry:block",
+    title: "All free components",
+    description: `Every free Scrim UI component — ${published.length} in total, from prompt inputs and streaming messages to tool calls and citations.`,
+    author: `Scrim UI (${SITE_URL})`,
+    categories: ["collection"],
+    docs: `${SITE_URL}/components`,
+    dependencies: [],
+    registryDependencies: published.map((c) => `${SITE_URL}/r/${c.slug}.json`),
+    files: [],
+  };
 }
 
 /**
@@ -209,6 +236,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ nam
      request most worth answering deliberately rather than with a 500. */
   const known =
     slug === "registry" ||
+    slug === "all" ||
     published.some((c) => c.slug === slug) ||
     patterns.some((p) => p.slug === slug);
   if (!known) {
@@ -217,9 +245,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ nam
   const body =
     slug === "registry"
       ? index()
-      : patterns.some((p) => p.slug === slug)
-        ? patternItem(slug)
-        : item(slug);
+      : slug === "all"
+        ? allItem()
+        : patterns.some((p) => p.slug === slug)
+          ? patternItem(slug)
+          : item(slug);
   return Response.json(body, {
     headers: { "cache-control": "public, max-age=0, must-revalidate" },
   });
