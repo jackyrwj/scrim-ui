@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160">
+  <rect x="24" y="24" width="112" height="112" rx="26" fill="#09090b"/>
+  <g transform="translate(48 48) scale(0.6666667)">
+    <path fill="#fafafa" fill-rule="evenodd" d="M0 0 H80 L0 80 Z M96 16 V96 H16 Z"/>
+  </g>
+  <text x="160" y="102" fill="#09090b" font-family="Inter, Helvetica Neue, Arial, sans-serif" font-size="58" font-weight="650" letter-spacing="-1.4">Scrim UI</text>
+</svg>
