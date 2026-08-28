@@ -57,10 +57,13 @@ const SLIDES = [
   },
 ];
 
-/* How fast the strip drifts when nobody is holding it, and how long
-   it waits after the visitor lets go before drifting again. */
+/* How fast the strip drifts when nobody is holding it. Two resume
+   waits: a deliberate move buys the strip a beat for its snap or
+   momentum to settle, but a hover owes nothing — the visitor only
+   looked, so the drift starts again almost as soon as they leave. */
 const DRIFT_PX_PER_S = 40;
 const RESUME_AFTER_MS = 1500;
+const RESUME_AFTER_HOVER_MS = 300;
 
 /* The distance between a slide and its clone — one full sequence.
    This is the width the scroll gets folded back by to loop. */
@@ -84,6 +87,11 @@ export function HeroTemplateCarousel() {
   const resumeTimer = React.useRef(0);
   const hoveringRef = React.useRef(false);
   const draggingRef = React.useRef(false);
+  /* Whether the current pause still owes a settle. A pause that began
+     with a deliberate move keeps the long wait even if the cursor
+     wanders off mid-settle; a hover's pause owes nothing and resumes
+     fast. Cleared only when the drift actually restarts. */
+  const awaitingSettleRef = React.useRef(false);
 
   React.useEffect(() => () => window.clearTimeout(resumeTimer.current), []);
 
@@ -170,9 +178,10 @@ export function HeroTemplateCarousel() {
   /* Everything the visitor does means "let me read". Hover just
      freezes the strip where it stands — re-centring on the way in
      was a jump, not a settle; a swipe or an explicit jump is what
-     ends centred, with snap back on to finish the move. Drift
-     returns a moment after they let go, never while a pointer is
-     still on the strip or mid-drag. */
+     ends centred, with snap back on to finish the move. Leaving
+     starts the drift again almost at once — a look needs no
+     cool-down — while a deliberate move buys a beat for the settle,
+     and nothing resumes while a pointer is on the strip. */
   function pauseDrift() {
     window.clearTimeout(resumeTimer.current);
     setDrifting(false);
@@ -185,16 +194,18 @@ export function HeroTemplateCarousel() {
   function pauseToSettle() {
     pauseDrift();
     setSnapping(true);
+    awaitingSettleRef.current = true;
   }
 
-  function scheduleResume() {
+  function scheduleResume(after = RESUME_AFTER_MS) {
     window.clearTimeout(resumeTimer.current);
     resumeTimer.current = window.setTimeout(() => {
       if (!hoveringRef.current && !draggingRef.current) {
         setDrifting(true);
         setSnapping(false);
+        awaitingSettleRef.current = false;
       }
-    }, RESUME_AFTER_MS);
+    }, after);
   }
 
   function endDrag() {
@@ -232,7 +243,10 @@ export function HeroTemplateCarousel() {
           }}
           onPointerLeave={() => {
             hoveringRef.current = false;
-            scheduleResume();
+            /* A pause that was only a hover owes no settle: start
+               again almost at once. One that began with a move keeps
+               the full wait — its snap may still be finishing. */
+            scheduleResume(awaitingSettleRef.current ? RESUME_AFTER_MS : RESUME_AFTER_HOVER_MS);
           }}
           onPointerDown={() => {
             draggingRef.current = true;
