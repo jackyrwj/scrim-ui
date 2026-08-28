@@ -15,18 +15,14 @@
 /* one whole cycle once it passes the first copy, so the loop has no   */
 /* seam to see. It opens mid-drift — the first slide already part-way  */
 /* off the left edge — never parked beside a blank flank. Anything     */
-/* the visitor does — hover, grab, swipe, an arrow key, the switcher   */
-/* — stops the drift; a moment after they let go, it starts moving    */
-/* again. Hover only freezes the strip where it stands: a cursor      */
-/* crossing the edge is not a request to move anything, and yanking   */
-/* the nearest card to centre read as a jump, not an invitation.      */
-/* The deliberate moves — a swipe, the arrows, the switcher — are     */
-/* what settle a template dead centre. Each slide is the real         */
-/* template demo, running its own scripted loop on its own clock.     */
-/*                                                                     */
-/* The switcher below the frame is the one the old tool tour used:     */
-/* a hairline, an index number, a name. It was a good switcher; only   */
-/* the thing it switched needed replacing.                             */
+/* the visitor does — hover, grab, swipe, an arrow key — stops the     */
+/* drift; a moment after they let go, it starts moving again. Hover    */
+/* only freezes the strip where it stands: a cursor crossing the edge  */
+/* is not a request to move anything, and yanking the nearest card to  */
+/* centre read as a jump, not an invitation. The deliberate moves —    */
+/* a swipe, the arrows — are what settle a template dead centre.       */
+/* Each slide is the real template demo, running its own scripted      */
+/* loop on its own clock.                                              */
 /* ------------------------------------------------------------------ */
 
 import * as React from "react";
@@ -362,57 +358,6 @@ export function HeroTemplateCarousel() {
           <ChevronRight size={18} strokeWidth={2} aria-hidden />
         </button>
       </div>
-
-      {/* Same switcher the tool tour used. The hairline no longer
-          narrates a timer — the strip beneath it is what moves now, so
-          the active line is simply full. */}
-      <ol className="mt-5 grid gap-x-6 sm:grid-cols-3">
-        {SLIDES.map((s, i) => {
-          const active = i === index;
-          return (
-            <li
-              key={s.slug}
-              aria-current={active ? "step" : undefined}
-              role="button"
-              tabIndex={0}
-              className="cursor-pointer outline-offset-4"
-              onClick={() => {
-                goTo(i);
-                scheduleResume();
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  goTo(i);
-                  scheduleResume();
-                }
-              }}
-            >
-              <div className="relative h-px w-full overflow-hidden bg-(--border)">
-                {active && (
-                  <span aria-hidden className="absolute inset-0" style={{ background: "var(--primary)" }} />
-                )}
-              </div>
-              <p className="mt-2.5 flex items-baseline gap-2 text-sm font-medium">
-                <span
-                  className={`font-mono text-[11px] tabular-nums ${
-                    active ? "text-(--primary)" : "text-(--muted-foreground)"
-                  }`}
-                >
-                  0{i + 1}
-                </span>
-                <span
-                  className={`transition-colors ${
-                    active ? "text-(--foreground)" : "text-(--muted-foreground) hover:text-(--foreground)"
-                  }`}
-                >
-                  {s.tab}
-                </span>
-              </p>
-            </li>
-          );
-        })}
-      </ol>
     </div>
   );
 }
