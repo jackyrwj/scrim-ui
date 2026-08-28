@@ -16,10 +16,13 @@
 /* seam to see. It opens mid-drift — the first slide already part-way  */
 /* off the left edge — never parked beside a blank flank. Anything     */
 /* the visitor does — hover, grab, swipe, an arrow key, the switcher   */
-/* — stops the drift and settles the nearest template dead centre; a   */
-/* moment after they let go, it starts moving again. Each slide is     */
-/* the real template demo, running its own scripted loop on its own    */
-/* clock.                                                              */
+/* — stops the drift; a moment after they let go, it starts moving    */
+/* again. Hover only freezes the strip where it stands: a cursor      */
+/* crossing the edge is not a request to move anything, and yanking   */
+/* the nearest card to centre read as a jump, not an invitation.      */
+/* The deliberate moves — a swipe, the arrows, the switcher — are     */
+/* what settle a template dead centre. Each slide is the real         */
+/* template demo, running its own scripted loop on its own clock.     */
 /*                                                                     */
 /* The switcher below the frame is the one the old tool tour used:     */
 /* a hairline, an index number, a name. It was a good switcher; only   */
@@ -27,7 +30,6 @@
 /* ------------------------------------------------------------------ */
 
 import * as React from "react";
-import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AiChatDemo } from "@/components/templates/ai-chat-demo";
 import { RagQaDemo } from "@/components/templates/rag-qa-demo";
@@ -160,9 +162,11 @@ export function HeroTemplateCarousel() {
     if (best !== index) setIndex(best);
   }
 
-  /* Everything the visitor does means "let me read": stop the drift,
-     bring the snap back so the nearest template settles centred, and
-     start moving again a moment later — never while a pointer is
+  /* Everything the visitor does means "let me read". Hover just
+     freezes the strip where it stands — re-centring on the way in
+     was a jump, not a settle; a swipe or an explicit jump is what
+     ends centred, with snap back on to finish the move. Drift
+     returns a moment after they let go, never while a pointer is
      still on the strip or mid-drag. */
   function pauseDrift() {
     window.clearTimeout(resumeTimer.current);
@@ -207,12 +211,9 @@ export function HeroTemplateCarousel() {
         <div
           ref={scrollerRef}
           onScroll={onScroll}
-          onPointerEnter={(e) => {
+          onPointerEnter={() => {
             hoveringRef.current = true;
             pauseDrift();
-            /* A finger's pointerenter is immediately a drag — settle
-               only for the mouse, where it means "I stopped to look". */
-            if (e.pointerType !== "touch") goTo(nearestIndex());
           }}
           onPointerLeave={() => {
             hoveringRef.current = false;
@@ -277,7 +278,14 @@ export function HeroTemplateCarousel() {
               aria-label={clone ? undefined : `${n + 1} of ${SLIDES.length}: ${tab}`}
               aria-hidden={clone || undefined}
               inert={clone || undefined}
-              className={`w-full shrink-0 snap-center transition-[opacity,transform] duration-300 ease-out ${
+              /* For now the slides are strictly a moving preview: nothing
+                 inside them is clickable. The demos carry real buttons
+                 and inputs that a marketing page has no business
+                 answering, and a click target inside a drifting strip
+                 invites misclicks. Events fall through to the strip
+                 itself, so pause-on-hover and swipe still work. The
+                 full experience lives on the template's own page. */
+              className={`pointer-events-none w-full shrink-0 snap-center transition-[opacity,transform] duration-300 ease-out ${
                 n === index ? "opacity-100" : "opacity-45 scale-[0.98]"
               }`}
             >
@@ -289,13 +297,7 @@ export function HeroTemplateCarousel() {
                   n === index ? "opacity-100" : "opacity-0"
                 }`}
               >
-                <Link
-                  href={`/templates/${slug}`}
-                  className="font-medium text-(--foreground) underline-offset-4 hover:underline"
-                >
-                  {tab}
-                </Link>{" "}
-                — {caption}
+                <span className="font-medium text-(--foreground)">{tab}</span> — {caption}
               </p>
             </div>
             );
