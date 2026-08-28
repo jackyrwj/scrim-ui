@@ -9,18 +9,8 @@ import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
 import { publishedTemplates } from "@/lib/templates";
 import { SITE_REPO } from "@/lib/site";
+import { siteNav } from "@/lib/nav";
 import { AccountNav } from "@/components/account/account-nav";
-
-const navItems = [
-  { href: "/tools", label: "Tools" },
-  { href: "/components", label: "Components" },
-  { href: "/patterns", label: "Patterns" },
-  { href: "/templates", label: "Templates" },
-  { href: "/icons", label: "Icons" },
-  { href: "/resources", label: "Resources" },
-  { href: "/inspiration", label: "Inspiration" },
-  { href: "/pro", label: "Pricing" },
-];
 
 function buildSearchItems() {
   const items: { title: string; href: string; type: "Component" | "Pattern" | "Resource" | "Inspiration" | "Tool" | "Template"; description?: string }[] = [];
@@ -63,7 +53,7 @@ export function SiteHeader() {
           <span>Scrim UI</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-(--muted-foreground) md:flex">
-          {navItems.map((item) => (
+          {siteNav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
@@ -92,7 +82,11 @@ export function SiteHeader() {
             </svg>
           </a>
           <ThemeToggle />
-          <MobileNav />
+          {/* The account links are sm-hidden in the header bar itself, so the
+              mobile menu is their only surface below 640px. Passed as an
+              element (not rendered inside MobileNav) so this server component
+              keeps sole ownership of the auth-configured gate. */}
+          <MobileNav account={accountAuthConfigured ? <AccountNav mobile /> : undefined} />
         </div>
       </div>
     </header>

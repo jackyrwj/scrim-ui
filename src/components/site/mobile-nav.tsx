@@ -3,16 +3,9 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { siteNav } from "@/lib/nav";
 
-const navItems = [
-  { href: "/tools", label: "Tools" },
-  { href: "/components", label: "Components" },
-  { href: "/patterns", label: "Patterns" },
-  { href: "/resources", label: "Resources" },
-  { href: "/inspiration", label: "Inspiration" },
-];
-
-export function MobileNav() {
+export function MobileNav({ account }: { account?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
@@ -74,7 +67,7 @@ export function MobileNav() {
           />
           <nav className="fixed inset-x-0 top-[57px] z-50 border-b border-(--border) bg-(--background) p-4">
             <div className="flex flex-col gap-1">
-              {navItems.map((item) => (
+              {siteNav.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -83,6 +76,11 @@ export function MobileNav() {
                   {item.label}
                 </Link>
               ))}
+              {account && (
+                <div className="mt-2 flex flex-col gap-1 border-t border-(--border) pt-2">
+                  {account}
+                </div>
+              )}
             </div>
           </nav>
         </>
