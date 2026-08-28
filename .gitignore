@@ -50,3 +50,8 @@ next-env.d.ts
 
 # Assembled by scripts/build-demo.mjs — never committed.
 .demo-build/
+
+# Scratch space and local-only backups. The blocks backup tgz in here is
+# the only copy of deleted Pro source, and this repo is public — nothing
+# under this directory may ever be committed.
+.scratchpad/
