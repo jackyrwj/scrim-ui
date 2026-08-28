@@ -13,11 +13,13 @@
 /* The strip also drifts on its own, slowly and endlessly: the         */
 /* sequence is rendered twice and the scroll position is folded back   */
 /* one whole cycle once it passes the first copy, so the loop has no   */
-/* seam to see. Anything the visitor does — hover, grab, swipe, an     */
-/* arrow key, the switcher — stops the drift and settles the nearest   */
-/* template dead centre; a few seconds after they let go, it starts    */
-/* moving again. Each slide is the real template demo, running its     */
-/* own scripted loop on its own clock.                                 */
+/* seam to see. It opens mid-drift — the first slide already part-way  */
+/* off the left edge — never parked beside a blank flank. Anything     */
+/* the visitor does — hover, grab, swipe, an arrow key, the switcher   */
+/* — stops the drift and settles the nearest template dead centre; a   */
+/* moment after they let go, it starts moving again. Each slide is     */
+/* the real template demo, running its own scripted loop on its own    */
+/* clock.                                                              */
 /*                                                                     */
 /* The switcher below the frame is the one the old tool tour used:     */
 /* a hairline, an index number, a name. It was a good switcher; only   */
@@ -56,7 +58,7 @@ const SLIDES = [
 /* How fast the strip drifts when nobody is holding it, and how long
    it waits after the visitor lets go before drifting again. */
 const DRIFT_PX_PER_S = 40;
-const RESUME_AFTER_MS = 4000;
+const RESUME_AFTER_MS = 1500;
 
 /* The distance between a slide and its clone — one full sequence.
    This is the width the scroll gets folded back by to loop. */
@@ -75,7 +77,6 @@ export function HeroTemplateCarousel() {
   const resumeTimer = React.useRef(0);
   const hoveringRef = React.useRef(false);
   const draggingRef = React.useRef(false);
-  const focusingRef = React.useRef(false);
 
   React.useEffect(() => () => window.clearTimeout(resumeTimer.current), []);
 
@@ -88,6 +89,26 @@ export function HeroTemplateCarousel() {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  /* Opening on scrollLeft 0 parks the first slide dead centre, which
+     leaves the whole left padding empty — a static carousel with a
+     missing window, not a moving strip. Start mid-transit instead:
+     the first slide already part-way off the left edge, the second
+     entering on the right — the exact picture the drift is about to
+     keep painting. Reduced motion keeps the centred, snapped start:
+     with nothing moving, the empty flank is just padding. */
+  const startedRef = React.useRef(false);
+  React.useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el || startedRef.current || reduced) return;
+    const head = el.children[0] as HTMLElement | undefined;
+    const cycle = cycleWidth(el);
+    if (!head || !cycle) return;
+    const slot = cycle / SLIDES.length;
+    const centered = head.offsetLeft + head.offsetWidth / 2 - el.clientWidth / 2;
+    el.scrollLeft = centered + slot * 0.45;
+    startedRef.current = true;
+  }, [reduced]);
 
   React.useEffect(() => {
     const el = scrollerRef.current;
@@ -141,8 +162,8 @@ export function HeroTemplateCarousel() {
 
   /* Everything the visitor does means "let me read": stop the drift,
      bring the snap back so the nearest template settles centred, and
-     start moving again a few seconds later — never while a pointer is
-     still on the strip or the region still holds focus. */
+     start moving again a moment later — never while a pointer is
+     still on the strip or mid-drag. */
   function pauseDrift() {
     window.clearTimeout(resumeTimer.current);
     setDrifting(false);
@@ -151,10 +172,15 @@ export function HeroTemplateCarousel() {
   function scheduleResume() {
     window.clearTimeout(resumeTimer.current);
     resumeTimer.current = window.setTimeout(() => {
-      if (!hoveringRef.current && !draggingRef.current && !focusingRef.current) {
+      if (!hoveringRef.current && !draggingRef.current) {
         setDrifting(true);
       }
     }, RESUME_AFTER_MS);
+  }
+
+  function endDrag() {
+    draggingRef.current = false;
+    scheduleResume();
   }
 
   /* Jumping more than a cycle away is wasted motion: pick the copy of
@@ -195,29 +221,18 @@ export function HeroTemplateCarousel() {
           onPointerDown={() => {
             draggingRef.current = true;
             pauseDrift();
-          }}
-          onPointerUp={() => {
-            draggingRef.current = false;
-            scheduleResume();
-          }}
-          onPointerCancel={() => {
-            draggingRef.current = false;
-            scheduleResume();
+            /* A flung drag can end outside the window, where no
+               pointerup lands on the strip — watch from up top, or
+               the drag flag outlives the drag and the drift never
+               comes back. */
+            window.addEventListener("pointerup", endDrag, { once: true });
+            window.addEventListener("pointercancel", endDrag, { once: true });
           }}
           /* Only a horizontal wheel is aimed at the strip; a vertical
              one is the page scrolling past and should not disturb it. */
           onWheel={(e) => {
             if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
             pauseDrift();
-            scheduleResume();
-          }}
-          onFocus={() => {
-            focusingRef.current = true;
-            pauseDrift();
-            goTo(nearestIndex());
-          }}
-          onBlur={() => {
-            focusingRef.current = false;
             scheduleResume();
           }}
           tabIndex={0}
