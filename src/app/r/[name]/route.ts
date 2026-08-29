@@ -196,6 +196,15 @@ function index() {
     name: "scrim-ui",
     homepage: SITE_URL,
     items: [
+      {
+        name: "all",
+        type: "registry:block",
+        title: "All free components",
+        description: `Every free Scrim UI component — ${published.length} in total, from prompt inputs and streaming messages to tool calls and citations.`,
+        categories: ["collection"],
+        registryDependencies: published.map((c) => `${SITE_URL}/r/${c.slug}.json`),
+        files: [],
+      },
       ...published.map((c) => ({
         name: c.slug,
         type: "registry:ui",
