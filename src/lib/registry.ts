@@ -38,6 +38,11 @@ export const categories: Category[] = [
     description: "User and assistant messages, streaming, markdown, code and errors.",
   },
   {
+    slug: "conversation",
+    name: "Conversation & Artifacts",
+    description: "Chat history sidebars and artifact preview panels.",
+  },
+  {
     slug: "reasoning",
     name: "Reasoning & Progress",
     description: "Thinking indicators, reasoning steps, agent progress and task states.",
@@ -136,7 +141,6 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["editing", "typo", "versioned", "bare"],
     tags: ["prompt", "editor", "template", "variables", "diff"],
-    tier: "pro",
     status: "published",
   },
   {
@@ -209,7 +213,42 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["streaming", "settled"],
     tags: ["markdown", "streaming", "message", "rendering"],
-    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Response Versions",
+    slug: "response-versions",
+    category: "messages",
+    searchTitle: "AI Response Versions UI — Regenerate & Branch",
+    description:
+      "The 1/3 pager after a regenerate — previous and next versions, branch markers, continue-from-here, and honest generating, failed and stopped states.",
+    frameworks: ["react", "tailwind"],
+    variants: ["single", "multiple", "generating", "branched", "failed"],
+    tags: ["message", "versions", "regenerate", "branch"],
+    status: "published",
+  },
+  {
+    name: "Conversation Sidebar",
+    slug: "conversation-sidebar",
+    category: "conversation",
+    searchTitle: "ChatGPT-Style Chat History Sidebar — React",
+    description:
+      "The chat-history sidebar every AI app rebuilds — search, inline rename, pin, and delete with undo, grouped by date, with loading and empty states.",
+    frameworks: ["react", "tailwind"],
+    variants: ["default", "searching", "empty", "loading", "mobile"],
+    tags: ["conversation", "history", "sidebar", "chat list"],
+    status: "published",
+  },
+  {
+    name: "Artifact Preview",
+    slug: "artifact-preview",
+    category: "conversation",
+    searchTitle: "Claude Artifact-Style Preview Panel — React",
+    description:
+      "The side panel for generated output — preview/code toggle, copy, download, version switching, and streaming, error and stale states.",
+    frameworks: ["react", "tailwind"],
+    variants: ["streaming", "preview", "code", "error", "versioned"],
+    tags: ["artifact", "preview", "canvas", "panel", "generated"],
     status: "published",
   },
   {
@@ -297,6 +336,18 @@ export const components: ComponentEntry[] = [
     status: "published",
   },
   {
+    name: "Generated Media Result",
+    slug: "generated-media",
+    category: "tool-calls",
+    searchTitle: "AI Image Generation Result UI — React",
+    description:
+      "The result card for AI-generated images, audio and video — queue and stage states, variants, download and regenerate, and a safety block that isn't an error.",
+    frameworks: ["react", "tailwind"],
+    variants: ["queued", "generating", "image", "audio", "video", "failed"],
+    tags: ["image generation", "media", "audio", "video", "variants"],
+    status: "published",
+  },
+  {
     name: "Source Card",
     slug: "source-card",
     category: "sources",
@@ -342,7 +393,6 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["resolved", "unresolved", "scored"],
     tags: ["citation", "popover", "rag", "source", "grounding"],
-    tier: "pro",
     status: "published",
   },
   {
@@ -379,7 +429,6 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["pending", "submitting", "decided-elsewhere", "expired", "reconnecting"],
     tags: ["approval", "human-in-the-loop", "agent", "resumable"],
-    tier: "pro",
     status: "published",
   },
   {
@@ -404,6 +453,18 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["handing-off", "accepted", "returned"],
     tags: ["agent", "handoff", "multi-agent", "routing"],
+    status: "published",
+  },
+  {
+    name: "Agent Run Timeline",
+    slug: "agent-run-timeline",
+    category: "agents",
+    searchTitle: "Agent Activity Log UI — Long-Run Timeline",
+    description:
+      "The activity log for a long agent run — collapsible success clusters, retry-linked events, approval gates in place, and a follow that respects the reader.",
+    frameworks: ["react", "tailwind"],
+    variants: ["running", "waiting", "failed", "completed", "long-run"],
+    tags: ["agent", "timeline", "activity log", "run", "observability"],
     status: "published",
   },
   {
@@ -464,7 +525,6 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["settled", "streaming", "line-diff", "whole-file"],
     tags: ["diff", "review", "edit", "accept-reject", "streaming"],
-    tier: "pro",
     status: "published",
   },
   {
@@ -489,6 +549,18 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["default", "full", "empty"],
     tags: ["file", "context", "panel", "tokens"],
+    status: "published",
+  },
+  {
+    name: "Context Picker",
+    slug: "context-picker",
+    category: "files",
+    searchTitle: "@ Mention Context Picker — React",
+    description:
+      "The @-mention menu for adding context to a prompt — files, web pages and knowledge bases with search, recent items, access states and token cost.",
+    frameworks: ["react", "tailwind"],
+    variants: ["open", "searching", "selected", "permission-required", "empty"],
+    tags: ["context", "mention", "picker", "files", "tokens"],
     status: "published",
   },
   {
@@ -585,7 +657,6 @@ export const components: ComponentEntry[] = [
     frameworks: ["react", "tailwind"],
     variants: ["message", "conversation", "approximate", "streaming"],
     tags: ["cost", "tokens", "usage", "pricing", "meter"],
-    tier: "pro",
     status: "published",
   },
   {
@@ -700,7 +771,7 @@ export const patterns: PatternEntry[] = [
     slug: "ai-chat",
     description:
       "The canonical chat interface — sidebar, streaming messages, prompt input with model selector, and sources.",
-    elements: ["prompt-input", "streaming-message", "citation-ui"],
+    elements: ["conversation-sidebar", "prompt-input", "context-picker", "streaming-message", "response-versions", "citation-ui"],
   },
   {
     name: "AI Research Assistant",
@@ -729,6 +800,64 @@ export const patterns: PatternEntry[] = [
     description:
       "A preferences screen that picks the model, reasoning level and tools, and manages persistent memory.",
     elements: ["model-selector", "reasoning-level", "tool-toggle", "memory-list"],
+  },
+  {
+    name: "Artifact Workspace",
+    slug: "artifact-workspace",
+    description:
+      "Chat on the left, generated output on the right — artifacts open from the answer, stream, version, and fail without breaking the conversation.",
+    elements: ["conversation-sidebar", "streaming-message", "response-versions", "prompt-input", "artifact-preview"],
+  },
+  {
+    name: "Document Q&A Workspace",
+    slug: "rag-workspace",
+    description:
+      "Ask your own documents — upload and parse, cited answers with inspectable passages, an honest not-found state, and a visible context budget.",
+    elements: ["file-upload", "context-files", "context-usage", "citation-ui", "source-list", "streaming-message", "prompt-input"],
+  },
+  {
+    name: "Structured Extraction & Review",
+    slug: "extraction-review",
+    description:
+      "Upload a document, watch fields fill in, then review the flagged ones — per-field confidence, corrections that keep the original, export earned.",
+    elements: ["file-upload", "agent-status", "confidence-answer", "inline-correction"],
+  },
+  {
+    name: "Image Generation Studio",
+    slug: "image-studio",
+    description:
+      "A one-screen generation studio — prompt composer and model picker beside a feed of queued, staged, blocked and ready image results with variants.",
+    elements: ["generated-media", "prompt-input", "model-selector"],
+  },
+  {
+    name: "Multi-agent Ops Console",
+    slug: "agent-console",
+    description:
+      "Watch a fleet of agents at once — parallel statuses, an inspectable handoff, a waiting approval, a failed child run, and per-run plus fleet cost.",
+    elements: ["agent-run-timeline", "agent-status", "agent-handoff"],
+  },
+  {
+    name: "Customer Support Copilot",
+    slug: "support-copilot",
+    description:
+      "Grounded reply drafts with citations, honest low-confidence answers, inline corrections, an approval gate on refunds, and a rating row on every draft.",
+    elements: [
+      "conversation-sidebar",
+      "context-picker",
+      "citation-ui",
+      "source-list",
+      "confidence-answer",
+      "inline-correction",
+      "approval-request",
+      "response-rating",
+    ],
+  },
+  {
+    name: "Generative UI Dashboard",
+    slug: "generative-dashboard",
+    description:
+      "The model assembles a dashboard from a controlled widget registry — streamed props, an unsupported-request fallback, and widget clicks that re-enter the chat.",
+    elements: ["generative-ui", "tool-call", "artifact-preview", "error-message", "prompt-input"],
   },
 ];
 

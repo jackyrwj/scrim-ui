@@ -11,10 +11,12 @@ export const metadata: Metadata = {
 export default function CategoriesPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Categories</h1>
+      <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+        Categories
+      </h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        Every AI product is built from the same blocks. Browse them by category and copy what you
-        need.
+        Find components for every part of an AI interface, from prompt input to agent
+        approvals.
       </p>
 
       <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

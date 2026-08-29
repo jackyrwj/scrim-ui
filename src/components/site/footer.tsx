@@ -28,7 +28,8 @@ export function SiteFooter() {
               Scrim UI
             </div>
             <p className="mt-3 text-sm leading-6 text-(--muted-foreground)">
-              Open-source UI patterns and components for AI products. Free to copy, built for designers and developers.
+              Copy-ready UI components, complete patterns, and practical tools for building
+              AI products.
             </p>
           </div>
 
@@ -78,9 +79,9 @@ export function SiteFooter() {
           <div>
             <h2 className="text-sm font-semibold">About</h2>
             <ul className="mt-3 space-y-2 text-sm text-(--muted-foreground)">
-              <li>Free &amp; open source</li>
-              <li>Built with Next.js + Tailwind</li>
-              <li>No signup required</li>
+              <li>Free components, MIT licensed</li>
+              <li>Browser tools, no account required</li>
+              <li>Pro templates and production workflows</li>
             </ul>
           </div>
         </div>
@@ -89,7 +90,7 @@ export function SiteFooter() {
         <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-(--border) pt-6 text-xs text-(--muted-foreground) sm:flex-row">
           <p className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:justify-start">
             <span>
-              © {new Date().getFullYear()} Scrim UI. Components are MIT licensed — free to copy.
+              © {new Date().getFullYear()} Scrim UI. Free components are MIT licensed.
             </span>
             <Link href="/privacy" className="transition-colors hover:text-(--foreground)">
               Privacy

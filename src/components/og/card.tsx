@@ -29,7 +29,7 @@ export function OgCard({
   description?: string;
   /** The footer claim. Defaults to the free library's, because that is what
    *  almost every page on the site is — but a Pro page must override it. A
-   *  card reading "Free" under a $49 template is the kind of detail that
+   *  card reading "Free" under a paid template is the kind of detail that
    *  costs more trust than the share was ever going to earn. */
   tagline?: string;
 }) {

@@ -13,18 +13,11 @@ export function AccountNav({ mobile = false }: { mobile?: boolean }) {
        signed-in avatar stays in the header bar at every width, so the mobile
        section carries links only. */
     return (
-      <>
-        <Show when="signed-out">
-          <Link href="/sign-in" className={menuRow}>
-            Sign in
-          </Link>
-        </Show>
-        <Show when="signed-in">
-          <Link href="/dashboard" className={menuRow}>
-            Dashboard
-          </Link>
-        </Show>
-      </>
+      <Show when="signed-out">
+        <Link href="/sign-in" className={menuRow}>
+          Sign in
+        </Link>
+      </Show>
     );
   }
 
@@ -39,12 +32,6 @@ export function AccountNav({ mobile = false }: { mobile?: boolean }) {
         </Link>
       </Show>
       <Show when="signed-in">
-        <Link
-          href="/dashboard"
-          className="hidden text-xs font-medium text-(--muted-foreground) transition-colors hover:text-(--foreground) sm:block"
-        >
-          Dashboard
-        </Link>
         {/* afterSignOutUrl is a ClerkProvider option in Clerk v7 — set it
             there when the provider is wired up, not on UserButton. */}
         <UserButton />

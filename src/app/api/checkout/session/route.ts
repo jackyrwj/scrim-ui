@@ -1,7 +1,7 @@
 import { hasActiveEntitlement, PRO_PRODUCT_KEY, upsertAccountUser } from "@/lib/account-store.server";
 import { getViewer } from "@/lib/auth.server";
 import { databaseConfigured } from "@/lib/db.server";
-import { PRO_PLAN } from "@/lib/pro";
+import { PRO_PLAN, PRO_PRICE } from "@/lib/pro";
 import { SITE_URL } from "@/lib/site";
 import { getStripe, priceMatchesPlan, stripeApiConfigured } from "@/lib/stripe-client.server";
 
@@ -23,7 +23,7 @@ export async function POST() {
     amount: PRO_PLAN.priceCents,
     currency: PRO_PLAN.currency,
   }))) {
-    console.error("[checkout] STRIPE_PRICE_ID is not the active one-time US$49 Pro price.");
+    console.error(`[checkout] STRIPE_PRICE_ID is not the active one-time ${PRO_PRICE} Pro price.`);
     return Response.json({ error: "The Pro price is misconfigured." }, { status: 503 });
   }
   const session = await stripe.checkout.sessions.create({

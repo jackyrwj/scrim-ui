@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, GoogleOneTap } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/header";
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s — Scrim UI",
   },
   description:
-    "Beautiful, copy-ready UI patterns and components for AI products. Prompt inputs, streaming messages, tool calls, citations, agent states, reasoning and more.",
+    "Copy-ready React components, complete interface patterns and practical tools for streaming, tool calls, citations, agents and more.",
   /* Every page declares its own address on the canonical host. metadataBase
      alone does NOT emit this tag — it only absolutises relative URLs — and
      without it the project's permanent *.vercel.app alias serves a second,
@@ -114,7 +114,10 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
         {accountAuthConfigured ? (
-          <ClerkProvider afterSignOutUrl="/">{content}</ClerkProvider>
+          <ClerkProvider afterSignOutUrl="/">
+            <GoogleOneTap />
+            {content}
+          </ClerkProvider>
         ) : (
           content
         )}

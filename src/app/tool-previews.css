@@ -9,6 +9,7 @@
 
 .tp {
   position: relative;
+  flex-shrink: 0;
   overflow: hidden;
   aspect-ratio: 16 / 9;
   background:

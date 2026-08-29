@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { toolLabel, type Tool } from "@/lib/tools";
 import { ToolPreview } from "./tool-preview";
+import { ToolCardDemo } from "@/components/tools/card-demos/tool-card-demo";
+import { hasToolCardDemo } from "@/components/tools/card-demos/slugs";
 
 /**
  * One tool, as it appears on the homepage and on /tools.
@@ -36,7 +38,11 @@ export function ToolCard({ tool }: { tool: Tool }) {
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-1 hover:border-(--primary)/40"
       style={{ boxShadow: "var(--shadow-sm)" }}
     >
-      <ToolPreview slug={tool.slug} />
+      {hasToolCardDemo(tool.slug) ? (
+        <ToolCardDemo slug={tool.slug} />
+      ) : (
+        <ToolPreview slug={tool.slug} />
+      )}
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2">
           <span className="font-semibold group-hover:underline">{toolLabel(tool)}</span>

@@ -61,13 +61,6 @@
   }
 }
 
-/* The exported-code peek under the model switcher: it is a head slice
-   of a much longer file, so fade the last line rather than cut it. */
-.hs-code {
-  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
-}
-
 /* The control rail scrolls sideways on phones; the bar itself is noise. */
 .hs-rail {
   scrollbar-width: none;

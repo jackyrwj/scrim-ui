@@ -4,18 +4,20 @@ import { resources, resourceCategories } from "@/lib/resources";
 import { ResourcesBrowser } from "@/components/resources/resources-browser";
 
 export const metadata: Metadata = {
-  title: "Resources — AI UI Libraries, Generators & Guides",
+  title: "Curated AI Interface Resources",
   description:
-    "A curated directory of component libraries, AI UI generators, design tools, icons and guides for building AI product interfaces.",
+    "Explore curated libraries, generators, design tools, assets and guides for building AI interfaces, each with a clear note on when to use it.",
 };
 
 export default function ResourcesPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">Resources</h1>
+      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">
+        Resources
+      </h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        A curated directory of the best libraries, generators, design tools and guides for
-        building AI interfaces — each with a note on when to use it.
+        A hand-picked directory of libraries, generators, design tools, and guides for AI
+        interfaces.
       </p>
 
       {/* The browser reads `?category=` (the link a detail page comes back on)

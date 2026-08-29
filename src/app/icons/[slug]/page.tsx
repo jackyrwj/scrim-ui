@@ -7,7 +7,7 @@ import { iconGuide, iconSlug, getIconEntry, relatedIcons } from "@/lib/icon-guid
 import { getCategory, components } from "@/lib/registry";
 import { categoryIconFor } from "@/lib/icons";
 import { IconEditor } from "@/components/icons/icon-editor";
-import { SITE_REPO, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamicParams = false;
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
   const name = entry.icon.displayName ?? "Icon";
   return {
     title: `${entry.concept} icon — ${name}`,
-    description: `${entry.meaning}. The Lucide icon we use for "${entry.concept}" in AI interfaces, with size, stroke and colour you can set before copying.`,
+    description: `${entry.meaning}. The Lucide icon we use for "${entry.concept}" in AI interfaces — set size, stroke and colour, then copy as React, Vue, Svelte, SVG or PNG.`,
   };
 }
 
@@ -90,6 +90,28 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
         </IconEditor>
       </div>
 
+      {/* Legibility check at real UI sizes, at Lucide's default stroke — the
+          failure mode this catches is a glyph that reads at 48 dissolving at
+          16. Server-rendered and static on purpose: the editor above is for
+          tuning, this strip is for judging. */}
+      <section className="mt-10">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-(--muted-foreground)">
+          At every size
+        </h2>
+        <div className="mt-3 flex flex-wrap items-end gap-x-8 gap-y-4 rounded-xl border border-(--border) bg-(--muted)/30 px-6 py-5">
+          {[12, 16, 20, 24, 32, 48].map((s) => (
+            <span key={s} className="flex flex-col items-center gap-1.5">
+              {createElement(entry.icon, { size: s, strokeWidth: 2, "aria-hidden": true })}
+              <span className="text-[10px] tabular-nums text-(--muted-foreground)">{s}px</span>
+            </span>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-(--muted-foreground)">
+          Stroke 2 at 16px and below reads heavy next to body text — drop to 1.5 with the slider
+          above.
+        </p>
+      </section>
+
       {used.length > 0 && (
         <section className="mt-12">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-(--muted-foreground)">
@@ -132,31 +154,6 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
           </div>
         </section>
       )}
-
-      <footer className="mt-14 border-t border-(--border) pt-6 text-sm text-(--muted-foreground)">
-        <p className="max-w-2xl">
-          <code className="font-mono text-(--foreground)">{name}</code> is from{" "}
-          <a
-            href="https://lucide.dev"
-            target="_blank"
-            rel="noreferrer"
-            className="underline underline-offset-2 transition-colors hover:text-(--foreground)"
-          >
-            Lucide
-          </a>
-          , ISC licence, &copy; Lucide Contributors. The icon is theirs; pairing it with
-          &ldquo;{entry.concept}&rdquo; is ours, and{" "}
-          <a
-            href={`${SITE_REPO}/issues`}
-            target="_blank"
-            rel="noreferrer"
-            className="underline underline-offset-2 transition-colors hover:text-(--foreground)"
-          >
-            arguable
-          </a>
-          .
-        </p>
-      </footer>
     </div>
   );
 }

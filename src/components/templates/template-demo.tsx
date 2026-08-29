@@ -4,6 +4,12 @@ import { RagQaDemo } from "./rag-qa-demo";
 import { AgentConsoleDemo } from "./agent-console-demo";
 import { StructuredExtractionDemo } from "./structured-extraction-demo";
 import { GenerativeUiDemo } from "./generative-ui-demo";
+import { VoiceAssistantDemo } from "./voice-assistant-demo";
+import { AnswerEngineDemo } from "./answer-engine-demo";
+import { MemoryChatDemo } from "./memory-chat-demo";
+import { SupportCopilotDemo } from "./support-copilot-demo";
+import { ImageStudioDemo } from "./image-studio-demo";
+import { ResearchAgentDemo } from "./research-agent-demo";
 
 /**
  * Which templates have a running demo on their page.
@@ -24,6 +30,12 @@ const demos: Record<string, (props: { caption?: boolean }) => React.ReactElement
   "agent-console": AgentConsoleDemo,
   "structured-extraction": StructuredExtractionDemo,
   "generative-ui": GenerativeUiDemo,
+  "voice-assistant": VoiceAssistantDemo,
+  "answer-engine": AnswerEngineDemo,
+  "memory-chat": MemoryChatDemo,
+  "support-copilot": SupportCopilotDemo,
+  "image-studio": ImageStudioDemo,
+  "research-agent": ResearchAgentDemo,
 };
 
 export function hasTemplateDemo(slug: string): boolean {

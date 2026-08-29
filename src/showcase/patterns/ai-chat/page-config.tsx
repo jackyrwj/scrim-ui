@@ -5,9 +5,11 @@ export const aiChatPageConfig: PatternPageConfig = {
   sourceFile: "ai-chat.tsx",
   heroDemo: <AIChatPattern />,
   elements: [
-    { label: "Conversation sidebar", componentSlug: undefined },
+    { label: "Conversation Sidebar", componentSlug: "conversation-sidebar" },
+    { label: "Response Versions", componentSlug: "response-versions" },
     { label: "Streaming Message", componentSlug: "streaming-message" },
     { label: "Prompt Input", componentSlug: "prompt-input" },
+    { label: "Context Picker", componentSlug: "context-picker" },
     { label: "Prompt Input + Model Selector", componentSlug: "prompt-input-model-selector" },
     { label: "Citation UI", componentSlug: "citation-ui" },
     { label: "Source Card", componentSlug: "source-card" },

@@ -3,7 +3,7 @@ import { checkProAccess } from "@/lib/pro-access.server";
 import { proArtifactErrorResponse, readProTemplate } from "@/lib/pro-artifacts.server";
 
 /**
- * A whole template's source, against a licence.
+ * A whole template's source, against Pro access.
  *
  * The same contract as /api/pro/source, one directory wider: the template
  * page renders its file LIST from the public metadata catalog and never the
@@ -11,14 +11,14 @@ import { proArtifactErrorResponse, readProTemplate } from "@/lib/pro-artifacts.s
  */
 export async function POST(request: Request) {
   const body: unknown = await request.json().catch(() => null);
-  const { slug, key } = (body ?? {}) as { slug?: unknown; key?: unknown };
+  const { slug } = (body ?? {}) as { slug?: unknown };
 
   const entry = typeof slug === "string" ? getTemplate(slug) : undefined;
   if (!entry || entry.status !== "published") {
     return Response.json({ error: "Unknown template." }, { status: 404 });
   }
 
-  const check = await checkProAccess({ key });
+  const check = await checkProAccess();
   if (!check.valid) {
     return Response.json({ error: check.error }, { status: 401, headers: { "cache-control": "no-store" } });
   }

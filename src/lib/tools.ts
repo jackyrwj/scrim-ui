@@ -24,6 +24,61 @@ export type Tool = {
 
 export const tools: Tool[] = [
   {
+    slug: "workshop",
+    name: "AI Component Workshop",
+    description:
+      "Describe an AI product interface, compose it from real Scrim UI components, refine individual layers and export the React implementation.",
+    tagline: "Build and refine AI interfaces with a constrained design agent",
+    cta: "Try prototype",
+    status: "published",
+    featured: true,
+    isNew: true,
+  },
+  {
+    slug: "pricing-calculator",
+    name: "AI Pricing Calculator",
+    description:
+      "Compare AI model costs across providers. Input your estimated usage and see monthly cost breakdowns for GPT, Claude, Gemini and DeepSeek.",
+    tagline: "Compare monthly costs across AI models and providers",
+    cta: "Open tool",
+    status: "published",
+    featured: true,
+    isNew: true,
+  },
+  {
+    slug: "system-prompt-builder",
+    name: "System Prompt Builder",
+    description:
+      "Build structured system prompts from modular blocks — role, rules, output format, constraints. Edit each section and copy the combined prompt.",
+    tagline: "Build structured system prompts from modular blocks",
+    cta: "Open tool",
+    status: "published",
+    featured: true,
+    isNew: true,
+  },
+  {
+    slug: "mcp-config-builder",
+    name: "MCP Config Builder",
+    description:
+      "Visually configure MCP server connections for Claude, Cursor and other AI tools. Add servers, set transport and environment variables, then copy the JSON.",
+    tagline: "Configure MCP servers visually and copy the JSON config",
+    cta: "Open tool",
+    status: "published",
+    featured: true,
+    isNew: true,
+  },
+  {
+    slug: "response-diff",
+    name: "AI Response Diff",
+    description:
+      "Compare two AI model outputs side by side. Paste responses and see word counts, token estimates and structural differences highlighted.",
+    tagline: "Compare AI model outputs side by side",
+    cta: "Open tool",
+    status: "published",
+    featured: true,
+    isNew: true,
+  },
+  {
     slug: "model-switcher",
     name: "Model Switcher Builder",
     description:

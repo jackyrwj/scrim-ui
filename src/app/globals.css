@@ -144,29 +144,11 @@ body {
   text-shadow: var(--display-shadow);
 }
 
-/* The hero headline, on one line from lg up.
-   ------------------------------------------------------------------
-   Measured, not guessed: "The interface layer for AI products" in Geist
-   Semibold at tracking-tight is 14.34em wide. Sizing off the viewport
-   rather than picking a fixed px means it cannot overflow at any width —
-   6.4vw of a 1024px viewport is 65px, which needs 939px of the ~976px
-   available, and it stops growing at 4.25rem so it never outruns the
-   1024px container.
-
-   This is coupled to the length of that sentence. A longer headline
-   needs a smaller vw figure, or it will wrap again and the nowrap will
-   push it out of the viewport instead. Below lg it wraps normally: 39
-   characters on one line on a phone would be 10px type. */
+/* Keep the hero headline inside its own box so the clipped text gradient
+   covers every glyph. The copy is allowed to balance across lines instead
+   of relying on a nowrap rule coupled to one exact sentence. */
 .display-title--hero {
   text-wrap: balance;
-}
-
-@media (min-width: 1024px) {
-  .display-title--hero {
-    white-space: nowrap;
-    font-size: min(4.25rem, 6.4vw);
-    line-height: 1.05;
-  }
 }
 
 @keyframes shimmer {
@@ -217,4 +199,16 @@ body {
   border: none;
   border-radius: 0;
   box-shadow: none !important;
+}
+
+/* The /templates card is a stretched link (an overlay anchor covers it), so
+   the demo band is raised above that overlay but made click-transparent
+   itself: clicks on empty demo space fall through to the card link, while
+   the replay's real controls stay clickable on top. */
+.tcd {
+  z-index: 20;
+  pointer-events: none;
+}
+.tcd :is(button, a, input, textarea, select, summary, [role="button"]) {
+  pointer-events: auto;
 }

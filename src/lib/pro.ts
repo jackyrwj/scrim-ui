@@ -2,7 +2,7 @@
  * The paid tier.
  *
  * The site's whole traffic story is organic search on component pages, so the
- * rule this module exists to enforce is: a Pro component's PAGE stays public
+ * rule this module exists to enforce is: a Pro item's PAGE stays public
  * and indexable — title, description, tags, live preview, "when to use it",
  * "what breaks in production" — and only the source and the install command
  * are held back. Hiding the page would trade the one asset that brings
@@ -41,23 +41,21 @@ export type Tier = "free" | "pro";
  * sales copy. (Blocks shipped and were later removed as redundant with the
  * templates — a template buyer already owns the frame code.)
  *
- * Components stay on the list on the same test: the streaming Markdown
- * renderer, the citation popover, the approval gate and the cost meter. The
- * test is whether the category is empty, not whether it is short.
+ * The same rule is why there are no Pro components any more: the four that
+ * launched the tier (streaming partial Markdown, reviewing streamed edits,
+ * a durable approval lifecycle, honest usage arithmetic) moved to Free,
+ * and Pro is templates-only until a component's hard part clearly survives
+ * outside every template.
  */
 
 export const FREE_PLAN = {
   name: "Free",
   priceCents: 0,
   currency: "USD",
-  billing: "Free forever",
   features: [
-    "Every free component, full source",
-    "MIT licensed — commercial use, no attribution",
-    "Stays free forever — nothing published moves behind the lock",
-    "shadcn CLI install, or just copy the file",
-    "No dependencies to add, no theme layer to fight",
-    "No account, no email, no sign-up",
+    "Full source for every component — all of them",
+    "MIT licensed for commercial projects",
+    "Install with shadcn CLI or copy and paste — no account required",
   ],
 } as const;
 
@@ -69,13 +67,12 @@ export const PRO_PLAN = {
   /** One-time. A subscription would promise a release cadence not yet earned. */
   billing: "One-time payment",
   features: [
-    "Everything in Free, unchanged",
-    "Every Pro template — complete apps, wired to the AI SDK",
-    "Every Pro component, full source",
-    "Everything added to Pro later, at no extra cost",
-    "shadcn CLI install for every Pro item",
-    "Single developer, unlimited projects",
-    "Commercial use, including client work",
+    "Everything in Free",
+    "Complete AI app templates with real routes and data flow",
+    "Resumable agents, grounded retrieval, streaming and async jobs",
+    "Full source for every Pro template",
+    "Unlimited personal and client projects",
+    "Lifetime access and future Pro releases",
   ],
 } as const;
 

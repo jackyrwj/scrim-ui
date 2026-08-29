@@ -12,23 +12,19 @@ import { proArtifactErrorResponse, readProTemplateZip } from "@/lib/pro-artifact
  * that brings its own package.json — it still works, and it is still offered,
  * but it should not be the only way out of this page.
  *
- * POST, and the key in the body, exactly like /api/pro/template — a GET would
- * put the licence in a URL, where it reaches the referrer header, the browser
- * history and every log between here and there. The registry endpoint has to
- * accept a key in the query because `npx shadcn` can only fetch a URL; a
- * browser download has no such excuse, so the client fetches the bytes and
- * saves them from a blob.
+ * POST, like /api/pro/template — the browser fetches the bytes and saves them
+ * from a blob, so the click can await the archive and show a pending label.
  */
 export async function POST(request: Request) {
   const body: unknown = await request.json().catch(() => null);
-  const { slug, key } = (body ?? {}) as { slug?: unknown; key?: unknown };
+  const { slug } = (body ?? {}) as { slug?: unknown };
 
   const entry = typeof slug === "string" ? getTemplate(slug) : undefined;
   if (!entry || entry.status !== "published") {
     return Response.json({ error: "Unknown template." }, { status: 404 });
   }
 
-  const check = await checkProAccess({ key });
+  const check = await checkProAccess();
   if (!check.valid) {
     return Response.json(
       { error: check.error },

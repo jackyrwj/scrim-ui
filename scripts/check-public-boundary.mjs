@@ -2,20 +2,22 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 const root = process.cwd();
-const proComponents = [
-  "approval-gate",
-  "citation-popover",
-  "cost-meter",
-  "edit-diff-view",
-  "prompt-editor",
-  "streaming-markdown",
-];
+// No Pro components right now — the launch four (approval-gate, cost-meter,
+// edit-diff-view, streaming-markdown) are free and live in src/showcase.
+// Add slugs back when a Pro component ships.
+const proComponents = [];
 const proTemplates = [
   "agent-console",
   "ai-chat",
+  "answer-engine",
   "generative-ui",
+  "image-studio",
+  "memory-chat",
   "rag-qa",
+  "research-agent",
   "structured-extraction",
+  "support-copilot",
+  "voice-assistant",
 ];
 
 const forbidden = [

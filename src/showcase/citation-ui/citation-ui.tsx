@@ -90,30 +90,41 @@ export function InlineCitation({ citation, className = "" }: InlineCitationProps
 export function CitationList({
   citations,
   className = "",
+  linkable = true,
 }: {
   citations: Citation[];
   className?: string;
+  /** False inside a card already wrapped in <a>, where nested anchors are invalid HTML. */
+  linkable?: boolean;
 }) {
   if (citations.length === 0) return null;
   return (
     <div className={`space-y-1.5 ${className}`}>
       <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Sources</p>
       <ol className="space-y-1">
-        {citations.map((c) => (
-          <li key={c.id} className="flex items-baseline gap-2 text-sm">
-            <span className="w-4 shrink-0 text-right text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
-              {c.id}
-            </span>
-            <a
-              href={c.url}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="truncate text-zinc-600 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100"
-            >
-              {c.title}
-            </a>
-          </li>
-        ))}
+        {citations.map((c) => {
+          const titleClass =
+            "truncate text-zinc-600 transition-colors hover:text-zinc-900 hover:underline dark:text-zinc-300 dark:hover:text-zinc-100";
+          return (
+            <li key={c.id} className="flex items-baseline gap-2 text-sm">
+              <span className="w-4 shrink-0 text-right text-xs tabular-nums text-zinc-500 dark:text-zinc-400">
+                {c.id}
+              </span>
+              {linkable ? (
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className={titleClass}
+                >
+                  {c.title}
+                </a>
+              ) : (
+                <span className={titleClass}>{c.title}</span>
+              )}
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

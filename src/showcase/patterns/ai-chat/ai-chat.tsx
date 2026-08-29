@@ -4,6 +4,18 @@ import * as React from "react";
 import { PromptInput } from "../../prompt-input/prompt-input";
 import { StreamingMessage } from "../../streaming-message/streaming-message";
 import { CitationList, type Citation } from "../../citation-ui/citation-ui";
+import {
+  ConversationSidebar,
+  type ConversationGroup,
+} from "../../conversation-sidebar/conversation-sidebar";
+import {
+  ResponseVersions,
+  type ResponseVersion,
+} from "../../response-versions/response-versions";
+import {
+  ContextPicker,
+  type ContextItem,
+} from "../../context-picker/context-picker";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -15,10 +27,37 @@ type Turn = {
   text: string;
 };
 
+const INITIAL_CONVERSATIONS: ConversationGroup[] = [
+  {
+    id: "today",
+    label: "Today",
+    conversations: [
+      { id: "t1", title: "Streaming UI patterns", updatedAt: "2m" },
+      { id: "t2", title: "Claude model pricing", updatedAt: "1h" },
+    ],
+  },
+  {
+    id: "week",
+    label: "Previous 7 days",
+    conversations: [
+      { id: "t3", title: "Agent approval UX", updatedAt: "2d" },
+      { id: "t4", title: "Research: RAG citations", updatedAt: "4d" },
+    ],
+  },
+];
+
 const MODELS = [
   { id: "sonnet", name: "Claude Sonnet 5", hint: "Balanced", icon: <ClaudeMark /> },
   { id: "opus", name: "Claude Opus 5", hint: "Reasoning", icon: <ClaudeMark /> },
   { id: "haiku", name: "Claude Haiku 4.5", hint: "Fast", icon: <ClaudeMark /> },
+];
+
+const CONTEXT_SOURCES: ContextItem[] = [
+  { id: "f1", kind: "file", title: "Q3-planning.md", detail: "docs/roadmap", tokens: 2400, recent: true },
+  { id: "f2", kind: "file", title: "metrics.csv", detail: "Downloads", tokens: 9800 },
+  { id: "w1", kind: "web", title: "AI SDK — useChat", detail: "sdk.vercel.ai/docs", tokens: 3100, recent: true },
+  { id: "w2", kind: "web", title: "Pricing page draft", detail: "Notion · shared", status: "permission-required" },
+  { id: "k1", kind: "knowledge", title: "Support handbook", detail: "142 articles", tokens: 12400 },
 ];
 
 const SOURCES: Citation[] = [
@@ -44,6 +83,13 @@ const REPLIES = [
   "The model selector belongs at the point of composition. Let users pick per message, describe the trade-off, and never wipe their draft when they switch.",
 ];
 
+/* Alternate greetings the regenerate loop cycles through. */
+const GREETINGS = [
+  "Hi — I'm your AI research assistant. Ask me anything, or attach files and I'll ground answers in them.",
+  "Hello — ask me anything. I can search the web, read attachments, and cite what I find.",
+  "Welcome back. Pick a model below and ask away — I'll show my sources when I use them.",
+];
+
 /* ------------------------------------------------------------------ */
 /* Icons                                                               */
 /* ------------------------------------------------------------------ */
@@ -56,14 +102,6 @@ function ClaudeMark() {
   return (
     <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden className="shrink-0 fill-[#d97757]">
       <path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z" />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-      <path d="M12 5v14M5 12h14" />
     </svg>
   );
 }
@@ -82,15 +120,19 @@ function SearchIcon() {
 /* ------------------------------------------------------------------ */
 
 export function AIChatPattern() {
-  const [turns, setTurns] = React.useState<Turn[]>([
-    {
-      id: 1,
-      role: "assistant",
-      text: "Hi — I'm your AI research assistant. Ask me anything, or attach files and I'll ground answers in them.",
-    },
-  ]);
+  const [turns, setTurns] = React.useState<Turn[]>([]);
   const [pending, setPending] = React.useState<string | null>(null);
   const [showSources, setShowSources] = React.useState(false);
+  const [conversations, setConversations] = React.useState(INITIAL_CONVERSATIONS);
+  const [activeConvo, setActiveConvo] = React.useState("t1");
+  const [contextSel, setContextSel] = React.useState<string[]>([]);
+  const [contextGranted, setContextGranted] = React.useState<string[]>([]);
+  /* The greeting doubles as the regenerate demo: it is a version stack, and
+     the regenerate button appends a streaming v2 the reader can page back
+     from. */
+  const [greetingVersions, setGreetingVersions] = React.useState<ResponseVersion[]>([
+    { id: "g1", status: "ready", content: <StreamingMessage text={GREETINGS[0]} /> },
+  ]);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const idRef = React.useRef(2);
 
@@ -115,43 +157,100 @@ export function AIChatPattern() {
     }
   }
 
+  function regenerateGreeting() {
+    const id = `g${idRef.current++}`;
+    const text = GREETINGS[idRef.current % GREETINGS.length];
+    setGreetingVersions((vs) => [
+      ...vs,
+      {
+        id,
+        status: "generating",
+        content: (
+          <StreamingMessage
+            key={id}
+            text={text}
+            isStreaming
+            speed={2}
+            onComplete={() =>
+              setGreetingVersions((vs2) =>
+                vs2.map((v) => (v.id === id ? { ...v, status: "ready" } : v)),
+              )
+            }
+          />
+        ),
+      },
+    ]);
+  }
+
+  function newChat() {
+    const id = `t${idRef.current++}`;
+    setConversations((gs) =>
+      gs.map((g, i) =>
+        i === 0
+          ? { ...g, conversations: [{ id, title: "Untitled chat", updatedAt: "now" }, ...g.conversations] }
+          : g,
+      ),
+    );
+    setActiveConvo(id);
+    setTurns([]);
+    setGreetingVersions([
+      {
+        id: `g${idRef.current++}`,
+        status: "ready",
+        content: <StreamingMessage text="New conversation started. What are you working on?" />,
+      },
+    ]);
+    setPending(null);
+    setShowSources(false);
+  }
+
+  const activeTitle =
+    conversations.flatMap((g) => g.conversations).find((c) => c.id === activeConvo)?.title ?? "AI Chat";
+
   return (
     <div className="flex h-[560px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-      {/* Sidebar */}
-      <aside className="hidden w-56 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/60 dark:border-zinc-800 dark:bg-zinc-950/40 md:flex">
-        <div className="p-3">
-          <button
-            type="button"
-            onClick={() => {
-              setTurns([
-                { id: idRef.current++, role: "assistant", text: "New conversation started. What are you working on?" },
-              ]);
-              setPending(null);
-              setShowSources(false);
-            }}
-            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white py-2 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
-          >
-            <PlusIcon />
-            New chat
-          </button>
+      {/* Sidebar — hidden below md; on small screens the chat takes over. */}
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-zinc-200 dark:border-zinc-800 md:flex">
+        <div className="min-h-0 flex-1">
+          <ConversationSidebar
+            groups={conversations}
+            activeId={activeConvo}
+            onNewChat={newChat}
+            onSelect={setActiveConvo}
+            onRename={(id, title) =>
+              setConversations((gs) =>
+                gs.map((g) => ({
+                  ...g,
+                  conversations: g.conversations.map((c) => (c.id === id ? { ...c, title } : c)),
+                })),
+              )
+            }
+            onTogglePin={(id) =>
+              setConversations((gs) =>
+                gs.map((g) => ({
+                  ...g,
+                  conversations: g.conversations.map((c) =>
+                    c.id === id ? { ...c, pinned: !c.pinned } : c,
+                  ),
+                })),
+              )
+            }
+            onDelete={(id) =>
+              setConversations((gs) =>
+                gs
+                  .map((g) => ({ ...g, conversations: g.conversations.filter((c) => c.id !== id) }))
+                  .filter((g) => g.conversations.length > 0),
+              )
+            }
+            onRestore={(conv) =>
+              setConversations((gs) =>
+                gs.map((g, i) =>
+                  i === 0 ? { ...g, conversations: [conv, ...g.conversations] } : g,
+                ),
+              )
+            }
+          />
         </div>
-        <nav className="flex-1 space-y-0.5 overflow-y-auto px-3">
-          {["Streaming UI patterns", "Claude model pricing", "Agent approval UX", "Research: RAG citations"].map(
-            (title, i) => (
-              <button
-                key={title}
-                type="button"
-                className={`w-full truncate rounded-lg px-2.5 py-2 text-left text-[13px] transition-colors ${
-                  i === 0
-                    ? "bg-zinc-200/70 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
-                    : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
-                }`}
-              >
-                {title}
-              </button>
-            ),
-          )}
-        </nav>
         <div className="border-t border-zinc-200 p-3 text-xs text-zinc-500 dark:text-zinc-400 dark:border-zinc-800">
           <div className="mb-1 font-medium text-zinc-500 dark:text-zinc-400">Claude Sonnet 5</div>
           <div className="flex items-center gap-1">
@@ -165,17 +264,18 @@ export function AIChatPattern() {
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-          <div>
+          <div className="min-w-0">
             <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">AI Chat</p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">Streaming UI patterns</p>
+            <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{activeTitle}</p>
           </div>
-          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+          <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
             Online
           </span>
         </div>
 
         {/* Messages */}
         <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto px-4 py-5 sm:px-6">
+          <ResponseVersions versions={greetingVersions} onRegenerate={regenerateGreeting} />
           {turns.map((t) =>
             t.role === "user" ? (
               <div key={t.id} className="flex justify-end">
@@ -209,6 +309,17 @@ export function AIChatPattern() {
 
         {/* Composer */}
         <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
+          <ContextPicker
+            className="mb-2"
+            items={CONTEXT_SOURCES.map((it) =>
+              contextGranted.includes(it.id) && it.status === "permission-required"
+                ? { ...it, status: "available" as const }
+                : it,
+            )}
+            selectedIds={contextSel}
+            onSelectionChange={setContextSel}
+            onRequestAccess={(item) => setContextGranted((g) => [...g, item.id])}
+          />
           <PromptInput
             models={MODELS}
             defaultModel="sonnet"

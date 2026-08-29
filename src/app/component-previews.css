@@ -49,6 +49,47 @@
   0%, 100% { opacity: 1; }
   50%      { opacity: 0.35; }
 }
+/* A turn arriving or a choice landing. Most of the cycle sits at rest, so
+   the replay reads as "another one just happened" rather than a loop. */
+@keyframes cp-pop {
+  0%, 5%   { opacity: 0; transform: translateY(3px) scale(0.96); }
+  15%, 92% { opacity: 1; transform: translateY(0) scale(1); }
+  100%     { opacity: 0; transform: translateY(0) scale(1); }
+}
+/* The dropzone's standing invitation. */
+@keyframes cp-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2.5px); }
+}
+/* Work crossing from one agent to the next. */
+@keyframes cp-shuttle {
+  0%, 100% { transform: translateX(-2px); opacity: 0.45; }
+  50%      { transform: translateX(2px);  opacity: 1; }
+}
+/* A toggle flipping: track and knob share the timeline so they stay
+   plausible — the knob never arrives before the track lights. */
+@keyframes cp-track {
+  0%, 22%   { background: var(--border); }
+  34%, 76%  { background: var(--primary); }
+  88%, 100% { background: var(--border); }
+}
+@keyframes cp-knob {
+  0%, 22%   { transform: translateX(0); }
+  34%, 76%  { transform: translateX(7px); }
+  88%, 100% { transform: translateX(0); }
+}
+/* Indeterminate progress, for output that is still being written. The
+   bar is 40% of its track, so ±its own width clears both edges. */
+@keyframes cp-stream {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+/* An upscale pass finishing: one sweep, then a long rest so the loop
+   reads as the next generation, not a screensaver. */
+@keyframes cp-shimmer {
+  0%       { transform: translateX(-100%); }
+  45%, 100% { transform: translateX(320%); }
+}
 
 .cp-caret { opacity: 1; animation: cp-caret 1s steps(1, end) infinite; }
 .cp-line {
@@ -56,6 +97,15 @@
   animation: cp-grow 6s var(--ease-out-expo) infinite;
 }
 .cp-dot { animation: cp-pulse 1.4s var(--ease-smooth) infinite; }
+.cp-pop { animation: cp-pop 6s var(--ease-smooth) infinite; }
+.cp-bob { animation: cp-bob 2.4s var(--ease-smooth) infinite; }
+.cp-shuttle { animation: cp-shuttle 2.6s var(--ease-smooth) infinite; }
+/* Base colour on the class, not inline: an inline style outranks the
+   reduced-motion block below and would pin the switch lit. */
+.cp-track { background: var(--border); animation: cp-track 4.5s var(--ease-smooth) infinite; }
+.cp-knob { animation: cp-knob 4.5s var(--ease-out-expo) infinite; }
+.cp-stream { animation: cp-stream 1.6s linear infinite; }
+.cp-shimmer { animation: cp-shimmer 3.4s var(--ease-smooth) infinite; }
 
 /* Nothing paints until the card has been revealed. */
 .aos-stagger-item:not(.aos-visible) .cp *,

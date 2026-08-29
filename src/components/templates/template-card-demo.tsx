@@ -6,7 +6,7 @@ import * as React from "react";
  * A template demo, shrunk into a list-page card.
  *
  * The demos were built for the detail pages, where one of them gets the
- * whole column. Five of them at natural size would make this page a
+ * whole column. Eleven of them at natural size would make this page a
  * scrollathon, so each one renders at a fixed design width and is scaled
  * to the card width exactly — edge to edge, no matting, so the card's top
  * half IS the app. The height is measured rather than guessed: transforms
@@ -19,7 +19,7 @@ import * as React from "react";
  * which is exactly what a card preview should be.
  *
  * The demo chunks are lazy and only load once the card is near the
- * viewport — five demos eager would drag every showcase component onto a
+ * viewport — eleven demos eager would drag every showcase component onto a
  * listing page. Until one arrives the band is a bare muted rectangle at
  * the estimated height; the 400px lead means it is almost never seen.
  */
@@ -32,6 +32,20 @@ const demos: Record<string, React.LazyExoticComponent<(props: { caption?: boolea
     import("./structured-extraction-demo").then((m) => ({ default: m.StructuredExtractionDemo })),
   ),
   "generative-ui": React.lazy(() => import("./generative-ui-demo").then((m) => ({ default: m.GenerativeUiDemo }))),
+  "voice-assistant": React.lazy(() =>
+    import("./voice-assistant-demo").then((m) => ({ default: m.VoiceAssistantDemo })),
+  ),
+  "answer-engine": React.lazy(() =>
+    import("./answer-engine-demo").then((m) => ({ default: m.AnswerEngineDemo })),
+  ),
+  "memory-chat": React.lazy(() => import("./memory-chat-demo").then((m) => ({ default: m.MemoryChatDemo }))),
+  "support-copilot": React.lazy(() =>
+    import("./support-copilot-demo").then((m) => ({ default: m.SupportCopilotDemo })),
+  ),
+  "image-studio": React.lazy(() => import("./image-studio-demo").then((m) => ({ default: m.ImageStudioDemo }))),
+  "research-agent": React.lazy(() =>
+    import("./research-agent-demo").then((m) => ({ default: m.ResearchAgentDemo })),
+  ),
 };
 
 const WIDE = "(min-width: 640px)";
