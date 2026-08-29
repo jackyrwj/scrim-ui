@@ -97,6 +97,78 @@ export const templates: TemplateEntry[] = [
     tier: "pro",
     status: "published",
   },
+  {
+    name: "Voice Assistant",
+    slug: "voice-assistant",
+    searchTitle: "Next.js Voice Assistant Template — Realtime",
+    description:
+      "Realtime speech over WebRTC with barge-in that actually retracts playback, a live waveform, a transcript store — and a simulated backend so it runs with zero credentials.",
+    dir: "voice-assistant",
+    stack: ["Next.js 16", "React 19", "OpenAI Realtime", "Tailwind v4", "TypeScript"],
+    componentSlugs: ["voice-input", "voice-waveform", "voice-conversation", "voice-call-controls"],
+    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Answer Engine",
+    slug: "answer-engine",
+    searchTitle: "Perplexity-Style Answer Engine Template",
+    description:
+      "Ask, retrieve, answer, suggest: sources on the stream before the first token, citations that slice the original document by offset, and follow-up questions from a second call.",
+    dir: "answer-engine",
+    stack: ["Next.js 16", "React 19", "AI SDK 7", "Tailwind v4", "TypeScript"],
+    componentSlugs: ["source-card", "source-list", "citation-popover", "prompt-input"],
+    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Memory Chat",
+    slug: "memory-chat",
+    searchTitle: "AI Chat with Long-Term Memory Template",
+    description:
+      "A chat that remembers: approval-gated memory writes, a cookie-backed store with no database, and a system prompt that keeps recollection sparse instead of clingy.",
+    dir: "memory-chat",
+    stack: ["Next.js 16", "React 19", "AI SDK 7", "Tailwind v4", "TypeScript"],
+    componentSlugs: ["memory-list", "memory-chip", "memory-toast", "approval-request"],
+    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Support Copilot",
+    slug: "support-copilot",
+    searchTitle: "AI Support Copilot Template — Next.js",
+    description:
+      "An agent-assist console: ticket queue, KB-cited draft replies your agents edit before sending, and refunds the model can only propose — a human approves.",
+    dir: "support-copilot",
+    stack: ["Next.js 16", "React 19", "AI SDK 7", "Tailwind v4", "TypeScript"],
+    componentSlugs: ["citation-popover", "approval-request", "error-message", "thinking-indicator"],
+    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Image Studio",
+    slug: "image-studio",
+    searchTitle: "AI Image Generation Studio Template",
+    description:
+      "Generation as an async job, not a chat: a server-enforced state machine, polling that never re-downloads pixels, blocked vs failed as different outcomes, and a simulated backend for keyless development.",
+    dir: "image-studio",
+    stack: ["Next.js 16", "React 19", "Images API", "Tailwind v4", "TypeScript"],
+    componentSlugs: ["generated-media", "moderation-flag", "error-message"],
+    tier: "pro",
+    status: "published",
+  },
+  {
+    name: "Research Agent",
+    slug: "research-agent",
+    searchTitle: "Deep Research Agent Template — Next.js",
+    description:
+      "Plan, fan out, synthesize: a planner decomposes the question, parallel researchers answer against the corpus, and a live timeline streams every step before the cited report.",
+    dir: "research-agent",
+    stack: ["Next.js 16", "React 19", "AI SDK 7", "Tailwind v4", "TypeScript"],
+    componentSlugs: ["agent-plan", "agent-run-timeline", "source-list", "citation-popover"],
+    tier: "pro",
+    status: "published",
+  },
 ];
 
 export const publishedTemplates = templates.filter((t) => t.status === "published");

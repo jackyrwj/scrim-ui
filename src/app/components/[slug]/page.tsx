@@ -63,9 +63,8 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
   const related = getRelated(entry);
   const guides = getGuidesForComponent(entry.slug);
   /* Free items are prerendered flat files under /r; Pro items are served by
-     the key-checked route instead, so the two never share a URL. */
+     the token-checked route instead, so the two never share a URL. */
   const registryUrl = `${SITE_URL}/r/${entry.slug}.json`;
-  const proRegistryUrl = `${SITE_URL}/r/pro/${entry.slug}.json`;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
@@ -81,7 +80,9 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         {displayName(entry)}
         {pro && <ProBadge className="translate-y-1" />}
       </h1>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{entry.description}</p>
+      <p className="mt-3 max-w-4xl text-pretty text-lg text-(--muted-foreground)">
+        {entry.description}
+      </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {entry.tags.map((t) => (
           <span key={t} className="rounded-full border border-(--border) px-2.5 py-0.5 text-xs text-(--muted-foreground)">
@@ -140,7 +141,6 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
           <ProSource
             slug={entry.slug}
             lines={proCatalog?.lines ?? 0}
-            registryUrl={proRegistryUrl}
           />
         ) : (
           <CodeBlock code={source} filename={config!.sourceFile} />

@@ -4,18 +4,20 @@ import { ToolCard } from "@/components/site/tool-card";
 import { StaggerChildren } from "@/components/site/animate-on-scroll";
 
 export const metadata: Metadata = {
-  title: "Tools",
+  title: "Free AI Interface Design Tools",
   description:
-    "Free, in-browser tools for designing AI product interfaces. No signup, no install.",
+    "Create chat mockups, build prompts, compare models and count tokens with free in-browser tools for AI interfaces.",
 };
 
 export default function ToolsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">Tools</h1>
+      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">
+        Tools
+      </h1>
       <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        Free, in-browser tools for designing AI product interfaces. No signup, no install —
-        everything runs locally in your browser.
+        Mock up conversations, shape prompts, compare models, and inspect tokens in your
+        browser.
       </p>
 
       <StaggerChildren className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

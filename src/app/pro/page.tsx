@@ -8,13 +8,11 @@ import { clerkConfigured, getViewer } from "@/lib/auth.server";
 import { databaseConfigured } from "@/lib/db.server";
 import { stripeApiConfigured } from "@/lib/stripe-client.server";
 import { ProBadge } from "@/components/pro/pro-badge";
-import { LicenseForm } from "@/components/pro/license-form";
-import { RecoverForm } from "@/components/pro/recover-form";
 
 export const metadata: Metadata = {
-  title: "Pricing — Free and Pro",
+  title: "Pricing — Free UI Components and Pro Workflows",
   description:
-    "Every component is free and MIT licensed. Pro adds complete AI application templates and the components that take a week to get right — one payment, lifetime updates, unlimited projects.",
+    "Free gives you reusable AI interface components. Pro gives you complete application templates and production workflows with one payment and lifetime updates.",
 };
 
 /* Counted here rather than written into lib/pro.ts on purpose: the tier
@@ -47,21 +45,44 @@ export default async function ProPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
       <div className="text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Pricing</h1>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-(--muted-foreground)">
-          The free library stays free. Pro is the layer above: the pieces that take a week to get
-          right, and the templates that are an application rather than a component.
+        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+          Unlock all access
+        </h1>
+        <p className="mx-auto mt-5 max-w-2xl text-lg text-(--muted-foreground)">
+          Every component is free. Pro adds complete app templates and production workflows
+          with one payment and lifetime updates.
         </p>
       </div>
 
-      <div className="mt-12 grid gap-5 md:grid-cols-2 md:items-start">
+      {/* Subgrid: both cards share the parent's four row tracks (title,
+          price, CTA, features), so each card must render exactly four row
+          items — this keeps the CTAs and feature lists vertically aligned
+          regardless of how the price row wraps. The CTA sits between the
+          price and the features: the buying decision happens at the price,
+          and the list below is the justification, not the gate. */}
+      <div className="mt-14 grid gap-x-5 md:grid-cols-2">
         {/* ---------------------------------------------------------- Free */}
-        <div className="rounded-2xl border border-(--border) p-7">
-          <h2 className="text-lg font-semibold">{FREE_PLAN.name}</h2>
-          <p className="mt-1 text-sm text-(--muted-foreground)">{FREE_PLAN.billing}</p>
-          <div className="mt-4 text-4xl font-bold tracking-tight">{FREE_PRICE}</div>
+        <div className="row-span-4 grid grid-rows-subgrid rounded-2xl border border-(--border) p-7">
+          <div className="border-b border-(--border) pb-5">
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-semibold">{FREE_PLAN.name}</h2>
+              <span className="size-2 rounded-full bg-(--muted-foreground)/40" aria-hidden />
+            </div>
+            <p className="mt-1 text-sm text-(--muted-foreground)">Free forever</p>
+          </div>
+          <div className="mt-6 flex items-baseline gap-1.5">
+            <span className="text-4xl font-bold tracking-tight">{FREE_PRICE}</span>
+            <span className="text-sm text-(--muted-foreground)">/ forever</span>
+          </div>
 
-          <ul className="mt-6 space-y-3">
+          <Link
+            href="/components"
+            className="mt-6 flex h-11 w-full items-center justify-center rounded-xl border border-(--border) text-sm font-semibold transition-colors hover:bg-(--muted)"
+          >
+            Browse the components
+          </Link>
+
+          <ul className="mt-7 space-y-3">
             {FREE_PLAN.features.map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-(--muted-foreground)">
                 <CheckIcon />
@@ -69,31 +90,53 @@ export default async function ProPage() {
               </li>
             ))}
           </ul>
-
-          <Link
-            href="/components"
-            className="mt-7 flex h-11 w-full items-center justify-center rounded-xl border border-(--border) text-sm font-semibold transition-colors hover:bg-(--muted)"
-          >
-            Browse the components
-          </Link>
         </div>
 
         {/* ----------------------------------------------------------- Pro */}
         <div
-          className="rounded-2xl border border-(--primary)/30 bg-(--card) p-7"
+          className="row-span-4 grid grid-rows-subgrid rounded-2xl border border-(--primary)/30 bg-(--card) p-7 max-md:mt-5"
           style={{ boxShadow: "var(--shadow-md)" }}
         >
-          <div className="flex items-center gap-2.5">
-            <h2 className="text-lg font-semibold">{PRO_PLAN.name}</h2>
-            <ProBadge />
+          <div className="border-b border-(--primary)/20 pb-5">
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-lg font-semibold">{PRO_PLAN.name}</h2>
+              <span className="size-2 rounded-full bg-(--primary)" aria-hidden />
+              <ProBadge />
+            </div>
+            <p className="mt-1 text-sm text-(--muted-foreground)">Lifetime access</p>
           </div>
-          <p className="mt-1 text-sm text-(--muted-foreground)">{PRO_PLAN.billing}</p>
-          <div className="mt-4 flex items-baseline gap-2">
+          <div className="mt-6 flex flex-wrap items-baseline gap-x-2 gap-y-1.5">
             <span className="text-4xl font-bold tracking-tight">{PRO_PRICE}</span>
-            <span className="text-sm text-(--muted-foreground)">once</span>
+            <span className="text-sm text-(--muted-foreground)">/ one-time</span>
           </div>
 
-          <ul className="mt-6 space-y-3">
+          {hasPro ? (
+            <Link
+              href="/dashboard"
+              className="mt-6 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
+            >
+              Open dashboard
+            </Link>
+          ) : !viewer && authReady ? (
+            <Link
+              href="/sign-in"
+              className="mt-6 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
+            >
+              Sign in to get Pro
+            </Link>
+          ) : checkoutReady ? (
+            <form action="/api/checkout/session" method="post" className="mt-6">
+              <button className="flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90">
+                Get Pro — {PRO_PRICE}
+              </button>
+            </form>
+          ) : (
+            <div className="mt-6 rounded-xl border border-dashed border-(--border) px-4 py-3 text-center text-sm text-(--muted-foreground)">
+              Account checkout is not configured yet.
+            </div>
+          )}
+
+          <ul className="mt-7 space-y-3">
             {PRO_PLAN.features.map((feature) => (
               <li key={feature} className="flex items-start gap-2.5 text-sm text-(--muted-foreground)">
                 <CheckIcon />
@@ -101,87 +144,67 @@ export default async function ProPage() {
               </li>
             ))}
           </ul>
-
-          {hasPro ? (
-            <Link
-              href="/dashboard"
-              className="mt-7 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
-            >
-              Open dashboard
-            </Link>
-          ) : !viewer && authReady ? (
-            <Link
-              href="/sign-in"
-              className="mt-7 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
-            >
-              Sign in to get Pro
-            </Link>
-          ) : checkoutReady ? (
-            <form action="/api/checkout/session" method="post" className="mt-7">
-              <button className="flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90">
-                Get Pro — {PRO_PRICE}
-              </button>
-            </form>
-          ) : (
-            <div className="mt-7 rounded-xl border border-dashed border-(--border) px-4 py-3 text-center text-sm text-(--muted-foreground)">
-              Account checkout is not configured yet.
-            </div>
-          )}
         </div>
       </div>
 
       {/* Counted, never claimed: the inventory a buyer gets today, derived
-          from the registry at render time so it can never oversell. */}
+          from the registry at render time so it can never oversell. Styled to
+          match the Pro card above so the list reads as "that card's contents",
+          not as site navigation. */}
       {(publishedTemplates.length > 0 || proComponents.length > 0) && (
-        <div className="mt-12">
-          <h2 className="text-xl font-semibold tracking-tight">In Pro today</h2>
-          <div className="mt-5 space-y-2">
-            {publishedTemplates.map((t) => (
-              <Link
-                key={t.slug}
-                href={`/templates/${t.slug}`}
-                className="group flex items-center justify-between gap-3 rounded-xl border border-(--border) px-4 py-3 transition-colors hover:bg-(--muted)/60"
-              >
-                <span className="font-medium group-hover:underline">{t.name} Template</span>
-                <ProBadge />
-              </Link>
-            ))}
-            {proComponents.map((c) => (
-              <Link
-                key={c.slug}
-                href={`/components/${c.slug}`}
-                className="group flex items-center justify-between gap-3 rounded-xl border border-(--border) px-4 py-3 transition-colors hover:bg-(--muted)/60"
-              >
-                <span className="font-medium group-hover:underline">{c.name}</span>
-                <ProBadge />
-              </Link>
-            ))}
+        <div
+          className="mt-12 rounded-2xl border border-(--primary)/30 bg-(--card) p-7"
+          style={{ boxShadow: "var(--shadow-md)" }}
+        >
+          <div className="flex flex-wrap items-baseline justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-xl font-semibold tracking-tight">Included with Pro</h2>
+              <ProBadge />
+            </div>
+            <p className="text-sm text-(--muted-foreground)">
+              {publishedTemplates.length} templates
+              {proComponents.length > 0 && ` · ${proComponents.length} components`}
+            </p>
           </div>
+
+          <h3 className="mt-6 text-xs font-semibold uppercase tracking-wider text-(--muted-foreground)">
+            Templates
+          </h3>
+          <ul className="mt-2 grid gap-0.5 sm:grid-cols-2 lg:grid-cols-3">
+            {publishedTemplates.map((t) => (
+              <li key={t.slug}>
+                <Link
+                  href={`/templates/${t.slug}`}
+                  className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-(--muted)"
+                >
+                  {t.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {proComponents.length > 0 && (
+            <>
+              <h3 className="mt-6 text-xs font-semibold uppercase tracking-wider text-(--muted-foreground)">
+                Production components
+              </h3>
+              <ul className="mt-2 grid gap-0.5 sm:grid-cols-2 lg:grid-cols-3">
+                {proComponents.map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      href={`/components/${c.slug}`}
+                      className="group flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-(--muted)"
+                    >
+                      {c.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       )}
 
-      <div className="mt-12 rounded-2xl border border-(--border) p-6">
-        <h2 className="text-sm font-semibold">Legacy licence key</h2>
-        <p className="mt-1 text-sm text-(--muted-foreground)">
-          Keys issued before accounts remain valid. New purchases are linked to your account instead.
-        </p>
-        <div className="mt-4">
-          <LicenseForm />
-        </div>
-
-        {/* Next to the key field rather than on a page of its own: the reader
-            who has lost their key and the reader who is about to paste one
-            arrive here identically, and only one of them knows which they are. */}
-        <div className="mt-6 border-t border-(--border) pt-5">
-          <h3 className="text-sm font-semibold">Lost your key?</h3>
-          <p className="mt-1 text-sm text-(--muted-foreground)">
-            Enter the email address you paid with and it will be sent again.
-          </p>
-          <div className="mt-3">
-            <RecoverForm />
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

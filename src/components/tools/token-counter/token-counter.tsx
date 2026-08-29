@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Section } from "../tool-ui";
+import { VendorPicker } from "../vendor-picker";
 import { BrandIcon } from "@/components/brands/brand-icon";
 import { CopyButton } from "@/components/component-page/copy-button";
 import type { TokenConfig } from "./types";
@@ -23,10 +24,28 @@ const FAMILY_COLORS: Record<string, string> = {
   DeepSeek: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300",
 };
 
+const FAMILIES = ["OpenAI", "Anthropic", "Google", "DeepSeek"] as const;
+type Family = (typeof FAMILIES)[number];
+
 export function TokenCounter() {
   const [config, setConfig] = React.useState<TokenConfig>(
     structuredClone(defaultConfig)
   );
+  const [activeFamilies, setActiveFamilies] = React.useState<Set<Family>>(
+    () => new Set(FAMILIES)
+  );
+
+  function toggleFamily(f: Family) {
+    setActiveFamilies((prev) => {
+      const next = new Set(prev);
+      if (next.has(f)) {
+        if (next.size > 1) next.delete(f);
+      } else {
+        next.add(f);
+      }
+      return next;
+    });
+  }
 
   // The real tokenizer ships a multi-megabyte rank table, so it is only
   // fetched when someone asks for exact counts. Until then (and if the
@@ -70,8 +89,6 @@ export function TokenCounter() {
     { label: "Lines", value: stats.lines },
     { label: "Sentences", value: stats.sentences },
   ];
-
-  const families = ["OpenAI", "Anthropic", "Google", "DeepSeek"] as const;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -167,7 +184,15 @@ export function TokenCounter() {
             </p>
           )}
 
-          {families.map((family) => {
+          <div className="mb-4">
+            <VendorPicker
+              vendors={FAMILIES}
+              active={activeFamilies}
+              onSelect={toggleFamily}
+            />
+          </div>
+
+          {FAMILIES.filter((f) => activeFamilies.has(f)).map((family) => {
             const models = estimates.filter((e) => e.model.family === family);
             return (
               <div key={family} className="mb-5 last:mb-0">

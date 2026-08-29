@@ -75,7 +75,7 @@ export default async function InspirationArticlePage({ params }: Props) {
             <span>{entry.title}</span>
           )}
         </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-7 text-(--muted-foreground)">
+        <p className="mt-4 max-w-3xl text-pretty text-lg leading-7 text-(--muted-foreground)">
           {entry.summary}
         </p>
         {entry.disclaimer && (

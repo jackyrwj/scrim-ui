@@ -3,8 +3,9 @@
 import * as React from "react";
 import { CopyButton } from "@/components/component-page/copy-button";
 import { Chip, Field, Section, inputCls, selectCls } from "../tool-ui";
+import { VendorPicker } from "../vendor-picker";
 import { generateCode } from "./generate-code";
-import { modelPresets } from "./presets";
+import { modelPresets, vendorLineups } from "./presets";
 import { getPalette } from "./styles";
 import { SwitcherPreview } from "./switcher-preview";
 import {
@@ -118,6 +119,16 @@ export function ModelSwitcherTool() {
       ...c,
       models: structuredClone(preset.models),
       selectedId: preset.selectedId,
+    }));
+  }
+
+  function applyVendorLineup(vendor: string) {
+    const lineup = vendorLineups.find((v) => v.vendor === vendor);
+    if (!lineup) return;
+    setConfig((c) => ({
+      ...c,
+      models: structuredClone(lineup.models),
+      selectedId: lineup.models[0].id,
     }));
   }
 
@@ -263,7 +274,15 @@ export function ModelSwitcherTool() {
           </Section>
 
           <Section title="Models">
-            <Field label="Start from a preset">
+            <Field label="Start from a provider">
+              <VendorPicker
+                vendors={vendorLineups.map((v) => v.vendor)}
+                onSelect={applyVendorLineup}
+              />
+            </Field>
+
+            <div className="mt-3">
+              <Field label="Start from a preset">
               <select
                 value=""
                 onChange={(e) => applyPreset(e.target.value)}
@@ -276,7 +295,8 @@ export function ModelSwitcherTool() {
                   </option>
                 ))}
               </select>
-            </Field>
+              </Field>
+            </div>
 
             <div className="mt-3 space-y-3">
               {config.models.map((model, i) => (

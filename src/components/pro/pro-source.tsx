@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CodeBlock } from "@/components/component-page/code-block";
-import { InstallCommand } from "@/components/component-page/install-command";
 import { useProAccess } from "@/lib/pro-access";
 import { PRO_PRICE } from "@/lib/pro";
 import { UnlockDialog } from "./unlock-dialog";
@@ -25,18 +24,15 @@ import { UnlockDialog } from "./unlock-dialog";
 export function ProSource({
   slug,
   lines,
-  registryUrl,
 }: {
   slug: string;
   /** Line count of the withheld file. Metadata, not content. */
   lines: number;
-  /** The key-checked registry endpoint, without the key. */
-  registryUrl: string;
 }) {
   const access = useProAccess();
   const pathname = usePathname();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  /* Both results are keyed by the licence they belong to, so a new key
+  /* Both results are keyed by the access identity they belong to, so a change
      invalidates them by comparison at render time instead of an effect that
      clears state — which is the cascading-render pattern the lint rule
      rejects, and which would also blank the code for a frame on every
@@ -54,7 +50,7 @@ export function ProSource({
     fetch("/api/pro/source", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, key: access.key }),
+      body: JSON.stringify({ slug }),
     })
       .then(async (response) => {
         const data: unknown = await response.json().catch(() => null);
@@ -75,24 +71,18 @@ export function ProSource({
     return () => {
       cancelled = true;
     };
-  }, [access.identity, access.key, access.unlocked, loading, slug]);
+  }, [access.identity, access.unlocked, loading, slug]);
 
   if (source) {
     return (
       <div className="space-y-6">
-        {/* The buyer's own key, in their own install command. /r/pro checks it
-            on every fetch, so the command is as portable as the licence is. */}
-        {access.mode === "license" ? (
-          <InstallCommand url={`${registryUrl}?key=${encodeURIComponent(access.key ?? "")}`} />
-        ) : (
-          <p className="text-sm text-(--muted-foreground)">
-            Need the CLI install command? Create a private API token in your{" "}
-            <Link href="/dashboard" className="font-medium text-(--foreground) underline underline-offset-4">
-              dashboard
-            </Link>
-            .
-          </p>
-        )}
+        <p className="text-sm text-(--muted-foreground)">
+          Need the CLI install command? Create a private API token in your{" "}
+          <Link href="/dashboard" className="font-medium text-(--foreground) underline underline-offset-4">
+            dashboard
+          </Link>
+          .
+        </p>
         <CodeBlock code={source.source} filename={source.filename} />
       </div>
     );
@@ -142,7 +132,6 @@ export function ProSource({
       <UnlockDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        onUnlocked={() => setFailed(null)}
         item={pathname}
       />
     </>

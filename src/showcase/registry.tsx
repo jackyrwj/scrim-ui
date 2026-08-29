@@ -42,6 +42,18 @@ import { moderationFlagPageConfig } from "./moderation-flag/page-config";
 import { confidenceAnswerPageConfig } from "./confidence-answer/page-config";
 import { voiceCallControlsPageConfig } from "./voice-call-controls/page-config";
 import { memoryToastPageConfig } from "./memory-toast/page-config";
+import { conversationSidebarPageConfig } from "./conversation-sidebar/page-config";
+import { responseVersionsPageConfig } from "./response-versions/page-config";
+import { artifactPreviewPageConfig } from "./artifact-preview/page-config";
+import { contextPickerPageConfig } from "./context-picker/page-config";
+import { generatedMediaPageConfig } from "./generated-media/page-config";
+import { agentRunTimelinePageConfig } from "./agent-run-timeline/page-config";
+import { citationPopoverPageConfig } from "./citation-popover/page-config";
+import { promptEditorPageConfig } from "./prompt-editor/page-config";
+import { streamingMarkdownPageConfig } from "./streaming-markdown/page-config";
+import { approvalGatePageConfig } from "./approval-gate/page-config";
+import { editDiffViewPageConfig } from "./edit-diff-view/page-config";
+import { costMeterPageConfig } from "./cost-meter/page-config";
 
 /**
  * Map of slug -> page config for every *published* showcase component.
@@ -92,4 +104,16 @@ export const pageConfigs: Record<string, ComponentPageConfig> = {
   "confidence-answer": confidenceAnswerPageConfig,
   "voice-call-controls": voiceCallControlsPageConfig,
   "memory-toast": memoryToastPageConfig,
+  "conversation-sidebar": conversationSidebarPageConfig,
+  "response-versions": responseVersionsPageConfig,
+  "artifact-preview": artifactPreviewPageConfig,
+  "context-picker": contextPickerPageConfig,
+  "generated-media": generatedMediaPageConfig,
+  "agent-run-timeline": agentRunTimelinePageConfig,
+  "citation-popover": citationPopoverPageConfig,
+  "prompt-editor": promptEditorPageConfig,
+  "streaming-markdown": streamingMarkdownPageConfig,
+  "approval-gate": approvalGatePageConfig,
+  "edit-diff-view": editDiffViewPageConfig,
+  "cost-meter": costMeterPageConfig,
 };

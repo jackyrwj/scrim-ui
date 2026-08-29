@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { resources } from "@/lib/resources";
 import { createElement } from "react";
 import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { categoryIconFor } from "@/lib/icons";
@@ -8,48 +6,24 @@ import { categories, components } from "@/lib/registry";
 import { IconCard } from "@/components/icons/icon-card";
 
 export const metadata: Metadata = {
-  title: "AI Interface Icons",
+  title: "Icon Guide for AI Interfaces",
   description:
-    "Which icon to use for streaming, tool calls, approval gates, context windows and every other AI interface concept — mapped to Lucide, with copy and download for each.",
+    "Find the right Lucide icon for each AI interface concept, then copy it as SVG, JSX or a component file.",
 };
 
 const nameOf = (slug: string) => components.find((c) => c.slug === slug)?.name ?? slug;
 
 export default function IconsPage() {
-  const assetCount = resources.filter((r) => r.category === "assets").length;
   return (
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <header className="max-w-2xl">
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          {iconGuide.length} AI Interface Icons
+          Icons
         </h1>
         <p className="mt-3 text-lg text-(--muted-foreground)">
-          Lucide ships 2,034 icons and no opinion about which one means &ldquo;tool call&rdquo;.
-          This is that opinion — one icon picked per concept, with the components that use it.
+          Find a clear, consistent Lucide icon for every AI action and state.
         </p>
       </header>
-
-      {/* What this page is and is not. uwarp-style directories answer "where
-          do I find icons"; this answers "which icon means tool call". Both are
-          worth having, and a reader who wants the first one should not have to
-          work out that it lives somewhere else on the site. */}
-      <div className="mt-8 flex max-w-2xl flex-col gap-3 rounded-xl border border-(--border) bg-(--muted)/40 p-4 text-[13px] leading-5 sm:flex-row sm:items-center sm:gap-6">
-        <p className="flex-1 text-(--muted-foreground)">
-          <span className="font-medium text-(--foreground)">Here</span> — one icon chosen per
-          AI concept, sized, stroked and coloured before you copy it.
-        </p>
-        <span aria-hidden className="hidden w-px self-stretch bg-(--border) sm:block" />
-        <p className="flex-1 text-(--muted-foreground)">
-          <span className="font-medium text-(--foreground)">Elsewhere</span> — whole icon sets
-          and illustration libraries.{" "}
-          <Link
-            href="/resources/category/assets"
-            className="text-(--primary) underline underline-offset-2"
-          >
-            Browse {assetCount} &rarr;
-          </Link>
-        </p>
-      </div>
 
       <div className="mt-12 space-y-10">
         {categories.map((cat) => {
@@ -94,23 +68,6 @@ export default function IconsPage() {
           );
         })}
       </div>
-
-      <footer className="mt-14 border-t border-(--border) pt-6 text-sm text-(--muted-foreground)">
-        <p className="max-w-2xl">
-          Icons are from{" "}
-          <a
-            href="https://lucide.dev"
-            target="_blank"
-            rel="noreferrer"
-            className="underline underline-offset-2 transition-colors hover:text-(--foreground)"
-          >
-            Lucide
-          </a>
-          , used and redistributed under the ISC licence: copyright &copy; Lucide Contributors,
-          permission to use, copy, modify and distribute granted provided the copyright notice and
-          this permission notice appear in all copies. The pairing of icon to concept is ours.
-        </p>
-      </footer>
     </div>
   );
 }

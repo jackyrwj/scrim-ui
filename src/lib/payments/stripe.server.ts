@@ -126,7 +126,7 @@ export type ContractOutcome = { ok: true } | { ok: false; reason: string };
  * Keep fulfilment tied to the authenticated account and product that created
  * the server-side Checkout Session.
  *
- * `amount_subtotal`, rather than `amount_total`, is the advertised $49 price:
+ * `amount_subtotal`, rather than `amount_total`, is the advertised list price:
  * automatic tax may legitimately make the final total higher. A total below
  * the subtotal is rejected as well, so a discount cannot silently turn into a
  * full-price Pro entitlement.

@@ -10,7 +10,10 @@
  * keep their own inline SVG.
  */
 import {
+  Activity,
   ArrowLeftRight,
+  AppWindow,
+  AtSign,
   AudioLines,
   AudioWaveform,
   BadgeQuestionMark,
@@ -28,14 +31,20 @@ import {
   Database,
   Ellipsis,
   FileDiff,
+  FileQuestion,
   FileText,
   Files,
   Flag,
   Gauge,
+  GitBranch,
   GitCompare,
   Globe,
   Hand,
+  Headset,
+  History,
+  ImagePlay,
   Layers,
+  LayoutDashboard,
   Lightbulb,
   List,
   ListOrdered,
@@ -47,6 +56,7 @@ import {
   MessageSquareWarning,
   Mic,
   MicVocal,
+  PanelRight,
   Paperclip,
   PenLine,
   PhoneOff,
@@ -57,12 +67,14 @@ import {
   SlidersHorizontal,
   Sparkles,
   SquareTerminal,
+  TableProperties,
   Telescope,
   TextCursor,
   TextCursorInput,
   TextInitial,
   ThumbsUp,
   ToggleRight,
+  TowerControl,
   Type,
   Upload,
   Wrench,
@@ -73,6 +85,7 @@ import {
 export const categoryIcons: Record<string, LucideIcon> = {
   "prompt-input": TextCursorInput,
   messages: MessageSquare,
+  conversation: MessagesSquare,
   reasoning: Brain,
   "tool-calls": Wrench,
   sources: BookMarked,
@@ -99,6 +112,10 @@ export const componentIcons: Record<string, LucideIcon> = {
   "error-message": MessageSquareWarning,
   "markdown-message": TextInitial,
   "streaming-markdown": Type,
+  "response-versions": GitBranch,
+  // conversation
+  "conversation-sidebar": History,
+  "artifact-preview": AppWindow,
   // reasoning
   reasoning: Brain,
   "thinking-indicator": LoaderCircle,
@@ -108,6 +125,7 @@ export const componentIcons: Record<string, LucideIcon> = {
   "search-tool-call": Globe,
   "code-execution": SquareTerminal,
   "generative-ui": Sparkles,
+  "generated-media": ImagePlay,
   // sources
   "source-card": FileText,
   "source-list": List,
@@ -119,6 +137,7 @@ export const componentIcons: Record<string, LucideIcon> = {
   "approval-gate": Hand,
   "agent-plan": Route,
   "agent-handoff": ArrowLeftRight,
+  "agent-run-timeline": Activity,
   // feedback
   "response-rating": ThumbsUp,
   "inline-correction": PenLine,
@@ -128,6 +147,7 @@ export const componentIcons: Record<string, LucideIcon> = {
   // files
   "file-upload": Upload,
   "context-files": Files,
+  "context-picker": AtSign,
   "context-usage": ChartPie,
   // memory
   "memory-list": Database,
@@ -157,6 +177,13 @@ export const patternIcons: Record<string, LucideIcon> = {
   "coding-agent": SquareTerminal,
   "voice-assistant": AudioLines,
   "model-preferences": SlidersHorizontal,
+  "artifact-workspace": PanelRight,
+  "rag-workspace": FileQuestion,
+  "extraction-review": TableProperties,
+  "image-studio": ImagePlay,
+  "agent-console": TowerControl,
+  "support-copilot": Headset,
+  "generative-dashboard": LayoutDashboard,
 };
 
 /** Falls back to a neutral mark so a new Component never renders a blank cell. */

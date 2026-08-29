@@ -18,3 +18,23 @@ export function ProBadge({ className = "" }: { className?: string }) {
     </span>
   );
 }
+
+/**
+ * The corner-ribbon form of the Pro mark, for card surfaces (/components,
+ * /templates). The pill is easy to miss inside a row of text; the ribbon sits
+ * on the preview itself, where the eye already is.
+ *
+ * The parent card must be `relative overflow-hidden` — the strip is oversized
+ * and relies on the card's rounded corner to clip it. Pointer events are off
+ * so it never intercepts a click meant for the card beneath.
+ */
+export function ProRibbon() {
+  return (
+    <span
+      className="pointer-events-none absolute -right-9 top-4 z-10 w-32 rotate-45 bg-(--primary) py-1 text-center text-[10px] font-bold uppercase tracking-[0.14em] text-(--primary-foreground)"
+      style={{ boxShadow: "var(--shadow-md)" }}
+    >
+      Pro
+    </span>
+  );
+}

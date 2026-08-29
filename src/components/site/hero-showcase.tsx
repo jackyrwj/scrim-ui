@@ -18,7 +18,6 @@ import {
   type MockupConfig,
 } from "@/components/tools/chat-mockup/types";
 import { SwitcherPreview } from "@/components/tools/model-switcher/switcher-preview";
-import { generateCode } from "@/components/tools/model-switcher/generate-code";
 import {
   defaultConfig as switcherDefaults,
   type ModelSwitcherConfig,
@@ -124,7 +123,6 @@ const SLIDES: {
   id: SlideId;
   slug: string;
   tab: string;
-  headline: string;
   /** Intrinsic px width of the stage content, used to compute the fit scale. */
   width: number;
   narrowWidth: number;
@@ -135,7 +133,6 @@ const SLIDES: {
     id: "chat-mockup",
     slug: "chat-mockup",
     tab: "Chat Mockup",
-    headline: "Compose an AI chat screen, export it as a PNG.",
     width: 700,
     narrowWidth: 390,
     fitHeight: true,
@@ -144,7 +141,6 @@ const SLIDES: {
     id: "model-switcher",
     slug: "model-switcher",
     tab: "Model Switcher",
-    headline: "Design the model picker, copy the React component.",
     width: 620,
     narrowWidth: 340,
     fitHeight: true,
@@ -153,7 +149,6 @@ const SLIDES: {
     id: "voice-mockup",
     slug: "voice-mockup",
     tab: "Voice Mockup",
-    headline: "Mock up a voice assistant, from listening to speaking.",
     width: 700,
     narrowWidth: 390,
     fitHeight: true,
@@ -368,15 +363,6 @@ export function HeroShowcase() {
     [chat, narrow, reduced],
   );
 
-  /* A peek at the component the tool actually exports, cut at the
-     ModelSwitcher declaration so the body visibly changes with the
-     variant — which is the whole point of the slide. */
-  const switcherCode = React.useMemo(() => {
-    const lines = generateCode(switcher).split("\n");
-    const start = lines.findIndex((l) => l.startsWith("export function ModelSwitcher"));
-    return lines.slice(start < 0 ? 0 : start, (start < 0 ? 0 : start) + 11).join("\n");
-  }, [switcher]);
-
   const controls: { key: string; label: string; active: boolean }[] =
     (() => {
       switch (slide.id) {
@@ -466,9 +452,6 @@ export function HeroShowcase() {
                       {c.label}
                     </button>
                   ))}
-                  <p className="mt-auto hidden text-xs leading-5 text-(--muted-foreground) sm:block">
-                    {slide.headline}
-                  </p>
                 </div>
 
                 {/* Stage */}
@@ -485,21 +468,11 @@ export function HeroShowcase() {
                     {slide.id === "chat-mockup" && <MockupPreview config={chatConfig} />}
 
                     {slide.id === "model-switcher" && (
-                      <div className="space-y-3">
-                        <div className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-2xl dark:border-zinc-800">
-                          <SwitcherPreview
-                            config={switcher}
-                            onSelect={(id) => setSwitcher((c) => ({ ...c, selectedId: id }))}
-                          />
-                        </div>
-                        <div className="overflow-hidden rounded-2xl bg-zinc-950 px-4 pt-3 pb-4 text-left shadow-2xl">
-                          <p className="mb-2 font-mono text-[10px] tracking-wide text-zinc-500 uppercase">
-                            ModelSwitcher.tsx — exported for this exact config
-                          </p>
-                          <pre className="hs-code overflow-hidden font-mono text-[11px] leading-5 text-zinc-300">
-                            {switcherCode}
-                          </pre>
-                        </div>
+                      <div className="rounded-2xl border border-zinc-200 bg-white p-7 shadow-2xl dark:border-zinc-800">
+                        <SwitcherPreview
+                          config={switcher}
+                          onSelect={(id) => setSwitcher((c) => ({ ...c, selectedId: id }))}
+                        />
                       </div>
                     )}
 
@@ -544,10 +517,9 @@ export function HeroShowcase() {
         </span>
       </div>
 
-      {/* What you are looking at, as a caption rather than a control.
-          The tour drives itself; three tab buttons above the frame asked
-          the reader to operate a thing that was already playing, and put
-          three competing calls to action next to the one that matters. */}
+      {/* Progress and slide jump, below the frame rather than tab buttons
+          above it: the tour drives itself, and three buttons up there asked
+          the reader to operate a thing that was already playing. */}
       <ol className="mt-5 grid gap-x-6 gap-y-4 sm:grid-cols-3">
         {SLIDES.map((s, i) => {
           const active = i === slideIndex;
@@ -606,13 +578,6 @@ export function HeroShowcase() {
                 >
                   {s.tab}
                 </span>
-              </p>
-              <p
-                className={`mt-1 text-[13px] leading-5 transition-colors ${
-                  active ? "text-(--muted-foreground)" : "text-(--muted-foreground) hover:text-(--foreground)"
-                }`}
-              >
-                {s.headline}
               </p>
             </li>
           );

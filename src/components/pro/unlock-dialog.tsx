@@ -4,34 +4,23 @@ import * as React from "react";
 import Link from "next/link";
 import { trackEvent } from "@/lib/analytics";
 import { PRO_PLAN, PRO_PRICE } from "@/lib/pro";
-import { setLicense, useProAccess, verifyLicense } from "@/lib/pro-access";
+import { useProAccess } from "@/lib/pro-access";
 
 /**
- * What a locked surface opens: what Pro includes, what it costs, and a place
- * to paste a key you already own.
- *
- * The key field is on the same panel as the price rather than behind a
- * separate /unlock page, because the reader who already paid and the reader
- * deciding whether to arrive at the same lock, and sending the first one on a
- * hunt for a login is how a customer ends up emailing support instead.
+ * What a locked surface opens: what Pro includes, what it costs, and the way
+ * to get it — sign in, then one payment attached to the account.
  */
 export function UnlockDialog({
   open,
   onClose,
-  onUnlocked,
   item,
 }: {
   open: boolean;
   onClose: () => void;
-  onUnlocked: () => void;
   /** Path of the thing that was locked — the conversion signal in GA4. */
   item: string;
 }) {
-  const [key, setKey] = React.useState("");
-  const [error, setError] = React.useState<string | null>(null);
-  const [pending, setPending] = React.useState(false);
   const access = useProAccess();
-  const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (!open) return;
@@ -53,23 +42,6 @@ export function UnlockDialog({
   }, [open, item]);
 
   if (!open) return null;
-
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setPending(true);
-    setError(null);
-    const result = await verifyLicense(key);
-    setPending(false);
-    if (result.valid) {
-      trackEvent("pro_unlocked", { item });
-      onUnlocked();
-      onClose();
-    } else {
-      setLicense(null);
-      setError(result.error);
-      inputRef.current?.focus();
-    }
-  }
 
   return (
     <div className="fixed inset-0 z-[100]">
@@ -125,7 +97,9 @@ export function UnlockDialog({
               <span className="text-sm font-semibold">{PRO_PLAN.name}</span>
               <span className="text-xs text-(--muted-foreground)">{PRO_PLAN.billing}</span>
             </div>
-            <div className="mt-1 text-3xl font-bold tracking-tight">{PRO_PRICE}</div>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-3xl font-bold tracking-tight">{PRO_PRICE}</span>
+            </div>
           </div>
 
           <Link
@@ -135,36 +109,6 @@ export function UnlockDialog({
           >
             {access.authenticated ? `Get Pro — ${PRO_PRICE}` : "Sign in to get Pro"}
           </Link>
-
-          <form onSubmit={submit} className="mt-5 border-t border-(--border) pt-5">
-            <label htmlFor="license-key" className="text-xs font-medium text-(--muted-foreground)">
-              Have an older licence key? Paste it here.
-            </label>
-            <div className="mt-2 flex gap-2">
-              <input
-                id="license-key"
-                ref={inputRef}
-                value={key}
-                onChange={(e) => setKey(e.target.value)}
-                placeholder="SCRIM-XXXX-XXXX-XXXX"
-                autoComplete="off"
-                spellCheck={false}
-                className="h-10 min-w-0 flex-1 rounded-lg border border-(--border) bg-(--background) px-3 font-mono text-[13px] outline-none placeholder:text-(--muted-foreground) focus:border-(--primary)"
-              />
-              <button
-                type="submit"
-                disabled={pending}
-                className="h-10 shrink-0 rounded-lg border border-(--border) px-4 text-sm font-medium transition-colors hover:bg-(--muted) disabled:opacity-50"
-              >
-                {pending ? "Checking..." : "Unlock"}
-              </button>
-            </div>
-            {error && (
-              <p role="alert" className="mt-2 text-xs text-red-500">
-                {error}
-              </p>
-            )}
-          </form>
         </div>
       </div>
     </div>

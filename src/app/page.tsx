@@ -10,8 +10,6 @@ import { AnimateOnScroll, StaggerChildren } from "@/components/site/animate-on-s
 import { ToolCard } from "@/components/site/tool-card";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { HeroTemplateCarousel } from "@/components/site/hero-template-carousel";
-import { BrandIcon } from "@/components/brands/brand-icon";
-import { MODEL_VENDORS } from "@/lib/model-vendors";
 import { PatternPreview } from "@/components/site/pattern-preview";
 import { IconCard } from "@/components/icons/icon-card";
 import { createElement } from "react";
@@ -19,6 +17,7 @@ import { patternIconFor } from "@/lib/icons";
 import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { InstallCommand } from "@/components/component-page/install-command";
 import { SITE_URL } from "@/lib/site";
+import { PRO_PRICE } from "@/lib/pro";
 
 /* One icon per idea the site is about, spread across categories so the row
    reads as a map rather than a sample of one corner. */
@@ -45,8 +44,13 @@ export default function Home() {
       return entry;
     },
   );
+  /* Six, chosen as the most distinctive tiles in the directory: the input
+     everyone starts from, the typing effect, the chain of thought, the
+     function call, the code result, and inline citations. user-message and
+     markdown-message lose because a small preview tile cannot tell them
+     apart from streaming-message. */
   const popular = published.filter((c) =>
-    ["prompt-input", "streaming-message", "user-message", "markdown-message", "tool-call", "code-execution", "reasoning", "citation-ui"].includes(c.slug),
+    ["prompt-input", "streaming-message", "reasoning", "tool-call", "code-execution", "citation-ui"].includes(c.slug),
   );
   const featuredIcons = FEATURED_ICONS.map((concept) => {
     const entry = iconGuide.find((e) => e.concept === concept);
@@ -70,21 +74,17 @@ export default function Home() {
           style={{ background: "var(--gradient-glow)" }}
         />
         <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
-          {/* Wider than a reading measure, because the headline is one line
-              from lg up and needs the room. The paragraph under it keeps its
-              own narrower max-width — 1024px of prose is not readable. */}
+          {/* The headline balances inside the wide display measure. The
+              paragraph under it keeps its own narrower reading measure. */}
           <div className="mx-auto max-w-5xl text-center">
-            {/* States what this is, which is what every peer's headline does
-                — twelve were checked and not one frames the reader as lacking
-                something. "The UI layer your AI product is missing" made a
-                claim about the visitor rather than about the product, and left
-                a first-time reader still not knowing this is components. */}
+            {/* A short outcome statement that covers both sides of the site:
+                tools for designing the interface and code for building it. */}
             <h1 className="display-title display-title--hero text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-              The interface layer for AI products
+              Design and build better AI interfaces
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
-              Free in-browser tools and copy-ready components for AI interfaces —
-              prompt inputs, agent states, tool calls and citations.
+              Copy the components, patterns, and tools you need to build polished AI
+              interfaces.
             </p>
 
             {/* Every peer's hero answers "how do I get it" with one command;
@@ -110,27 +110,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Model vendors — recognition strip: the interface layer works with
-          the models a product already uses, not a proprietary lineup. */}
-      <section>
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
-          <div className="flex flex-wrap items-center justify-center gap-x-9 gap-y-4">
-            {MODEL_VENDORS.map((v) => (
-              <span
-                key={v.name}
-                title={v.blurb}
-                className="flex items-center gap-2 text-(--muted-foreground)"
-              >
-                {/* Brand color, not muted — the strip is for recognition, and
-                    eight spaced marks read fine where fifty would not. */}
-                <BrandIcon name={v.name} size={18} />
-                <span className="text-sm font-medium">{v.name}</span>
-              </span>
-            ))}
-          </div>
-        </AnimateOnScroll>
-      </section>
-
       {/* Tools */}
       <section className="bg-(--muted)/30">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
@@ -138,7 +117,8 @@ export default function Home() {
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>
               <p className="mt-2 text-(--muted-foreground)">
-                Free, in-browser tools for designing AI interfaces.
+                Small tools for the mockups, prompts and tokens AI interfaces need — no
+                signup, no install.
               </p>
             </div>
             <Link href="/tools" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
@@ -158,13 +138,21 @@ export default function Home() {
       {/* Popular components */}
       <section className="border-b border-(--border)">
         <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
-          <div className="flex items-end justify-between gap-4">
-            <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+            <div>
+              <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
+              <p className="mt-2 text-(--muted-foreground)">
+                The pieces every AI product rebuilds — prompt inputs, streaming, tool calls —
+                as single copy-ready files.
+              </p>
+            </div>
             <Link href="/components" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
               All {published.length} components →
             </Link>
           </div>
-          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {/* Two rows of three at desktop — the same rhythm as Tools and
+              Patterns. */}
+          <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {popular.map((c) => (
               <Link
                 key={c.slug}
@@ -219,9 +207,12 @@ export default function Home() {
           </div>
           {/* Same rendered tile as /patterns. A pattern is a layout, and the
               layout is the thing you are choosing between — a text card made
-              five whole screens look interchangeable. */}
+              five whole screens look interchangeable. Capped at six (two
+              rows) like every other section; registry order is the curation,
+              so the slice takes chat, research, coding, voice, preferences
+              and the artifact workspace. */}
           <StaggerChildren className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {patterns.map((p) => (
+            {patterns.slice(0, 6).map((p) => (
               <Link
                 key={p.slug}
                 href={`/patterns/${p.slug}`}
@@ -292,7 +283,8 @@ export default function Home() {
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Resources</h2>
               <p className="mt-2 text-(--muted-foreground)">
-                A curated directory of libraries, generators and guides for building AI interfaces.
+                A directory with opinions — {resources.length} links, each with a note on when
+                to reach for it.
               </p>
             </div>
             <Link href="/resources" className="shrink-0 whitespace-nowrap text-sm text-(--muted-foreground) hover:text-(--foreground)">
@@ -326,8 +318,8 @@ export default function Home() {
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Inspiration</h2>
               <p className="mt-2 text-(--muted-foreground)">
-                Product breakdowns and decision guides for AI interfaces — grounded in
-                official docs, with a live demo of each pattern you can copy.
+                How ChatGPT, Claude and Cursor handle streaming, citations and approvals —
+                quoted from their own docs, rebuilt as live demos.
               </p>
             </div>
             <Link
@@ -356,27 +348,29 @@ export default function Home() {
         />
         <AnimateOnScroll className="relative mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 sm:py-20">
           <h2 className="display-title text-2xl font-semibold tracking-tight text-balance sm:text-4xl">
-            Everything here is free and copy-ready
+            Build for free. Ship faster with Pro.
           </h2>
           <p className="mt-3 text-(--muted-foreground)">
-            No signup, no install, no package to add. The tools run in your browser and the
-            components are single files you paste into your own project.
+            Use every browser tool and copy free components into any project. Pro adds complete app
+            templates and the production workflows behind them.
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/tools"
-              className="inline-flex h-11 items-center rounded-lg px-6 text-sm font-medium text-(--primary-foreground) transition-all hover:opacity-90 active:scale-[0.98]"
-              style={{ background: "var(--gradient-primary)", boxShadow: "var(--shadow-glow)" }}
+              href="/pro"
+              className="inline-flex h-11 items-center justify-center rounded-md bg-(--accent) px-6 text-sm font-medium text-(--accent-foreground) shadow-xs transition-colors hover:bg-(--accent)/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)/50"
             >
-              Open the tools
+              Get Pro — {PRO_PRICE}
             </Link>
             <Link
               href="/components"
-              className="inline-flex h-11 items-center rounded-lg border border-(--border) px-6 text-sm font-medium transition-all hover:border-(--primary)/40 hover:bg-(--primary-muted) active:scale-[0.98]"
+              className="inline-flex h-11 items-center justify-center rounded-md border border-(--border) bg-(--background) px-6 text-sm font-medium text-(--foreground) shadow-xs transition-colors hover:bg-(--muted) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent)/50"
             >
-              Browse components
+              Browse free components
             </Link>
           </div>
+          <p className="mt-4 text-xs text-(--muted-foreground)">
+            One payment &middot; Lifetime updates &middot; Unlimited projects
+          </p>
         </AnimateOnScroll>
       </section>
 

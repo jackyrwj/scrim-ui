@@ -252,6 +252,8 @@ export type IconPromptInput = {
   /** Tailwind class for the chosen tone, or null for inherited colour. */
   toneClass: string | null;
   toneLabel: string;
+  /** A fixed hex colour from the swatch palette; wins over toneClass. */
+  toneHex?: string | null;
   /** Components on this site that use the icon for this concept. */
   usedBy: string[];
 };
@@ -271,10 +273,11 @@ export type IconPromptInput = {
  * reader just dialled in.
  */
 export function buildIconPrompt(input: IconPromptInput): string {
-  const { name, concept, meaning, docsUrl, size, stroke, toneClass, toneLabel, usedBy } = input;
+  const { name, concept, meaning, docsUrl, size, stroke, toneClass, toneLabel, toneHex, usedBy } = input;
 
   const attrs = [`size={${size}}`, `strokeWidth={${stroke}}`];
-  if (toneClass) attrs.push(`className="${toneClass}"`);
+  if (toneHex) attrs.push(`color="${toneHex}"`);
+  else if (toneClass) attrs.push(`className="${toneClass}"`);
 
   const lines: string[] = [
     `Use the Lucide \`${name}\` icon for "${concept}" in this project's interface.`,
@@ -298,9 +301,11 @@ export function buildIconPrompt(input: IconPromptInput): string {
     "## Keep these",
     "",
     `- \`size={${size}}\` and \`strokeWidth={${stroke}}\` — the weight that sits correctly beside body text at this size. A default stroke of 2 at small sizes reads heavy next to text.`,
-    toneClass
-      ? `- \`${toneClass}\` — the ${toneLabel.toLowerCase()} tone this state calls for.`
-      : `- No colour class: the icon inherits \`currentColor\` from its container, so it follows the surrounding text in both light and dark themes. Do not hardcode a hex value.`,
+    toneHex
+      ? `- \`color="${toneHex}"\` — a fixed accent colour set on the icon itself, not a theme token. It stays identical in light and dark themes; check it against both.`
+      : toneClass
+        ? `- \`${toneClass}\` — the ${toneLabel.toLowerCase()} tone this state calls for.`
+        : `- No colour class: the icon inherits \`currentColor\` from its container, so it follows the surrounding text in both light and dark themes. Do not hardcode a hex value.`,
     `- Give it an accessible name when it stands alone (\`aria-label\`), or \`aria-hidden\` when it sits next to a text label that already says the same thing.`,
     "",
   ];

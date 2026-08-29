@@ -11,7 +11,7 @@ import { sliceTo, useInView, useReducedMotion } from "./use-demo-motion";
 /**
  * The AI Chat template, playing one turn.
  *
- * A template page that shows only a file list asks for $49 against a
+ * A template page that shows only a file list asks the Pro price against a
  * description. This is the answer to "what does it actually look like?" —
  * and it is not a screenshot, because it does not have to be: the six
  * components the template ships (`components/ui/*.tsx`) are byte-identical

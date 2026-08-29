@@ -1,119 +1,6 @@
 {
   "version": 1,
-  "components": {
-    "approval-gate": {
-      "sourceFile": "approval-gate.tsx",
-      "lines": 351,
-      "usage": [
-        "Feed `outcome` from the run's event log, not from the click handler. Every hard case here — a closed tab, a second tab, a reload — stops being a case at all once the outcome has a single source outside React.",
-        "Send `request.id` with the decision and dedupe on it server-side. Two tabs, a double click and a retried fetch are three ways to send the same decision twice.",
-        "Clear `submitting` when the outcome arrives over the stream, not when the fetch resolves. A 200 means the decision was received; it does not mean the run acted on it.",
-        "Set `expiresAt` to the run's own deadline. Derived state beats stored state — the expired render is then correct on a reload months later, with no expiry event needed.",
-        "Show the exact payload in `detail`. The question is 'should I do this?', and it cannot be answered from a summary of what 'this' is.",
-        "Pass `connection` from the stream's health so a pending gate stops claiming to be current while the tab is catching up."
-      ],
-      "mistakes": [
-        "Keeping the pending state in React. The tab closes, the state goes with it, and the run waits forever for an answer nobody can give any more.",
-        "Rendering the decision optimistically. With the run open in two tabs, one of them is then showing a decision the server may reject, and there is no honest way back from a green tick.",
-        "Rendering a late decision as a normal approval. It is the one state a tick actively lies about: the answer was recorded and the action never ran.",
-        "Hiding the buttons the moment they are clicked. The card empties, the answer is still in flight, and the reader has no way to tell 'sent' from 'ignored'.",
-        "Letting the deadline expire silently into the pending state. A gate that just sits there is indistinguishable from a run that is still waiting.",
-        "Announcing the countdown to screen readers. Once a second, forever, over whatever the reader was actually trying to hear."
-      ]
-    },
-    "citation-popover": {
-      "sourceFile": "citation-popover.tsx",
-      "lines": 185,
-      "usage": [
-        "Pass the passage, not a passage id. The component's job is to show the text the claim came from, and a lookup by id is one more place for the answer and the sources to disagree.",
-        "Slice the passage out of the document with the offsets you carried through retrieval. Storing the text alongside the offsets means the two can drift, and the drift is invisible until someone clicks.",
-        "Leave `passage` undefined for a number that was not retrieved. It is a real outcome, not a loading state — the model will occasionally cite a passage it was never given.",
-        "Send the sources down the stream before the first token, so a marker resolves the moment it arrives rather than after the answer settles.",
-        "Give `onJump` a destination only when there is a document pane on screen. Without one, the popover is the whole affordance and a click that goes nowhere is worse than no click."
-      ],
-      "mistakes": [
-        "Positioning the panel absolutely inside the answer. The answer is a scroll container, and the panel gets clipped by it the first time a citation lands near the bottom.",
-        "Opening on hover only. On a phone there is no hover, and the citation becomes text nobody can check.",
-        "Repositioning the panel as the page scrolls. It was measured from a rect that has moved; closing is what the reader expected, following the text around is motion they did not ask for.",
-        "Rendering an empty popover for an unresolved number. That launders a hallucinated citation into a real-looking one — the state the reader most needs to see becomes the state that looks most normal.",
-        "Replacing the number with an icon or a superscript glyph. The number is what the reader matches against the source list, and it is the same character the model wrote."
-      ]
-    },
-    "cost-meter": {
-      "sourceFile": "cost-meter.tsx",
-      "lines": 284,
-      "usage": [
-        "Pass `cachedInputTokens` as the share of `inputTokens` served from cache, not as a separate bucket added on top. Every provider reports it the first way and the second way over-bills a long conversation several times over.",
-        "Leave a field `undefined` when the provider did not report it. That is the signal the component needs to show a ~ instead of a confident number.",
-        "Pass `reasoningTokens` for display only. They are already inside `outputTokens`, and the reason to surface them is that they are the line which explains an unexpectedly large bill.",
-        "Keep the rate table in your own code and pass it in. Prices change, and a component that ships its own is one that will be quietly wrong after the next provider announcement.",
-        "Accumulate with `addUsage` rather than adding fields by hand — it keeps a missing field missing across a whole conversation instead of quietly turning it into a zero at the first sum.",
-        "Show the per-conversation total once a conversation is long enough for the per-message figure to stop being the interesting one."
-      ],
-      "mistakes": [
-        "Pricing all input at the fresh rate. On an agent run or a long chat the same prefix is re-read every turn, and the meter reads roughly an order of magnitude high.",
-        "Adding reasoning tokens to output tokens. They are already counted, and the double-count grows with exactly the kind of turn a user is most likely to check.",
-        "Treating a missing field as zero. '$0.00' and 'we do not know' look identical on screen and mean opposite things to whoever reads the invoice later.",
-        "Rounding to two decimals under a cent. Six turns at $0.00 followed by a jump to $0.01 reads as a broken meter, and the reader stops trusting the number at exactly the point it starts to matter.",
-        "Animating the figure as it climbs mid-stream. It is a subtotal, and a number that counts up smoothly looks more settled than one that is still moving.",
-        "Letting the budget bar overflow its track. A bar past 100% is a rendering bug; a bar pinned at full beside a number that keeps climbing is the actual situation."
-      ]
-    },
-    "edit-diff-view": {
-      "sourceFile": "edit-diff-view.tsx",
-      "lines": 442,
-      "usage": [
-        "Ask the model for edits as structured hunks — id, original, edited — rather than a rewritten document. A diff reverse-engineered from two full texts has no stable identity for 'the second change', and stable identity is what every decision hangs off.",
-        "Assign each hunk its id before it arrives and only ever append segments. Decisions keyed by id are the only arrangement in which an accept cannot slide onto a different change while the stream re-splits.",
-        "Mark a hunk `complete` only when its replacement has finished arriving. Until then the buttons stay disabled and `buildMergedDocument` treats it as undecided — half an edit is not a decision the reader can make.",
-        "Keep the context segments in the list even when they are collapsed on screen. `collapseContext` is a display choice; `buildMergedDocument` still needs the verbatim text to produce a whole file.",
-        "Produce the output with `buildMergedDocument`, not by stitching decisions together at the call site. Rejected and undecided both keep the original, which is the only rule that can never leak half an edit into the result.",
-        "Pass `streaming` while segments are being appended so the header says 'still arriving'. A count that looks final invites Accept all a beat too early."
-      ],
-      "mistakes": [
-        "Keying decisions by hunk index. A streaming diff re-splits itself as more text arrives, and index 2 stops being the hunk the reader was looking at between renders.",
-        "Letting an incomplete hunk be accepted. The merged document gets half a function, and the failure shows up in someone else's build rather than in the review UI.",
-        "Diffing whole documents instead of keeping a segment list. With only two big strings, 'accept the second change' has no representation, and partial acceptance becomes string surgery.",
-        "Recomputing the diff on the client from before and after snapshots. The model already knows what it changed; rendering its structured hunks is exact, and re-deriving them is a second algorithm that disagrees with the first.",
-        "Painting whole lines red and green for a one-word change. The reader scans two lines to find one token; word-level marks are what make a small edit read as small.",
-        "Shipping a 'copy result' button that joins every hunk's edited text regardless of decisions. The merged document is a function of the decisions; bypassing it is how a rejected edit reaches the clipboard."
-      ]
-    },
-    "prompt-editor": {
-      "sourceFile": "prompt-editor.tsx",
-      "lines": 271,
-      "usage": [
-        "Pass the list of variables your deployment actually fills. It is what turns a typo'd {{name}} from a silent hole in the output into an amber highlight with a warning line.",
-        "Fill the preview with realistic sample values, not lorem ipsum — a preview that reads like the real prompt is the one reviewers actually check before saving.",
-        "Use `renderTemplate` for the substitution at send time too, so the preview and the request can never disagree about how a variable resolves.",
-        "Pass `compareWith` when editing a versioned prompt. The diff is the answer to the only question a reviewer has: what did this change actually do.",
-        "Give the editor room. A system prompt is the longest text in the product, and a three-line box invites the kind of edit that never gets reviewed."
-      ],
-      "mistakes": [
-        "Highlighting with a rich-text editor. A contentEditable with inline spans fights the browser's own editing behavior; the transparent-textarea-over-pre split keeps the browser's textarea and adds color underneath it.",
-        "Letting the two layers' typography drift. Font, size, line height, padding and wrapping must match exactly — the shared class constant in the source is load-bearing, not tidiness.",
-        "Forgetting scroll sync. The textarea scrolls and the pre does not, so without mirroring scrollTop the highlights stay behind while the text moves.",
-        "Substituting unknown variables with an empty string. '{{naem}}' in the output is a visible mistake; a gap where a name should be is an invisible one that ships.",
-        "Diffing prompts by eye in a PR. Two long strings in a code review hide a one-word change; compareWith puts the changed lines under the editor where the edit happens."
-      ]
-    },
-    "streaming-markdown": {
-      "sourceFile": "streaming-markdown.tsx",
-      "lines": 533,
-      "usage": [
-        "Pass `streaming` straight from the SDK's status — it drives correctness, not just a caret. Finished text must be parsed strictly, because an unmatched `**` in a completed message is two literal asterisks.",
-        "Render this instead of swapping renderers at the end of a turn. Swapping reflows the whole message at the moment the reader is furthest down it.",
-        "Keep the message container a fixed width. Speculation removes reflow from inside the text; a container that resizes with content puts it back.",
-        "Use it for the assistant turn only. User messages are complete the moment they exist and have nothing to speculate about."
-      ],
-      "mistakes": [
-        "Leaving `streaming` on after the turn ends — trailing asterisks or backticks in the final text then render as formatting the author never wrote.",
-        "Re-parsing the whole message on every token. Blocks above the last boundary cannot change; parsing them once is the difference between smooth and stuttering at a few thousand tokens.",
-        "Rendering an ambiguous fragment rather than holding it. A lone `#` or a pipe row with no separator yet can still become several different things, and correcting it on screen is the flicker you were trying to remove.",
-        "Letting a partly-arrived table row set the column count — every subsequent cell then shifts sideways as the row fills."
-      ]
-    }
-  },
+  "components": {},
   "templates": {
     "agent-console": {
       "files": [
@@ -335,6 +222,178 @@
         }
       ]
     },
+    "answer-engine": {
+      "files": [
+        {
+          "path": ".env.example",
+          "lines": 8
+        },
+        {
+          "path": ".gitignore",
+          "lines": 6
+        },
+        {
+          "path": "AGENTS.md",
+          "lines": 10
+        },
+        {
+          "path": "app/api/ask/route.ts",
+          "lines": 198
+        },
+        {
+          "path": "app/api/corpus/route.ts",
+          "lines": 42
+        },
+        {
+          "path": "app/globals.css",
+          "lines": 2
+        },
+        {
+          "path": "app/layout.tsx",
+          "lines": 16
+        },
+        {
+          "path": "app/page.tsx",
+          "lines": 6
+        },
+        {
+          "path": "CLAUDE.md",
+          "lines": 2
+        },
+        {
+          "path": "components/answer.tsx",
+          "lines": 82
+        },
+        {
+          "path": "components/engine.tsx",
+          "lines": 303
+        },
+        {
+          "path": "components/followups.tsx",
+          "lines": 64
+        },
+        {
+          "path": "components/history-panel.tsx",
+          "lines": 75
+        },
+        {
+          "path": "components/sources.tsx",
+          "lines": 107
+        },
+        {
+          "path": "components/ui/citation.tsx",
+          "lines": 170
+        },
+        {
+          "path": "components/ui/error-message.tsx",
+          "lines": 78
+        },
+        {
+          "path": "components/ui/prompt-input.tsx",
+          "lines": 216
+        },
+        {
+          "path": "components/ui/thinking-indicator.tsx",
+          "lines": 42
+        },
+        {
+          "path": "data/api.md",
+          "lines": 90
+        },
+        {
+          "path": "data/billing.md",
+          "lines": 47
+        },
+        {
+          "path": "data/custom-domains.md",
+          "lines": 47
+        },
+        {
+          "path": "data/environment-variables.md",
+          "lines": 59
+        },
+        {
+          "path": "data/getting-started.md",
+          "lines": 59
+        },
+        {
+          "path": "data/preview-environments.md",
+          "lines": 51
+        },
+        {
+          "path": "data/rollbacks.md",
+          "lines": 54
+        },
+        {
+          "path": "data/troubleshooting.md",
+          "lines": 60
+        },
+        {
+          "path": "eslint.config.mjs",
+          "lines": 10
+        },
+        {
+          "path": "lib/chunk.ts",
+          "lines": 256
+        },
+        {
+          "path": "lib/citations.ts",
+          "lines": 116
+        },
+        {
+          "path": "lib/corpus-index.ts",
+          "lines": 115
+        },
+        {
+          "path": "lib/corpus.ts",
+          "lines": 94
+        },
+        {
+          "path": "lib/embed.ts",
+          "lines": 77
+        },
+        {
+          "path": "lib/followups.ts",
+          "lines": 97
+        },
+        {
+          "path": "lib/history.ts",
+          "lines": 120
+        },
+        {
+          "path": "lib/message.ts",
+          "lines": 103
+        },
+        {
+          "path": "lib/models.ts",
+          "lines": 69
+        },
+        {
+          "path": "lib/retrieve.ts",
+          "lines": 141
+        },
+        {
+          "path": "next.config.ts",
+          "lines": 6
+        },
+        {
+          "path": "package.json",
+          "lines": 30
+        },
+        {
+          "path": "postcss.config.mjs",
+          "lines": 6
+        },
+        {
+          "path": "README.md",
+          "lines": 136
+        },
+        {
+          "path": "tsconfig.json",
+          "lines": 42
+        }
+      ]
+    },
     "generative-ui": {
       "files": [
         {
@@ -440,6 +499,218 @@
         {
           "path": "README.md",
           "lines": 100
+        },
+        {
+          "path": "tsconfig.json",
+          "lines": 42
+        }
+      ]
+    },
+    "image-studio": {
+      "files": [
+        {
+          "path": ".env.example",
+          "lines": 18
+        },
+        {
+          "path": ".gitignore",
+          "lines": 6
+        },
+        {
+          "path": "AGENTS.md",
+          "lines": 10
+        },
+        {
+          "path": "app/api/jobs/[id]/images/[imageId]/route.ts",
+          "lines": 43
+        },
+        {
+          "path": "app/api/jobs/[id]/retry/route.ts",
+          "lines": 33
+        },
+        {
+          "path": "app/api/jobs/[id]/route.ts",
+          "lines": 34
+        },
+        {
+          "path": "app/api/jobs/route.ts",
+          "lines": 50
+        },
+        {
+          "path": "app/globals.css",
+          "lines": 2
+        },
+        {
+          "path": "app/layout.tsx",
+          "lines": 21
+        },
+        {
+          "path": "app/page.tsx",
+          "lines": 6
+        },
+        {
+          "path": "CLAUDE.md",
+          "lines": 2
+        },
+        {
+          "path": "components/gallery.tsx",
+          "lines": 191
+        },
+        {
+          "path": "components/image-studio.tsx",
+          "lines": 51
+        },
+        {
+          "path": "components/prompt-composer.tsx",
+          "lines": 228
+        },
+        {
+          "path": "eslint.config.mjs",
+          "lines": 10
+        },
+        {
+          "path": "lib/backends/backend.ts",
+          "lines": 74
+        },
+        {
+          "path": "lib/backends/openai.ts",
+          "lines": 146
+        },
+        {
+          "path": "lib/backends/simulated.ts",
+          "lines": 164
+        },
+        {
+          "path": "lib/jobs.ts",
+          "lines": 243
+        },
+        {
+          "path": "lib/studio-store.ts",
+          "lines": 162
+        },
+        {
+          "path": "lib/types.ts",
+          "lines": 88
+        },
+        {
+          "path": "next.config.ts",
+          "lines": 6
+        },
+        {
+          "path": "package.json",
+          "lines": 28
+        },
+        {
+          "path": "postcss.config.mjs",
+          "lines": 6
+        },
+        {
+          "path": "README.md",
+          "lines": 140
+        },
+        {
+          "path": "tsconfig.json",
+          "lines": 42
+        }
+      ]
+    },
+    "memory-chat": {
+      "files": [
+        {
+          "path": ".env.example",
+          "lines": 8
+        },
+        {
+          "path": ".gitignore",
+          "lines": 6
+        },
+        {
+          "path": "app/api/chat/route.ts",
+          "lines": 91
+        },
+        {
+          "path": "app/globals.css",
+          "lines": 19
+        },
+        {
+          "path": "app/layout.tsx",
+          "lines": 16
+        },
+        {
+          "path": "app/page.tsx",
+          "lines": 6
+        },
+        {
+          "path": "components/chat.tsx",
+          "lines": 169
+        },
+        {
+          "path": "components/memory-card.tsx",
+          "lines": 182
+        },
+        {
+          "path": "components/memory-panel.tsx",
+          "lines": 152
+        },
+        {
+          "path": "components/message.tsx",
+          "lines": 123
+        },
+        {
+          "path": "components/ui/error-message.tsx",
+          "lines": 114
+        },
+        {
+          "path": "components/ui/message-actions.tsx",
+          "lines": 189
+        },
+        {
+          "path": "components/ui/prompt-input.tsx",
+          "lines": 240
+        },
+        {
+          "path": "components/ui/reasoning.tsx",
+          "lines": 160
+        },
+        {
+          "path": "components/ui/thinking-indicator.tsx",
+          "lines": 88
+        },
+        {
+          "path": "eslint.config.mjs",
+          "lines": 10
+        },
+        {
+          "path": "lib/memory-store.ts",
+          "lines": 134
+        },
+        {
+          "path": "lib/memory.ts",
+          "lines": 127
+        },
+        {
+          "path": "lib/models.ts",
+          "lines": 62
+        },
+        {
+          "path": "lib/tools.ts",
+          "lines": 51
+        },
+        {
+          "path": "next.config.ts",
+          "lines": 11
+        },
+        {
+          "path": "package.json",
+          "lines": 30
+        },
+        {
+          "path": "postcss.config.mjs",
+          "lines": 6
+        },
+        {
+          "path": "README.md",
+          "lines": 143
         },
         {
           "path": "tsconfig.json",
@@ -575,6 +846,190 @@
         }
       ]
     },
+    "research-agent": {
+      "files": [
+        {
+          "path": ".env.example",
+          "lines": 14
+        },
+        {
+          "path": ".gitignore",
+          "lines": 6
+        },
+        {
+          "path": "AGENTS.md",
+          "lines": 10
+        },
+        {
+          "path": "app/api/corpus/route.ts",
+          "lines": 42
+        },
+        {
+          "path": "app/api/research/route.ts",
+          "lines": 248
+        },
+        {
+          "path": "app/globals.css",
+          "lines": 2
+        },
+        {
+          "path": "app/layout.tsx",
+          "lines": 17
+        },
+        {
+          "path": "app/page.tsx",
+          "lines": 6
+        },
+        {
+          "path": "CLAUDE.md",
+          "lines": 2
+        },
+        {
+          "path": "components/history-panel.tsx",
+          "lines": 75
+        },
+        {
+          "path": "components/report.tsx",
+          "lines": 72
+        },
+        {
+          "path": "components/research.tsx",
+          "lines": 266
+        },
+        {
+          "path": "components/sources.tsx",
+          "lines": 76
+        },
+        {
+          "path": "components/timeline.tsx",
+          "lines": 127
+        },
+        {
+          "path": "components/ui/citation.tsx",
+          "lines": 170
+        },
+        {
+          "path": "components/ui/error-message.tsx",
+          "lines": 78
+        },
+        {
+          "path": "components/ui/prompt-input.tsx",
+          "lines": 216
+        },
+        {
+          "path": "components/ui/thinking-indicator.tsx",
+          "lines": 42
+        },
+        {
+          "path": "data/architecture-overview.md",
+          "lines": 36
+        },
+        {
+          "path": "data/capacity-and-limits.md",
+          "lines": 40
+        },
+        {
+          "path": "data/ingestion-pipeline.md",
+          "lines": 42
+        },
+        {
+          "path": "data/query-engine.md",
+          "lines": 41
+        },
+        {
+          "path": "data/replication.md",
+          "lines": 38
+        },
+        {
+          "path": "data/retention-and-downsampling.md",
+          "lines": 36
+        },
+        {
+          "path": "data/security-and-access.md",
+          "lines": 38
+        },
+        {
+          "path": "data/storage-engine.md",
+          "lines": 41
+        },
+        {
+          "path": "eslint.config.mjs",
+          "lines": 10
+        },
+        {
+          "path": "lib/chunk.ts",
+          "lines": 256
+        },
+        {
+          "path": "lib/citations.ts",
+          "lines": 116
+        },
+        {
+          "path": "lib/corpus-index.ts",
+          "lines": 115
+        },
+        {
+          "path": "lib/corpus-store.ts",
+          "lines": 79
+        },
+        {
+          "path": "lib/corpus.ts",
+          "lines": 94
+        },
+        {
+          "path": "lib/embed.ts",
+          "lines": 77
+        },
+        {
+          "path": "lib/history.ts",
+          "lines": 120
+        },
+        {
+          "path": "lib/message.ts",
+          "lines": 178
+        },
+        {
+          "path": "lib/models.ts",
+          "lines": 83
+        },
+        {
+          "path": "lib/plan.ts",
+          "lines": 104
+        },
+        {
+          "path": "lib/researcher.ts",
+          "lines": 92
+        },
+        {
+          "path": "lib/retrieve.ts",
+          "lines": 93
+        },
+        {
+          "path": "lib/synthesize.ts",
+          "lines": 147
+        },
+        {
+          "path": "next.config.ts",
+          "lines": 6
+        },
+        {
+          "path": "package.json",
+          "lines": 30
+        },
+        {
+          "path": "postcss.config.mjs",
+          "lines": 6
+        },
+        {
+          "path": "README.md",
+          "lines": 164
+        },
+        {
+          "path": "tsconfig.json",
+          "lines": 42
+        }
+      ]
+    },
     "structured-extraction": {
       "files": [
         {
@@ -648,6 +1103,278 @@
         {
           "path": "README.md",
           "lines": 84
+        },
+        {
+          "path": "tsconfig.json",
+          "lines": 42
+        }
+      ]
+    },
+    "support-copilot": {
+      "files": [
+        {
+          "path": ".env.example",
+          "lines": 8
+        },
+        {
+          "path": ".gitignore",
+          "lines": 6
+        },
+        {
+          "path": "AGENTS.md",
+          "lines": 10
+        },
+        {
+          "path": "app/api/draft/route.ts",
+          "lines": 256
+        },
+        {
+          "path": "app/api/kb/route.ts",
+          "lines": 39
+        },
+        {
+          "path": "app/api/tickets/[id]/route.ts",
+          "lines": 38
+        },
+        {
+          "path": "app/api/tickets/route.ts",
+          "lines": 33
+        },
+        {
+          "path": "app/globals.css",
+          "lines": 2
+        },
+        {
+          "path": "app/layout.tsx",
+          "lines": 16
+        },
+        {
+          "path": "app/page.tsx",
+          "lines": 6
+        },
+        {
+          "path": "CLAUDE.md",
+          "lines": 2
+        },
+        {
+          "path": "components/copilot.tsx",
+          "lines": 98
+        },
+        {
+          "path": "components/draft-panel.tsx",
+          "lines": 397
+        },
+        {
+          "path": "components/refund-card.tsx",
+          "lines": 196
+        },
+        {
+          "path": "components/thread.tsx",
+          "lines": 151
+        },
+        {
+          "path": "components/ticket-list.tsx",
+          "lines": 87
+        },
+        {
+          "path": "components/ui/error-message.tsx",
+          "lines": 79
+        },
+        {
+          "path": "components/ui/thinking-indicator.tsx",
+          "lines": 40
+        },
+        {
+          "path": "data/account-access.md",
+          "lines": 10
+        },
+        {
+          "path": "data/billing.md",
+          "lines": 10
+        },
+        {
+          "path": "data/plan-features.md",
+          "lines": 10
+        },
+        {
+          "path": "data/refund-policy.md",
+          "lines": 12
+        },
+        {
+          "path": "data/security.md",
+          "lines": 10
+        },
+        {
+          "path": "data/shipping.md",
+          "lines": 10
+        },
+        {
+          "path": "data/sla.md",
+          "lines": 10
+        },
+        {
+          "path": "data/tickets.json",
+          "lines": 141
+        },
+        {
+          "path": "data/troubleshooting.md",
+          "lines": 10
+        },
+        {
+          "path": "eslint.config.mjs",
+          "lines": 10
+        },
+        {
+          "path": "lib/chunk.ts",
+          "lines": 255
+        },
+        {
+          "path": "lib/citations.ts",
+          "lines": 113
+        },
+        {
+          "path": "lib/corpus-index.ts",
+          "lines": 116
+        },
+        {
+          "path": "lib/corpus.ts",
+          "lines": 95
+        },
+        {
+          "path": "lib/embed.ts",
+          "lines": 77
+        },
+        {
+          "path": "lib/message.ts",
+          "lines": 91
+        },
+        {
+          "path": "lib/models.ts",
+          "lines": 64
+        },
+        {
+          "path": "lib/retrieve.ts",
+          "lines": 151
+        },
+        {
+          "path": "lib/tickets.ts",
+          "lines": 97
+        },
+        {
+          "path": "lib/tools.ts",
+          "lines": 107
+        },
+        {
+          "path": "lib/workbench-store.ts",
+          "lines": 151
+        },
+        {
+          "path": "next.config.ts",
+          "lines": 6
+        },
+        {
+          "path": "package.json",
+          "lines": 30
+        },
+        {
+          "path": "postcss.config.mjs",
+          "lines": 6
+        },
+        {
+          "path": "README.md",
+          "lines": 134
+        },
+        {
+          "path": "tsconfig.json",
+          "lines": 42
+        }
+      ]
+    },
+    "voice-assistant": {
+      "files": [
+        {
+          "path": ".env.example",
+          "lines": 14
+        },
+        {
+          "path": ".gitignore",
+          "lines": 6
+        },
+        {
+          "path": "AGENTS.md",
+          "lines": 10
+        },
+        {
+          "path": "app/api/realtime/session/route.ts",
+          "lines": 163
+        },
+        {
+          "path": "app/globals.css",
+          "lines": 2
+        },
+        {
+          "path": "app/layout.tsx",
+          "lines": 17
+        },
+        {
+          "path": "app/page.tsx",
+          "lines": 6
+        },
+        {
+          "path": "CLAUDE.md",
+          "lines": 2
+        },
+        {
+          "path": "components/transcript.tsx",
+          "lines": 60
+        },
+        {
+          "path": "components/voice-assistant.tsx",
+          "lines": 187
+        },
+        {
+          "path": "components/waveform.tsx",
+          "lines": 99
+        },
+        {
+          "path": "eslint.config.mjs",
+          "lines": 10
+        },
+        {
+          "path": "lib/realtime/backend.ts",
+          "lines": 51
+        },
+        {
+          "path": "lib/realtime/events.ts",
+          "lines": 183
+        },
+        {
+          "path": "lib/realtime/openai.ts",
+          "lines": 160
+        },
+        {
+          "path": "lib/realtime/simulated.ts",
+          "lines": 253
+        },
+        {
+          "path": "lib/session-store.ts",
+          "lines": 392
+        },
+        {
+          "path": "next.config.ts",
+          "lines": 6
+        },
+        {
+          "path": "package.json",
+          "lines": 28
+        },
+        {
+          "path": "postcss.config.mjs",
+          "lines": 6
+        },
+        {
+          "path": "README.md",
+          "lines": 170
         },
         {
           "path": "tsconfig.json",

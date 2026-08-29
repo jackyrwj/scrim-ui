@@ -146,14 +146,6 @@ export default async function DashboardPage({
           <ApiTokenPanel initialTokens={tokens} />
         </div>
       )}
-
-      <section className="mt-5 rounded-2xl border border-(--border) p-6">
-        <h2 className="font-semibold">Legacy licence keys</h2>
-        <p className="mt-2 text-sm text-(--muted-foreground)">
-          Keys issued before accounts remain valid. You can still paste one on the Pricing page;
-          new purchases are attached directly to your account.
-        </p>
-      </section>
     </div>
   );
 }

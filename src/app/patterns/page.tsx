@@ -9,9 +9,9 @@ import { patternIconFor } from "@/lib/icons";
 import { PatternPreview } from "@/components/site/pattern-preview";
 
 export const metadata: Metadata = {
-  title: "Patterns",
+  title: "Complete AI Interface Patterns",
   description:
-    "Whole AI screens you can copy — chat, research, coding agent, voice and preferences — each assembled from the components on this site.",
+    "Copy and remix complete AI interface screens, each delivered as one React and Tailwind file built from documented components.",
 };
 
 /**
@@ -107,11 +107,10 @@ export default function PatternsPage() {
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <header className="max-w-2xl">
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          {patterns.length} AI Interface Patterns
+          Patterns
         </h1>
         <p className="mt-3 text-lg text-(--muted-foreground)">
-          A pattern is a whole screen, not one control — a single React + Tailwind file, built
-          from the components on this site.
+          Start with a complete AI interface, then adapt it to your product.
         </p>
       </header>
 

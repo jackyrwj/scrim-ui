@@ -7,7 +7,6 @@ import { getProTemplateCatalog } from "@/lib/pro-catalog";
 import { ProBadge } from "@/components/pro/pro-badge";
 import { ProTemplate } from "@/components/pro/pro-template";
 import { TemplateDemo, hasTemplateDemo } from "@/components/templates/template-demo";
-import { SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
   return templates.filter((t) => t.status === "published").map((t) => ({ slug: t.slug }));
@@ -46,7 +45,9 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
         {entry.name} Template
         {entry.tier === "pro" && <ProBadge className="translate-y-1" />}
       </h1>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{entry.description}</p>
+      <p className="mt-3 max-w-4xl text-pretty text-lg text-(--muted-foreground)">
+        {entry.description}
+      </p>
       <div className="mt-4 flex flex-wrap gap-2">
         {entry.stack.map((s) => (
           <span key={s} className="rounded-full border border-(--border) px-2.5 py-0.5 text-xs text-(--muted-foreground)">
@@ -74,7 +75,6 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
         <ProTemplate
           slug={entry.slug}
           files={files.map((f) => ({ path: f.path, lines: f.lines }))}
-          registryUrl={`${SITE_URL}/r/pro/template-${entry.slug}.json`}
         />
       </section>
 

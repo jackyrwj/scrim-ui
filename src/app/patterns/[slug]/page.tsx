@@ -58,7 +58,9 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
         })}
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name}</h1>
       </div>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{entry.description}</p>
+      <p className="mt-3 max-w-4xl text-pretty text-lg text-(--muted-foreground)">
+        {entry.description}
+      </p>
 
       {/* The same three facts the card on /patterns promised, restated where
           the reader decides whether to copy: one file, this big, made of

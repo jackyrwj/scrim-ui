@@ -10,12 +10,25 @@ Ordered by what a buyer would miss most, not by what is quickest to build.
 
 | | Count |
 | --- | --- |
-| Pro templates | **5** (ai-chat, rag-qa, agent-console, structured-extraction, generative-ui) |
-| Pro components | **6** (streaming-markdown, citation-popover, approval-gate, cost-meter, edit-diff-view, prompt-editor) |
-| Free components, published | 38 |
+| Pro templates | **11** (ai-chat, rag-qa, agent-console, structured-extraction, generative-ui, voice-assistant, answer-engine, memory-chat, support-copilot, image-studio, research-agent) |
+| Pro components | **0** |
+| Free components, published | **55** |
 
-Eleven items. Every decision below follows from that sentence — and the sentence
-has changed four times now, so re-read it before trusting anything written under it.
+Eleven paid items, all templates. Every decision below follows from that sentence —
+and the sentence has changed five times now, so re-read it before trusting anything
+written under it.
+
+The product boundary was recalibrated on 2026-08-29: `prompt-editor` and
+`citation-popover` moved to Free. Their hard parts are local interface behavior.
+The durable citation pipeline belongs to the RAG templates; prompt versioning,
+evaluation and rollback would belong to a future Prompt Ops workflow rather
+than behind an editor paywall.
+
+The remaining four Pro components (`streaming-markdown`, `approval-gate`,
+`cost-meter`, `edit-diff-view`) moved to Free the same day: the user decided the
+paid story is templates, and a four-item component shelf was inventory, not value.
+Pro is templates-only until a component's hard part clearly survives outside
+every template.
 
 ### The thing to fix before charging anyone — **done**
 
@@ -42,7 +55,7 @@ and both now say what the list says.
 
 ## Price
 
-**Two tiers: $0 and $49. Pro is everything — no feature splitting.**
+**Two tiers: $0 and Pro. Pro is everything — no paid-tier splitting.**
 
 | | Free | Pro |
 | --- | --- | --- |
@@ -56,7 +69,9 @@ One paid tier, not three. A $49 / $99 / $199 ladder would mean deciding which
 buyer gets the good version, and at this size that decision costs more in
 hesitation at the pricing page than it could ever earn.
 
-Why $49:
+The original plan was a $29 launch price against a $49 standard price. The
+reasoning still stands and is recorded here because a future offer would lean
+on it:
 
 **One-time and lifetime means early buyers are funding the work.** The low
 price is what they get for buying while the Pro catalogue is still young.
@@ -66,15 +81,31 @@ sleeps on it. What is scarce right now is not margin, it is *buyers* — the
 first twenty people's feedback and testimonials are worth more than the price
 difference on twenty sales.
 
+**What actually shipped (2026-08-29): the launch promo was built, then hidden
+before it ever ran.** The banner, countdown and strike-through price were
+complete — `PromoBanner` at the top of every page, a `LaunchCountdown` beside
+the Pro price, `$49` struck through beside `$29` on /pro and in the unlock
+dialog, all gated on `LAUNCH_PROMO` in `src/lib/pro.ts` with a real deadline
+(2026-09-04) and self-hiding past it. Two problems surfaced at the finish
+line: the only Price that ever existed in Stripe was the $49 one, so the $29
+the code advertised would have failed checkout's own price guard (503 by
+design), and on reflection the urgency machinery was not the launch this
+catalogue needed. The site sells at $49, once, with no promo UI.
+
+The promo is not deleted — it is archived on branch **`promo-launch-price`**
+(`0e83e70`), committed with each file's full in-progress state. Restoring it
+means cherry-picking the promo parts (never merging the branch wholesale),
+creating a matching one-time Price in Stripe first, and repointing
+`STRIPE_PRICE_ID`. `PRO_PLAN` in `src/lib/pro.ts` remains the executable
+source of truth for the charge.
+
 There is no paid-tier ladder: Free stays Free and Pro contains the complete
 paid catalogue. The Pro price can be revisited later without splitting the
-entitlement or changing what existing buyers own, but **the current price is
-$49 once**.
+entitlement or changing what existing buyers own.
 
-One thing this price cannot fix: there is still no checkout. `CHECKOUT_URL`
-is empty and the button falls back to `/pro`. A price is a claim about a
-transaction that does not exist yet, and until it does, every rung above is
-theory.
+Checkout now runs through the account, database and Stripe integration. The
+pricing page exposes the purchase action only when all three are configured;
+otherwise it shows an explicit setup state instead of a dead payment link.
 
 ### How the page stays honest
 
@@ -231,7 +262,7 @@ with disabled buttons, and `buildMergedDocument` treats rejected and undecided
 identically — both keep the original — so no state of the UI can leak half an
 edit into the output.
 
-### Citation source popover — **shipped** as `citation-popover`
+### Citation source popover — **moved to Free** as `citation-popover`
 
 Hover a claim, see the passage it came from.
 
@@ -240,7 +271,7 @@ during retrieval, referenced through generation, and resolved back to a
 character range in a document that may have been re-rendered since. Also the
 positioning problem every popover has, plus touch, plus keyboard.
 
-*Shipped.* Promoted out of the RAG template rather than rewritten. Two things
+*Shipped, then moved to Free.* Promoted out of the RAG template rather than rewritten. Two things
 were worth the care: `position: fixed` measured from the chip's rect, because
 an absolutely-positioned panel inside a scrolling answer is clipped by it the
 first time a citation lands near the bottom — and the **unresolved** state, a
@@ -293,7 +324,7 @@ turns running and then jumps to $0.01 has already lost the reader.
 The rate table stays at the call site. A component that ships its own prices
 is a component that is quietly wrong after the next provider announcement.
 
-### Prompt editor — **shipped** as `prompt-editor`
+### Prompt editor — **moved to Free** as `prompt-editor`
 
 Variable highlighting, template preview, diffing between versions.
 
@@ -301,7 +332,7 @@ Variable highlighting, template preview, diffing between versions.
 included because it is genuinely useful, not because it is hard. If the list
 needs cutting, it goes first.
 
-*Shipped*, and the low-end call was right. The transparent-textarea-over-pre
+*Shipped, then moved to Free*, and the low-end call was right. The transparent-textarea-over-pre
 trick is well known; the care went into the four places it silently fails —
 typographic drift between the layers (one shared class constant), scroll sync,
 the trailing newline that collapses in a pre, and unknown `{{variables}}`,
@@ -318,8 +349,10 @@ The sequence:
 2. ~~**Streaming Markdown renderer.**~~ Shipped.
 3. ~~**RAG template.**~~ Shipped.
 4. ~~**Citation popover.**~~ Shipped as `citation-popover`, promoted out of the
-   RAG template.
-5. ~~**Set the launch price.**~~ Done — **$49 once**.
+   RAG template, and later moved to Free.
+5. ~~**Set the launch price.**~~ Done — **$49 once**. The $29 launch promo was
+   built but pulled before going live; it is archived on branch
+   `promo-launch-price` (see the Price section).
 
 Everything above this line was the plan as written in the first draft. The
 plan is now finished, which is the point at which a roadmap is most dangerous:
@@ -333,16 +366,18 @@ immediately, and every unconfigured piece degrades to something honest. What
 remains is account setup, not code — a Payment Link, its webhook secret, the
 Upstash pair, and a verified sending domain. Eleven Pro items and a price is
 not a product until someone can pay, and someone is now four environment
-variables away from being able to.
+variables away from being able to. This paragraph records the original launch
+architecture; the current account checkout is defined by the Clerk, database
+and Stripe configuration in the application.
 
-**The two remaining Pro components — shipped.** The AI edit diff view shipped
+**The final component work — shipped and recalibrated.** The AI edit diff view shipped
 as `edit-diff-view`, without the host template the first draft argued for: the
 four traps (hunks that re-split mid-stream, deciding on an incomplete hunk,
 partial acceptance, word-level noise) all turned out to live in the segment
 model, not in any surrounding app. Id-keyed decisions over an append-only
-segment list, and the hard part stops being hard. The prompt editor shipped as
-`prompt-editor` — flagged as the honest low end, and it was, which is exactly
-why it cost an afternoon instead of a week.
+segment list, and the hard part stops being hard. The prompt editor also
+shipped, then moved to Free: the original “honest low end” assessment was the
+evidence that it did not belong behind the paid boundary.
 
 **Blocks: shipped and removed, and both calls were right.** The category's
 problem was never design — once the three were named (chat page shell,

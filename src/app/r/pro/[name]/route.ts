@@ -5,17 +5,16 @@ import { ProArtifactError, readProComponent, readProTemplate } from "@/lib/pro-a
 import { SITE_URL } from "@/lib/site";
 
 /**
- * The shadcn registry for Pro items, served against a licence key.
+ * The shadcn registry for Pro items, served against an API token.
  *
- * The key rides in the query string here, and only here. /api/pro/source
- * takes a POST precisely to keep it out of URLs — but the shadcn CLI does one
- * thing, `fetch(url)`, so a query parameter is the only place a key can go if
+ * The token rides in the query string here. The shadcn CLI does one thing,
+ * `fetch(url)`, so a query parameter is the only place a credential can go if
  * `npx shadcn add` is to work at all. That is the same trade every paid
- * registry makes; the mitigation is that the key is revocable and buys
- * nothing but source the buyer already owns.
+ * registry makes; the mitigation is that the token is revocable from the
+ * dashboard and buys nothing but source the buyer already owns.
  *
  * Kept apart from /r/[name] rather than folded into it: that route is
- * prerendered to flat files at build time, and a key check cannot live in a
+ * prerendered to flat files at build time, and a token check cannot live in a
  * file that was written before the request existed.
  */
 
@@ -32,11 +31,10 @@ function artifactJson(error: unknown) {
 export async function GET(request: Request, { params }: { params: Promise<{ name: string }> }) {
   const { name } = await params;
   const slug = name.replace(/\.json$/, "");
-  const key = new URL(request.url).searchParams.get("key");
   const token = new URL(request.url).searchParams.get("token");
 
   if (slug === "registry") {
-    const check = await checkProAccess({ key, token });
+    const check = await checkProAccess({ token });
     if (!check.valid) return json({ error: check.error }, 401);
     const pro = components.filter((c) => c.status === "published" && c.tier === "pro");
     return json({
@@ -76,7 +74,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ name
   if (slug.startsWith("template-")) {
     const template = getTemplate(slug.slice("template-".length));
     if (!template || template.status !== "published") return json({ error: "Not found." }, 404);
-    const templateCheck = await checkProAccess({ key, token });
+    const templateCheck = await checkProAccess({ token });
     if (!templateCheck.valid) return json({ error: templateCheck.error }, 401);
     try {
       const files = await readProTemplate(template.slug);
@@ -109,7 +107,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ name
     return json({ error: "Not found." }, 404);
   }
 
-  const check = await checkProAccess({ key, token });
+  const check = await checkProAccess({ token });
   if (!check.valid) return json({ error: check.error }, 401);
 
   try {

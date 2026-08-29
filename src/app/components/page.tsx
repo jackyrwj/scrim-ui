@@ -4,15 +4,13 @@ import type { Metadata } from "next";
 import { components, categories } from "@/lib/registry";
 import { categoryIconFor, iconFor } from "@/lib/icons";
 import { ComponentPreview } from "@/components/site/component-preview";
-import { ProBadge } from "@/components/pro/pro-badge";
+import { ProRibbon } from "@/components/pro/pro-badge";
 
 export const metadata: Metadata = {
-  title: "Components",
+  title: "Copy-ready AI UI Components",
   description:
-    "Copy-ready UI components for AI products — prompt inputs, streaming messages, tool calls, citations, agent states and more.",
+    "Preview and copy React and Tailwind components for prompts, streaming, tool calls, citations, agent states and more.",
 };
-
-const published = () => components.filter((c) => c.status === "published").length;
 
 /**
  * One component card: a static preview of the component's shape, then its
@@ -46,6 +44,7 @@ function ComponentCard({
 }) {
   const body = (
     <>
+      {isPublished && pro && <ProRibbon />}
       <ComponentPreview slug={slug} />
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2">
@@ -61,12 +60,9 @@ function ComponentCard({
               "shrink-0 text-(--muted-foreground) transition-colors group-hover:text-(--primary)",
           })}
           <span className="truncate text-sm font-medium group-hover:underline">{name}</span>
-          {/* Pro outranks the variant count for the same corner: one tells the
-              reader whether they can use this at all, the other is a detail
-              they will see on the page anyway. */}
-          {isPublished && pro ? (
-            <ProBadge className="ml-auto" />
-          ) : isPublished ? (
+          {/* Pro moved to a corner ribbon on the preview, so this corner is
+              back to the variant count for every published card. */}
+          {isPublished ? (
             variants > 1 && (
               <span className="ml-auto shrink-0 rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
                 {variants} variants
@@ -86,7 +82,7 @@ function ComponentCard({
   );
 
   const shell =
-    "group flex flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-all";
+    "group relative flex flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-all";
 
   return isPublished ? (
     <Link
@@ -106,11 +102,11 @@ export default function ComponentsPage() {
     <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
       <header className="max-w-2xl">
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          {published()} AI UI Components
+          Components
         </h1>
         <p className="mt-3 text-lg text-(--muted-foreground)">
-          Every component has a live preview and copy-ready React + Tailwind source. No
-          dependencies, no install.
+          Copy production-ready React components for the interactions and states unique to
+          AI products.
         </p>
       </header>
 

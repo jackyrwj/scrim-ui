@@ -1,13 +1,14 @@
 /* ------------------------------------------------------------------ */
-/* Static previews for the component cards — the homepage's "Popular   */
+/* Previews for the component cards — the homepage's "Popular          */
 /* Components" row and every card on /components.                      */
 /*                                                                     */
 /* Same rationale as tool-preview.tsx — pure markup + CSS, so nothing  */
-/* downloads, it stays crisp at any size and it follows dark mode —    */
-/* but these show the component's *shape* rather than performing what  */
-/* it does. A component library whose most-used components are six     */
-/* text-only cards is asking people to click blind; a loop of six more */
-/* animations would compete with the hero. Static is the middle.       */
+/* downloads, it stays crisp at any size and it follows dark mode.     */
+/* Every preview carries one piece of resting motion (component-       */
+/* previews.css): the line that streams in, the dot that keeps        */
+/* blinking, the toggle that flips. A still card next to a moving one */
+/* reads as a card that failed to load, and the motion is how each    */
+/* tile tells the component's story rather than just its shape.       */
 /* Server component on purpose — zero JS.                              */
 /*                                                                     */
 /* There is one entry per published component, on purpose. GenericPre- */
@@ -25,6 +26,7 @@ const previews: Record<string, () => React.ReactElement> = {
   "prompt-input": PromptInputPreview,
   "prompt-input-attachments": PromptInputAttachmentsPreview,
   "prompt-input-model-selector": PromptInputModelSelectorPreview,
+  "prompt-editor": PromptEditorPreview,
   /* Messages */
   "streaming-message": StreamingMessagePreview,
   "user-message": UserMessagePreview,
@@ -32,6 +34,10 @@ const previews: Record<string, () => React.ReactElement> = {
   "error-message": ErrorMessagePreview,
   "markdown-message": MarkdownMessagePreview,
   "streaming-markdown": StreamingMarkdownPreview,
+  "response-versions": ResponseVersionsPreview,
+  /* Conversation & Artifacts */
+  "conversation-sidebar": ConversationSidebarPreview,
+  "artifact-preview": ArtifactPreviewPreview,
   /* Reasoning & Progress */
   reasoning: ReasoningPreview,
   "thinking-indicator": ThinkingIndicatorPreview,
@@ -41,6 +47,7 @@ const previews: Record<string, () => React.ReactElement> = {
   "generative-ui": GenerativeUiPreview,
   "search-tool-call": SearchToolCallPreview,
   "code-execution": CodeExecutionPreview,
+  "generated-media": GeneratedMediaPreview,
   /* Sources & Citations */
   "source-card": SourceCardPreview,
   "citation-ui": CitationUiPreview,
@@ -52,19 +59,23 @@ const previews: Record<string, () => React.ReactElement> = {
   "approval-gate": ApprovalGatePreview,
   "agent-plan": AgentPlanPreview,
   "agent-handoff": AgentHandoffPreview,
+  "agent-run-timeline": AgentRunTimelinePreview,
   /* Evaluation & Feedback */
   "response-rating": ResponseRatingPreview,
   "inline-correction": InlineCorrectionPreview,
   "output-comparison": OutputComparisonPreview,
   "eval-results": EvalResultsPreview,
+  "edit-diff-view": EditDiffViewPreview,
   /* Files & Context */
   "file-upload": FileUploadPreview,
   "context-files": ContextFilesPreview,
+  "context-picker": ContextPickerPreview,
   "context-usage": ContextUsagePreview,
   /* Memory */
   "memory-list": MemoryListPreview,
   "memory-suggestion": MemorySuggestionPreview,
   "memory-chip": MemoryChipPreview,
+  "memory-toast": MemoryToastPreview,
   /* Model & Settings */
   "model-selector": ModelSelectorPreview,
   "reasoning-level": ReasoningLevelPreview,
@@ -74,6 +85,11 @@ const previews: Record<string, () => React.ReactElement> = {
   "voice-input": VoiceInputPreview,
   "voice-waveform": VoiceWaveformPreview,
   "voice-conversation": VoiceConversationPreview,
+  "voice-call-controls": VoiceCallControlsPreview,
+  /* Safety & Refusal */
+  "refusal-message": RefusalMessagePreview,
+  "moderation-flag": ModerationFlagPreview,
+  "confidence-answer": ConfidenceAnswerPreview,
 };
 
 export function hasComponentPreview(slug: string) {
@@ -176,7 +192,7 @@ function UserMessagePreview() {
       <div className="space-y-2">
         <div className="flex items-end justify-end gap-1.5">
           <div
-            className="max-w-[170px] rounded-xl rounded-br-sm px-3 py-1.5 text-[10px] leading-4 text-(--primary-foreground)"
+            className="cp-pop max-w-[170px] rounded-xl rounded-br-sm px-3 py-1.5 text-[10px] leading-4 text-(--primary-foreground)"
             style={{ background: "var(--primary)" }}
           >
             Can you rewrite this in TypeScript?
@@ -184,7 +200,9 @@ function UserMessagePreview() {
           <div className="h-5 w-5 shrink-0 rounded-full bg-(--border)" />
         </div>
         <div className="flex justify-end pr-6.5">
-          <span className="text-[9px] text-(--muted-foreground)">Edited · 2:14 PM</span>
+          <span className="cp-pop text-[9px] text-(--muted-foreground)" style={{ animationDelay: "0.45s" }}>
+            Edited · 2:14 PM
+          </span>
         </div>
       </div>
     </Stage>
@@ -196,22 +214,33 @@ function MarkdownMessagePreview() {
   return (
     <Stage>
       <Panel className="space-y-2 p-3">
-        <div className="h-2 w-[42%] rounded-full" style={{ background: "var(--muted-foreground)", opacity: 0.55 }} />
+        {/* Bars render top to bottom on staggered delays — the answer
+            arriving, not a finished page. */}
+        <div
+          className="cp-line h-2 w-[42%] rounded-full"
+          style={{ background: "var(--muted-foreground)", opacity: 0.55 }}
+        />
         <div className="space-y-1">
-          <div className="h-1 w-full rounded-full bg-(--border)" />
-          <div className="h-1 w-[76%] rounded-full bg-(--border)" />
+          <div className="cp-line h-1 w-full rounded-full bg-(--border)" style={{ animationDelay: "0.1s" }} />
+          <div className="cp-line h-1 w-[76%] rounded-full bg-(--border)" style={{ animationDelay: "0.2s" }} />
         </div>
         <div className="space-y-1">
-          {["68%", "58%"].map((w) => (
+          {["68%", "58%"].map((w, i) => (
             <div key={w} className="flex items-center gap-1.5">
               <span className="h-1 w-1 shrink-0 rounded-full" style={{ background: "var(--primary)" }} />
-              <span className="h-1 rounded-full bg-(--border)" style={{ width: w }} />
+              <span
+                className="cp-line h-1 rounded-full bg-(--border)"
+                style={{ width: w, animationDelay: `${0.3 + i * 0.1}s` }}
+              />
             </div>
           ))}
         </div>
         <div className="space-y-1 rounded-md bg-(--muted) p-1.5">
-          <div className="h-1 w-[60%] rounded-full" style={{ background: "var(--primary)", opacity: 0.55 }} />
-          <div className="h-1 w-[38%] rounded-full bg-(--border)" />
+          <div
+            className="cp-line h-1 w-[60%] rounded-full"
+            style={{ background: "var(--primary)", opacity: 0.55, animationDelay: "0.5s" }}
+          />
+          <div className="cp-line h-1 w-[38%] rounded-full bg-(--border)" style={{ animationDelay: "0.6s" }} />
         </div>
       </Panel>
     </Stage>
@@ -282,10 +311,17 @@ function CodeExecutionPreview() {
           </span>
         </div>
         <div className="space-y-1 px-2.5 py-2">
-          <div className="h-1 w-[72%] rounded-full" style={{ background: "var(--primary)", opacity: 0.55 }} />
-          <div className="h-1 w-[48%] rounded-full bg-(--border)" />
+          <div
+            className="cp-line h-1 w-[72%] rounded-full"
+            style={{ background: "var(--primary)", opacity: 0.55 }}
+          />
+          <div className="cp-line h-1 w-[48%] rounded-full bg-(--border)" style={{ animationDelay: "0.15s" }} />
         </div>
-        <div className="flex items-center gap-1.5 border-t border-(--border) bg-(--muted) px-2.5 py-1.5">
+        {/* Output pops in after the source has "run". */}
+        <div
+          className="cp-pop flex items-center gap-1.5 border-t border-(--border) bg-(--muted) px-2.5 py-1.5"
+          style={{ animationDelay: "0.7s" }}
+        >
           <span className="font-mono text-[9px] text-(--muted-foreground)">›</span>
           <span className="font-mono text-[9px] text-(--foreground)">42</span>
         </div>
@@ -416,6 +452,17 @@ const G = {
   star: "M12 2.5 14.9 9l6.6.6-5 4.4 1.5 6.5L12 17l-5.9 3.4L7.6 14l-5-4.4L9.2 9Z",
   wrench: "M14.7 6.3a4 4 0 0 0 5 5l-9.6 9.6a2.8 2.8 0 0 1-4-4Z",
   quote: "M4 6h16M4 12h10M4 18h7",
+  pin: "M12 17v5M9 10.8a2 2 0 0 1-1.1 1.8l-1.8.9A2 2 0 0 0 5 15.2V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.8a2 2 0 0 0-1.1-1.8l-1.8-.9A2 2 0 0 1 15 10.8V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1Z",
+  pencil: "M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z",
+  trash: "M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6",
+  flag: "M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1ZM4 22v-7",
+  phone: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z",
+  database: "M12 8c4.97 0 9-1.34 9-3s-4.03-3-9-3-9 1.34-9 3 4.03 3 9 3ZM3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0",
+  lock: "M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2ZM7 11V7a5 5 0 0 1 10 0v4",
+  image: "M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM9 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM21 15l-3.09-3.09a2 2 0 0 0-2.82 0L6 21",
+  left: "M15 18l-6-6 6-6",
+  right: "M9 18l6-6-6-6",
+  arrowRight: "M5 12h14M13 6l6 6-6 6",
 };
 
 /** A tiny toggle switch, on or off. */
@@ -816,7 +863,8 @@ function ApprovalRequestPreview() {
     <Stage>
       <Panel className="p-3">
         <div className="flex items-start gap-2">
-          <Tile size={20} className="bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
+          {/* The pulse is the point: a human decision is outstanding. */}
+          <Tile size={20} className="cp-dot bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
             <Glyph d={G.shield} size={11} />
           </Tile>
           <div className="min-w-0 flex-1">
@@ -850,7 +898,7 @@ function FileUploadPreview() {
         {/* --card, not --muted: the stage itself is --muted, so a muted
             surface laid straight on it disappears. Anything outside a Panel
             in these previews has to carry its own contrast. */}
-        <span className="grid h-8 w-8 place-items-center rounded-full border border-(--border) bg-(--card) text-(--muted-foreground)">
+        <span className="cp-bob grid h-8 w-8 place-items-center rounded-full border border-(--border) bg-(--card) text-(--muted-foreground)">
           <Glyph d={G.upload} size={14} />
         </span>
         <span className="text-[10px] font-medium text-(--foreground)">Drop files here</span>
@@ -955,7 +1003,7 @@ function MemoryChipPreview() {
           ["Based in Shenzhen", true],
           ["Ships on Fridays", false],
           ["Dark mode", false],
-        ].map(([text, saved]) => (
+        ].map(([text, saved], i) => (
           <span
             key={String(text)}
             className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-medium ${
@@ -965,7 +1013,11 @@ function MemoryChipPreview() {
             }`}
           >
             {saved ? (
-              <Glyph d={G.check} size={8} />
+              // The second chip's check re-arrives on the loop — a fact
+              // being saved, not one that was always there.
+              <span className={i === 1 ? "cp-pop inline-flex" : "inline-flex"}>
+                <Glyph d={G.check} size={8} />
+              </span>
             ) : (
               <span className="h-1 w-1 rounded-full bg-current" />
             )}
@@ -999,7 +1051,7 @@ function ModelSelectorPreview() {
               <ModelIcon name={String(name)} size={9} />
               <span className="text-[9px] text-(--foreground)">{name}</span>
               {active && (
-                <span className="ml-auto text-(--primary)">
+                <span className="cp-pop ml-auto inline-flex text-(--primary)" style={{ animationDelay: "0.3s" }}>
                   <Glyph d={G.check} size={9} />
                 </span>
               )}
@@ -1062,7 +1114,15 @@ function ToolTogglePreview() {
               </Tile>
               <span className="text-[9px] text-(--foreground)">{label}</span>
               <span className="ml-auto">
-                <Switch on={Boolean(on)} />
+                {label === "Code interpreter" ? (
+                  /* The one switch that moves: a capability being granted,
+                     not a settings page at rest. */
+                  <span className="cp-track relative block h-2.5 w-4.5 shrink-0 rounded-full">
+                    <span className="cp-knob absolute top-[2px] left-[2px] h-1.5 w-1.5 rounded-full bg-white" />
+                  </span>
+                ) : (
+                  <Switch on={Boolean(on)} />
+                )}
               </span>
             </li>
           ))}
@@ -1271,7 +1331,7 @@ function ApprovalGatePreview() {
           </span>
           {/* What separates this from the plain approval card: the request
               expires, and the run stops waiting whether or not anyone looked. */}
-          <span className="ml-auto inline-flex shrink-0 items-center gap-1 text-[8px] tabular-nums text-amber-600 dark:text-amber-400">
+          <span className="cp-dot ml-auto inline-flex shrink-0 items-center gap-1 text-[8px] tabular-nums text-amber-600 dark:text-amber-400">
             <Glyph d={G.clock} size={8} />
             0:24 left
           </span>
@@ -1351,7 +1411,10 @@ function AgentHandoffPreview() {
           </Tile>
           <span className="text-[9px] font-medium text-(--foreground)">Researcher</span>
           <span className="shrink-0 text-(--muted-foreground)">
-            <Glyph d="M5 12h14M13 6l6 6-6 6" size={9} />
+            {/* The handoff is the arrow: context in transit. */}
+            <span className="cp-shuttle inline-flex">
+              <Glyph d="M5 12h14M13 6l6 6-6 6" size={9} />
+            </span>
           </span>
           <Tile size={16} className="bg-(--primary-muted) text-(--primary-muted-foreground)">
             <Glyph d={G.bot} size={9} />
@@ -1398,8 +1461,9 @@ function ResponseRatingPreview() {
         </div>
         <Panel className="p-2">
           <div className="flex flex-wrap items-center gap-1">
+            {/* The chosen reason lands on the loop — feedback being given. */}
             <span
-              className="rounded-full px-1.5 py-px text-[8px] font-medium text-(--primary-foreground)"
+              className="cp-pop rounded-full px-1.5 py-px text-[8px] font-medium text-(--primary-foreground)"
               style={{ background: "var(--primary)" }}
             >
               Incorrect
@@ -1537,9 +1601,17 @@ function ContextUsagePreview() {
           </span>
         </div>
         <div className="mt-2 flex h-1.5 overflow-hidden rounded-full bg-(--muted)">
-          <span className="w-[18%]" style={{ background: "var(--primary)" }} />
-          <span className="w-[22%]" style={{ background: "var(--primary)", opacity: 0.55 }} />
-          <span className="w-[9%]" style={{ background: "var(--primary)", opacity: 0.3 }} />
+          {/* Segments fill on staggered delays — the window accumulating
+              as the conversation grows. The striped free space stays put. */}
+          <span className="cp-line w-[18%]" style={{ background: "var(--primary)" }} />
+          <span
+            className="cp-line w-[22%]"
+            style={{ background: "var(--primary)", opacity: 0.55, animationDelay: "0.15s" }}
+          />
+          <span
+            className="cp-line w-[9%]"
+            style={{ background: "var(--primary)", opacity: 0.3, animationDelay: "0.3s" }}
+          />
           {/* Free space is striped, not solid: a solid block reads as one
               more segment, and this is the part nothing has claimed. */}
           <span
@@ -1593,6 +1665,553 @@ function CostMeterPreview() {
         <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-(--muted)">
           <div className="cp-line h-full w-[41%] rounded-full" style={{ background: "var(--primary)" }} />
         </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* ================================================================== */
+/* The thirteen that used to fall back to GenericPreview.              */
+/*                                                                     */
+/* Same rule as the rest of the file: lead with the one element that   */
+/* argues for the component's existence — the typo'd variable, the     */
+/* version pager, the collapsed cluster, the masked-off stream. A      */
+/* preview that could sit on any other card is a GenericPreview with   */
+/* better dressing.                                                    */
+/* ================================================================== */
+
+/* --- prompt-editor: the variable that matches nothing -------------- */
+function PromptEditorPreview() {
+  return (
+    <Stage>
+      <Panel className="overflow-hidden">
+        <div className="flex items-center gap-1 border-b border-(--border) px-2.5 py-1.5">
+          <span className="rounded-md bg-(--muted) px-1.5 py-0.5 text-[8px] font-medium text-(--foreground)">
+            Write
+          </span>
+          <span className="px-1.5 py-0.5 text-[8px] text-(--muted-foreground)">Preview</span>
+          <span className="ml-auto text-[8px] text-(--muted-foreground)">2 variables</span>
+        </div>
+        <div className="space-y-1.5 px-2.5 py-2 font-mono text-[9px] leading-4 text-(--muted-foreground)">
+          <div>
+            {"Summarise "}
+            <span className="rounded-[3px] bg-emerald-100 px-0.5 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+              {"{{document}}"}
+            </span>
+            {" for "}
+            <span className="rounded-[3px] bg-emerald-100 px-0.5 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+              {"{{audience}}"}
+            </span>
+          </div>
+          <div>
+            {"Keep it under "}
+            {/* The typo is the demo: "lenght" matches nothing, so it
+                tints amber instead of emerald and trips the warning. */}
+            <span className="rounded-[3px] bg-amber-100 px-0.5 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400">
+              {"{{lenght}}"}
+            </span>
+            {" words"}
+            <Caret />
+          </div>
+        </div>
+        <div
+          className="cp-pop flex items-center gap-1 border-t border-amber-200 bg-amber-50 px-2.5 py-1 text-[8px] text-amber-700 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-400"
+          style={{ animationDelay: "0.4s" }}
+        >
+          <Glyph d={G.alert} size={8} />
+          Unknown variable: lenght
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- response-versions: the pager under a regenerated answer ------- */
+function ResponseVersionsPreview() {
+  return (
+    <Stage>
+      <div className="space-y-2">
+        <Panel className="space-y-1.5 p-3">
+          <Line w="100%" />
+          <Line w="81%" />
+          <Line w="64%" />
+        </Panel>
+        <div className="flex items-center gap-1.5 pl-0.5 text-(--muted-foreground)">
+          {/* Regenerate navigation: walk the answers, and know where this
+              one branched from. The position pops — a new version landing. */}
+          <span className="inline-flex items-center gap-0.5 rounded-md bg-(--muted) px-1 py-0.5">
+            <Glyph d={G.left} size={8} />
+            <span className="cp-pop inline-block px-0.5 text-[8px] tabular-nums">2 / 3</span>
+            <Glyph d={G.right} size={8} />
+          </span>
+          <span className="rounded-md border border-(--border) px-1.5 py-0.5 text-[8px]">from v1</span>
+          <span className="ml-auto">
+            <Glyph d={G.refresh} size={9} />
+          </span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- conversation-sidebar: hover actions, and a way back ------------ */
+function ConversationSidebarPreview() {
+  return (
+    <Stage>
+      <Panel className="overflow-hidden">
+        <div className="flex items-center gap-1.5 border-b border-(--border) px-2 py-1.5">
+          <span
+            className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[8px] font-medium text-(--primary-foreground)"
+            style={{ background: "var(--primary)" }}
+          >
+            <Glyph d={G.plus} size={8} />
+            New chat
+          </span>
+          <span className="ml-auto rounded-md border border-(--border) px-1.5 py-0.5 text-[8px] text-(--muted-foreground)">
+            Search…
+          </span>
+        </div>
+        <div className="px-2.5 pt-1.5 text-[7px] font-semibold uppercase tracking-wide text-(--muted-foreground)">
+          Today
+        </div>
+        <ul className="space-y-0.5 p-1.5">
+          <li className="flex items-center gap-1.5 px-1.5 py-1">
+            <Line w="58%" tint="fg" />
+            <span className="ml-auto text-(--muted-foreground)">
+              <Glyph d={G.pin} size={8} />
+            </span>
+          </li>
+          {/* The row being acted on: in the real sidebar these glyphs only
+              appear under the cursor. */}
+          <li className="flex items-center gap-1.5 rounded-md bg-(--muted) px-1.5 py-1">
+            <Line w="44%" />
+            <span className="ml-auto flex items-center gap-1 text-(--muted-foreground)">
+              <Glyph d={G.pencil} size={8} />
+              <Glyph d={G.trash} size={8} />
+            </span>
+          </li>
+          <li className="flex items-center px-1.5 py-1">
+            <Line w="66%" />
+          </li>
+        </ul>
+        {/* Deletion is never final here — the bar arrives and leaves on
+            its own, which is exactly cp-pop's loop. */}
+        <div className="cp-pop flex items-center gap-1.5 border-t border-(--border) bg-(--muted) px-2.5 py-1.5 text-[8px] text-(--muted-foreground)">
+          <Glyph d={G.trash} size={8} />
+          <span className="truncate">Deleted “Q3 plan”</span>
+          <span className="ml-auto shrink-0 font-medium text-(--foreground) underline">Undo</span>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- artifact-preview: generated output, still arriving ------------- */
+function ArtifactPreviewPreview() {
+  return (
+    <Stage>
+      <Panel className="overflow-hidden">
+        <div className="flex items-center gap-1.5 px-2.5 py-1.5">
+          <Tile size={14}>
+            <Glyph d={G.file} size={8} />
+          </Tile>
+          <span className="text-[9px] font-medium text-(--foreground)">chart.tsx</span>
+          <Pill tone="info">
+            <span className="inline-flex items-center gap-1">
+              <span className="cp-dot h-1 w-1 rounded-full bg-current" />
+              Generating
+            </span>
+          </Pill>
+          {/* The artifact chrome: the reader flips between what it looks
+              like and what it is. */}
+          <span className="ml-auto inline-flex rounded-md bg-(--muted) p-0.5 text-[8px]">
+            <span
+              className="rounded-[5px] bg-(--card) px-1.5 py-px font-medium text-(--foreground)"
+              style={{ boxShadow: "var(--shadow-sm)" }}
+            >
+              Preview
+            </span>
+            <span className="px-1.5 py-px text-(--muted-foreground)">Code</span>
+          </span>
+        </div>
+        {/* Indeterminate stream: the artifact is still being written. */}
+        <div className="h-0.5 overflow-hidden bg-(--muted)">
+          <div className="cp-stream h-full w-2/5" style={{ background: "var(--primary)" }} />
+        </div>
+        <div className="flex h-[52px] items-end justify-center gap-2 px-6 pt-3 pb-2">
+          {[14, 26, 18, 34, 24].map((h, i) => (
+            <span
+              key={i}
+              className="w-4 rounded-t-[3px]"
+              style={{
+                height: h,
+                background: "var(--primary)",
+                opacity: i === 3 ? 1 : 0.35 + i * 0.1,
+              }}
+            />
+          ))}
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- generated-media: the answer is a picture ----------------------- */
+function GeneratedMediaPreview() {
+  return (
+    <Stage>
+      <Panel className="overflow-hidden">
+        <div className="flex items-center gap-1.5 px-2.5 py-1.5">
+          <Tile size={14}>
+            <Glyph d={G.image} size={8} />
+          </Tile>
+          <span className="text-[9px] font-medium text-(--foreground)">Image</span>
+          <span className="ml-auto">
+            <Pill tone="good">Ready</Pill>
+          </span>
+        </div>
+        {/* Not lines: the whole point is that the model's output is a
+            picture. The sweep is the upscale pass finishing. */}
+        <div
+          className="relative mx-2.5 h-[58px] overflow-hidden rounded-lg"
+          style={{
+            background:
+              "linear-gradient(150deg, var(--primary), color-mix(in oklab, var(--primary), black 40%))",
+          }}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="absolute inset-0 m-auto h-6 w-6 text-white/70"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <circle cx="17" cy="7" r="2.5" />
+            <path d="M2 20 8 11l4 5 3.5-4L21 20Z" />
+          </svg>
+          <span
+            className="cp-shimmer absolute inset-y-0 w-1/3"
+            style={{
+              background:
+                "linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent)",
+            }}
+          />
+        </div>
+        <div className="flex items-center gap-1.5 px-2.5 py-2">
+          <span className="truncate text-[8px] text-(--muted-foreground)">
+            “a desk plant at golden hour”
+          </span>
+          <span className="ml-auto flex shrink-0 gap-0.5">
+            <span
+              className="grid h-3.5 w-3.5 place-items-center rounded-[4px] text-[8px] font-medium text-(--primary-foreground)"
+              style={{ background: "var(--primary)" }}
+            >
+              1
+            </span>
+            <span className="grid h-3.5 w-3.5 place-items-center rounded-[4px] border border-(--border) text-[8px] text-(--muted-foreground)">
+              2
+            </span>
+          </span>
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- agent-run-timeline: the log that folds its own successes ------- */
+function AgentRunTimelinePreview() {
+  return (
+    <Stage>
+      <Panel className="overflow-hidden">
+        <ul className="divide-y divide-(--border)">
+          <li className="flex items-center gap-2 border-l-2 border-emerald-500 px-2.5 py-1.5">
+            <span className="text-emerald-600 dark:text-emerald-400">
+              <Glyph d={G.check} size={8} />
+            </span>
+            <Line w="52%" />
+            <span className="ml-auto shrink-0 text-[7px] tabular-nums text-(--muted-foreground)">
+              14:02
+            </span>
+          </li>
+          {/* The signature: eleven boring wins take one line, so the two
+              that need a reader keep the screen. */}
+          <li className="px-2.5 py-1.5">
+            <span className="inline-flex items-center gap-1 rounded-full bg-(--muted) px-2 py-0.5 text-[8px] text-(--muted-foreground)">
+              <Glyph d={G.chevron} size={7} />
+              4 completed steps · 14:02–14:05
+            </span>
+          </li>
+          <li
+            className="flex items-center gap-2 border-l-2 px-2.5 py-1.5"
+            style={{ borderColor: "var(--primary)" }}
+          >
+            <span className="cp-dot h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--primary)" }} />
+            <Line w="64%" tint="fg" />
+            <span className="ml-auto shrink-0 text-[7px] text-(--muted-foreground)">running</span>
+          </li>
+        </ul>
+        <div className="border-t border-(--border) bg-(--muted) px-2.5 py-1 text-[8px] tabular-nums text-(--muted-foreground)">
+          0:42 · 8.1k tok · $0.021
+        </div>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- edit-diff-view: review by the hunk, not by the file ------------ */
+function EditDiffViewPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        <div className="flex items-center gap-1.5 px-0.5">
+          <span className="text-(--muted-foreground)">
+            <Glyph d={G.file} size={8} />
+          </span>
+          <span className="font-mono text-[8px] text-(--foreground)">rate-limiter.ts</span>
+          <span className="ml-auto text-[8px] tabular-nums text-(--muted-foreground)">
+            1 of 3 decided
+          </span>
+        </div>
+        {/* A decided hunk: kept on screen, dimmed, border flipped. A diff
+            that hides its history cannot be audited. */}
+        <Panel className="flex items-center gap-1.5 border-emerald-300 px-2 py-1.5 opacity-60 dark:border-emerald-800">
+          <span className="grid h-3 w-3 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400">
+            <Glyph d={G.check} size={7} />
+          </span>
+          <Line w="62%" />
+          <span className="ml-auto shrink-0 text-[7px] text-(--muted-foreground)">accepted</span>
+        </Panel>
+        {/* The pending hunk: red out, green in, decision underneath. */}
+        <Panel className="space-y-1 p-2">
+          <div className="flex items-center gap-1.5">
+            <span className="shrink-0 font-mono text-[8px] text-red-500">−</span>
+            <span className="h-1 w-[58%] rounded-full bg-red-200 dark:bg-red-900/50" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="shrink-0 font-mono text-[8px] text-emerald-600 dark:text-emerald-400">+</span>
+            <span className="cp-line h-1 w-[66%] rounded-full bg-emerald-200 dark:bg-emerald-900/50" />
+          </div>
+          <div className="flex items-center gap-1 pt-0.5">
+            <span className="inline-flex items-center gap-0.5 rounded-md bg-emerald-700 px-1.5 py-0.5 text-[7px] font-medium text-white">
+              <Glyph d={G.check} size={6} />
+              Accept
+            </span>
+            <span className="rounded-md border border-(--border) px-1.5 py-0.5 text-[7px] font-medium text-(--muted-foreground)">
+              Reject
+            </span>
+          </div>
+        </Panel>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- context-picker: every option admits its cost ------------------- */
+function ContextPickerPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        {/* The popover opens upward from the composer, so the list sits
+            above the trigger here too. */}
+        <Panel className="overflow-hidden">
+          <div className="border-b border-(--border) px-2 py-1 text-[8px] text-(--muted-foreground)">
+            Add context…
+          </div>
+          <ul className="divide-y divide-(--border)">
+            <li className="flex items-center gap-1.5 bg-(--muted) px-2 py-1.5">
+              <span className="text-(--muted-foreground)">
+                <Glyph d={G.file} size={8} />
+              </span>
+              <span className="text-[8px] text-(--foreground)">notes.md</span>
+              <span className="ml-auto font-mono text-[7px] tabular-nums text-(--muted-foreground)">
+                ≈1.7k
+              </span>
+              {/* Being chosen, on the loop. */}
+              <span className="cp-pop inline-flex text-(--primary)">
+                <Glyph d={G.check} size={8} />
+              </span>
+            </li>
+            <li className="flex items-center gap-1.5 px-2 py-1.5">
+              <span className="text-(--muted-foreground)">
+                <Glyph d={G.globe} size={8} />
+              </span>
+              <span className="text-[8px] text-(--foreground)">docs site</span>
+              <span className="ml-auto font-mono text-[7px] tabular-nums text-(--muted-foreground)">
+                ≈2.4k
+              </span>
+            </li>
+            <li className="flex items-center gap-1.5 px-2 py-1.5 opacity-75">
+              <span className="text-(--muted-foreground)">
+                <Glyph d={G.lock} size={8} />
+              </span>
+              <span className="text-[8px] text-(--muted-foreground)">Knowledge base</span>
+              <span className="ml-auto rounded-md border border-(--border) px-1 py-px text-[7px] text-(--muted-foreground)">
+                Grant
+              </span>
+            </li>
+          </ul>
+        </Panel>
+        <div className="flex items-center gap-1.5">
+          <Chip>
+            <Glyph d={G.file} size={8} />
+            spec.pdf
+          </Chip>
+          <span className="inline-flex items-center gap-0.5 rounded-md border border-dashed border-(--border) px-1.5 py-0.5 text-[8px] text-(--muted-foreground)">
+            @ Add context
+          </span>
+          <span className="ml-auto font-mono text-[8px] tabular-nums text-(--muted-foreground)">
+            ≈ 4.1k
+          </span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- refusal-message: a wall with a door in it ---------------------- */
+function RefusalMessagePreview() {
+  return (
+    <Stage>
+      <div
+        className="flex items-start gap-2 rounded-xl rounded-tl-sm border border-(--border) bg-(--card) px-3 py-2.5"
+        style={{ boxShadow: "var(--shadow-sm)" }}
+      >
+        {/* Muted, not red: the assistant is declining a task, not
+            reporting a failure. */}
+        <Tile size={18}>
+          <Glyph d={G.shield} size={10} />
+        </Tile>
+        <div className="min-w-0 flex-1">
+          <div className="space-y-1">
+            <Line w="94%" tint="fg" />
+            <Line w="58%" />
+          </div>
+          <div className="mt-1.5 text-[8px] text-(--muted-foreground)">Why: it could enable harm.</div>
+          {/* The redirect is the component — a refusal that offers no next
+              step is just an error with better manners. */}
+          <span
+            className="cp-pop mt-2 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[8px] font-medium text-(--primary-foreground)"
+            style={{ background: "var(--primary)", animationDelay: "0.5s" }}
+          >
+            Help me rephrase
+            <Glyph d={G.arrowRight} size={7} />
+          </span>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- moderation-flag: the stream, frozen mid-sentence --------------- */
+function ModerationFlagPreview() {
+  return (
+    <Stage>
+      <div className="space-y-1.5">
+        {/* Where the answer was cut. The mask does the storytelling — this
+            text did not conclude, it was stopped. */}
+        <div
+          className="space-y-1 px-1"
+          style={{
+            maskImage: "linear-gradient(to bottom, black 20%, transparent)",
+            WebkitMaskImage: "linear-gradient(to bottom, black 20%, transparent)",
+          }}
+        >
+          <Line w="88%" />
+          <Line w="52%" />
+        </div>
+        <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50/60 px-3 py-2 dark:border-amber-900/50 dark:bg-amber-950/30">
+          <span className="cp-dot mt-px shrink-0 text-amber-600 dark:text-amber-400">
+            <Glyph d={G.flag} size={10} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <div className="text-[10px] font-medium text-(--foreground)">Response stopped</div>
+            <div className="mt-1">
+              <Line w="78%" />
+            </div>
+            <div className="mt-2 flex items-center gap-2">
+              <span
+                className="rounded-md px-2 py-0.5 text-[8px] font-medium text-(--primary-foreground)"
+                style={{ background: "var(--primary)" }}
+              >
+                Try again
+              </span>
+              <span className="text-[8px] text-(--muted-foreground) underline">Report a mistake</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- confidence-answer: the answer grades itself -------------------- */
+function ConfidenceAnswerPreview() {
+  return (
+    <Stage>
+      {/* Medium confidence, the interesting state: high renders as a
+          plain answer, low says "treat as a guess". */}
+      <div className="rounded-xl rounded-tl-sm border border-amber-200 bg-amber-50/50 px-3 py-2.5 dark:border-amber-900/50 dark:bg-amber-950/20">
+        <div className="space-y-1">
+          <Line w="100%" tint="fg" />
+          <Line w="72%" tint="fg" />
+        </div>
+        <div className="mt-2 flex items-center gap-1.5">
+          <span className="cp-dot h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
+          <span className="text-[8px] font-medium text-amber-700 dark:text-amber-400">
+            Worth double-checking
+          </span>
+        </div>
+        <div className="mt-1.5">
+          <Line w="52%" />
+        </div>
+      </div>
+    </Stage>
+  );
+}
+
+/* --- voice-call-controls: mute, the clock, and the way out ---------- */
+function VoiceCallControlsPreview() {
+  return (
+    <Stage>
+      <Panel className="flex items-center justify-between rounded-full px-3 py-2">
+        <span className="inline-flex items-center gap-1 rounded-full border border-(--border) px-2 py-1 text-[9px] text-(--foreground)">
+          <Glyph d={G.mic} size={9} />
+          Mute
+        </span>
+        {/* The colon ticks with cp-caret's step blink — the only motion a
+            call timer needs. */}
+        <span className="text-[10px] font-medium tabular-nums text-(--foreground)">
+          1<span className="cp-caret">:</span>42
+        </span>
+        <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-2.5 py-1 text-[9px] font-medium text-white">
+          <Glyph d={G.phone} size={9} />
+          End
+        </span>
+      </Panel>
+    </Stage>
+  );
+}
+
+/* --- memory-toast: the receipt, with the fact in the user's words --- */
+function MemoryToastPreview() {
+  return (
+    <Stage>
+      {/* A toast's whole life is arriving and leaving — cp-pop's loop. */}
+      <Panel className="cp-pop flex items-center gap-2 px-3 py-2.5">
+        <Tile size={18} className="bg-(--primary-muted) text-(--primary-muted-foreground)">
+          <Glyph d={G.database} size={10} />
+        </Tile>
+        <div className="min-w-0 flex-1">
+          <div className="text-[7px] font-semibold uppercase tracking-wide text-(--muted-foreground)">
+            Saved to memory
+          </div>
+          <div className="truncate text-[10px] text-(--foreground)">Prefers pnpm over npm</div>
+        </div>
+        <span className="shrink-0 text-[9px] font-medium text-(--foreground) underline">Undo</span>
+        <span className="shrink-0 text-[9px] text-(--muted-foreground)">Manage</span>
       </Panel>
     </Stage>
   );

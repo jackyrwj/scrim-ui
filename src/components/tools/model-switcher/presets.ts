@@ -87,3 +87,18 @@ export const modelPresets: ModelPreset[] = [
     ],
   },
 ];
+
+/* Per-provider lineups derived from the all-providers preset — the vendor
+   buttons in the editor load one of these as a starting point. Group order
+   follows the preset's model order. */
+export const vendorLineups: { vendor: string; models: ModelItem[] }[] = (() => {
+  const all = modelPresets.find((p) => p.id === "all-providers");
+  const groups = new Map<string, ModelItem[]>();
+  for (const m of all?.models ?? []) {
+    if (!m.group) continue;
+    const list = groups.get(m.group) ?? [];
+    list.push(m);
+    groups.set(m.group, list);
+  }
+  return [...groups].map(([vendor, models]) => ({ vendor, models }));
+})();

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { CodeBlock } from "@/components/component-page/code-block";
-import { InstallCommand } from "@/components/component-page/install-command";
 import { useProAccess } from "@/lib/pro-access";
 import { PRO_PRICE } from "@/lib/pro";
 import { UnlockDialog } from "./unlock-dialog";
@@ -24,11 +23,9 @@ export type TemplateFileMeta = { path: string; lines: number };
 export function ProTemplate({
   slug,
   files,
-  registryUrl,
 }: {
   slug: string;
   files: TemplateFileMeta[];
-  registryUrl: string;
 }) {
   const access = useProAccess();
   const pathname = usePathname();
@@ -39,7 +36,7 @@ export function ProTemplate({
   const [downloading, setDownloading] = React.useState(false);
   const [downloadError, setDownloadError] = React.useState<string | null>(null);
 
-  /* Keyed by licence and compared at render, so a changed key invalidates
+  /* Keyed by access identity and compared at render, so a change invalidates
      without an effect that calls setState — see pro-source.tsx. */
   const contents = fetched && fetched.key === access.identity ? fetched.files : null;
   const error = failed && failed.key === access.identity ? failed.message : null;
@@ -51,7 +48,7 @@ export function ProTemplate({
     fetch("/api/pro/template", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ slug, key: access.key }),
+      body: JSON.stringify({ slug }),
     })
       .then(async (response) => {
         const data: unknown = await response.json().catch(() => null);
@@ -75,12 +72,10 @@ export function ProTemplate({
     return () => {
       cancelled = true;
     };
-  }, [access.identity, access.key, access.unlocked, loading, slug]);
+  }, [access.identity, access.unlocked, loading, slug]);
 
-  /* Fetched and saved from a blob rather than linked: the licence goes in the
-     POST body, and an <a href> carrying a key would leak it into history and
-     the referrer. The cost is that the click has to await the bytes, hence
-     the pending label. */
+  /* Fetched and saved from a blob rather than linked, so the click can await
+     the bytes and show a pending label. */
   async function download() {
     if (!access.unlocked) return;
     setDownloading(true);
@@ -89,7 +84,7 @@ export function ProTemplate({
       const response = await fetch("/api/pro/template/download", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ slug, key: access.key }),
+        body: JSON.stringify({ slug }),
       });
       if (!response.ok) {
         const data: unknown = await response.json().catch(() => null);
@@ -118,17 +113,13 @@ export function ProTemplate({
     <>
       {contents ? (
         <div className="mb-6 space-y-3">
-          {access.mode === "license" ? (
-            <InstallCommand url={`${registryUrl}?key=${encodeURIComponent(access.key ?? "")}`} />
-          ) : (
-            <p className="text-sm text-(--muted-foreground)">
-              Create a private CLI token in your{" "}
-              <Link href="/dashboard" className="font-medium text-(--foreground) underline underline-offset-4">
-                dashboard
-              </Link>
-              .
-            </p>
-          )}
+          <p className="text-sm text-(--muted-foreground)">
+            Create a private CLI token in your{" "}
+            <Link href="/dashboard" className="font-medium text-(--foreground) underline underline-offset-4">
+              dashboard
+            </Link>
+            .
+          </p>
           {/* The second way out, and for a template arguably the first: this
               is a standalone app with its own package.json, so the natural
               move is unzip, install, run — not merge twenty-three files into
@@ -234,7 +225,6 @@ export function ProTemplate({
       <UnlockDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        onUnlocked={() => setFailed(null)}
         item={pathname}
       />
     </>
