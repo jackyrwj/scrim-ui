@@ -1,7 +1,7 @@
 "use client";
 
 /* ------------------------------------------------------------------ */
-/* Hero template carousel — three Pro templates on one drifting        */
+/* Hero template carousel — the Pro catalog on one drifting            */
 /* filmstrip.                                                          */
 /*                                                                     */
 /* The slides are narrower than the strip, so the neighbours stay      */
@@ -30,6 +30,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AiChatDemo } from "@/components/templates/ai-chat-demo";
 import { RagQaDemo } from "@/components/templates/rag-qa-demo";
 import { AgentConsoleDemo } from "@/components/templates/agent-console-demo";
+import { StructuredExtractionDemo } from "@/components/templates/structured-extraction-demo";
+import { GenerativeUiDemo } from "@/components/templates/generative-ui-demo";
+import { VoiceAssistantDemo } from "@/components/templates/voice-assistant-demo";
+import { AnswerEngineDemo } from "@/components/templates/answer-engine-demo";
+import { MemoryChatDemo } from "@/components/templates/memory-chat-demo";
+import { SupportCopilotDemo } from "@/components/templates/support-copilot-demo";
+import { ImageStudioDemo } from "@/components/templates/image-studio-demo";
+import { ResearchAgentDemo } from "@/components/templates/research-agent-demo";
 import { useReducedMotion } from "@/components/templates/use-demo-motion";
 
 const SLIDES = [
@@ -51,7 +59,60 @@ const SLIDES = [
     caption: "a resumable agent run: approvals, per-step cost, and cancellation that lands.",
     Demo: AgentConsoleDemo,
   },
+  {
+    slug: "structured-extraction",
+    tab: "Structured Extraction",
+    caption: "stream a schema into a stable form, with evidence and honest validation states.",
+    Demo: StructuredExtractionDemo,
+  },
+  {
+    slug: "generative-ui",
+    tab: "Generative UI",
+    caption: "stream model-selected components through a typed, two-sided registry.",
+    Demo: GenerativeUiDemo,
+  },
+  {
+    slug: "voice-assistant",
+    tab: "Voice Assistant",
+    caption: "realtime speech, barge-in, waveform and transcript in one working call surface.",
+    Demo: VoiceAssistantDemo,
+  },
+  {
+    slug: "answer-engine",
+    tab: "Answer Engine",
+    caption: "retrieve first, stream cited answers, then generate grounded follow-up questions.",
+    Demo: AnswerEngineDemo,
+  },
+  {
+    slug: "memory-chat",
+    tab: "Memory Chat",
+    caption: "approval-gated long-term memory that stays visible and under the user's control.",
+    Demo: MemoryChatDemo,
+  },
+  {
+    slug: "support-copilot",
+    tab: "Support Copilot",
+    caption: "KB-cited draft replies and human-approved actions inside an agent-assist console.",
+    Demo: SupportCopilotDemo,
+  },
+  {
+    slug: "image-studio",
+    tab: "Image Studio",
+    caption: "async image jobs with progress, moderation and distinct blocked and failed states.",
+    Demo: ImageStudioDemo,
+  },
+  {
+    slug: "research-agent",
+    tab: "Research Agent",
+    caption: "plan, fan out and synthesize while every cited research step stays visible.",
+    Demo: ResearchAgentDemo,
+  },
 ];
+
+/* Four head clones cover a 4K viewport even at the widest multi-card layout.
+   Duplicating the full catalog would mount seven more large demo apps without
+   adding any pixels the visitor can see at the loop seam. */
+const LOOP_SLIDES = [...SLIDES, ...SLIDES.slice(0, 4)];
 
 /* How fast the strip drifts when nobody is holding it. Two resume
    waits: a deliberate move buys the strip a beat for its snap or
@@ -282,23 +343,21 @@ export function HeroTemplateCarousel() {
              hovering cursor (engaging it mid-transit snaps on the spot —
              the teleport); deliberate moves turn it on to settle, and
              reduced motion keeps it on because nothing moves anyway. */
-          className={`flex items-start gap-4 overflow-x-auto overscroll-x-contain rounded-xl px-[7%] outline-none focus-visible:ring-2 focus-visible:ring-(--primary)/40 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-5 sm:px-[15%] ${
+          className={`flex w-full cursor-grab items-start gap-4 overflow-x-auto overscroll-x-contain px-[calc((100vw-var(--hero-slide-width))/2)] outline-none [--hero-slide-width:86vw] [scrollbar-width:none] active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--primary)/40 sm:gap-5 sm:[--hero-slide-width:72vw] lg:gap-6 lg:[--hero-slide-width:min(64vw,64rem)] 2xl:[--hero-slide-width:min(52vw,72rem)] [&::-webkit-scrollbar]:hidden ${
             !reduced && !snapping ? "snap-none" : "snap-x snap-mandatory"
           }`}
         >
-          {/* The second pass is the loop made flesh: identical pixels
-              one cycle along, so folding the scroll back is invisible.
-              Clones are inert — the keyboard and screen readers should
-              meet each template exactly once. */}
-          {[...SLIDES, ...SLIDES].map(({ slug, tab, caption, Demo }, i) => {
+          {/* The repeated head makes the loop seam invisible. Clones are
+              inert — the keyboard and screen readers should meet each
+              template exactly once. */}
+          {LOOP_SLIDES.map(({ slug, tab, caption, Demo }, i) => {
             const clone = i >= SLIDES.length;
             const n = i % SLIDES.length;
             return (
-            /* w-full, not w-[70%]: a percentage width would resolve
-               against the content box the paddings have already shrunk,
-               compounding to a slide narrower than designed. Filling the
-               content box makes the padding the sole controller of the
-               peek ratio — px-[15%] ⇒ slide = 70% of the strip. */
+            /* A viewport-relative width makes the filmstrip useful at every
+               size: one readable frame on mobile, multiple substantial
+               frames across a wide desktop. The matching scroller padding
+               keeps the selected frame centred without a max-width wrapper. */
             <div
               key={clone ? `${slug}-repeat` : slug}
               aria-roledescription={clone ? undefined : "slide"}
@@ -312,11 +371,16 @@ export function HeroTemplateCarousel() {
                  invites misclicks. Events fall through to the strip
                  itself, so pause-on-hover and swipe still work. The
                  full experience lives on the template's own page. */
-              className={`pointer-events-none w-full shrink-0 snap-center transition-[opacity,transform] duration-300 ease-out ${
+              className={`pointer-events-none w-(--hero-slide-width) shrink-0 snap-center transition-[opacity,transform] duration-300 ease-out ${
                 n === index ? "opacity-100" : "opacity-45 scale-[0.98]"
               }`}
             >
-              <Demo caption={false} />
+              {/* These are moving previews, not eleven nested applications.
+                  Keep the slide itself named for assistive technology, but
+                  remove every control inside the demo from the tab order. */}
+              <div inert>
+                <Demo caption={false} />
+              </div>
               {/* Only the centred slide keeps its caption: a half-clipped
                   sentence at the strip's edge reads as a bug, not a peek. */}
               <p
@@ -342,7 +406,7 @@ export function HeroTemplateCarousel() {
             scheduleResume();
           }}
           aria-label="Previous template"
-          className="absolute top-1/2 left-2 z-10 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-(--border) bg-(--card)/90 text-(--muted-foreground) shadow-sm backdrop-blur transition-all hover:text-(--foreground) sm:grid xl:-left-12"
+          className="absolute top-1/2 left-4 z-10 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-(--border) bg-(--card)/90 text-(--muted-foreground) shadow-sm backdrop-blur transition-[color,background-color,transform] hover:text-(--foreground) active:scale-[0.96] sm:grid"
         >
           <ChevronLeft size={18} strokeWidth={2} aria-hidden />
         </button>
@@ -353,7 +417,7 @@ export function HeroTemplateCarousel() {
             scheduleResume();
           }}
           aria-label="Next template"
-          className="absolute top-1/2 right-2 z-10 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-(--border) bg-(--card)/90 text-(--muted-foreground) shadow-sm backdrop-blur transition-all hover:text-(--foreground) sm:grid xl:-right-12"
+          className="absolute top-1/2 right-4 z-10 hidden h-9 w-9 -translate-y-1/2 place-items-center rounded-full border border-(--border) bg-(--card)/90 text-(--muted-foreground) shadow-sm backdrop-blur transition-[color,background-color,transform] hover:text-(--foreground) active:scale-[0.96] sm:grid"
         >
           <ChevronRight size={18} strokeWidth={2} aria-hidden />
         </button>

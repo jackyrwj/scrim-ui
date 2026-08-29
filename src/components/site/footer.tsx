@@ -19,7 +19,7 @@ const resourceLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-(--border)">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <div className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>

@@ -18,6 +18,12 @@ const TEMPLATE_FILES = [
 ];
 
 const nextConfig: NextConfig = {
+  /* The dev server is also opened from other machines on the local network.
+     Next blocks its HMR and client chunks for non-localhost origins unless
+     the host is listed explicitly; without them the server HTML appears but
+     every client interaction and scroll reveal stays frozen. */
+  allowedDevOrigins: ["192.168.2.1", "192.168.31.39"],
+
   /* Both of these read component source with fs at REQUEST time, and Next's
      tracer cannot see through a dynamic path — without this the files are
      absent from the deployed bundle and every Pro unlock 500s in production

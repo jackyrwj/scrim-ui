@@ -15,8 +15,6 @@ import { IconCard } from "@/components/icons/icon-card";
 import { createElement } from "react";
 import { patternIconFor } from "@/lib/icons";
 import { iconGuide, iconSlug } from "@/lib/icon-guide";
-import { InstallCommand } from "@/components/component-page/install-command";
-import { SITE_URL } from "@/lib/site";
 import { PRO_PRICE } from "@/lib/pro";
 
 /* One icon per idea the site is about, spread across categories so the row
@@ -73,46 +71,33 @@ export default function Home() {
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-glow)" }}
         />
-        <div className="relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-16">
+        <div className="relative mx-auto max-w-[1536px] px-4 pt-10 sm:px-6 sm:pt-16">
           {/* The headline balances inside the wide display measure. The
               paragraph under it keeps its own narrower reading measure. */}
           <div className="mx-auto max-w-5xl text-center">
             {/* A short outcome statement that covers both sides of the site:
                 tools for designing the interface and code for building it. */}
-            <h1 className="display-title display-title--hero text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+            <h1 className="display-title display-title--hero relative z-10 pb-[0.12em] text-4xl leading-[1.12] font-semibold tracking-tight text-balance sm:text-5xl">
               Design and build better AI interfaces
             </h1>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
+            <p className="relative z-0 mx-auto mt-3 max-w-2xl text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
               Copy the components, patterns, and tools you need to build polished AI
               interfaces.
             </p>
-
-            {/* Every peer's hero answers "how do I get it" with one command;
-                this is ours. The same InstallCommand as on component pages, so
-                the visitor's package-manager preference carries over. */}
-            <div className="mx-auto mt-6 max-w-lg text-left">
-              <InstallCommand url={`${SITE_URL}/r/all.json`} />
-            </div>
-
-            {/* The main event: a live, scripted tour of three real tools.
-                Wider than the prose above it — it is the thing being read. */}
           </div>
+        </div>
 
-          {/* The hero's proof is a real template, playing itself. The scripted
-              tool tour this replaced animated controls at the visitor; this
-              mounts the actual template UI on its own timeline — three
-              templates, swiped between, each replaying a scripted run with
-              the real components it ships. */}
-          <div className="mx-auto mt-8 max-w-5xl sm:mt-10">
-            <HeroTemplateCarousel />
-          </div>
-
+        {/* The media strip deliberately escapes the prose container. Templates
+            are visual proof, so they bleed to both viewport edges while the
+            heading and controls keep the page's normal content margins. */}
+        <div className="relative mt-8 pb-10 sm:mt-10 sm:pb-16">
+          <HeroTemplateCarousel />
         </div>
       </section>
 
       {/* Tools */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>
@@ -137,7 +122,7 @@ export default function Home() {
 
       {/* Popular components */}
       <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Components</h2>
@@ -193,7 +178,7 @@ export default function Home() {
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--gradient-subtle)" }}
         />
-        <AnimateOnScroll className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="relative mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Patterns</h2>
@@ -243,7 +228,7 @@ export default function Home() {
 
       {/* Icons */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Icons</h2>
@@ -278,7 +263,7 @@ export default function Home() {
 
       {/* Resources */}
       <section className="border-b border-(--border)">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Resources</h2>
@@ -313,7 +298,7 @@ export default function Home() {
 
       {/* Inspiration */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Inspiration</h2>
