@@ -15,9 +15,9 @@ export default function ResourcesPage() {
       <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">
         Resources
       </h1>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        A hand-picked directory of libraries, generators, design tools, and guides for AI
-        interfaces.
+      <p className="mt-3 max-w-2xl text-balance text-lg text-(--muted-foreground)">
+        Explore {resources.length} libraries, generators, design tools, assets, and guides —
+        each with a clear note on when to use it.
       </p>
 
       {/* The browser reads `?category=` (the link a detail page comes back on)

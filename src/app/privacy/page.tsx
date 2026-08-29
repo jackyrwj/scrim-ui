@@ -22,7 +22,7 @@ export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Privacy</h1>
-      <p className="mt-3 text-lg text-(--muted-foreground)">
+      <p className="mt-3 text-pretty text-lg text-(--muted-foreground)">
         The short version: there are no accounts, nothing you type into the tools ever leaves your
         browser, and nothing is sold to anyone.
       </p>

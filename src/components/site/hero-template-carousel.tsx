@@ -343,7 +343,7 @@ export function HeroTemplateCarousel() {
              hovering cursor (engaging it mid-transit snaps on the spot —
              the teleport); deliberate moves turn it on to settle, and
              reduced motion keeps it on because nothing moves anyway. */
-          className={`flex w-full cursor-grab items-start gap-4 overflow-x-auto overscroll-x-contain px-[calc((100vw-var(--hero-slide-width))/2)] outline-none [--hero-slide-width:86vw] [scrollbar-width:none] active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--primary)/40 sm:gap-5 sm:[--hero-slide-width:72vw] lg:gap-6 lg:[--hero-slide-width:min(64vw,64rem)] 2xl:[--hero-slide-width:min(52vw,72rem)] [&::-webkit-scrollbar]:hidden ${
+          className={`flex w-full cursor-grab items-start gap-4 overflow-x-auto overscroll-x-contain px-[calc((100vw-var(--hero-slide-width))/2)] outline-none [--hero-slide-width:86vw] [scrollbar-width:none] active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--primary)/40 sm:gap-5 sm:[--hero-slide-width:68vw] lg:gap-6 lg:[--hero-slide-width:min(56vw,56rem)] 2xl:[--hero-slide-width:min(46vw,60rem)] [&::-webkit-scrollbar]:hidden ${
             !reduced && !snapping ? "snap-none" : "snap-x snap-mandatory"
           }`}
         >

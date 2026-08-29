@@ -109,8 +109,9 @@ export default function PatternsPage() {
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           Patterns
         </h1>
-        <p className="mt-3 text-lg text-(--muted-foreground)">
-          Start with a complete AI interface, then adapt it to your product.
+        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+          Start from a complete AI screen, then remix it. Each of the {patterns.length} patterns
+          ships as one React + Tailwind file built from this library&rsquo;s components.
         </p>
       </header>
 

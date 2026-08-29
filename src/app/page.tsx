@@ -80,9 +80,9 @@ export default function Home() {
             <h1 className="display-title display-title--hero relative z-10 pb-[0.12em] text-4xl leading-[1.12] font-semibold tracking-tight text-balance sm:text-5xl">
               Design and build better AI interfaces
             </h1>
-            <p className="relative z-0 mx-auto mt-3 max-w-2xl text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
-              Copy the components, patterns, and tools you need to build polished AI
-              interfaces.
+            <p className="relative z-0 mx-auto mt-3 max-w-2xl text-balance text-base leading-7 text-(--muted-foreground) sm:text-xl sm:leading-8">
+              React components, complete interface patterns, and practical tools for
+              building modern AI products.
             </p>
           </div>
         </div>

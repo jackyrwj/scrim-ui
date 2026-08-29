@@ -103,7 +103,7 @@ export default async function ResourceDetailPage({ params }: Props) {
         <div className="min-w-0">
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name}</h1>
           <p className="mt-3 text-pretty text-lg leading-7 text-(--muted-foreground)">
-            {entry.notes}
+            {entry.description}
           </p>
           {entry.tags.length > 0 && (
             <ul className="mt-4 flex flex-wrap gap-1.5">
@@ -166,6 +166,14 @@ export default async function ResourceDetailPage({ params }: Props) {
           The live product, its pricing and its terms are on the official site.
         </figcaption>
       </figure>
+
+      {/* Curation note */}
+      {entry.notes && (
+        <section className="mt-10">
+          <h2 className="text-lg font-semibold tracking-tight">Why we list it</h2>
+          <p className="mt-2 leading-7 text-(--muted-foreground)">{entry.notes}</p>
+        </section>
+      )}
 
       {/* Related */}
       {related.length > 0 && (

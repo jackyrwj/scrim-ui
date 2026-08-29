@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     "Preview and copy React and Tailwind components for prompts, streaming, tool calls, citations, agent states and more.",
 };
 
+const published = () => components.filter((c) => c.status === "published").length;
+
 /**
  * One component card: a static preview of the component's shape, then its
  * name — carrying the same Lucide mark the directory and the /icons page use
@@ -104,9 +106,9 @@ export default function ComponentsPage() {
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           Components
         </h1>
-        <p className="mt-3 text-lg text-(--muted-foreground)">
-          Copy production-ready React components for the interactions and states unique to
-          AI products.
+        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+          Preview and copy React + Tailwind components for prompts, streaming, tool calls,
+          citations, agent states, and more. {published()} components are available today.
         </p>
       </header>
 

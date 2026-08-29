@@ -39,7 +39,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       </nav>
 
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{cat.name}</h1>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">{cat.description}</p>
+      <p className="mt-3 max-w-2xl text-pretty text-lg text-(--muted-foreground)">{cat.description}</p>
 
       {/* Published components */}
       <section className="mt-12">

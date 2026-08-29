@@ -48,9 +48,9 @@ export default async function ProPage() {
         <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
           Unlock all access
         </h1>
-        <p className="mx-auto mt-5 max-w-2xl text-lg text-(--muted-foreground)">
-          Every component is free. Pro adds complete app templates and production workflows
-          with one payment and lifetime updates.
+        <p className="mx-auto mt-5 max-w-2xl text-balance text-lg text-(--muted-foreground)">
+          Go beyond individual components with complete app templates, production workflows,
+          and lifetime updates.
         </p>
       </div>
 

@@ -15,9 +15,9 @@ export default function ToolsPage() {
       <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">
         Tools
       </h1>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        Mock up conversations, shape prompts, compare models, and inspect tokens in your
-        browser.
+      <p className="mt-3 max-w-2xl text-balance text-lg text-(--muted-foreground)">
+        Create chat mockups, build prompts, compare models, and count tokens — free in your
+        browser, with no sign-up.
       </p>
 
       <StaggerChildren className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

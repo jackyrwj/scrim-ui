@@ -19,9 +19,9 @@ export default function TemplatesPage() {
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           Templates
         </h1>
-        <p className="mt-3 text-lg text-(--muted-foreground)">
-          Launch from a working Next.js AI app with the difficult interaction states already
-          wired up.
+        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+          Start with a working Next.js app where streaming, tools, reasoning, model switching,
+          and persistence are already wired together.
         </p>
       </header>
 

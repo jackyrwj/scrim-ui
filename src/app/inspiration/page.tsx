@@ -14,9 +14,9 @@ export default function InspirationPage() {
       <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">
         Inspiration
       </h1>
-      <p className="mt-3 max-w-2xl text-lg text-(--muted-foreground)">
-        Study how leading AI products handle difficult interface decisions through live,
-        copyable examples.
+      <p className="mt-3 max-w-2xl text-balance text-lg text-(--muted-foreground)">
+        See how ChatGPT, Claude, Cursor, and others handle streaming, citations, approvals,
+        and agent state — grounded in official docs and rebuilt as live demos.
       </p>
 
       <div className="mt-10 grid gap-3 sm:grid-cols-2">

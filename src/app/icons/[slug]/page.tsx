@@ -73,7 +73,7 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
             {name}
           </code>
         </div>
-        <p className="mt-3 text-lg text-(--muted-foreground)">{entry.meaning}</p>
+        <p className="mt-3 text-pretty text-lg text-(--muted-foreground)">{entry.meaning}</p>
       </header>
 
       <div className="mt-8">

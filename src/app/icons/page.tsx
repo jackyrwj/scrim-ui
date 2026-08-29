@@ -20,8 +20,9 @@ export default function IconsPage() {
         <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
           Icons
         </h1>
-        <p className="mt-3 text-lg text-(--muted-foreground)">
-          Find a clear, consistent Lucide icon for every AI action and state.
+        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+          Find the right Lucide icon for each AI concept, then copy it as SVG, JSX, or a
+          component file. {iconGuide.length} concepts are mapped and ready to use.
         </p>
       </header>
 

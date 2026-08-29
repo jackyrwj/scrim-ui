@@ -74,7 +74,7 @@ export default async function ResourceCategoryPage({
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           {entries.length} {category.name}
         </h1>
-        <p className="mt-3 text-lg text-(--muted-foreground)">{category.description}</p>
+        <p className="mt-3 text-pretty text-lg text-(--muted-foreground)">{category.description}</p>
         <p className="mt-2 text-sm text-(--muted-foreground)">
           {/* The line that separates this from a link dump, said out loud. */}
           Every entry carries a note on why it is here, not just what it is.
