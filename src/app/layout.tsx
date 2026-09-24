@@ -6,7 +6,6 @@ import { SiteHeader } from "@/components/site/header";
 import { PreviewMotion } from "@/components/site/preview-motion";
 import { SiteFooter } from "@/components/site/footer";
 import { GoogleAnalytics } from "@/components/site/google-analytics";
-import { MicrosoftClarity } from "@/components/site/ms-clarity";
 import { SITE_URL as BASE_URL, SITE_NAME } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -118,7 +117,6 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         <GoogleAnalytics />
-        <MicrosoftClarity />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
         {accountAuthConfigured ? (
