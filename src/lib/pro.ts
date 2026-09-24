@@ -62,7 +62,7 @@ export const FREE_PLAN = {
 export const PRO_PLAN = {
   name: "Pro",
   /** Cents, so the display and the checkout agree on one number. */
-  priceCents: 4900,
+  priceCents: 1999,
   currency: "USD",
   /** One-time. A subscription would promise a release cadence not yet earned. */
   billing: "One-time payment",

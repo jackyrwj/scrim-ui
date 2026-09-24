@@ -10,7 +10,7 @@ records, Stripe owns payment, and Resend delivers the confirmation email.
 2. Create a Neon Postgres database, run `db/migrations/001_accounts.sql`, and add
    its pooled connection string as `DATABASE_URL`.
 3. In Stripe, copy the secret API key and the `price_...` id of the one-time
-   US$49 Scrim UI Pro price into `STRIPE_SECRET_KEY` and `STRIPE_PRICE_ID`.
+   US$19.99 Scrim UI Pro price into `STRIPE_SECRET_KEY` and `STRIPE_PRICE_ID`.
 4. In the private `scrim-ui-pro` repository, run `npm run build` and upload the
    generated `dist/` directory to an origin protected by a server-side bearer
    token. Set its root URL as `PRO_ARTIFACT_BASE_URL` and the credential as
