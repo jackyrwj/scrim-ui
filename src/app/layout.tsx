@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site/header";
 import { PreviewMotion } from "@/components/site/preview-motion";
 import { SiteFooter } from "@/components/site/footer";
 import { GoogleAnalytics } from "@/components/site/google-analytics";
+import { MicrosoftClarity } from "@/components/site/ms-clarity";
 import { SITE_URL as BASE_URL, SITE_NAME } from "@/lib/site";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -104,6 +105,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script async src="https://plausible.io/js/pa-y03ZdFqmP-3YKB1QHYL4I.js" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};plausible.init()`,
+          }}
+        />
         <script
           type="application/ld+json"
           /* JSON.stringify, not a template literal: the values are ours, but
@@ -111,6 +118,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         <GoogleAnalytics />
+        <MicrosoftClarity />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
         {accountAuthConfigured ? (
