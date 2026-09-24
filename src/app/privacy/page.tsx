@@ -4,10 +4,10 @@ import { SITE_NAME } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Privacy",
   description:
-    "What Scrim UI collects, what it does not, and how to opt out. No accounts, no ads, no data sold.",
+    "How Scrim UI uses analytics, advertising, account and payment services, and how to opt out.",
 };
 
-const UPDATED = "August 25, 2026";
+const UPDATED = "September 24, 2026";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -23,8 +23,8 @@ export default function PrivacyPage() {
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Privacy</h1>
       <p className="mt-3 text-pretty text-lg text-(--muted-foreground)">
-        The short version: there are no accounts, nothing you type into the tools ever leaves your
-        browser, and nothing is sold to anyone.
+        The short version: text entered into the browser-based tools stays on your device. The site
+        uses analytics, account and payment providers, and advertising on selected free pages.
       </p>
       <p className="mt-6 text-xs text-(--muted-foreground)">Last updated {UPDATED}</p>
 
@@ -44,22 +44,36 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
+      <Section title="Advertising">
+        <p>
+          Selected free content pages display banner advertising supplied by Adsterra. Adsterra and
+          its advertising partners may process your IP address, approximate location, browser and
+          device information, the page and referring site, and cookies or similar identifiers to
+          deliver, limit and measure advertising.
+        </p>
+        <p>
+          Advertising is labelled and does not receive text entered into Scrim UI&apos;s browser-based
+          tools. Pro, account, sign-in and payment pages do not contain Adsterra ads.
+        </p>
+      </Section>
+
       <Section title="What is never collected">
         <p>
-          There are no accounts, so there is no name, email address, or password to collect. Nothing
-          you type into the prompt generator, theme generator, token counter, or any other tool is
-          transmitted anywhere — those tools run entirely in your browser, and the text stays on your
-          machine.
+          Nothing you type into the prompt generator, theme generator, token counter, or any other
+          browser-based tool is sent to Scrim UI or to advertisers. Account authentication and
+          payments are handled by Clerk and Stripe; Scrim UI does not receive your password or full
+          card number.
         </p>
-        <p>No data is sold, rented, or shared with advertisers.</p>
+        <p>Scrim UI does not sell or rent personal information.</p>
       </Section>
 
       <Section title="Cookies">
         <p>
           Google Analytics sets a cookie (<code className="text-(--foreground)">_ga</code>) that
           distinguishes a returning visitor from a new one. It holds a random identifier, not
-          anything about you. Your theme preference is also stored in your browser, which is what
-          keeps the site dark if you asked for dark.
+          anything about you. Adsterra and its advertising partners may set cookies or similar
+          identifiers when an advertising placement loads. Your theme preference is also stored in
+          your browser, which is what keeps the site dark if you asked for dark.
         </p>
       </Section>
 
@@ -75,8 +89,9 @@ export default function PrivacyPage() {
           >
             opt-out browser add-on
           </a>{" "}
-          that applies across every site using Analytics. The site works identically either way —
-          nothing here is gated on being measured.
+          that applies across every site using Analytics. Browser tracking protection and content
+          blockers can also prevent advertising from loading. Site content and Pro access are not
+          gated on analytics or advertising.
         </p>
       </Section>
 

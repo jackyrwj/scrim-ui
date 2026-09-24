@@ -15,6 +15,7 @@ import { ProSource } from "@/components/pro/pro-source";
 import { getProComponentCatalog } from "@/lib/pro-catalog";
 import { componentSchema } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export function generateStaticParams() {
   return components.filter((c) => c.status === "published").map((c) => ({ slug: c.slug }));
@@ -166,6 +167,8 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
           ))}
         </ul>
       </section>
+
+      {!pro && <AdsterraBanner />}
 
       {/* Up-links to decision guides. Guides link down via componentSlugs;
           this is the reverse edge, so a reader deciding WHETHER to use the

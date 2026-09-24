@@ -12,6 +12,7 @@ import { CodeBlock } from "@/components/component-page/code-block";
 import { InstallCommand } from "@/components/component-page/install-command";
 import { PatternAgentPrompt } from "@/components/component-page/pattern-agent-prompt";
 import { SITE_URL } from "@/lib/site";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export function generateStaticParams() {
   return patterns.map((p) => ({ slug: p.slug }));
@@ -170,6 +171,8 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
           ))}
         </ul>
       </section>
+
+      <AdsterraBanner />
 
       {/* More patterns */}
       <section className="mt-14 border-t border-(--border) pt-10">

@@ -15,6 +15,7 @@ import {
 } from "@/lib/resources";
 import { previewPath } from "@/lib/previews";
 import { BrandIcon } from "@/components/brands/brand-icon";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -174,6 +175,8 @@ export default async function ResourceDetailPage({ params }: Props) {
           <p className="mt-2 leading-7 text-(--muted-foreground)">{entry.notes}</p>
         </section>
       )}
+
+      <AdsterraBanner />
 
       {/* Related */}
       {related.length > 0 && (

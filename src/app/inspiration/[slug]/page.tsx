@@ -8,6 +8,7 @@ import { BrandIcon } from "@/components/brands/brand-icon";
 import { PreviewFrame } from "@/components/component-page/preview-frame";
 import { JsonLd } from "@/components/site/json-ld";
 import { articleSchema } from "@/lib/structured-data";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -152,6 +153,8 @@ export default async function InspirationArticlePage({ params }: Props) {
           ))}
         </ul>
       </section>
+
+      <AdsterraBanner />
 
       {/* Sources */}
       {entry.sources && entry.sources.length > 0 && (
