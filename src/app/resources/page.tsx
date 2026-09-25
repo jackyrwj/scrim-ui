@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { resources, resourceCategories } from "@/lib/resources";
 import { ResourcesBrowser } from "@/components/resources/resources-browser";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export const metadata: Metadata = {
   title: "Curated AI Interface Resources",
@@ -19,6 +20,8 @@ export default function ResourcesPage() {
         Explore {resources.length} libraries, generators, design tools, assets, and guides —
         each with a clear note on when to use it.
       </p>
+
+      <AdsterraBanner />
 
       {/* The browser reads `?category=` (the link a detail page comes back on)
           via useSearchParams, which is URL data — reading it on the server

@@ -73,6 +73,7 @@ export const PRO_PLAN = {
     "Full source for every Pro template",
     "Unlimited personal and client projects",
     "Lifetime access and future Pro releases",
+    "Ad-free browsing across Scrim UI",
   ],
 } as const;
 

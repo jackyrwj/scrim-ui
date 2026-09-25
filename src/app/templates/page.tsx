@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { templates } from "@/lib/templates";
 import { ProRibbon } from "@/components/pro/pro-badge";
 import { TemplateCardDemo } from "@/components/templates/template-card-demo";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export const metadata: Metadata = {
   title: "Production-ready AI App Templates",
@@ -24,6 +25,8 @@ export default function TemplatesPage() {
           and persistence are already wired together.
         </p>
       </header>
+
+      <AdsterraBanner />
 
       {/* The demo leads the card: someone deciding whether to pay wants to
           see it run, and a sentence was asking them to take that on faith.

@@ -7,6 +7,7 @@ import { patterns, getComponent } from "@/lib/registry";
 import { patternConfigs } from "@/showcase/patterns/registry";
 import { patternIconFor } from "@/lib/icons";
 import { PatternPreview } from "@/components/site/pattern-preview";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export const metadata: Metadata = {
   title: "Complete AI Interface Patterns",
@@ -114,6 +115,8 @@ export default function PatternsPage() {
           ships as one React + Tailwind file built from this library&rsquo;s components.
         </p>
       </header>
+
+      <AdsterraBanner />
 
       <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
         {patterns.map((p, i) => (

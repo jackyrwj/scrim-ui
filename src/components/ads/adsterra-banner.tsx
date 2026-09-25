@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useProAccess } from "@/lib/pro-access";
 
 const ZONE_KEY = "9ea9ed85a4b75afcfbf32355563700fb";
 const SCRIPT_SRC = `https://www.highrevenueformat.com/${ZONE_KEY}/invoke.js`;
@@ -19,8 +20,14 @@ declare global {
 
 export function AdsterraBanner() {
   const hostRef = useRef<HTMLDivElement>(null);
+  const access = useProAccess();
 
   useEffect(() => {
+    // Do not contact the ad network until we know this viewer is on Free.
+    // That keeps Pro browsing genuinely ad-free rather than hiding an ad
+    // after its third-party request has already started.
+    if (access.checking || access.unlocked) return;
+
     const host = hostRef.current;
     if (!host) return;
 
@@ -41,7 +48,9 @@ export function AdsterraBanner() {
       host.replaceChildren();
       delete window.atOptions;
     };
-  }, []);
+  }, [access.checking, access.unlocked]);
+
+  if (access.checking || access.unlocked) return null;
 
   return (
     <aside aria-label="Advertisement" className="mt-14 hidden flex-col items-center md:flex">

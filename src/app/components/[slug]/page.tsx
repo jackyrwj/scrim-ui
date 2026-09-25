@@ -168,7 +168,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         </ul>
       </section>
 
-      {!pro && <AdsterraBanner />}
+      <AdsterraBanner />
 
       {/* Up-links to decision guides. Guides link down via componentSlugs;
           this is the reverse edge, so a reader deciding WHETHER to use the

@@ -5,6 +5,7 @@ import { components, categories } from "@/lib/registry";
 import { categoryIconFor, iconFor } from "@/lib/icons";
 import { ComponentPreview } from "@/components/site/component-preview";
 import { ProRibbon } from "@/components/pro/pro-badge";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export const metadata: Metadata = {
   title: "Copy-ready AI UI Components",
@@ -137,6 +138,8 @@ export default function ComponentsPage() {
           );
         })}
       </nav>
+
+      <AdsterraBanner />
 
       <div className="mt-12 space-y-12">
         {categories.map((cat) => {

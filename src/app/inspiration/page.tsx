@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { inspirationEntries } from "@/lib/inspiration";
 import { InspirationCard } from "@/components/inspiration/entry-card";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export const metadata: Metadata = {
   title: "How Leading AI Products Solve Interface Problems",
@@ -18,6 +19,8 @@ export default function InspirationPage() {
         See how ChatGPT, Claude, Cursor, and others handle streaming, citations, approvals,
         and agent state — grounded in official docs and rebuilt as live demos.
       </p>
+
+      <AdsterraBanner />
 
       <div className="mt-10 grid gap-3 sm:grid-cols-2">
         {inspirationEntries.map((entry) => (

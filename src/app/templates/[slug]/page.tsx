@@ -7,6 +7,7 @@ import { getProTemplateCatalog } from "@/lib/pro-catalog";
 import { ProBadge } from "@/components/pro/pro-badge";
 import { ProTemplate } from "@/components/pro/pro-template";
 import { TemplateDemo, hasTemplateDemo } from "@/components/templates/template-demo";
+import { AdsterraBanner } from "@/components/ads/adsterra-banner";
 
 export function generateStaticParams() {
   return templates.filter((t) => t.status === "published").map((t) => ({ slug: t.slug }));
@@ -131,6 +132,8 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
           </li>
         </ol>
       </section>
+
+      <AdsterraBanner />
     </div>
   );
 }
