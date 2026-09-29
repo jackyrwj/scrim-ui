@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { OutboundLink } from "./outbound-link";
 import { ScrimBadge } from "./scrim-mark";
 
 const browseLinks = [
@@ -95,6 +96,13 @@ export function SiteFooter() {
             <Link href="/privacy" className="transition-colors hover:text-(--foreground)">
               Privacy
             </Link>
+            <OutboundLink
+              href="https://github.com/jackyrwj/scrim-ui/issues"
+              item="feedback"
+              className="transition-colors hover:text-(--foreground)"
+            >
+              Feedback <span className="text-[10px]">↗</span>
+            </OutboundLink>
           </p>
           <a
             href="#"

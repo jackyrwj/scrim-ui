@@ -90,14 +90,14 @@ export default function Home() {
         {/* The media strip deliberately escapes the prose container. Templates
             are visual proof, so they bleed to both viewport edges while the
             heading and controls keep the page's normal content margins. */}
-        <div className="relative mt-8 pb-10 sm:mt-10 sm:pb-16">
+        <div className="relative mt-8 pb-4 sm:mt-10 sm:pb-6">
           <HeroTemplateCarousel />
         </div>
       </section>
 
       {/* Tools */}
       <section className="bg-(--muted)/30">
-        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 py-12 sm:px-6 sm:py-14">
+        <AnimateOnScroll className="mx-auto max-w-[1536px] px-4 pt-8 pb-12 sm:px-6 sm:pt-10 sm:pb-14">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
             <div>
               <h2 className="display-title text-2xl font-semibold tracking-tight sm:text-3xl">Tools</h2>

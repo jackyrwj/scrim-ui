@@ -42,6 +42,12 @@ export default function PrivacyPage() {
           recorded because a search that returns nothing is the clearest possible signal about a
           page that ought to exist.
         </p>
+        <p>
+          The site also uses Microsoft Clarity, a free analytics service that records anonymous
+          sessions — where people click, scroll, and stop — as heatmaps and session playback.
+          Recordings are not tied to an identity, and anything typed into a text field is masked
+          before it is captured, so the tools on this site stay between you and your browser.
+        </p>
       </Section>
 
       <Section title="Advertising">
@@ -71,7 +77,9 @@ export default function PrivacyPage() {
         <p>
           Google Analytics sets a cookie (<code className="text-(--foreground)">_ga</code>) that
           distinguishes a returning visitor from a new one. It holds a random identifier, not
-          anything about you. Adsterra and its advertising partners may set cookies or similar
+          anything about you. Microsoft Clarity sets its own cookie (
+          <code className="text-(--foreground)">_clck</code>) for the same purpose — stitching a
+          session together. Adsterra and its advertising partners may set cookies or similar
           identifiers when an advertising placement loads. Your theme preference is also stored in
           your browser, which is what keeps the site dark if you asked for dark.
         </p>
