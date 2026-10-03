@@ -17,7 +17,7 @@ export function PreviewFrame({
           {action}
         </div>
       )}
-      <div className="flex items-center justify-center bg-(--muted)/50 px-4 py-10 sm:px-8">
+      <div className="flex items-center justify-center bg-(--stage) px-4 py-10 sm:px-8">
         <div className="w-full max-w-xl">{children}</div>
       </div>
     </div>

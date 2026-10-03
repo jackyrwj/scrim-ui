@@ -8,82 +8,61 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 :root {
+  color-scheme: light;
   --background: #ffffff;
-  --foreground: #09090b;
-  --muted: #f4f4f5;
-  /* Darkened from #71717a (zinc-500), which measured 4.39:1 against --muted
-     and so failed WCAG AA on the 11px chips and captions that use this pair
-     all over the site. This value clears the 4.5 floor on every background it
-     actually lands on: 4.80 on --muted, 5.01 on --muted/50, 5.28 on white.
-     Dark mode was never in violation (#a1a1aa on --muted is 6.91) and is
-     unchanged. Re-measure with scripts/contrast.mjs before touching either. */
-  --muted-foreground: #6b6b74;
-  --border: #e4e4e7;
+  --foreground: #1a1a1a;
+  --muted: #f4f5f7;
+  --muted-foreground: #666970;
+  --border: #e6e8ec;
   --card: #ffffff;
-  --accent: #18181b;
-  --accent-foreground: #fafafa;
-
-  --primary: #7c3aed;
+  --stage: #fafafa;
+  --accent: #0b0d12;
+  --accent-foreground: #ffffff;
+  --primary: #0b0d12;
   --primary-foreground: #ffffff;
-  --primary-hover: #6d28d9;
-  --primary-muted: #ede9fe;
-  --primary-muted-foreground: #6d28d9;
-
-  --display-top: #18181b;
-  --display-bottom: #52525b;
-  --display-shadow: 0 1px 2px rgb(0 0 0 / 0.14);
-
-  --gradient-primary: linear-gradient(135deg, #7c3aed, #2563eb);
-  --gradient-subtle: linear-gradient(135deg, var(--muted), var(--background));
-  --gradient-glow: radial-gradient(ellipse at 50% 0%, var(--primary-muted) 0%, transparent 60%);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
-  --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.15);
-
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --primary-hover: #2a2f3a;
+  --primary-muted: #f0f1f3;
+  --primary-muted-foreground: #34373e;
+  --gradient-primary: linear-gradient(135deg, #0b0d12, #34373e);
+  --gradient-subtle: linear-gradient(135deg, var(--stage), var(--background));
+  --gradient-glow: none;
+  --shadow-sm: 0 1px 2px rgb(13 18 28 / 0.04);
+  --shadow-md: 0 6px 24px -8px rgb(13 18 28 / 0.12);
+  --shadow-lg: 0 24px 60px -20px rgb(13 18 28 / 0.18);
+  --shadow-glow: 0 0 0 1px var(--border);
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 150ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
-  --duration-entrance: 600ms;
+  --duration-normal: 200ms;
+  --duration-slow: 280ms;
+  --duration-entrance: 400ms;
 }
 
 .dark {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-  --border: #27272a;
-  --card: #111113;
-  --accent: #fafafa;
-  --accent-foreground: #18181b;
-
-  --primary: #a78bfa;
-  --primary-foreground: #09090b;
-  --primary-hover: #8b5cf6;
-  --primary-muted: #2e1065;
-  --primary-muted-foreground: #a78bfa;
-
-  --display-top: #ffffff;
-  --display-bottom: #8b8b95;
-  --display-shadow: 0 2px 6px rgb(0 0 0 / 0.55);
-
-  --gradient-primary: linear-gradient(135deg, #a78bfa, #60a5fa);
-  /* Dialled back from 0.5. The etched title reads as a solid object now,
-     and a heavy violet wash behind it turned the whole hero purple. */
-  --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(46, 16, 101, 0.3) 0%, transparent 60%);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(167, 139, 250, 0.2);
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --muted: #242424;
+  --muted-foreground: #a3a3a3;
+  --border: #303030;
+  --card: #141414;
+  --stage: #101010;
+  --accent: #f5f5f5;
+  --accent-foreground: #0a0a0a;
+  --primary: #f5f5f5;
+  --primary-foreground: #0a0a0a;
+  --primary-hover: #d4d4d4;
+  --primary-muted: #242424;
+  --primary-muted-foreground: #d4d4d4;
+  --gradient-primary: linear-gradient(135deg, #f5f5f5, #a3a3a3);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 6px 24px -8px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 24px 60px -20px rgb(0 0 0 / 0.5);
 }
 
 /* <BrandIcon tone="brand"> ships both appearances of a brand color as custom
@@ -106,6 +85,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
@@ -120,22 +100,28 @@ body {
   animation-play-state: paused !important;
 }
 
-/* --- The display title ---------------------------------------------
-   The hero h1, treated as an object with a light on it rather than as
-   coloured text: a vertical gradient down the glyphs and a shadow a
-   pixel below, which together read as type pressed into the page.
-
-   The gradient is clipped to the glyphs, so the fill is transparent and
-   what you actually see at every letter edge is the shadow. That is the
-   whole trick, and it is why the shadow has to be tuned per theme: on
-   white a dark shadow below is a cast shadow, on near-black it would be
-   invisible, so dark mode lights from above and leans on the gradient
-   falling away instead.
-
-   Purple was the previous treatment, animated on a loop. It made the
-   site name compete with the tool tour underneath it, which is the part
-   worth looking at. */
+/* Shared site typography and surfaces. Demo components keep their own styles. */
 .display-title {
+  color: var(--foreground);
+  text-wrap: balance;
+}
+
+/* Preserve the original homepage hero without changing other page headings. */
+.home-hero {
+  --display-top: #18181b;
+  --display-bottom: #52525b;
+  --display-shadow: 0 1px 2px rgb(0 0 0 / 0.14);
+  --gradient-glow: radial-gradient(ellipse at 50% 0%, #ede9fe 0%, transparent 60%);
+}
+
+.dark .home-hero {
+  --display-top: #ffffff;
+  --display-bottom: #8b8b95;
+  --display-shadow: 0 2px 6px rgb(0 0 0 / 0.55);
+  --gradient-glow: radial-gradient(ellipse at 50% 0%, rgba(46, 16, 101, 0.3) 0%, transparent 60%);
+}
+
+.home-hero .display-title--hero {
   background-image: linear-gradient(to bottom, var(--display-top) 0%, var(--display-bottom) 64%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -144,11 +130,140 @@ body {
   text-shadow: var(--display-shadow);
 }
 
-/* Keep the hero headline inside its own box so the clipped text gradient
-   covers every glyph. The copy is allowed to balance across lines instead
-   of relying on a nowrap rule coupled to one exact sentence. */
-.display-title--hero {
+.site-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.detail-page {
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+  padding: 48px 40px 96px;
+}
+
+.catalog-page,
+.catalog-content > :is(.site-container, .detail-page) {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding: 40px 20px 96px;
+}
+
+@media (min-width: 640px) {
+  .catalog-page,
+  .catalog-content > :is(.site-container, .detail-page) {
+    padding-inline: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .catalog-page,
+  .catalog-content > :is(.site-container, .detail-page) {
+    padding-inline: 40px;
+  }
+}
+
+.detail-page > h1,
+.detail-page > header h1 {
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
   text-wrap: balance;
+}
+
+.detail-page > section {
+  scroll-margin-top: 80px;
+}
+
+.gallery-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--card);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.gallery-card:hover {
+  border-color: color-mix(in srgb, var(--foreground) 25%, var(--border));
+  box-shadow: var(--shadow-md);
+}
+
+.gallery-card .cp {
+  aspect-ratio: auto;
+  height: 240px;
+  background: var(--stage);
+  border-bottom: 0;
+}
+
+.aicss-card-stage {
+  display: flex;
+  height: 240px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--stage);
+  padding: 28px 20px;
+  container-type: inline-size;
+}
+
+.aicss-card-demo {
+  width: 340px;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+/* The scoped preview owns both sets of variables, even inside a dark site. */
+.preview-surface[data-theme="light"] {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --muted: #f4f5f7;
+  --muted-foreground: #666970;
+  --border: #e6e8ec;
+  --card: #ffffff;
+  --stage: #fafafa;
+  --primary: #0b0d12;
+  --primary-foreground: #ffffff;
+  --primary-muted: #f0f1f3;
+  --primary-muted-foreground: #34373e;
+  background: var(--stage);
+  color: var(--foreground);
+}
+
+.preview-surface[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #f5f5f5;
+  --muted: #242424;
+  --muted-foreground: #a3a3a3;
+  --border: #303030;
+  --card: #141414;
+  --stage: #101010;
+  --primary: #f5f5f5;
+  --primary-foreground: #0a0a0a;
+  --primary-muted: #242424;
+  --primary-muted-foreground: #d4d4d4;
+  background: var(--stage);
+  color: var(--foreground);
+}
+
+@media (max-width: 639px) {
+  .site-container { padding-inline: 20px; }
+  .detail-page { padding: 32px 20px 64px; }
+  .detail-page :is(input, textarea, select) { font-size: 16px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .aicss-card-demo *, .preview-surface * { animation: none !important; }
 }
 
 @keyframes shimmer {

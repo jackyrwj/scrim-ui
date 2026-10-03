@@ -45,7 +45,7 @@ export default async function ProPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
       <div className="text-center">
-        <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+        <h1 className="text-5xl font-medium tracking-[-0.04em] sm:text-6xl">
           Unlock all access
         </h1>
         <p className="mx-auto mt-5 max-w-2xl text-balance text-lg text-(--muted-foreground)">
@@ -62,7 +62,7 @@ export default async function ProPage() {
           and the list below is the justification, not the gate. */}
       <div className="mt-14 grid gap-x-5 md:grid-cols-2">
         {/* ---------------------------------------------------------- Free */}
-        <div className="row-span-4 grid grid-rows-subgrid rounded-2xl border border-(--border) p-7">
+        <div className="row-span-4 grid grid-rows-subgrid rounded-xl border border-(--border) p-7">
           <div className="border-b border-(--border) pb-5">
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-semibold">{FREE_PLAN.name}</h2>
@@ -77,7 +77,7 @@ export default async function ProPage() {
 
           <Link
             href="/components"
-            className="mt-6 flex h-11 w-full items-center justify-center rounded-xl border border-(--border) text-sm font-semibold transition-colors hover:bg-(--muted)"
+            className="mt-6 flex h-11 w-full items-center justify-center rounded-full border border-(--border) text-sm font-semibold transition-colors hover:bg-(--muted)"
           >
             Browse the components
           </Link>
@@ -94,7 +94,7 @@ export default async function ProPage() {
 
         {/* ----------------------------------------------------------- Pro */}
         <div
-          className="row-span-4 grid grid-rows-subgrid rounded-2xl border border-(--primary)/30 bg-(--card) p-7 max-md:mt-5"
+          className="row-span-4 grid grid-rows-subgrid rounded-xl border border-(--primary)/30 bg-(--card) p-7 max-md:mt-5"
           style={{ boxShadow: "var(--shadow-md)" }}
         >
           <div className="border-b border-(--primary)/20 pb-5">
@@ -113,20 +113,20 @@ export default async function ProPage() {
           {hasPro ? (
             <Link
               href="/dashboard"
-              className="mt-6 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
+              className="mt-6 flex h-11 w-full items-center justify-center rounded-full bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
             >
               Open dashboard
             </Link>
           ) : !viewer && authReady ? (
             <Link
               href="/sign-in"
-              className="mt-6 flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
+              className="mt-6 flex h-11 w-full items-center justify-center rounded-full bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90"
             >
               Sign in to get Pro
             </Link>
           ) : checkoutReady ? (
             <form action="/api/checkout/session" method="post" className="mt-6">
-              <button className="flex h-11 w-full items-center justify-center rounded-xl bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90">
+              <button className="flex h-11 w-full items-center justify-center rounded-full bg-(--accent) text-sm font-semibold text-(--accent-foreground) transition-opacity hover:opacity-90">
                 Get Pro — {PRO_PRICE}
               </button>
             </form>
@@ -153,7 +153,7 @@ export default async function ProPage() {
           not as site navigation. */}
       {(publishedTemplates.length > 0 || proComponents.length > 0) && (
         <div
-          className="mt-12 rounded-2xl border border-(--primary)/30 bg-(--card) p-7"
+          className="mt-12 rounded-xl border border-(--primary)/30 bg-(--card) p-7"
           style={{ boxShadow: "var(--shadow-md)" }}
         >
           <div className="flex flex-wrap items-baseline justify-between gap-3">

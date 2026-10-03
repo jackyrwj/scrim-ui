@@ -8,6 +8,7 @@ import { patternConfigs } from "@/showcase/patterns/registry";
 import { patternIconFor } from "@/lib/icons";
 import { PatternPreview } from "@/components/site/pattern-preview";
 import { AdsterraBanner } from "@/components/ads/adsterra-banner";
+import { CatalogHeader } from "@/components/site/catalog-header";
 
 export const metadata: Metadata = {
   title: "Complete AI Interface Patterns",
@@ -45,8 +46,8 @@ function PatternCard({ slug, featured }: { slug: string; featured: boolean }) {
   return (
     <Link
       href={`/patterns/${slug}`}
-      className={`group flex flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-all hover:-translate-y-0.5 hover:border-(--primary)/30 ${
-        featured ? "sm:col-span-2 lg:col-span-3" : "lg:col-span-2"
+      className={`group flex flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-[border-color,box-shadow] hover:border-(--foreground)/25 hover:shadow-sm ${
+        featured ? "sm:col-span-2 xl:col-span-3" : "xl:col-span-2"
       }`}
       style={{ boxShadow: "var(--shadow-sm)" }}
     >
@@ -105,20 +106,15 @@ function PatternCard({ slug, featured }: { slug: string; featured: boolean }) {
 
 export default function PatternsPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <header className="max-w-2xl">
-        <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          Patterns
-        </h1>
-        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+    <div className="catalog-page">
+      <CatalogHeader eyebrow="The pattern library" title="Patterns">
           Start from a complete AI screen, then remix it. Each of the {patterns.length} patterns
           ships as one React + Tailwind file built from this library&rsquo;s components.
-        </p>
-      </header>
+      </CatalogHeader>
 
       <AdsterraBanner />
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mt-12 grid gap-5 sm:grid-cols-2 xl:grid-cols-6">
         {patterns.map((p, i) => (
           <PatternCard key={p.slug} slug={p.slug} featured={i < 2} />
         ))}

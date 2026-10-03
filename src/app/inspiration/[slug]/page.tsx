@@ -46,7 +46,7 @@ export default async function InspirationArticlePage({ params }: Props) {
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-14 sm:px-6">
+    <div className="detail-page">
       <JsonLd data={articleSchema(entry)} />
 
       {/* Breadcrumb */}
@@ -64,7 +64,7 @@ export default async function InspirationArticlePage({ params }: Props) {
             Decision guide
           </span>
         )}
-        <h1 className="mt-1 flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="mt-1 flex items-center gap-3 text-3xl font-medium tracking-tight sm:text-4xl">
           {entry.product ? (
             <>
               <BrandIcon name={entry.product} size={32} />

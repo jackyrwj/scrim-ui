@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ClerkProvider, GoogleOneTap } from "@clerk/nextjs";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site/header";
 import { PreviewMotion } from "@/components/site/preview-motion";
@@ -9,7 +9,7 @@ import { GoogleAnalytics } from "@/components/site/google-analytics";
 import { MicrosoftClarity } from "@/components/site/ms-clarity";
 import { SITE_URL as BASE_URL, SITE_NAME } from "@/lib/site";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -82,6 +82,9 @@ const themeScript = `
     var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     if (stored === "dark" || (!stored && prefersDark)) {
       document.documentElement.classList.add("dark");
+      document.documentElement.dataset.theme = "dark";
+    } else {
+      document.documentElement.dataset.theme = "light";
     }
   } catch (e) {}
 })();
@@ -95,9 +98,10 @@ export default function RootLayout({
   );
   const content = (
     <>
+      <a href="#main-content" className="fixed top-2 left-4 z-[100] -translate-y-20 rounded-full bg-(--foreground) px-4 py-2 text-sm text-(--background) focus:translate-y-0">Skip to content</a>
       <PreviewMotion />
       <SiteHeader />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
       <SiteFooter />
     </>
   );
@@ -120,7 +124,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <MicrosoftClarity />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
+      <body className={`${inter.variable} ${geistMono.variable} min-h-screen flex flex-col`}>
         {accountAuthConfigured ? (
           <ClerkProvider afterSignOutUrl="/">
             <GoogleOneTap />

@@ -4,6 +4,7 @@ import { templates } from "@/lib/templates";
 import { ProRibbon } from "@/components/pro/pro-badge";
 import { TemplateCardDemo } from "@/components/templates/template-card-demo";
 import { AdsterraBanner } from "@/components/ads/adsterra-banner";
+import { CatalogHeader } from "@/components/site/catalog-header";
 
 export const metadata: Metadata = {
   title: "Production-ready AI App Templates",
@@ -15,16 +16,11 @@ export default function TemplatesPage() {
   const published = templates.filter((t) => t.status === "published");
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <header className="max-w-2xl">
-        <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          Templates
-        </h1>
-        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+    <div className="catalog-page">
+      <CatalogHeader eyebrow="The app templates" title="Templates">
           Start with a working Next.js app where streaming, tools, reasoning, model switching,
           and persistence are already wired together.
-        </p>
-      </header>
+      </CatalogHeader>
 
       <AdsterraBanner />
 
@@ -35,11 +31,11 @@ export default function TemplatesPage() {
           overlay link; the demo band sits above it with pointer-events
           only on its live controls (see .tcd in globals.css), so clicking
           anywhere still opens the template while the replay's buttons work. */}
-      <div className="mt-12 grid gap-6 lg:grid-cols-2">
+      <div className="mt-12 grid gap-5 sm:grid-cols-2">
         {published.map((t) => (
           <article
             key={t.slug}
-            className="group relative flex flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--card) transition-all hover:-translate-y-0.5 hover:border-(--primary)/30"
+            className="group relative flex flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--card) transition-[border-color,box-shadow] hover:border-(--foreground)/25 hover:shadow-sm"
             style={{ boxShadow: "var(--shadow-sm)" }}
           >
             {t.tier === "pro" && <ProRibbon />}

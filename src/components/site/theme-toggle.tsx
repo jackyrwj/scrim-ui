@@ -17,6 +17,7 @@ export function ThemeToggle() {
     const next = !(dark ?? document.documentElement.classList.contains("dark"));
     setDark(next);
     document.documentElement.classList.toggle("dark", next);
+    document.documentElement.dataset.theme = next ? "dark" : "light";
     try {
       localStorage.setItem("theme", next ? "dark" : "light");
     } catch {}
@@ -26,7 +27,7 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       aria-label="Toggle dark mode"
-      className="flex h-8 w-8 items-center justify-center rounded-md border border-(--border) text-(--muted-foreground) transition-colors hover:text-(--foreground)"
+      className="flex h-8 w-8 items-center justify-center rounded-full bg-(--primary-muted) text-(--muted-foreground) transition-colors hover:text-(--foreground)"
     >
       {dark ? (
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

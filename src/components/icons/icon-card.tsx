@@ -93,7 +93,7 @@ export function IconCard({
     "relative z-10 rounded-md px-2 py-1 text-[11px] font-medium text-(--muted-foreground) transition-colors hover:bg-(--muted) hover:text-(--foreground) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)";
 
   return (
-    <div className="group relative flex flex-col gap-3 rounded-xl border border-(--border) bg-(--card) p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40">
+    <div className="group relative flex flex-col gap-3 rounded-xl border border-(--border) bg-(--card) p-4 transition-[border-color,background-color,box-shadow] duration-150 hover:border-(--foreground)/25">
       <div className="flex items-start gap-3">
         <span
           ref={holderRef}

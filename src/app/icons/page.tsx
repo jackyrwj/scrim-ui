@@ -4,6 +4,7 @@ import { iconGuide, iconSlug } from "@/lib/icon-guide";
 import { categoryIconFor } from "@/lib/icons";
 import { categories, components } from "@/lib/registry";
 import { IconCard } from "@/components/icons/icon-card";
+import { CatalogHeader } from "@/components/site/catalog-header";
 
 export const metadata: Metadata = {
   title: "Icon Guide for AI Interfaces",
@@ -15,36 +16,31 @@ const nameOf = (slug: string) => components.find((c) => c.slug === slug)?.name ?
 
 export default function IconsPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-      <header className="max-w-2xl">
-        <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
-          Icons
-        </h1>
-        <p className="mt-3 text-balance text-lg text-(--muted-foreground)">
+    <div className="catalog-page">
+      <CatalogHeader eyebrow="The icon guide" title="Icons">
           Find the right Lucide icon for each AI concept, then copy it as SVG, JSX, or a
           component file. {iconGuide.length} concepts are mapped and ready to use.
-        </p>
-      </header>
+      </CatalogHeader>
 
-      <div className="mt-12 space-y-10">
+      <div className="mt-12 space-y-14">
         {categories.map((cat) => {
           const items = iconGuide.filter((e) => e.category === cat.slug);
           if (items.length === 0) return null;
           return (
-            <section key={cat.slug}>
-              <div className="mb-3 flex items-center gap-2">
+            <section key={cat.slug} id={cat.slug} className="scroll-mt-24">
+              <div className="mb-5 flex items-center gap-2">
                 {createElement(categoryIconFor(cat.slug), {
                   size: 15,
                   strokeWidth: 1.75,
                   "aria-hidden": true,
                   className: "text-(--primary)",
                 })}
-                <h2 className="text-sm font-semibold tracking-tight">{cat.name}</h2>
+                <h2 className="text-base font-medium tracking-[-0.01em]">{cat.name}</h2>
                 <span className="text-xs tabular-nums text-(--muted-foreground)">
                   {items.length}
                 </span>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                 {items.map((e) => (
                   <IconCard
                     key={e.concept}

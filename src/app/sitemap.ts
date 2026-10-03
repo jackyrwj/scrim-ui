@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 import { components, categories, patterns } from "@/lib/registry";
+import { aicssComponents } from "@/lib/aicss-catalog";
+import { recreatedComponents } from "@/lib/recreated-catalog";
 import { inspirationEntries } from "@/lib/inspiration";
 import { publishedTools } from "@/lib/tools";
 import { publishedTemplates } from "@/lib/templates";
@@ -62,6 +64,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const aicssPages: MetadataRoute.Sitemap = aicssComponents.map((component) => ({
+    url: `${BASE_URL}/components/${component.slug}`,
+    lastModified: lastModified(`src/aicss-source/react/${component.sourceSlug}`, now),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+  const recreatedPages: MetadataRoute.Sitemap = recreatedComponents.map((component) => ({
+    url: `${BASE_URL}/components/${component.slug}`,
+    lastModified: lastModified(`src/recreated-components/${component.sourceFile}`, now),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
   const categoryPages: MetadataRoute.Sitemap = categories.map((c) => ({
     url: `${BASE_URL}/categories/${c.slug}`,
     lastModified: lastModified("src/lib/registry.ts", now),
@@ -114,5 +129,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...templatePages,
     ...iconPages,
-    ...resourceCategoryPages,...staticPages, ...toolPages, ...componentPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
+    ...resourceCategoryPages,...staticPages, ...toolPages, ...componentPages, ...aicssPages, ...recreatedPages, ...categoryPages, ...patternPages, ...inspirationPages, ...resourcePages];
 }

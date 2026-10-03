@@ -91,11 +91,11 @@ export function TokenCounter() {
   ];
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <div className="detail-page">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
             Prompt Token Counter
           </h1>
           <p className="mt-1.5 text-sm text-(--muted-foreground)">

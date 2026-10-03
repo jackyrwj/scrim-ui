@@ -39,8 +39,18 @@ The [model switcher](https://scrimui.dev/tools/model-switcher) groups models by 
 npx shadcn@latest add https://scrimui.dev/r/prompt-input.json
 ```
 
-All 29 components are in the registry; the index is at
+All 55 Scrim UI components are in the registry; the index is at
 [`/r/registry.json`](https://scrimui.dev/r/registry.json).
+
+The Components catalog also includes 13 public AICSS React, Vue and Svelte
+components within the existing categories. Each has a live React preview and
+individual source files. AICSS source uses its own format and is not in the
+Scrim UI shadcn registry.
+
+Five additional interfaces (AI Agent Input, Approval Card, Audio Waves, Image
+Generation State, and Agent Task List) are original Scrim UI React + Tailwind
+implementations of the patterns visible on the AICSS site. They are not the
+original AICSS Pro source and do not include Vue or Svelte versions.
 
 Or skip the CLI entirely — every free component page has the full MIT source
 and a copy button. Pro implementations are built in a separate private

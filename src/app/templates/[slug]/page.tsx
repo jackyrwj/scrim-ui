@@ -35,14 +35,14 @@ export default async function TemplatePage({ params }: { params: Promise<{ slug:
   const components = entry.componentSlugs.map(getComponent).filter((c) => c !== undefined);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div className="detail-page">
       <nav className="mb-6 text-sm text-(--muted-foreground)">
         <Link href="/templates" className="hover:text-(--foreground)">Templates</Link>
         <span className="mx-2">/</span>
         <span className="text-(--foreground)">{entry.name}</span>
       </nav>
 
-      <h1 className="flex flex-wrap items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+      <h1 className="flex flex-wrap items-center gap-3 text-3xl font-medium tracking-tight sm:text-4xl">
         {entry.name} Template
         {entry.tier === "pro" && <ProBadge className="translate-y-1" />}
       </h1>

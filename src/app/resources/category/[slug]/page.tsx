@@ -58,7 +58,7 @@ export default async function ResourceCategoryPage({
   const others = resourceCategories.filter((c) => c.slug !== slug);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div className="site-container py-14 sm:py-16">
       <nav
         aria-label="Breadcrumb"
         className="flex items-center gap-1.5 text-sm text-(--muted-foreground)"
@@ -71,7 +71,7 @@ export default async function ResourceCategoryPage({
       </nav>
 
       <header className="mt-6 max-w-2xl">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">
           {entries.length} {category.name}
         </h1>
         <p className="mt-3 text-pretty text-lg text-(--muted-foreground)">{category.description}</p>
@@ -81,7 +81,7 @@ export default async function ResourceCategoryPage({
         </p>
       </header>
 
-      <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {entries.map((entry) => (
           <div key={entry.url} className="grid">
             <ResourceCard entry={entry} preview={previewPath(resourceSlug(entry.name))} />

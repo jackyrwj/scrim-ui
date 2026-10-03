@@ -43,7 +43,7 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div className="detail-page">
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-sm text-(--muted-foreground)">
         <Link href="/icons" className="transition-colors hover:text-(--foreground)">
           Icons
@@ -67,7 +67,7 @@ export default async function IconPage({ params }: { params: Promise<{ slug: str
 
       <header className="mt-6">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.concept}</h1>
+          <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">{entry.concept}</h1>
           {/* Full foreground, not muted: this is the name you copy. */}
           <code className="rounded-md bg-(--muted) px-2 py-1 font-mono text-xs text-(--foreground)">
             {name}

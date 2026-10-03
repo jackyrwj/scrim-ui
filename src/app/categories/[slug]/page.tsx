@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { categories, components, patterns, getCategory } from "@/lib/registry";
+import { aicssComponents } from "@/lib/aicss-catalog";
+import { recreatedComponents } from "@/lib/recreated-catalog";
 
 export function generateStaticParams() {
   return categories.map((c) => ({ slug: c.slug }));
@@ -24,13 +26,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   if (!cat) notFound();
 
   const published = components.filter((c) => c.category === cat.slug && c.status === "published");
+  const aicssPublished = aicssComponents.filter((c) => c.category === cat.slug);
+  const recreatedPublished = recreatedComponents.filter((c) => c.category === cat.slug);
   const planned = components.filter((c) => c.category === cat.slug && c.status === "planned");
   const relatedPatterns = patterns.filter((p) =>
     p.elements.some((el) => published.some((c) => c.slug === el)),
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div className="site-container py-14 sm:py-16">
       {/* Breadcrumb */}
       <nav className="mb-6 text-sm text-(--muted-foreground)">
         <Link href="/categories" className="hover:text-(--foreground)">Categories</Link>
@@ -38,7 +42,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         <span className="text-(--foreground)">{cat.name}</span>
       </nav>
 
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{cat.name}</h1>
+      <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">{cat.name}</h1>
       <p className="mt-3 max-w-2xl text-pretty text-lg text-(--muted-foreground)">{cat.description}</p>
 
       {/* Published components */}
@@ -46,11 +50,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         <div className="flex items-end justify-between">
           <h2 className="text-xl font-semibold tracking-tight">Components</h2>
           <span className="text-sm text-(--muted-foreground)">
-            {published.length} {published.length === 1 ? "component" : "components"} available
+            {published.length + aicssPublished.length + recreatedPublished.length} {published.length + aicssPublished.length + recreatedPublished.length === 1 ? "component" : "components"} available
           </span>
         </div>
 
-        {published.length > 0 ? (
+        {published.length + aicssPublished.length + recreatedPublished.length > 0 ? (
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {published.map((c) => (
               <Link
@@ -64,6 +68,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 </p>
               </Link>
             ))}
+            {aicssPublished.map((c) => (
+              <Link key={c.slug} href={`/components/${c.slug}`} className="group rounded-xl border border-(--border) p-5 transition-colors hover:bg-(--muted)/60">
+                <span className="font-medium group-hover:underline">{c.slug === "aicss-message-actions" ? "Message Actions (AICSS)" : c.name}</span>
+                <p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">{c.description}</p>
+              </Link>
+            ))}
+            {recreatedPublished.map((c) => <Link key={c.slug} href={`/components/${c.slug}`} className="group rounded-xl border border-(--border) p-5 transition-colors hover:bg-(--muted)/60"><span className="font-medium group-hover:underline">{c.name}</span><p className="mt-1.5 line-clamp-2 text-sm text-(--muted-foreground)">{c.description}</p></Link>)}
           </div>
         ) : (
           <div className="mt-5 rounded-xl border border-dashed border-(--border) p-10 text-center">

@@ -79,7 +79,7 @@ export default async function ResourceDetailPage({ params }: Props) {
   const host = resourceHost(entry.url);
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div className="detail-page">
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-(--muted-foreground)">
         <Link href="/resources" className="transition-colors hover:text-(--foreground)">
@@ -102,7 +102,7 @@ export default async function ResourceDetailPage({ params }: Props) {
           <BrandIcon name={entry.name} size={32} />
         </div>
         <div className="min-w-0">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name}</h1>
+          <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">{entry.name}</h1>
           <p className="mt-3 text-pretty text-lg leading-7 text-(--muted-foreground)">
             {entry.description}
           </p>

@@ -18,7 +18,7 @@ import { hasToolCardDemo } from "@/components/tools/card-demos/slugs";
 export function ToolCard({ tool }: { tool: Tool }) {
   if (tool.status !== "published") {
     return (
-      <div className="flex h-full flex-col rounded-2xl border border-dashed border-(--border) p-5 opacity-70">
+      <div className="flex h-full flex-col rounded-xl border border-dashed border-(--border) p-5 opacity-70">
         <div className="flex items-center justify-between gap-2">
           <span className="font-semibold">{tool.name}</span>
           <span className="shrink-0 rounded-full bg-(--muted) px-2 py-0.5 text-[11px] text-(--muted-foreground)">
@@ -35,7 +35,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
       href={`/tools/${tool.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-1 hover:border-(--primary)/40"
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-(--border) bg-(--card) transition-[border-color,box-shadow] duration-150 hover:border-(--foreground)/25 hover:shadow-sm"
       style={{ boxShadow: "var(--shadow-sm)" }}
     >
       {hasToolCardDemo(tool.slug) ? (
@@ -45,9 +45,9 @@ export function ToolCard({ tool }: { tool: Tool }) {
       )}
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2">
-          <span className="font-semibold group-hover:underline">{toolLabel(tool)}</span>
+          <span className="font-medium group-hover:underline">{toolLabel(tool)}</span>
           {tool.isNew && (
-            <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[11px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
+            <span className="rounded-full bg-(--primary-muted) px-2 py-0.5 text-[11px] font-medium text-(--primary-muted-foreground)">
               New
             </span>
           )}

@@ -29,8 +29,7 @@ import { CodeCopyButton } from "./code-copy-button";
  *
  * Now: a Preview/Usage tab strip over the stage, one column down the side
  * holding presets (the old variants) above the props they set, and the agent
- * prompt as a separate disclosure above the card, right under the install
- * command — the same module patterns use. Every edit regenerates preview,
+ * prompt as a separate disclosure below the preview. Every edit regenerates preview,
  * snippet and prompt together. Copy takes exactly what is on screen.
  *
  * Not a code *editor*. Sandpack or react-live would let the reader type real
@@ -110,20 +109,10 @@ export function ComponentExplorer({
 
   return (
     <div className="space-y-3">
-      {/* The prompt as its own module, the way patterns present it, rather
-          than a third tab — sitting directly under the install command. It
-          still lives inside this client component because it follows the
-          controls; a separate island could not see them. Collapsed by
-          default: forty lines addressed to a machine should not stand
-          between the reader and the preview. */}
-      <AgentPromptCard
-        prompt={prompt}
-        hint="Follows the props below — change a control and the prompt changes with it, so an agent reproduces that configuration instead of the defaults."
-      />
       <div className="overflow-hidden rounded-xl border border-(--border)">
-      <div className="grid lg:grid-cols-[1fr_260px]">
+      <div className="grid xl:grid-cols-[1fr_220px]">
         {/* Stage */}
-        <div className="min-w-0 border-(--border) lg:border-r">
+        <div className="min-w-0 border-(--border) xl:border-r">
           <div className="flex items-center gap-1 border-b border-(--border) px-3 py-2">
             {/* "Usage", not "Code": the page carries two code surfaces and
                 they answer different questions. This one is the call site —
@@ -149,7 +138,7 @@ export function ComponentExplorer({
           </div>
 
           {tab === "preview" ? (
-            <div className="flex min-h-[300px] items-center justify-center bg-(--muted)/30 px-4 py-8 sm:px-6">
+            <div className="flex min-h-[300px] items-center justify-center bg-(--stage) px-4 py-12 sm:px-6">
               <div className="w-full max-w-xl">{render(values, remountKey)}</div>
             </div>
           ) : (
@@ -253,12 +242,16 @@ export function ComponentExplorer({
         </div>
       </div>
       </div>
+      <AgentPromptCard
+        prompt={prompt}
+        hint="Follows the props below — change a control and the prompt changes with it, so an agent reproduces that configuration instead of the defaults."
+      />
     </div>
   );
 }
 
 const inputCls =
-  "w-full rounded-lg border border-(--border) bg-(--background) px-2.5 py-1.5 text-xs outline-none transition-colors focus:border-(--foreground)";
+  "w-full rounded-lg border border-(--border) bg-(--background) px-2.5 py-1.5 text-base sm:text-xs outline-none transition-colors focus:border-(--foreground)";
 
 function Control({
   def,

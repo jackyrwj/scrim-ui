@@ -43,7 +43,7 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
   const source = readPatternSource(slug, config.sourceFile);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+    <div className="detail-page">
       {/* Header */}
       <nav className="mb-6 text-sm text-(--muted-foreground)">
         <Link href="/patterns" className="hover:text-(--foreground)">Patterns</Link>
@@ -57,7 +57,7 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
           "aria-hidden": true,
           className: "shrink-0 text-(--primary)",
         })}
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{entry.name}</h1>
+        <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">{entry.name}</h1>
       </div>
       <p className="mt-3 max-w-4xl text-pretty text-lg text-(--muted-foreground)">
         {entry.description}

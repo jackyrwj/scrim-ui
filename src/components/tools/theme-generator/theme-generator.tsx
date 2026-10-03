@@ -31,11 +31,11 @@ export function ThemeGenerator() {
   const schemeEntries = Object.entries(scheme) as [keyof ColorScheme, string][];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <div className="site-container py-12 sm:py-14">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-4xl">
             AI Chat Theme Generator
           </h1>
           <p className="mt-1.5 max-w-xl text-sm text-(--muted-foreground)">

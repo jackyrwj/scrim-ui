@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
      Next blocks its HMR and client chunks for non-localhost origins unless
      the host is listed explicitly; without them the server HTML appears but
      every client interaction and scroll reveal stays frozen. */
-  allowedDevOrigins: ["192.168.2.1", "192.168.31.39"],
+  allowedDevOrigins: ["127.0.0.1", "192.168.2.1", "192.168.31.39"],
 
   /* Both of these read component source with fs at REQUEST time, and Next's
      tracer cannot see through a dynamic path — without this the files are

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { categories, components } from "@/lib/registry";
+import { aicssComponents } from "@/lib/aicss-catalog";
+import { recreatedComponents } from "@/lib/recreated-catalog";
 
 export const metadata: Metadata = {
   title: "Categories",
@@ -10,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function CategoriesPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="display-title text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
+    <div className="site-container py-14 sm:py-16">
+      <h1 className="display-title text-3xl font-medium tracking-tight text-balance sm:text-4xl">
         The same blocks, in every AI product
       </h1>
       <p className="mt-3 max-w-2xl text-balance text-lg text-(--muted-foreground)">
@@ -23,7 +25,7 @@ export default function CategoriesPage() {
         {categories.map((cat) => {
           const count = components.filter(
             (c) => c.category === cat.slug && c.status === "published",
-          ).length;
+          ).length + aicssComponents.filter((c) => c.category === cat.slug).length + recreatedComponents.filter((c) => c.category === cat.slug).length;
           return (
             <Link
               key={cat.slug}

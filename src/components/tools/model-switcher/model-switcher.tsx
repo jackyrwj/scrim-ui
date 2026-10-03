@@ -119,11 +119,11 @@ export function ModelSwitcherTool() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+    <div className="site-container py-12 sm:py-14">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-(--muted-foreground)">Component builder</p>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Model Switcher</h1>
+          <h1 className="text-3xl font-medium tracking-[-0.035em] sm:text-4xl">Model Switcher</h1>
           <p className="mt-1.5 max-w-xl text-sm text-(--muted-foreground)">Pick a layout, add your models, then copy a dependency-free React component.</p>
         </div>
         <button type="button" onClick={() => setConfig(structuredClone(defaultConfig))} className="inline-flex min-h-9 items-center rounded-lg border border-(--border) px-3 text-xs font-medium text-(--muted-foreground) transition-colors hover:text-(--foreground) active:scale-[0.96]">Reset</button>

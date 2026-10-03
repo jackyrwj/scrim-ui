@@ -92,13 +92,9 @@ export function Search({ items }: { items: SearchItem[] }) {
     }
   };
 
-  const typeColors: Record<string, string> = {
-    Component: "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400",
-    Pattern: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400",
-    Resource: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400",
-    Inspiration: "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400",
-    Tool: "bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-400",
-  };
+  const typeColors: Record<string, string> = Object.fromEntries(
+    ["Component", "Pattern", "Resource", "Inspiration", "Tool", "Template"].map((type) => [type, "bg-(--primary-muted) text-(--muted-foreground)"]),
+  );
 
   return (
     <>
@@ -106,14 +102,13 @@ export function Search({ items }: { items: SearchItem[] }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden h-8 items-center gap-2 rounded-lg border border-(--border) px-3 text-sm text-(--muted-foreground) transition-colors hover:bg-(--muted) sm:inline-flex"
+        aria-label="Search Scrim UI"
+        className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-(--primary-muted) text-(--muted-foreground) transition-colors hover:text-(--foreground)"
       >
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
           <circle cx="7" cy="7" r="5" />
           <line x1="11" y1="11" x2="14" y2="14" />
         </svg>
-        <span className="text-xs">Search...</span>
-        <kbd className="rounded border border-(--border) px-1 py-0.5 text-[10px]">⌘K</kbd>
       </button>
 
       {/* Dialog */}

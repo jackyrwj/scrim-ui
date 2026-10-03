@@ -8,8 +8,8 @@
  * here, not in a component.
  */
 export const siteNav = [
-  { href: "/tools", label: "Tools" },
   { href: "/components", label: "Components" },
+  { href: "/tools", label: "Tools" },
   { href: "/patterns", label: "Patterns" },
   { href: "/templates", label: "Templates" },
   { href: "/icons", label: "Icons" },

@@ -477,7 +477,7 @@ export function WorkshopV2() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1800px] px-3 py-4 sm:px-5 lg:px-6">
+    <div className="@container mx-auto w-full max-w-[1800px] px-3 py-4 sm:px-5 lg:px-6">
       <h1 className="sr-only">AI Component Workshop</h1>
       <div className="overflow-hidden rounded-2xl bg-(--card) shadow-[0_20px_70px_oklch(0_0_0/0.10)] ring-1 ring-black/8 dark:ring-white/10">
         {/* ── Header ── */}
@@ -499,9 +499,9 @@ export function WorkshopV2() {
         </header>
 
         {/* ── Main grid ── */}
-        <div className="grid h-[calc(100vh-10rem)] min-h-[600px] lg:grid-cols-[340px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(400px,1fr)_320px]">
+        <div className="grid h-[calc(100vh-10rem)] min-h-[600px] @min-[760px]:grid-cols-[340px_minmax(0,1fr)] @min-[1100px]:grid-cols-[340px_minmax(400px,1fr)_320px]">
           {/* ── Sidebar ── */}
-          <aside aria-label="Component library and layers" className="order-2 overflow-y-auto border-b border-(--border) lg:order-1 lg:border-b-0 lg:border-e">
+          <aside aria-label="Component library and layers" className="order-2 overflow-y-auto border-b border-(--border) @min-[760px]:order-1 @min-[760px]:border-b-0 @min-[760px]:border-e">
             <div className="flex gap-1 p-3">
               {(["add", "layers"] as SidebarTab[]).map((tab) => <button key={tab} type="button" aria-pressed={sidebarTab === tab} onClick={() => setSidebarTab(tab)} className={`min-h-10 flex-1 rounded-lg px-3 text-sm font-medium capitalize transition-[color,background-color,box-shadow] focus-visible:outline-2 focus-visible:outline-offset-2 ${sidebarTab === tab ? "bg-(--muted) shadow-sm" : "text-(--muted-foreground) hover:text-(--foreground)"}`}>{tab}</button>)}
             </div>
@@ -513,7 +513,7 @@ export function WorkshopV2() {
           </aside>
 
           {/* ── Free Canvas ── */}
-          <section aria-label="Canvas" className="relative order-1 min-w-0 overflow-auto bg-[radial-gradient(circle_at_center,oklch(0_0_0/0.045)_1px,transparent_1px)] bg-size-[20px_20px] dark:bg-[radial-gradient(circle_at_center,oklch(1_0_0/0.055)_1px,transparent_1px)] lg:order-2"
+          <section aria-label="Canvas" className="relative order-1 min-w-0 overflow-auto bg-[radial-gradient(circle_at_center,oklch(0_0_0/0.045)_1px,transparent_1px)] bg-size-[20px_20px] dark:bg-[radial-gradient(circle_at_center,oklch(1_0_0/0.055)_1px,transparent_1px)] @min-[760px]:order-2"
             ref={canvasRef}
             onDragOver={onCanvasDragOver}
             onDragLeave={() => setDragOver(null)}
@@ -670,7 +670,7 @@ function Inspector({ selectedNode, doc, updateNode, updateDocument, duplicateNod
   removeNode: (id: string) => void;
 }) {
   return (
-    <aside aria-label="Inspector" className="order-3 overflow-y-auto border-t border-(--border) bg-(--card) lg:col-span-2 xl:col-span-1 xl:border-s xl:border-t-0">
+    <aside aria-label="Inspector" className="order-3 overflow-y-auto border-t border-(--border) bg-(--card) @min-[760px]:col-span-2 @min-[1100px]:col-span-1 @min-[1100px]:border-s @min-[1100px]:border-t-0">
       <div className="p-4">
         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-(--muted-foreground)">Inspector</p>
         <h2 className="mt-1 text-base font-semibold">{selectedNode ? definitionFor(selectedNode.type).name : "Page"}</h2>

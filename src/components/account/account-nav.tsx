@@ -26,7 +26,7 @@ export function AccountNav({ mobile = false }: { mobile?: boolean }) {
       <Show when="signed-out">
         <Link
           href="/sign-in"
-          className="hidden h-8 items-center rounded-md border border-(--border) px-3 text-xs font-medium transition-colors hover:bg-(--muted) sm:flex"
+          className="hidden h-8 items-center rounded-full bg-(--primary-muted) px-3 text-xs font-medium transition-colors hover:bg-(--muted) sm:flex"
         >
           Sign in
         </Link>

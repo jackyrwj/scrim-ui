@@ -20,6 +20,9 @@ const eslintConfig = defineConfig([
     "templates/**",
     "demo/**",
     ".demo-build/**",
+    // Imported public AICSS components are preserved as upstream source.
+    // The integration pages are linted; upstream hooks use different rules.
+    "src/aicss-source/**",
   ]),
 ]);
 

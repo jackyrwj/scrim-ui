@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { resources, resourceCategories } from "@/lib/resources";
 import { ResourcesBrowser } from "@/components/resources/resources-browser";
 import { AdsterraBanner } from "@/components/ads/adsterra-banner";
+import { CatalogHeader } from "@/components/site/catalog-header";
 
 export const metadata: Metadata = {
   title: "Curated AI Interface Resources",
@@ -12,14 +13,11 @@ export const metadata: Metadata = {
 
 export default function ResourcesPage() {
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="display-title text-3xl font-semibold tracking-tight sm:text-4xl">
-        Resources
-      </h1>
-      <p className="mt-3 max-w-2xl text-balance text-lg text-(--muted-foreground)">
+    <div className="catalog-page">
+      <CatalogHeader eyebrow="The resource directory" title="Resources">
         Explore {resources.length} libraries, generators, design tools, assets, and guides —
         each with a clear note on when to use it.
-      </p>
+      </CatalogHeader>
 
       <AdsterraBanner />
 

@@ -27,7 +27,7 @@ export function MobileNav({ account }: { account?: React.ReactNode }) {
   }, [open]);
 
   return (
-    <div className="md:hidden">
+    <div className="xl:hidden">
       <button
         type="button"
         onClick={() => setOpen(!open)}

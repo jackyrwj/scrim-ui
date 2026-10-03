@@ -8,9 +8,8 @@ import { copyText } from "@/lib/clipboard";
 /**
  * The copy control that lives in a code block's corner.
  *
- * Icon-only and quiet until the block is hovered or the button is focused —
- * it should not compete with the code for attention, but it must never be
- * keyboard-invisible, hence the focus-visible escape from the fade.
+ * A quiet, always-visible control that follows the code surface in both
+ * appearances and remains easy to discover on touch devices.
  */
 export function CodeCopyButton({ code, label = "Copy code" }: { code: string; label?: string }) {
   const [copied, setCopied] = React.useState(false);
@@ -28,7 +27,7 @@ export function CodeCopyButton({ code, label = "Copy code" }: { code: string; la
       type="button"
       onClick={copy}
       aria-label={copied ? "Copied" : label}
-      className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-[11px] font-medium text-zinc-300 opacity-0 transition hover:bg-white/10 hover:text-white focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/60 group-hover:opacity-100"
+      className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-[11px] font-medium text-(--tok-punct) transition-colors hover:bg-(--border)/50 hover:text-(--code-fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--code-fg)"
     >
       {copied ? (
         <>

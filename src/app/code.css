@@ -1,19 +1,19 @@
-/* ------------------------------------------------------------------ */
-/* Syntax colours for the tokenizer in src/lib/code-highlight.ts.      */
-/*                                                                     */
-/* Code blocks stay on a near-black surface in both appearances. A     */
-/* light-mode code block would fight the page around it, and every     */
-/* reference this site is measured against — shadcn, Tailwind UI, the  */
-/* Next docs — keeps code dark in both. So there is one palette tuned  */
-/* for that surface rather than a light and a dark one, which also     */
-/* means the Explorer's regenerated snippet never has to re-theme.     */
-/*                                                                     */
-/* Every colour below clears 4.5:1 on --code-bg; the lowest is the     */
-/* comment grey at 6.15:1. scripts/contrast.mjs checks them.           */
-/* ------------------------------------------------------------------ */
+/* Source surfaces follow the site theme; syntax colors remain distinct in both appearances. */
 
 :root {
-  --code-bg: #0c0c0f;
+  --code-bg: #f4f5f7;
+  --code-fg: #24272d;
+  --tok-comment: #68707c;
+  --tok-string: #20754a;
+  --tok-number: #94561b;
+  --tok-keyword: #6f42c1;
+  --tok-tag: #0b66a8;
+  --tok-attr: #9a3e28;
+  --tok-punct: #69717c;
+}
+
+.dark {
+  --code-bg: #171717;
   --code-fg: #e4e4e7;
   --tok-comment: #8b90a3;
   --tok-string: #9ad4a4;

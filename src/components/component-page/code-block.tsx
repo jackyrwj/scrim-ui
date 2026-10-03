@@ -18,9 +18,9 @@ import { CodeExpander } from "./code-expander";
  *  - Long blocks fade out at a fixed height behind an Expand control, instead
  *    of an inner scrollbar that hijacks the page's own scroll.
  *
- * Server component: `tokenize` runs at build time for static source, so the
- * reader downloads coloured markup and no highlighter. The Explorer's live
- * snippet renders the same markup on the client via `CodeTokens`.
+ * Static pages tokenize source during rendering. The framework source
+ * viewer and Explorer reuse the same tokenizer when the selected file or
+ * live snippet changes on the client.
  */
 export function CodeBlock({
   code,
@@ -56,7 +56,7 @@ export function CodeBlock({
       className={`group relative overflow-hidden rounded-xl border border-(--border) ${className}`}
       style={{ background: "var(--code-bg)", color: "var(--code-fg)" }}
     >
-      <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-2">
+      <div className="flex items-center justify-between gap-3 border-b border-(--border) px-4 py-2">
         <span className="truncate font-mono text-[11px] text-(--tok-punct)">{filename}</span>
         <CodeCopyButton code={code} />
       </div>

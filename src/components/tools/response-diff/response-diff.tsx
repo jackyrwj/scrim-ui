@@ -128,11 +128,11 @@ export function ResponseDiff() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+    <div className="site-container py-12 sm:py-14">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">AI Response Diff</h1>
+          <h1 className="text-3xl font-medium tracking-[-0.035em]">AI Response Diff</h1>
           <p className="mt-1 max-w-xl text-sm text-(--muted-foreground)">
             Compare two AI responses side by side. Highlight differences to evaluate prompt changes
             or compare models.

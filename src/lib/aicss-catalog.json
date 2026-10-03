@@ -1,0 +1,80 @@
+[
+  {
+    "slug": "code-block",
+    "name": "Code Block",
+    "category": "Text Outputs",
+    "description": "A code block with a language label and one-click copy button."
+  },
+  {
+    "slug": "comparison-table",
+    "name": "Comparison Table",
+    "category": "Structured Outputs",
+    "description": "A feature-by-plan comparison matrix with checkmarks."
+  },
+  {
+    "slug": "data-table",
+    "name": "Data Table",
+    "category": "Structured Outputs",
+    "description": "A tidy data table for structured comparisons and results."
+  },
+  {
+    "slug": "file-diff",
+    "name": "File Diff",
+    "category": "Tool & Action States",
+    "description": "An inline diff card showing the additions and deletions the agent proposes."
+  },
+  {
+    "slug": "inline-citations",
+    "name": "Inline Citations",
+    "category": "Text Outputs",
+    "description": "Superscript citation markers with a compact source footer."
+  },
+  {
+    "slug": "message-actions",
+    "name": "Message Actions",
+    "category": "Rich & Interactive",
+    "description": "The action row under an assistant message: good response, bad response, copy, an emoji reaction, reply, and more."
+  },
+  {
+    "slug": "orbs",
+    "name": "Orbs",
+    "category": "Thinking & Reasoning",
+    "description": "Compact animated activity indicators for agent UIs - discrete DOM and CSS orbs that signal what the agent is doing without blocking the thread."
+  },
+  {
+    "slug": "reasoning-effort",
+    "name": "Reasoning Effort",
+    "category": "Rich & Interactive",
+    "description": "A stepped control for how much reasoning a model spends. Low keeps the budget short, Extra High uses the full thinking budget. While you drag, the model and the active level merge out of the track, then fold back on release."
+  },
+  {
+    "slug": "secure-input",
+    "name": "Secure Input",
+    "category": "Rich & Interactive",
+    "description": "A card the agent sends in chat when it needs a secret for the screen it is driving. The value is handed to that screen, not typed into the thread."
+  },
+  {
+    "slug": "streaming-text",
+    "name": "Streaming Text",
+    "category": "Text Outputs",
+    "description": "Typewriter-style streaming text with a blinking caret."
+  },
+  {
+    "slug": "text-response",
+    "name": "Text Response",
+    "category": "Text Outputs",
+    "description": "Clean prose styling for a standard assistant answer with inline code."
+  },
+  {
+    "slug": "thinking-reasoning",
+    "name": "Thinking + Reasoning",
+    "category": "Thinking & Reasoning",
+    "description": "An animated, collapsible thinking block: a shimmering label expands to reveal the agent's reasoning, then folds into a “Thought for Ns” summary."
+  },
+  {
+    "slug": "thinking-state",
+    "name": "Thinking State",
+    "category": "Thinking & Reasoning",
+    "description": "A minimal shimmering label that signals the agent is processing before it answers."
+  }
+]

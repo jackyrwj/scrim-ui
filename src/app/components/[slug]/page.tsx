@@ -16,14 +16,22 @@ import { getProComponentCatalog } from "@/lib/pro-catalog";
 import { componentSchema } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
 import { AdsterraBanner } from "@/components/ads/adsterra-banner";
+import { aicssComponents, getAicssComponent } from "@/lib/aicss-catalog";
+import { AicssDetail } from "@/components/component-page/aicss-detail";
+import { recreatedComponents, getRecreatedComponent } from "@/lib/recreated-catalog";
+import { RecreatedDetail } from "@/components/component-page/recreated-detail";
 
 export function generateStaticParams() {
-  return components.filter((c) => c.status === "published").map((c) => ({ slug: c.slug }));
+  return [...components.filter((c) => c.status === "published"), ...aicssComponents, ...recreatedComponents].map((c) => ({ slug: c.slug }));
 }
 
 export function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   return params.then(({ slug }) => {
     const entry = getComponent(slug);
+    const aicssEntry = getAicssComponent(slug);
+    const recreatedEntry = getRecreatedComponent(slug);
+    if (recreatedEntry) return { title: `${recreatedEntry.name} — AI UI Component`, description: recreatedEntry.description };
+    if (aicssEntry) return { title: `${aicssEntry.name} — AI UI Component`, description: aicssEntry.description };
     if (!entry) return {};
     return {
       /* searchTitle leads with the phrase a developer actually types; the
@@ -47,6 +55,8 @@ function readShowcaseSource(slug: string, file: string): string {
 
 export default async function ComponentPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  if (getAicssComponent(slug)) return <AicssDetail slug={slug} />;
+  if (getRecreatedComponent(slug)) return <RecreatedDetail slug={slug} />;
   const entry = getComponent(slug);
   if (!entry || entry.status !== "published") notFound();
 
@@ -68,20 +78,20 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
   const registryUrl = `${SITE_URL}/r/${entry.slug}.json`;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+    <div className="detail-page">
       <JsonLd data={componentSchema(entry)} />
 
       {/* Header */}
-      <nav className="mb-6 text-sm text-(--muted-foreground)">
+      <nav aria-label="Breadcrumb" className="mb-6 text-xs text-(--muted-foreground)">
         <Link href="/components" className="hover:text-(--foreground)">Components</Link>
         <span className="mx-2">/</span>
         <span className="text-(--foreground)">{entry.name}</span>
       </nav>
-      <h1 className="flex flex-wrap items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl">
+      <h1 className="flex flex-wrap items-center gap-3 text-3xl font-medium tracking-tight sm:text-4xl">
         {displayName(entry)}
         {pro && <ProBadge className="translate-y-1" />}
       </h1>
-      <p className="mt-3 max-w-4xl text-pretty text-lg text-(--muted-foreground)">
+      <p className="mt-4 max-w-2xl text-pretty text-base leading-7 text-(--muted-foreground)">
         {entry.description}
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
@@ -101,8 +111,8 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
           pattern pages use: install, prompt, then the interactive surface
           (presets, controls, preview and generated code in one surface —
           see lib/component-controls.ts). */}
-      <section className="mt-6 space-y-3">
-        {!pro && <InstallCommand url={registryUrl} />}
+      <section id="preview" className="mt-10 space-y-4">
+        <h2 className="text-base font-medium">Preview</h2>
         {pro ? (
           <div className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-(--border) bg-(--muted)/30 px-6 text-center">
             <ProBadge />
@@ -128,11 +138,16 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         )}
       </section>
 
+      {!pro && <section id="install" className="mt-10">
+        <h2 className="mb-4 text-base font-medium">Install</h2>
+        <InstallCommand url={registryUrl} />
+      </section>}
+
       {/* The component file itself, as opposed to the call site the Explorer
           shows. Both are code; naming them both "Code" made the second look
           like a repeat of the first. */}
       <section id="source" className="mt-14 scroll-mt-20">
-        <h2 className="text-xl font-semibold tracking-tight">Component source</h2>
+        <h2 className="text-base font-medium tracking-tight">Component source</h2>
         <p className="mb-3 mt-1 text-sm text-(--muted-foreground)">
           {pro
             ? "Single-file React + Tailwind component, no dependencies. Included with Pro — the source and its install command unlock together."
@@ -150,7 +165,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
       {/* Usage guidelines */}
       <section className="mt-14">
-        <h2 className="text-xl font-semibold tracking-tight">When to use it</h2>
+        <h2 className="text-base font-medium tracking-tight">When to use it</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-(--muted-foreground)">
           {usage.map((line) => (
             <li key={line}>{line}</li>
@@ -160,7 +175,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
       {/* Common mistakes */}
       <section className="mt-14">
-        <h2 className="text-xl font-semibold tracking-tight">What breaks in production</h2>
+        <h2 className="text-base font-medium tracking-tight">What breaks in production</h2>
         <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-(--muted-foreground)">
           {mistakes.map((line) => (
             <li key={line}>{line}</li>
@@ -175,7 +190,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
           component (not just how) has somewhere to go. */}
       {guides.length > 0 && (
         <section className="mt-14">
-          <h2 className="text-xl font-semibold tracking-tight">Guides</h2>
+          <h2 className="text-base font-medium tracking-tight">Guides</h2>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {guides.map((g) => (
               <Link
@@ -198,7 +213,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
       {/* Related */}
       <section className="mt-14 border-t border-(--border) pt-10">
-        <h2 className="text-xl font-semibold tracking-tight">Related Components</h2>
+        <h2 className="text-base font-medium tracking-tight">Related Components</h2>
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {related.map((r) => (
             <Link

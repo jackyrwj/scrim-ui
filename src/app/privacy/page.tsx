@@ -21,7 +21,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6">
-      <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Privacy</h1>
+      <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">Privacy</h1>
       <p className="mt-3 text-pretty text-lg text-(--muted-foreground)">
         The short version: text entered into the browser-based tools stays on your device. The site
         uses analytics, account and payment providers, and advertising on selected free pages.

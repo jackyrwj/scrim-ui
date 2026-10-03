@@ -24,7 +24,7 @@ function Badge({
     green:
       "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400",
     violet:
-      "bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-400",
+      "bg-(--primary-muted) text-(--primary-muted-foreground)",
     neutral: "bg-(--muted) text-(--muted-foreground)",
   }[tone];
   return (
@@ -64,7 +64,7 @@ export function ResourceCard({
   const Heading = headingLevel;
   return (
     <article
-      className={`group relative @container flex h-full flex-col rounded-xl border border-(--border) bg-(--card) transition-all duration-300 hover:-translate-y-0.5 hover:border-(--primary)/40 hover:shadow-[var(--shadow-sm)] ${
+      className={`group relative @container flex h-full flex-col rounded-xl border border-(--border) bg-(--card) transition-[border-color,background-color,box-shadow] duration-150 hover:border-(--foreground)/25 hover:shadow-[var(--shadow-sm)] ${
         preview ? "overflow-hidden" : "p-4"
       }`}
     >

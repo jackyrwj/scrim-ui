@@ -46,7 +46,7 @@ export function CodeExpander({
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="inline-flex h-7 items-center gap-1.5 rounded-md bg-white/10 px-2.5 text-[11px] font-medium text-zinc-100 transition-colors hover:bg-white/20"
+          className="inline-flex h-7 items-center gap-1.5 rounded-md bg-(--border)/70 px-2.5 text-[11px] font-medium text-(--code-fg) transition-colors hover:bg-(--border)"
         >
           {open ? "Collapse" : `Expand all ${lines} lines`}
         </button>
