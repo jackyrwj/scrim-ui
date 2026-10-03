@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/site";
 /**
  * The shadcn registry, served straight from src/lib/registry.ts.
  *
- * `npx shadcn@latest add https://scrimui.dev/r/prompt-input.json`
+ * `npx shadcn@latest add @scrimui/prompt-input`
  *
  * A route rather than a checked-in registry.json plus a build step, because
  * the component list already has a source of truth and a second copy of it
@@ -102,7 +102,7 @@ function readSource(slug: string) {
  * relative path (`../../tool-call/tool-call`). That path is meaningless in
  * someone else's project, where the CLI will have put those files at
  * `components/ui/`. So the imports are rewritten and the same slugs become
- * the item's registryDependencies: `shadcn add ai-chat` then installs the
+ * the item's registryDependencies: `shadcn add @scrimui/ai-chat` then installs the
  * screen *and* the three components it is built from.
  *
  * Anything left over — another relative import, or a bare package — throws,

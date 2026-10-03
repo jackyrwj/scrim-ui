@@ -14,21 +14,19 @@ import {
 /**
  * The one-line install command for a registry component.
  *
- * Every published component is already served as a shadcn registry item at
- * /r/<slug>.json — but that endpoint was invisible from the component page,
- * so the only discoverable path to using a component was copying its source
- * out of the "Component source" block by hand. This is the shortcut.
+ * Public items use the official @scrimui namespace, so readers can install
+ * by component name without copying a registry URL.
  *
  * The package manager is a per-visitor preference, not per-page, and it is
  * also quoted by the agent prompt inside the Explorer — hence the shared
  * store in lib/package-managers.ts rather than state that lives here.
  */
-export function InstallCommand({ url }: { url: string }) {
+export function InstallCommand({ item }: { item: string }) {
   const manager = usePackageManager();
   const [copied, setCopied] = React.useState(false);
   const pathname = usePathname();
 
-  const command = installCommand(manager, url);
+  const command = installCommand(manager, item);
 
   async function copy() {
     await copyText(command);

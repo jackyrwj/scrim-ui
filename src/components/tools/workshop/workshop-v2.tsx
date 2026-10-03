@@ -245,7 +245,7 @@ ${visible.map(codeForNode).join("\n")}
 
 function generateAgentPrompt(doc: WorkshopDocument) {
   const slugs = [...new Set(doc.nodes.filter((n) => n.visible).map((n) => definitionFor(n.type).slug))];
-  return `Build a ${doc.title.toLowerCase()} using Scrim UI.\n\nInstall:\n${slugs.map((s) => `- npx shadcn@latest add https://scrimui.dev/r/${s}.json`).join("\n")}\n\nComponents: ${doc.nodes.map((n) => definitionFor(n.type).name).join(" → ")}. Replace demo data with real handlers and preserve keyboard behavior.`;
+  return `Build a ${doc.title.toLowerCase()} using Scrim UI.\n\nInstall:\n${slugs.map((s) => `- npx shadcn@latest add @scrimui/${s}`).join("\n")}\n\nComponents: ${doc.nodes.map((n) => definitionFor(n.type).name).join(" → ")}. Replace demo data with real handlers and preserve keyboard behavior.`;
 }
 
 /* ─── Small UI helpers ─── */

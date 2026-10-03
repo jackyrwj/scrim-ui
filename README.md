@@ -36,8 +36,16 @@ The [model switcher](https://scrimui.dev/tools/model-switcher) groups models by 
 ## Install a component
 
 ```bash
-npx shadcn@latest add https://scrimui.dev/r/prompt-input.json
+npx shadcn@latest add @scrimui/prompt-input
 ```
+
+To install all free components:
+
+```bash
+npx shadcn@latest add @scrimui/all
+```
+
+`@scrimui` is listed in the [official shadcn registry directory](https://ui.shadcn.com/docs/directory), so no custom registry configuration is needed.
 
 All 55 Scrim UI components are in the registry; the index is at
 [`/r/registry.json`](https://scrimui.dev/r/registry.json).

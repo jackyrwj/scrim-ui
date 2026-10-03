@@ -83,14 +83,14 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
           from — the CLI resolves those from the item's registryDependencies,
           so one command produces a screen that compiles. */}
       <div className="mt-6 space-y-3">
-        <InstallCommand url={`${SITE_URL}/r/${entry.slug}.json`} />
+        <InstallCommand item={`@scrimui/${entry.slug}`} />
         <PatternAgentPrompt
           pattern={{
             name: entry.name,
             slug: entry.slug,
             description: entry.description,
             docsUrl: `${SITE_URL}/patterns/${entry.slug}`,
-            registryUrl: `${SITE_URL}/r/${entry.slug}.json`,
+            registryItem: `@scrimui/${entry.slug}`,
             elements: config.elements,
             usage: config.usage,
             mistakes: config.mistakes,

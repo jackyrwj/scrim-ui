@@ -17,10 +17,10 @@ import * as React from "react";
  * share one string.
  */
 export const MANAGERS = {
-  npm: (url: string) => `npx shadcn@latest add ${url}`,
-  pnpm: (url: string) => `pnpm dlx shadcn@latest add ${url}`,
-  yarn: (url: string) => `yarn dlx shadcn@latest add ${url}`,
-  bun: (url: string) => `bunx --bun shadcn@latest add ${url}`,
+  npm: (item: string) => `npx shadcn@latest add ${item}`,
+  pnpm: (item: string) => `pnpm dlx shadcn@latest add ${item}`,
+  yarn: (item: string) => `yarn dlx shadcn@latest add ${item}`,
+  bun: (item: string) => `bunx --bun shadcn@latest add ${item}`,
 } as const;
 
 export type Manager = keyof typeof MANAGERS;
@@ -93,6 +93,6 @@ export function usePackageManager(): Manager {
 }
 
 /** The install command for a registry item under the current choice. */
-export function installCommand(manager: Manager, url: string): string {
-  return MANAGERS[manager](url);
+export function installCommand(manager: Manager, item: string): string {
+  return MANAGERS[manager](item);
 }

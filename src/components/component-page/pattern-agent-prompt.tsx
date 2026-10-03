@@ -16,11 +16,11 @@ import { AgentPromptCard } from "./agent-prompt-card";
 export function PatternAgentPrompt({
   pattern,
 }: {
-  pattern: Omit<PatternPromptInput, "installCommand"> & { registryUrl: string };
+  pattern: Omit<PatternPromptInput, "installCommand"> & { registryItem: string };
 }) {
   const manager = usePackageManager();
   const prompt = React.useMemo(
-    () => buildPatternPrompt({ ...pattern, installCommand: installCommand(manager, pattern.registryUrl) }),
+    () => buildPatternPrompt({ ...pattern, installCommand: installCommand(manager, pattern.registryItem) }),
     [pattern, manager],
   );
 

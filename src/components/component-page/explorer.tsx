@@ -51,7 +51,7 @@ export type ExplorerComponent = {
   name: string;
   slug: string;
   description: string;
-  registryUrl: string;
+  registryItem: string;
   docsUrl: string;
 };
 
@@ -91,7 +91,7 @@ export function ComponentExplorer({
     () =>
       buildAgentPrompt({
         ...component,
-        installCommand: installCommand(manager, component.registryUrl),
+        installCommand: installCommand(manager, component.registryItem),
         schema,
         values,
       }),

@@ -34,7 +34,7 @@ export type AgentPromptInput = {
   name: string;
   slug: string;
   description: string;
-  registryUrl: string;
+  registryItem: string;
   docsUrl: string;
   installCommand: string;
   schema: ComponentControls;

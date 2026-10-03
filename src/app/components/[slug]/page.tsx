@@ -73,9 +73,9 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
   const mistakes = proCatalog?.mistakes ?? config?.mistakes ?? [];
   const related = getRelated(entry);
   const guides = getGuidesForComponent(entry.slug);
-  /* Free items are prerendered flat files under /r; Pro items are served by
-     the token-checked route instead, so the two never share a URL. */
-  const registryUrl = `${SITE_URL}/r/${entry.slug}.json`;
+  /* The public namespace resolves free items; Pro source uses a separate
+     token-checked route. */
+  const registryItem = `@scrimui/${entry.slug}`;
 
   return (
     <div className="detail-page">
@@ -131,7 +131,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
               name: displayName(entry),
               slug: entry.slug,
               description: entry.description,
-              registryUrl,
+              registryItem,
               docsUrl: `${SITE_URL}/components/${entry.slug}`,
             }}
           />
@@ -140,7 +140,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
 
       {!pro && <section id="install" className="mt-10">
         <h2 className="mb-4 text-base font-medium">Install</h2>
-        <InstallCommand url={registryUrl} />
+        <InstallCommand item={registryItem} />
       </section>}
 
       {/* The component file itself, as opposed to the call site the Explorer

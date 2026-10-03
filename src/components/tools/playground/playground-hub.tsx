@@ -68,7 +68,7 @@ export function PlaygroundHub() {
             name: entry.name,
             slug: entry.slug,
             description: entry.description,
-            registryUrl: `${SITE_URL}/r/${entry.slug}.json`,
+            registryItem: `@scrimui/${entry.slug}`,
             docsUrl: `${SITE_URL}/components/${entry.slug}`,
           }}
         />
