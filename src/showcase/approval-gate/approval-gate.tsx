@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -95,7 +97,7 @@ export type ApprovalGateProps = {
 
 function ShieldIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" {...props}>
       <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
       <path d="m9 12 2 2 4-4" />
     </svg>
@@ -104,7 +106,7 @@ function ShieldIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M20 6 9 17l-5-5" />
     </svg>
   );
@@ -112,7 +114,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M18 6 6 18M6 6l12 12" />
     </svg>
   );
@@ -120,7 +122,7 @@ function XIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 7v5l3 2" />
     </svg>
@@ -129,7 +131,7 @@ function ClockIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function Spinner(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" width="12" height="12" className="animate-spin" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" width="12" height="12" className="animate-spin" {...props}>
       <path d="M12 3a9 9 0 1 0 9 9" />
     </svg>
   );
@@ -200,12 +202,12 @@ export function ApprovalGate({
       : "amber";
 
   return (
-    <div
-      className={`rounded-xl border bg-white p-4 dark:bg-zinc-900 ${
+    <Card
+      className={`gap-0 py-0 rounded-xl border bg-card p-4 ${
         expired
-          ? "border-zinc-200 dark:border-zinc-800"
+          ? "border-border"
           : outcome
-            ? "border-zinc-200 dark:border-zinc-800"
+            ? "border-border"
             : "border-amber-200 dark:border-amber-900/60"
       } ${className}`}
     >
@@ -217,7 +219,7 @@ export function ApprovalGate({
               : tone === "red"
                 ? "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"
                 : tone === "zinc"
-                  ? "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                  ? "bg-muted text-muted-foreground"
                   : "bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400"
           }`}
         >
@@ -226,15 +228,15 @@ export function ApprovalGate({
 
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-3">
-            <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{request.title}</p>
+            <p className="text-sm font-medium text-foreground">{request.title}</p>
             {pending && remaining !== undefined && !expired && (
               <span
                 /* aria-live off: a countdown announced every second is a
                    screen reader nobody can use. The deadline is in the
                    button's own label instead. */
                 aria-hidden
-                className={`shrink-0 tabular-nums text-[11px] ${
-                  urgent ? "text-amber-600 dark:text-amber-500" : "text-zinc-400 dark:text-zinc-500"
+                className={`shrink-0 tabular-nums text-xs ${
+                  urgent ? "text-amber-600 dark:text-amber-500" : "text-muted-foreground"
                 }`}
               >
                 {formatDuration(remaining)} left
@@ -243,17 +245,17 @@ export function ApprovalGate({
           </div>
 
           {request.requester && (
-            <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="mt-0.5 text-xs text-muted-foreground">
               {request.requester} is requesting approval
             </p>
           )}
           {request.description && (
-            <p className="mt-1.5 text-[13px] leading-5 text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1.5 text-sm leading-5 text-muted-foreground">
               {request.description}
             </p>
           )}
           {request.detail && (
-            <pre className="mt-2 overflow-x-auto rounded-lg bg-zinc-50 p-2.5 font-mono text-xs leading-5 text-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-300">
+            <pre className="mt-2 overflow-x-auto rounded-lg bg-muted p-2.5 font-mono text-xs leading-5 text-foreground">
               {request.detail}
             </pre>
           )}
@@ -262,26 +264,25 @@ export function ApprovalGate({
           {pending && !expired && (
             <>
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                <button
+                <Button variant="default" size="sm"
                   type="button"
                   onClick={() => onDecide?.("approved", request.id)}
                   disabled={!actionable}
-                  /* emerald-700, not -600: white on emerald-600 is 3.65:1,
-                     under the 4.5 floor for this 12px label. -700 is 5.48:1. */
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-emerald-700 px-3.5 text-xs font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md bg-primary px-3.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
                   {submitting === "approved" ? <Spinner /> : <CheckIcon />}
                   Allow
-                </button>
-                <button
+                </Button>
+                <Button variant="outline" size="sm"
                   type="button"
                   onClick={() => onDecide?.("denied", request.id)}
                   disabled={!actionable}
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-zinc-200 px-3.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted disabled:opacity-50"
                 >
                   {submitting === "denied" ? <Spinner /> : <XIcon />}
                   Deny
-                </button>
+                </Button>
               </div>
 
               {/* The buttons stay visible and go inert rather than being
@@ -289,13 +290,13 @@ export function ApprovalGate({
                   reads as "did that work?" — and the answer is still in
                   flight, so the honest thing is to say so. */}
               {submitting !== undefined && (
-                <p className="mt-2 text-[11px] text-zinc-500 dark:text-zinc-400">
+                <p className="mt-2 text-xs text-muted-foreground">
                   Sent. Waiting for the run to confirm — this is not decided until it does.
                 </p>
               )}
 
               {submitting === undefined && connection !== "live" && (
-                <p className="mt-2 text-[11px] text-amber-600 dark:text-amber-500">
+                <p className="mt-2 text-xs text-amber-600 dark:text-amber-500">
                   {connection === "reconnecting"
                     ? "Reconnecting — this may already have been decided elsewhere."
                     : "Offline — a decision cannot be sent until the run is reachable again."}
@@ -306,7 +307,7 @@ export function ApprovalGate({
 
           {/* ---------------- expired ---------------- */}
           {expired && (
-            <p className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            <p className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
               <ClockIcon />
               Expired {formatDuration(-remaining!)} ago — the run stopped waiting and did not act.
             </p>
@@ -336,7 +337,7 @@ export function ApprovalGate({
                 /* Named, because on a shared run "who clicked allow" is the
                    first question asked afterwards, and the second tab that
                    was watching deserves to know it was not ignored. */
-                <p className="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+                <p className="mt-1 text-xs text-muted-foreground">
                   by {outcome.decidedBy}
                   {outcome.at !== undefined && ` · ${formatDuration(now - outcome.at)} ago`}
                 </p>
@@ -345,6 +346,6 @@ export function ApprovalGate({
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

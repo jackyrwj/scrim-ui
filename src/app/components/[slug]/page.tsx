@@ -20,6 +20,7 @@ import { aicssComponents, getAicssComponent } from "@/lib/aicss-catalog";
 import { AicssDetail } from "@/components/component-page/aicss-detail";
 import { recreatedComponents, getRecreatedComponent } from "@/lib/recreated-catalog";
 import { RecreatedDetail } from "@/components/component-page/recreated-detail";
+import { componentDependencies } from "@/lib/component-dependencies";
 
 export function generateStaticParams() {
   return [...components.filter((c) => c.status === "published"), ...aicssComponents, ...recreatedComponents].map((c) => ({ slug: c.slug }));
@@ -69,6 +70,7 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
      from the repository and arrives only through the entitlement-gated
      artifact route. */
   const source = pro ? null : readShowcaseSource(slug, config!.sourceFile);
+  const dependencies = source ? componentDependencies(source) : [];
   const usage = proCatalog?.usage ?? config?.usage ?? [];
   const mistakes = proCatalog?.mistakes ?? config?.mistakes ?? [];
   const related = getRelated(entry);
@@ -151,7 +153,9 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
         <p className="mb-3 mt-1 text-sm text-(--muted-foreground)">
           {pro
             ? "Single-file React + Tailwind component, no dependencies. Included with Pro — the source and its install command unlock together."
-            : "Single-file React + Tailwind component. No dependencies — drop it into any project with Tailwind configured."}
+            : dependencies.length > 0
+              ? `React + Tailwind component using shadcn/ui (${dependencies.join(", ")}). The install command adds these dependencies automatically.`
+              : "React + Tailwind component using your shadcn theme. No additional component dependencies."}
         </p>
         {source === null ? (
           <ProSource
@@ -159,7 +163,10 @@ export default async function ComponentPage({ params }: { params: Promise<{ slug
             lines={proCatalog?.lines ?? 0}
           />
         ) : (
-          <CodeBlock code={source} filename={config!.sourceFile} />
+          <>
+            {dependencies.length > 0 && <div className="mb-4"><p className="mb-2 text-sm text-(--muted-foreground)">When copying source manually, install the required primitives first:</p><InstallCommand item={dependencies.join(" ")} /></div>}
+            <CodeBlock code={source} filename={config!.sourceFile} />
+          </>
         )}
       </section>
 

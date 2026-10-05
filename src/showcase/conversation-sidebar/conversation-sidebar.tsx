@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import * as React from "react";
 
 /**
@@ -66,7 +68,7 @@ export type ConversationSidebarProps = {
 
 function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
       <path d="M12 5v14M5 12h14" />
     </svg>
   );
@@ -74,7 +76,7 @@ function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />
     </svg>
@@ -83,7 +85,7 @@ function SearchIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function PinIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M12 17v5" />
       <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3z" />
     </svg>
@@ -92,7 +94,7 @@ function PinIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function PencilIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
       <path d="m15 5 4 4" />
     </svg>
@@ -101,7 +103,7 @@ function PencilIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function TrashIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M3 6h18" />
       <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
       <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
@@ -119,7 +121,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" {...props}>
       <path d="M18 6 6 18M6 6l12 12" />
     </svg>
   );
@@ -197,33 +199,33 @@ export function ConversationSidebar({
   }
 
   const actionBtn =
-    "rounded-md p-1.5 text-zinc-400 transition-colors hover:bg-zinc-200 hover:text-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-700 dark:hover:text-zinc-200";
+    "rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 
   return (
-    <div className={`flex h-full flex-col bg-zinc-50 dark:bg-zinc-950 ${className}`}>
+    <div className={`flex h-full flex-col bg-muted ${className}`}>
       {/* New chat */}
       <div className="p-3 pb-2">
-        <button
+        <Button variant="outline" size="sm"
           type="button"
           onClick={onNewChat}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-zinc-200 bg-white py-2 text-[13px] font-medium text-zinc-700 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+          className="h-auto min-h-8 whitespace-normal justify-start flex w-full items-center justify-center gap-1.5 rounded-md border border-border bg-card py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-50"
         >
           <PlusIcon />
           {newChatLabel}
-        </button>
+        </Button>
       </div>
 
       {/* Search */}
       <div className="px-3 pb-2">
         <div className="relative">
-          <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500" />
-          <input
+          <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={searchPlaceholder}
             aria-label="Search conversations"
-            className="w-full rounded-lg border border-zinc-200 bg-white py-1.5 pl-8 pr-3 text-[13px] text-zinc-700 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400/40 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 dark:placeholder:text-zinc-500"
+            className="w-full rounded-lg border border-border bg-card py-1.5 pl-8 pr-3 text-base sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus:ring-2 focus:ring-ring/40"
           />
         </div>
       </div>
@@ -235,28 +237,28 @@ export function ConversationSidebar({
             {[70, 88, 55, 80, 64, 92, 48].map((w, i) => (
               <div
                 key={i}
-                className="h-4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800"
+                className="h-4 animate-pulse rounded bg-muted"
                 style={{ width: `${w}%` }}
               />
             ))}
           </div>
         ) : total === 0 ? (
-          <p className="px-2 pt-8 text-center text-xs leading-5 text-zinc-500 dark:text-zinc-400">{emptyText}</p>
+          <p className="px-2 pt-8 text-center text-xs leading-5 text-muted-foreground">{emptyText}</p>
         ) : visible.length === 0 ? (
           <div className="px-2 pt-8 text-center">
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">No chats match &ldquo;{query.trim()}&rdquo;.</p>
-            <button
+            <p className="text-xs text-muted-foreground">No chats match &ldquo;{query.trim()}&rdquo;.</p>
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={() => setQuery("")}
-              className="mt-1 text-xs font-medium text-zinc-700 underline underline-offset-2 hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-zinc-100"
+              className="mt-1 text-xs font-medium text-foreground underline underline-offset-2 hover:text-foreground"
             >
               Clear search
-            </button>
+            </Button>
           </div>
         ) : (
           visible.map((group) => (
             <div key={group.id} className="pt-3 first:pt-1">
-              <p className="px-2 pb-1 text-[11px] font-medium tracking-wide text-zinc-400 dark:text-zinc-500">
+              <p className="px-2 pb-1 text-xs font-medium tracking-wide text-muted-foreground">
                 {group.label}
               </p>
               <ul className="space-y-0.5">
@@ -270,7 +272,7 @@ export function ConversationSidebar({
                         }}
                         className="flex items-center gap-1 py-0.5"
                       >
-                        <input
+                        <Input
                           autoFocus
                           value={draft}
                           onChange={(e) => setDraft(e.target.value)}
@@ -279,43 +281,43 @@ export function ConversationSidebar({
                             if (e.key === "Escape") setRenamingId(null);
                           }}
                           aria-label="Rename conversation"
-                          className="min-w-0 flex-1 rounded-md border border-zinc-300 bg-white px-2 py-1.5 text-[13px] text-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-400/40 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                          className="min-w-0 flex-1 rounded-md border border-border bg-card px-2 py-1.5 text-base sm:text-sm text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus:ring-2 focus:ring-ring/40"
                         />
-                        <button type="submit" aria-label="Save name" className={actionBtn}>
+                        <Button variant="ghost" size="icon-sm" type="submit" aria-label="Save name" className={actionBtn}>
                           <CheckIcon />
-                        </button>
-                        <button
+                        </Button>
+                        <Button variant="ghost" size="icon-sm"
                           type="button"
                           aria-label="Cancel rename"
                           onClick={() => setRenamingId(null)}
                           className={actionBtn}
                         >
                           <XIcon />
-                        </button>
+                        </Button>
                       </form>
                     ) : (
                       <div className="group/row relative">
-                        <button
+                        <Button variant="ghost" size="sm"
                           type="button"
                           aria-current={conv.id === activeId ? "true" : undefined}
                           onClick={() => onSelect?.(conv.id)}
-                          className={`flex w-full items-center gap-1.5 rounded-lg px-2.5 py-2 text-left text-[13px] transition-colors ${
+                          className={`h-auto min-h-8 whitespace-normal justify-start flex w-full items-center gap-1.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors ${
                             conv.id === activeId
-                              ? "bg-zinc-200/70 font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
-                              : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-200"
+                              ? "bg-muted/70 font-medium text-foreground"
+                              : "text-muted-foreground hover:bg-muted hover:text-foreground"
                           }`}
                         >
                           <span className="truncate">{conv.title}</span>
                           {conv.pinned && (
-                            <PinIcon className="shrink-0 text-zinc-400 dark:text-zinc-500" aria-label="Pinned" />
+                            <PinIcon className="shrink-0 text-muted-foreground" aria-label="Pinned" />
                           )}
-                        </button>
+                        </Button>
                         {/* Row actions — invisible until hover or keyboard
                             focus lands anywhere in the row, so the list stays
                             quiet but every action stays reachable. */}
-                        <span className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center rounded-md bg-zinc-50 opacity-0 shadow-sm ring-1 ring-zinc-200 transition-opacity group-hover/row:opacity-100 group-focus-within/row:opacity-100 dark:bg-zinc-900 dark:ring-zinc-700">
+                        <span className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center rounded-md bg-muted opacity-100 shadow-sm ring-1 ring-ring transition-opacity group-hover/row:opacity-100 group-focus-within/row:opacity-100">
                           {onTogglePin && (
-                            <button
+                            <Button variant="ghost" size="icon-sm"
                               type="button"
                               aria-pressed={!!conv.pinned}
                               aria-label={conv.pinned ? `Unpin: ${conv.title}` : `Pin: ${conv.title}`}
@@ -323,27 +325,27 @@ export function ConversationSidebar({
                               className={actionBtn}
                             >
                               <PinIcon />
-                            </button>
+                            </Button>
                           )}
                           {onRename && (
-                            <button
+                            <Button variant="ghost" size="icon-sm"
                               type="button"
                               aria-label={`Rename: ${conv.title}`}
                               onClick={() => startRename(conv)}
                               className={actionBtn}
                             >
                               <PencilIcon />
-                            </button>
+                            </Button>
                           )}
                           {onDelete && (
-                            <button
+                            <Button variant="ghost" size="icon-sm"
                               type="button"
                               aria-label={`Delete: ${conv.title}`}
                               onClick={() => handleDelete(conv)}
-                              className={`${actionBtn} hover:text-red-600 dark:hover:text-red-400`}
+                              className={`min-h-6 min-w-6 ${actionBtn} hover:text-red-600 dark:hover:text-red-400`}
                             >
                               <TrashIcon />
-                            </button>
+                            </Button>
                           )}
                         </span>
                       </div>
@@ -360,18 +362,18 @@ export function ConversationSidebar({
       {deleted && (
         <div
           role="status"
-          className="flex items-center justify-between gap-2 border-t border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-950"
+          className="flex items-center justify-between gap-2 border-t border-border bg-muted px-3 py-2"
         >
-          <span className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="truncate text-xs text-muted-foreground">
             Deleted &ldquo;{deleted.title}&rdquo;
           </span>
-          <button
+          <Button variant="ghost" size="sm"
             type="button"
             onClick={handleUndo}
-            className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-zinc-800 underline underline-offset-2 hover:text-zinc-950 dark:text-zinc-200 dark:hover:text-white"
+            className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-foreground underline underline-offset-2 hover:text-foreground"
           >
             Undo
-          </button>
+          </Button>
         </div>
       )}
     </div>

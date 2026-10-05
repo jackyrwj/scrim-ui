@@ -5,15 +5,38 @@
 @import "./code.css";
 @import "./pattern-previews.css";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *):not(:where([data-theme="light"], [data-theme="light"] *)));
 
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--muted);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--muted);
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: #b91c1c;
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--muted-foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 :root {
   color-scheme: light;
+  --radius: 0.5rem;
   --background: #ffffff;
   --foreground: #1a1a1a;
   --muted: #f4f5f7;
@@ -218,6 +241,20 @@ body {
   width: 340px;
   max-width: 100%;
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-preview-slug="citation-ui"] button[aria-label^="Source"] {
+    animation: gallery-citation 3s ease-in-out infinite;
+  }
+  [data-preview-slug="citation-ui"] button[aria-label^="Source 2"] {
+    animation-delay: 1.5s;
+  }
+}
+
+@keyframes gallery-citation {
+  0%, 100% { box-shadow: 0 0 0 0 transparent; }
+  50% { box-shadow: 0 0 0 3px var(--border); }
 }
 
 /* The scoped preview owns both sets of variables, even inside a dark site. */

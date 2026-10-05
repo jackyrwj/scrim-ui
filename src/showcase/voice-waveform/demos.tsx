@@ -1,25 +1,26 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import { VoiceWaveform } from "./voice-waveform";
 
 export function DemoStates() {
   return (
     <div className="space-y-4">
       <div>
-        <VoiceWaveform state="idle" className="text-zinc-300 dark:text-zinc-600" />
-        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Idle — nothing being captured</p>
+        <VoiceWaveform state="idle" className="text-muted-foreground" />
+        <p className="mt-1.5 text-xs text-muted-foreground">Idle — nothing being captured</p>
       </div>
       <div>
         <VoiceWaveform state="listening" className="text-emerald-500" />
-        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Listening — waiting for speech</p>
+        <p className="mt-1.5 text-xs text-muted-foreground">Listening — waiting for speech</p>
       </div>
       <div>
         <VoiceWaveform state="recording" className="text-red-500" />
-        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Recording — capturing input</p>
+        <p className="mt-1.5 text-xs text-muted-foreground">Recording — capturing input</p>
       </div>
       <div>
-        <VoiceWaveform state="speaking" className="text-violet-500" />
-        <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">Speaking — the model is answering aloud</p>
+        <VoiceWaveform state="speaking" className="text-muted-foreground" />
+        <p className="mt-1.5 text-xs text-muted-foreground">Speaking — the model is answering aloud</p>
       </div>
     </div>
   );
@@ -27,17 +28,17 @@ export function DemoStates() {
 
 export function DemoHero() {
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-violet-600 text-white text-xs font-semibold">
+    <Card className="flex-row gap-0 py-0 flex items-center gap-4 rounded-xl border border-border bg-card p-4">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">
         AI
       </span>
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-          <span className="font-medium text-zinc-600 dark:text-zinc-300">Assistant</span>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span className="font-medium text-muted-foreground">Assistant</span>
           <span>Speaking</span>
         </div>
-        <VoiceWaveform state="speaking" className="mt-2 text-violet-500" bars={28} />
+        <VoiceWaveform state="speaking" className="mt-2 text-muted-foreground" bars={28} />
       </div>
-    </div>
+    </Card>
   );
 }

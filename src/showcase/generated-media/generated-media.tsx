@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -74,7 +76,7 @@ const ICON_PROPS = {
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 2,
+  strokeWidth: 1.5,
   strokeLinecap: "round",
   strokeLinejoin: "round",
 } as const;
@@ -189,92 +191,92 @@ export function GeneratedMediaResult({
   const running = status === "queued" || status === "generating";
 
   const actionCls =
-    "inline-flex items-center gap-1 rounded-md border border-zinc-200 px-2 py-1 text-[11px] font-medium text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800";
+    "inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted";
 
   return (
     <figure
-      className={`overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}
+      className={`overflow-hidden rounded-xl border border-border bg-card ${className}`}
     >
       {/* Header — wraps on narrow cards; actions are never squeezed off. */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-zinc-100 px-3 py-2 dark:border-zinc-800/60">
-        <span className="flex items-center gap-1.5 text-[13px] font-medium text-zinc-700 dark:text-zinc-200">
-          <span className="text-zinc-400 dark:text-zinc-500">{meta.icon}</span>
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-3 py-2">
+        <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+          <span className="text-muted-foreground">{meta.icon}</span>
           {meta.label}
         </span>
         {status === "generating" && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" />
+          <Badge variant="secondary" className="inline-flex items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-foreground">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
             Generating
-          </span>
+          </Badge>
         )}
         {status === "queued" && (
-          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+          <Badge variant="secondary" className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
             Queued{queuePosition != null ? ` · #${queuePosition}` : ""}
-          </span>
+          </Badge>
         )}
         {status === "failed" && (
-          <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-700 dark:bg-red-950/60 dark:text-red-400">
+          <Badge variant="secondary" className="rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-950/60 dark:text-red-400">
             Failed
-          </span>
+          </Badge>
         )}
         {status === "blocked" && (
-          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 dark:bg-amber-950/60 dark:text-amber-400">
+          <Badge variant="secondary" className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950/60 dark:text-amber-400">
             Blocked by policy
-          </span>
+          </Badge>
         )}
         {status === "cancelled" && (
-          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+          <Badge variant="secondary" className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
             Cancelled
-          </span>
+          </Badge>
         )}
 
         <span className="ml-auto flex items-center gap-1.5">
           {running && onCancel && (
-            <button type="button" onClick={onCancel} className={actionCls}>
+            <Button variant="ghost" size="sm" type="button" onClick={onCancel} className={actionCls}>
               <XIcon />
               Cancel
-            </button>
+            </Button>
           )}
           {status === "failed" && onRetry && (
-            <button type="button" onClick={onRetry} className={actionCls}>
+            <Button variant="ghost" size="sm" type="button" onClick={onRetry} className={actionCls}>
               <RegenerateIcon />
               Retry
-            </button>
+            </Button>
           )}
           {(status === "ready" || status === "cancelled") && onRegenerate && (
-            <button type="button" onClick={onRegenerate} className={actionCls}>
+            <Button variant="ghost" size="sm" type="button" onClick={onRegenerate} className={actionCls}>
               <RegenerateIcon />
               Regenerate
-            </button>
+            </Button>
           )}
           {status === "ready" && onDownload && (
-            <button type="button" onClick={onDownload} className={actionCls}>
+            <Button variant="ghost" size="sm" type="button" onClick={onDownload} className={actionCls}>
               <DownloadIcon />
               Download
-            </button>
+            </Button>
           )}
         </span>
       </div>
 
       {/* Body — fixed minimum height so status flips don't shove the page. */}
-      <div className="flex min-h-[220px] items-center justify-center bg-zinc-50 dark:bg-zinc-950/40">
+      <div className="flex min-h-[220px] items-center justify-center bg-muted">
         {status === "queued" && (
           <div className="px-6 py-10 text-center">
-            <p className="text-[13px] font-medium text-zinc-600 dark:text-zinc-300">
+            <p className="text-sm font-medium text-muted-foreground">
               {queuePosition != null ? `#${queuePosition} in the queue` : "Waiting for a slot"}
             </p>
-            <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">Generation starts as soon as a worker is free.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Generation starts as soon as a worker is free.</p>
           </div>
         )}
 
         {status === "generating" && (
           <div className="w-full px-6 py-10">
             <div className="mx-auto max-w-[280px] space-y-2">
-              <div className="h-28 animate-pulse rounded-lg bg-zinc-200/70 dark:bg-zinc-800" />
-              <div className="h-2.5 w-2/3 animate-pulse rounded bg-zinc-200/70 dark:bg-zinc-800" />
-              <div className="h-2.5 w-1/3 animate-pulse rounded bg-zinc-200/70 dark:bg-zinc-800" />
+              <div className="h-28 animate-pulse rounded-lg bg-muted/70" />
+              <div className="h-2.5 w-2/3 animate-pulse rounded bg-muted/70" />
+              <div className="h-2.5 w-1/3 animate-pulse rounded bg-muted/70" />
             </div>
-            <p className="mt-4 text-center text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="mt-4 text-center text-xs text-muted-foreground">
               {stage ?? "Generating…"}
             </p>
           </div>
@@ -283,8 +285,8 @@ export function GeneratedMediaResult({
         {status === "ready" &&
           (children ?? (
             <div className="px-6 py-10 text-center">
-              <span className="mx-auto block w-fit text-zinc-300 dark:text-zinc-600">{meta.icon}</span>
-              <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+              <span className="mx-auto block w-fit text-muted-foreground">{meta.icon}</span>
+              <p className="mt-2 text-xs text-muted-foreground">
                 {mediaAlt ?? `The ${meta.label.toLowerCase()} could not be displayed.`}
               </p>
             </div>
@@ -295,8 +297,8 @@ export function GeneratedMediaResult({
             <span className="mx-auto block w-fit text-red-400 dark:text-red-500">
               <ErrorIcon />
             </span>
-            <p className="mt-2 text-[13px] font-medium text-zinc-700 dark:text-zinc-200">Generation failed</p>
-            <p className="mx-auto mt-1 max-w-[320px] text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="mt-2 text-sm font-medium text-foreground">Generation failed</p>
+            <p className="mx-auto mt-1 max-w-[320px] text-xs text-muted-foreground">
               {errorMessage ?? "The worker stopped mid-generation. Nothing was charged — retry to start over."}
             </p>
           </div>
@@ -307,10 +309,10 @@ export function GeneratedMediaResult({
             <span className="mx-auto block w-fit text-amber-500 dark:text-amber-400">
               <ShieldIcon />
             </span>
-            <p className="mt-2 text-[13px] font-medium text-zinc-700 dark:text-zinc-200">
+            <p className="mt-2 text-sm font-medium text-foreground">
               Blocked by the content policy
             </p>
-            <p className="mx-auto mt-1 max-w-[320px] text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="mx-auto mt-1 max-w-[320px] text-xs text-muted-foreground">
               {blockedReason ?? "The prompt was refused before generation started. Rephrase it and try again — this is not a retryable error."}
             </p>
           </div>
@@ -318,22 +320,22 @@ export function GeneratedMediaResult({
 
         {status === "cancelled" && (
           <div className="px-6 py-10 text-center">
-            <p className="text-[13px] font-medium text-zinc-500 dark:text-zinc-400">Cancelled before it finished</p>
-            <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">Nothing was charged. Regenerate to start over.</p>
+            <p className="text-sm font-medium text-muted-foreground">Cancelled before it finished</p>
+            <p className="mt-1 text-xs text-muted-foreground">Nothing was charged. Regenerate to start over.</p>
           </div>
         )}
       </div>
 
       {/* Footer — the prompt is the re-use path, so it is always visible. */}
-      <figcaption className="border-t border-zinc-100 px-3 py-2 dark:border-zinc-800/60">
-        <p className="truncate text-xs text-zinc-600 dark:text-zinc-300" title={prompt}>
+      <figcaption className="border-t border-border px-3 py-2">
+        <p className="truncate text-xs text-muted-foreground" title={prompt}>
           “{prompt}”
         </p>
         <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
           {params.map((p) => (
             <span
               key={p}
-              className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+              className="rounded bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground"
             >
               {p}
             </span>
@@ -343,26 +345,26 @@ export function GeneratedMediaResult({
               {variants.map((v, i) => {
                 const active = v.id === currentVariantId;
                 return (
-                  <button
+                  <Button variant="ghost" size="icon-sm"
                     key={v.id}
                     type="button"
                     onClick={() => onVariantChange?.(v.id)}
                     aria-pressed={active}
                     aria-label={v.label ?? `Variant ${i + 1}`}
-                    className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition-colors ${
+                    className={`min-h-6 min-w-6 rounded-md px-2 py-0.5 text-xs font-medium transition-colors ${
                       active
-                        ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                        : "border border-zinc-200 text-zinc-500 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                        ? "bg-muted text-foreground"
+                        : "border border-border text-muted-foreground hover:bg-muted"
                     }`}
                   >
                     {v.label ?? `${i + 1}`}
-                  </button>
+                  </Button>
                 );
               })}
             </span>
           )}
         </div>
-        {caption && <p className="mt-1.5 text-[11px] text-zinc-400 dark:text-zinc-500">{caption}</p>}
+        {caption && <p className="mt-1.5 text-xs text-muted-foreground">{caption}</p>}
       </figcaption>
     </figure>
   );

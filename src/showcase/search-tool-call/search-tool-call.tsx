@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -28,7 +31,7 @@ export type SearchToolCallProps = {
 
 function GlobeIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" {...props}>
       <circle cx="12" cy="12" r="10" />
       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20Z" />
     </svg>
@@ -37,7 +40,7 @@ function GlobeIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ChevronIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" {...props}>
       <path d="m6 9 6 6 6-6" />
     </svg>
   );
@@ -75,81 +78,81 @@ export function SearchToolCall({
   const [open, setOpen] = React.useState(status === "done");
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-zinc-200 bg-white transition-colors dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
+    <Card className={`gap-0 py-0 overflow-hidden rounded-xl border border-border bg-card transition-colors ${className}`}>
       {/* Header */}
-      <button
+      <Button variant="ghost" size="sm"
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left"
+        className="h-auto min-h-8 whitespace-normal justify-start flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left"
       >
-        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
           <GlobeIcon />
         </span>
-        <span className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+        <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
           {status === "searching" ? "Searching the web" : "Search the web"}
         </span>
-        <span className="hidden shrink-0 truncate text-xs text-zinc-500 dark:text-zinc-400 sm:block">
+        <span className="hidden shrink-0 truncate text-xs text-muted-foreground sm:block">
           {status === "searching" ? `"${query}"` : `${results.length} results`}
         </span>
-        {elapsed && <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{elapsed}</span>}
+        {elapsed && <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{elapsed}</span>}
         {status === "searching" ? (
-          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-blue-100 px-2 py-0.5 text-[11px] text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
+          <Badge variant="secondary" className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-muted px-2 py-0.5 text-xs text-foreground">
             <span className="h-2.5 w-2.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
             Searching
-          </span>
+          </Badge>
         ) : status === "error" ? (
-          <span className="shrink-0 rounded-full bg-red-100 px-2 py-0.5 text-[11px] text-red-700 dark:bg-red-900/40 dark:text-red-400">
+          <Badge variant="secondary" className="shrink-0 rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-700 dark:bg-red-900/40 dark:text-red-400">
             Failed
-          </span>
+          </Badge>
         ) : (
-          <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+          <Badge variant="secondary" className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
             {results.length} sources
-          </span>
+          </Badge>
         )}
-        <span className={`shrink-0 text-zinc-400 transition-transform ${open ? "rotate-180" : ""}`}>
+        <span className={`shrink-0 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`}>
           <ChevronIcon />
         </span>
-      </button>
+      </Button>
 
       {/* Body */}
       {open && (
-        <div className="border-t border-zinc-100 px-3.5 py-3 dark:border-zinc-800">
+        <div className="border-t border-border px-3.5 py-3">
           {status === "searching" && (
             <div className="flex items-center justify-between">
-              <p className="text-[13px] text-zinc-500 dark:text-zinc-400">
-                Querying <span className="font-medium text-zinc-700 dark:text-zinc-200">“{query}”</span>
+              <p className="text-sm text-muted-foreground">
+                Querying <span className="font-medium text-foreground">“{query}”</span>
               </p>
               {onStop && (
-                <button
+                <Button variant="outline" size="sm"
                   type="button"
                   onClick={onStop}
-                  className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 text-xs text-zinc-500 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs text-muted-foreground transition-colors hover:bg-muted"
                 >
                   <StopIcon />
                   Stop
-                </button>
+                </Button>
               )}
             </div>
           )}
 
           {status === "error" && (
             <div className="flex items-center justify-between">
-              <p className="text-[13px] text-red-600 dark:text-red-400">
+              <p className="text-sm text-red-600 dark:text-red-400">
                 Search failed — check your network connection.
               </p>
               {onRetry && (
-                <button
+                <Button variant="outline" size="sm"
                   type="button"
                   onClick={onRetry}
-                  className="inline-flex h-7 items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 text-xs text-zinc-500 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs text-muted-foreground transition-colors hover:bg-muted"
                 >
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
                     <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
                     <path d="M21 3v5h-5" />
                   </svg>
                   Retry
-                </button>
+                </Button>
               )}
             </div>
           )}
@@ -164,12 +167,12 @@ export function SearchToolCall({
                     rel="noreferrer noopener"
                     className="group block"
                   >
-                    <p className="truncate text-sm font-medium text-zinc-800 group-hover:underline dark:text-zinc-100">
+                    <p className="truncate text-sm font-medium text-foreground group-hover:underline">
                       {r.title}
                     </p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{domainFromUrl(r.url)}</p>
+                    <p className="text-xs text-muted-foreground">{domainFromUrl(r.url)}</p>
                     {r.snippet && (
-                      <p className="mt-0.5 line-clamp-1 text-[13px] text-zinc-500 dark:text-zinc-400">
+                      <p className="mt-0.5 line-clamp-1 text-sm text-muted-foreground">
                         {r.snippet}
                       </p>
                     )}
@@ -180,6 +183,6 @@ export function SearchToolCall({
           )}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

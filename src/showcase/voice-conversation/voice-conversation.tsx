@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -30,7 +31,7 @@ function UserIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="14"
@@ -65,7 +66,7 @@ function SpeakingIcon() {
       <span
         role="img"
         aria-label="Speaking"
-        className="inline-flex h-3.5 items-center gap-[2px] text-violet-500"
+        className="inline-flex h-3.5 items-center gap-[2px] text-muted-foreground"
       >
         {[0, 1, 2, 3].map((i) => (
           <span
@@ -102,37 +103,37 @@ export function VoiceConversation({
             <span
               className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-semibold ${
                 user
-                  ? "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
-                  : "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                  ? "bg-muted text-muted-foreground"
+                  : "bg-primary text-primary-foreground"
               }`}
             >
               {user ? <UserIcon /> : "AI"}
             </span>
 
             <div
-              className={`min-w-0 max-w-[75%] rounded-2xl px-4 py-3 ${
+              className={`min-w-0 max-w-[75%] rounded-xl px-4 py-3 ${
                 user
-                  ? "rounded-tr-md bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                  : "rounded-tl-md border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-800/60"
+                  ? "bg-muted text-foreground"
+                  : "bg-transparent text-foreground"
               }`}
             >
               <div
-                className={`flex items-center gap-2 text-[11px] ${
-                  user ? "text-zinc-300 dark:text-zinc-600" : "text-zinc-500 dark:text-zinc-400"
+                className={`flex items-center gap-2 text-xs ${
+                  user ? "text-muted-foreground" : "text-muted-foreground"
                 }`}
               >
                 <span className="font-medium">{user ? "You" : "Assistant"}</span>
                 {turn.speaking && <SpeakingIcon />}
                 {turn.time && <span className="tabular-nums">{turn.time}</span>}
                 {!turn.speaking && onReplay && (
-                  <button
+                  <Button variant="ghost" size="icon-sm"
                     type="button"
                     onClick={() => onReplay(turn.id)}
                     aria-label={`Replay ${user ? "your" : "the assistant's"} message`}
-                    className="rounded-md p-0.5 transition-colors hover:text-zinc-600 dark:hover:text-zinc-300"
+                    className="min-h-6 min-w-6 rounded-md p-0.5 transition-colors hover:text-muted-foreground"
                   >
                     <PlayIcon />
-                  </button>
+                  </Button>
                 )}
               </div>
               <p className="mt-1 text-sm leading-6">{turn.text}</p>

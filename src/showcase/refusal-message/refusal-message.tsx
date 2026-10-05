@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -43,7 +44,7 @@ export type RefusalMessageProps = {
 
 function ShieldIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
       <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
     </svg>
   );
@@ -51,7 +52,7 @@ function ShieldIcon() {
 
 function ArrowRightIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
       <path d="M5 12h14" />
       <path d="m12 5 7 7-7 7" />
     </svg>
@@ -70,33 +71,32 @@ export function RefusalMessage({
   className = "",
 }: RefusalMessageProps) {
   return (
-    <div className={`flex items-start gap-3 rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
-      <span className="mt-0.5 shrink-0 text-zinc-500 dark:text-zinc-400">
+    <div className={`flex items-start gap-3 rounded-xl border border-border bg-muted px-4 py-3 ${className}`}>
+      <span className="mt-0.5 shrink-0 text-muted-foreground">
         <ShieldIcon />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-sm leading-6 text-zinc-900 dark:text-zinc-100">{message}</p>
+        <p className="text-sm leading-6 text-foreground">{message}</p>
 
-        {/* zinc-600 on the caption: it sits on the zinc-50 surface, where
-            zinc-500 measures under AA at 12px. */}
+        {}
         {reason && (
-          <p className="mt-1.5 text-[13px] leading-5 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-1.5 text-sm leading-5 text-muted-foreground">
             <span className="font-medium">Why: </span>
             {reason}
           </p>
         )}
 
         {suggestion && (
-          <button
+          <Button variant="outline" size="sm"
             type="button"
             onClick={onSuggestion}
-            className="mt-2.5 inline-flex h-7 max-w-full items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-800"
+            className="h-auto min-h-8 whitespace-normal justify-start mt-2.5 inline-flex h-8 max-w-full items-center gap-1.5 rounded-md border border-border bg-card px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
           >
             <span className="truncate">{suggestion}</span>
             <span className="shrink-0">
               <ArrowRightIcon />
             </span>
-          </button>
+          </Button>
         )}
       </div>
     </div>

@@ -45,7 +45,7 @@ export function VoiceWaveform({
 
   return (
     <>
-      <style>{`@keyframes aiui-wave{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}`}</style>
+      <style>{`@keyframes aiui-wave{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}} @media(prefers-reduced-motion:reduce){.scrim-wave-bar{animation:none!important}}`}</style>
       <div className={`flex h-8 items-center gap-[2px] ${className}`} aria-hidden>
         {Array.from({ length: bars }).map((_, i) => {
           /* static bell shape: center bars taller than the edges */
@@ -58,7 +58,7 @@ export function VoiceWaveform({
           return (
             <span
               key={i}
-              className="w-[3px] rounded-full bg-current"
+              className="scrim-wave-bar w-[3px] rounded-full bg-current"
               style={{
                 height: "100%",
                 transform: `scaleY(${base})`,

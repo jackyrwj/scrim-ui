@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -28,7 +29,7 @@ function ChevronIcon({ open }: { open: boolean }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="14"
@@ -42,7 +43,7 @@ function ChevronIcon({ open }: { open: boolean }) {
 
 function CheckIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
       <path d="M20 6 9 17l-5-5" />
     </svg>
   );
@@ -64,43 +65,43 @@ export function ReasoningSteps({
   const doneCount = steps.filter((_, i) => i < activeStep).length;
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 ${className}`}>
-      <button
+    <div className={`overflow-hidden rounded-xl border border-border ${className}`}>
+      <Button variant="ghost" size="sm"
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center gap-2 bg-zinc-50 px-3 py-2.5 text-left transition-colors hover:bg-zinc-100 dark:bg-zinc-800/60 dark:hover:bg-zinc-800"
+        className="h-auto min-h-8 whitespace-normal justify-start flex w-full items-center gap-2 bg-muted px-3 py-2.5 text-left transition-colors hover:bg-muted"
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" className="text-zinc-500 dark:text-zinc-400">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" className="text-muted-foreground">
           <path d="M9.18 9.5a3 3 0 0 0 2.42 4.73" />
           <path d="M12 2a10 10 0 1 0 10 10" />
           <path d="M12 6v4l3 2" />
         </svg>
-        <span className="text-[13px] font-medium text-zinc-700 dark:text-zinc-200">{title}</span>
+        <span className="text-sm font-medium text-foreground">{title}</span>
         {activeStep >= 0 && activeStep < steps.length ? (
-          <span className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-            <span className="h-3 w-3 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-700 dark:border-t-zinc-300" />
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <span className="h-3 w-3 animate-spin rounded-full border-2 border-border border-t-foreground " />
             Step {activeStep + 1} of {steps.length}
             {elapsed && ` · ${elapsed}`}
           </span>
         ) : (
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="text-xs text-muted-foreground">
             {doneCount} {doneCount === 1 ? "step" : "steps"} · {steps.length} total
           </span>
         )}
-        <span className="ml-auto text-zinc-400 dark:text-zinc-500">
+        <span className="ml-auto text-muted-foreground">
           <ChevronIcon open={open} />
         </span>
-      </button>
+      </Button>
 
       {open && (
-        <ol className="border-t border-zinc-200 p-2 dark:border-zinc-800">
+        <ol className="border-t border-border p-2">
           {steps.map((step, i) => {
             const state = i < activeStep ? "done" : i === activeStep ? "active" : "pending";
             return (
               <li
                 key={step}
                 className={`flex items-start gap-2.5 rounded-lg px-2 py-1.5 ${
-                  state === "active" ? "bg-zinc-100 dark:bg-zinc-800/80" : ""
+                  state === "active" ? "bg-muted" : ""
                 }`}
               >
                 <span className="mt-[3px] flex h-4 w-4 shrink-0 items-center justify-center">
@@ -110,19 +111,19 @@ export function ReasoningSteps({
                     </span>
                   )}
                   {state === "active" && (
-                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-600 dark:border-zinc-700 dark:border-t-zinc-300" />
+                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-border border-t-foreground " />
                   )}
                   {state === "pending" && (
-                    <span className="h-1.5 w-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted" />
                   )}
                 </span>
                 <span
-                  className={`text-[13px] leading-5 ${
+                  className={`text-sm leading-5 ${
                     state === "done"
-                      ? "text-zinc-600 dark:text-zinc-300"
+                      ? "text-muted-foreground"
                       : state === "active"
-                        ? "font-medium text-zinc-800 dark:text-zinc-100"
-                        : "text-zinc-500 dark:text-zinc-400"
+                        ? "font-medium text-foreground"
+                        : "text-muted-foreground"
                   }`}
                 >
                   {step}

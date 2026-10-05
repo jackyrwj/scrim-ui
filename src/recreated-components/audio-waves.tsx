@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { Mic, Square } from "lucide-react";
 
@@ -53,12 +55,12 @@ export function AudioWaves() {
       stop();
     }
   };
-  return <div className="w-full rounded-2xl border border-(--border) bg-(--card) p-5 shadow-sm">
-    <div className="flex items-center justify-between gap-3"><div><h3 className="text-sm font-semibold">Voice input</h3><p className="mt-1 text-xs text-(--muted-foreground)">{recording ? "Listening to your microphone" : "Waveform preview · microphone off"}</p></div><span className={`size-2 rounded-full ${recording ? "bg-red-500" : "bg-(--muted-foreground)"}`} aria-hidden="true" /></div>
-    <div className="mt-5 flex h-20 items-center justify-center gap-1 rounded-xl bg-(--stage) px-3" role="img" aria-label={recording ? "Live microphone levels" : "Decorative audio waveform preview"}>{levels.map((level, i) => <span key={i} className={`w-1 rounded-full bg-(--primary) ${recording ? "" : "audio-waves-demo"}`} style={{ height: `${Math.max(9, Math.round(level * 72))}px`, animationDelay: `${i * 55}ms` }} />)}</div>
-    <button type="button" onClick={recording ? stop : () => void start()} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-lg bg-(--primary) px-4 text-xs font-medium text-(--primary-foreground) focus-visible:outline-2 focus-visible:outline-offset-2">{recording ? <Square size={14} aria-hidden="true" /> : <Mic size={14} aria-hidden="true" />}{recording ? "Stop microphone" : "Test microphone"}</button>
-    <p className="mt-3 text-xs text-(--muted-foreground)">Audio stays in your browser and is not uploaded.</p>
+  return <Card className="gap-0 py-0 w-full rounded-xl border border-border bg-card p-5 shadow-sm">
+    <div className="flex items-center justify-between gap-3"><div><h3 className="text-sm font-semibold">Voice input</h3><p className="mt-1 text-xs text-muted-foreground">{recording ? "Listening to your microphone" : "Waveform preview · microphone off"}</p></div><span className={`size-2 rounded-full ${recording ? "bg-red-500" : "bg-muted-foreground"}`} aria-hidden="true" /></div>
+    <div className="mt-5 flex h-20 items-center justify-center gap-1 rounded-xl bg-muted px-3" role="img" aria-label={recording ? "Live microphone levels" : "Decorative audio waveform preview"}>{levels.map((level, i) => <span key={i} className={`w-1 rounded-full bg-primary ${recording ? "" : "audio-waves-demo"}`} style={{ height: `${Math.max(9, Math.round(level * 72))}px`, animationDelay: `${i * 55}ms` }} />)}</div>
+    <Button variant="default" size="sm" type="button" onClick={recording ? stop : () => void start()} className="mt-4 inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-4 text-xs font-medium text-primary-foreground focus-visible:outline-2 focus-visible:outline-offset-2">{recording ? <Square size={14} aria-hidden="true" /> : <Mic size={14} aria-hidden="true" />}{recording ? "Stop microphone" : "Test microphone"}</Button>
+    <p className="mt-3 text-xs text-muted-foreground">Audio stays in your browser and is not uploaded.</p>
     <p role="status" className="mt-1 text-xs text-red-600">{error}</p>
     <style>{`@media (prefers-reduced-motion: no-preference) { @keyframes audio-waves-demo { 0%, 100% { transform: scaleY(.45) } 50% { transform: scaleY(1.5) } } .audio-waves-demo { animation: audio-waves-demo 1.2s ease-in-out infinite; } }`}</style>
-  </div>;
+  </Card>;
 }

@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -57,7 +60,7 @@ export type AgentHandoffProps = {
 
 function ArrowIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" {...props}>
       <path d="M5 12h14M13 6l6 6-6 6" />
     </svg>
   );
@@ -65,7 +68,7 @@ function ArrowIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ReturnIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" {...props}>
       <path d="M19 12H5M11 6l-6 6 6 6" />
     </svg>
   );
@@ -96,51 +99,51 @@ export function AgentHandoff({
   const [openWithheld, setOpenWithheld] = React.useState(false);
 
   return (
-    <div
-      className={`rounded-xl border bg-white dark:bg-zinc-900 ${
+    <Card
+      className={`gap-0 py-0 rounded-xl border bg-card ${
         state === "failed"
           ? "border-red-200 dark:border-red-900/60"
-          : "border-zinc-200 dark:border-zinc-800"
+          : "border-border"
       } ${className}`}
     >
-      <div className="flex flex-wrap items-center gap-2 border-b border-zinc-100 px-3.5 py-2.5 dark:border-zinc-800">
-        <span className="font-mono text-[11px] text-zinc-600 dark:text-zinc-300">{from}</span>
-        <span className={`shrink-0 ${state === "returned" ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-400 dark:text-zinc-500"}`}>
+      <div className="flex flex-wrap items-center gap-2 border-b border-border px-3.5 py-2.5">
+        <span className="font-mono text-xs text-muted-foreground">{from}</span>
+        <span className={`shrink-0 ${state === "returned" ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`}>
           {state === "returned" ? <ReturnIcon /> : <ArrowIcon />}
         </span>
-        <span className="font-mono text-[11px] font-medium text-zinc-900 dark:text-zinc-100">{to}</span>
-        <span
-          className={`ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-medium ${
+        <span className="font-mono text-xs font-medium text-foreground">{to}</span>
+        <Badge variant="secondary"
+          className={`ml-auto inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ${
             state === "returned"
               ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400"
               : state === "failed"
                 ? "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-400"
-                : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                : "bg-muted text-muted-foreground"
           }`}
         >
           {state === "accepted" && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />}
           {STATE_LABEL[state]}
-        </span>
+        </Badge>
       </div>
 
       <div className="px-3.5 py-3">
         {reason && (
-          <p className="mb-2 text-[11px] text-zinc-500 dark:text-zinc-400">{reason}</p>
+          <p className="mb-2 text-xs text-muted-foreground">{reason}</p>
         )}
 
-        <p className="rounded-lg bg-zinc-50 px-2.5 py-2 text-[13px] leading-5 text-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-200">
+        <p className="rounded-lg bg-muted px-2.5 py-2 text-sm leading-5 text-foreground">
           {task}
         </p>
 
         {carried.length > 0 && (
           <div className="mt-2.5">
-            <p className="text-[10px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+            <p className="text-xs font-medium text-muted-foreground">
               Carried across
             </p>
             <ul className="mt-1 space-y-0.5">
               {carried.map((item) => (
-                <li key={item} className="flex gap-1.5 text-[12px] leading-5 text-zinc-600 dark:text-zinc-300">
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+                <li key={item} className="flex gap-1.5 text-xs leading-5 text-muted-foreground">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-muted" />
                   {item}
                 </li>
               ))}
@@ -150,21 +153,21 @@ export function AgentHandoff({
 
         {withheld.length > 0 && (
           <div className="mt-2.5">
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={() => setOpenWithheld((v) => !v)}
               aria-expanded={openWithheld}
-              className="inline-flex items-center gap-1.5 rounded-md text-[10px] font-medium uppercase tracking-wide text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400"
+              className="inline-flex items-center gap-1.5 rounded-md text-xs font-medium text-amber-600 transition-colors hover:text-amber-700 dark:text-amber-500 dark:hover:text-amber-400"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="10" height="10" className={openWithheld ? "rotate-180" : ""}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="10" height="10" className={openWithheld ? "rotate-180" : ""}>
                 <path d="m6 9 6 6 6-6" />
               </svg>
               Not carried across ({withheld.length})
-            </button>
+            </Button>
             {openWithheld && (
               <ul className="mt-1 space-y-0.5">
                 {withheld.map((item) => (
-                  <li key={item} className="flex gap-1.5 text-[12px] leading-5 text-zinc-500 dark:text-zinc-400">
+                  <li key={item} className="flex gap-1.5 text-xs leading-5 text-muted-foreground">
                     <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-400" />
                     {item}
                   </li>
@@ -175,14 +178,14 @@ export function AgentHandoff({
         )}
 
         {result && (
-          <div className="mt-3 border-t border-zinc-100 pt-2.5 dark:border-zinc-800">
-            <p className="text-[10px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+          <div className="mt-3 border-t border-border pt-2.5">
+            <p className="text-xs font-medium text-muted-foreground">
               Returned to {from}
             </p>
-            <p className="mt-1 text-[13px] leading-5 text-zinc-700 dark:text-zinc-200">{result}</p>
+            <p className="mt-1 text-sm leading-5 text-foreground">{result}</p>
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

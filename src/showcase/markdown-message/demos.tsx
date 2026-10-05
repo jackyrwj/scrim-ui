@@ -43,7 +43,7 @@ Long tables scroll horizontally inside their own container instead of stretching
 
 export function DemoDefault() {
   return (
-    <div className="rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-800/60">
+    <div className="rounded-xl border border-border bg-muted px-4 py-3">
       <MarkdownMessage text={DEFAULT_TEXT} />
     </div>
   );
@@ -51,7 +51,7 @@ export function DemoDefault() {
 
 export function DemoCodeBlock() {
   return (
-    <div className="rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-800/60">
+    <div className="rounded-xl border border-border bg-muted px-4 py-3">
       <MarkdownMessage text={CODE_TEXT} />
     </div>
   );
@@ -59,7 +59,7 @@ export function DemoCodeBlock() {
 
 export function DemoTable() {
   return (
-    <div className="rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-800/60">
+    <div className="rounded-xl border border-border bg-muted px-4 py-3">
       <MarkdownMessage text={TABLE_TEXT} />
     </div>
   );

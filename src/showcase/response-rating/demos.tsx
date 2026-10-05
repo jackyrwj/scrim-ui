@@ -5,7 +5,7 @@ import { ResponseRating, type Rating } from "./response-rating";
 
 function Answer({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-2 max-w-lg text-[15px] leading-7 text-zinc-700 dark:text-zinc-200">{children}</p>
+    <p className="mb-2 max-w-lg text-sm leading-7 text-foreground">{children}</p>
   );
 }
 

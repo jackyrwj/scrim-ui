@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -100,7 +102,7 @@ export function formatTokens(n: number): string {
 
 function ChevronIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="m6 9 6 6 6-6" />
     </svg>
   );
@@ -156,14 +158,14 @@ export function CostMeter({
   const overBudget = budgetUsd !== undefined && headline.usd > budgetUsd;
 
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
+    <Card className={`gap-0 py-0 rounded-xl border border-border bg-card ${className}`}>
       <div className="flex items-center gap-3 px-3.5 py-2.5">
-        <span className="min-w-0 truncate font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+        <span className="min-w-0 truncate font-mono text-xs text-muted-foreground">
           {model}
         </span>
 
         <span className="ml-auto flex shrink-0 items-baseline gap-2.5">
-          <span className="tabular-nums text-[11px] text-zinc-500 dark:text-zinc-400">
+          <span className="tabular-nums text-xs text-muted-foreground">
             {usage.inputTokens === undefined ? "—" : formatTokens(usage.inputTokens)} in ·{" "}
             {usage.outputTokens === undefined ? "—" : formatTokens(usage.outputTokens)} out
           </span>
@@ -172,7 +174,7 @@ export function CostMeter({
                announced politely rather than on every token. */
             aria-live="polite"
             className={`tabular-nums text-sm font-medium ${
-              overBudget ? "text-red-600 dark:text-red-400" : "text-zinc-900 dark:text-zinc-100"
+              overBudget ? "text-red-600 dark:text-red-400" : "text-foreground"
             }`}
             title={headline.exact ? undefined : "Approximate — the provider did not report every field."}
           >
@@ -180,28 +182,28 @@ export function CostMeter({
           </span>
         </span>
 
-        <button
+        <Button variant="ghost" size="icon-sm"
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? "Hide the breakdown" : "Show the breakdown"}
-          className="-mr-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+          className="min-h-6 min-w-6 -mr-1 inline-flex h-8 w-6 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-muted-foreground"
         >
           <ChevronIcon className={open ? "rotate-180" : ""} />
-        </button>
+        </Button>
       </div>
 
       {budgetUsd !== undefined && (
         <div className="px-3.5 pb-2.5">
-          <div className="h-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+          <div className="h-1 overflow-hidden rounded-full bg-muted">
             <div
               className={`h-full rounded-full transition-[width] duration-500 ${
-                overBudget ? "bg-red-500" : spent > 0.8 ? "bg-amber-500" : "bg-zinc-400 dark:bg-zinc-500"
+                overBudget ? "bg-red-500" : spent > 0.8 ? "bg-amber-500" : "bg-muted"
               }`}
               style={{ width: `${spent * 100}%` }}
             />
           </div>
-          <p className="mt-1 text-[11px] text-zinc-400 dark:text-zinc-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             {overBudget
               ? `Over the ${formatCost({ usd: budgetUsd, exact: true })} budget for this conversation.`
               : `of ${formatCost({ usd: budgetUsd, exact: true })} budgeted`}
@@ -210,7 +212,7 @@ export function CostMeter({
       )}
 
       {open && (
-        <dl className="space-y-1.5 border-t border-zinc-100 px-3.5 py-3 text-[11px] dark:border-zinc-800">
+        <dl className="space-y-1.5 border-t border-border px-3.5 py-3 text-xs">
           <Row
             label="Fresh input"
             value={usage.inputTokens === undefined ? "not reported" : `${formatTokens(fresh)} · ${money((fresh / 1e6) * price.input)}`}
@@ -239,39 +241,39 @@ export function CostMeter({
           )}
 
           {total && (
-            <div className="mt-2.5 flex items-baseline justify-between border-t border-zinc-100 pt-2.5 dark:border-zinc-800">
-              <dt className="text-zinc-500 dark:text-zinc-400">This turn</dt>
-              <dd className="tabular-nums font-medium text-zinc-700 dark:text-zinc-200">
+            <div className="mt-2.5 flex items-baseline justify-between border-t border-border pt-2.5">
+              <dt className="text-muted-foreground">This turn</dt>
+              <dd className="tabular-nums font-medium text-foreground">
                 {formatCost(turn)}
               </dd>
             </div>
           )}
 
           {!headline.exact && (
-            <p className="pt-1 text-[11px] leading-4 text-amber-600 dark:text-amber-500">
+            <p className="pt-1 text-xs leading-4 text-amber-600 dark:text-amber-500">
               The provider did not report every field for this turn, so the total is a lower bound.
               That is what the ~ means.
             </p>
           )}
           {streaming && (
-            <p className="pt-1 text-[11px] leading-4 text-zinc-400 dark:text-zinc-500">
+            <p className="pt-1 text-xs leading-4 text-muted-foreground">
               Still generating — output tokens are a running subtotal.
             </p>
           )}
         </dl>
       )}
-    </div>
+    </Card>
   );
 }
 
 function Row({ label, value, hint, muted = false }: { label: string; value: string; hint?: string; muted?: boolean }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <dt className={muted ? "text-zinc-400 dark:text-zinc-500" : "text-zinc-500 dark:text-zinc-400"}>
+      <dt className={muted ? "text-muted-foreground" : "text-muted-foreground"}>
         {label}
-        {hint && <span className="ml-1.5 text-zinc-300 dark:text-zinc-600">{hint}</span>}
+        {hint && <span className="ml-1.5 text-muted-foreground">{hint}</span>}
       </dt>
-      <dd className={`shrink-0 tabular-nums ${muted ? "text-zinc-400 dark:text-zinc-500" : "text-zinc-700 dark:text-zinc-200"}`}>
+      <dd className={`shrink-0 tabular-nums ${muted ? "text-muted-foreground" : "text-foreground"}`}>
         {value}
       </dd>
     </div>

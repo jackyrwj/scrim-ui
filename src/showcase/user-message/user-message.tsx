@@ -1,5 +1,7 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -24,7 +26,7 @@ export type UserMessageProps = {
 
 function CopyIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
       <rect x="9" y="9" width="13" height="13" rx="2" />
       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
     </svg>
@@ -33,7 +35,7 @@ function CopyIcon() {
 
 function EditIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
     </svg>
   );
@@ -41,7 +43,7 @@ function EditIcon() {
 
 function RegenerateIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
       <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
       <path d="M21 3v5h-5" />
     </svg>
@@ -76,57 +78,53 @@ export function UserMessage({
         <div className="flex flex-wrap items-center justify-end gap-2">
           <span className="text-sm font-medium">You</span>
           {edited && (
-            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            <Badge variant="secondary" className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
               Edited
-            </span>
+            </Badge>
           )}
         </div>
 
-        <div className="mt-1.5 whitespace-pre-wrap rounded-2xl rounded-tr-md bg-zinc-900 px-4 py-3 text-[15px] leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+        <div className="mt-1.5 whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm leading-6 text-foreground">
           {text}
         </div>
 
         {showActions && (onCopy || onEdit || onRegenerate) && (
           <div className="mt-2 flex items-center justify-end gap-1">
             {onCopy && (
-              <button
+              <Button variant="ghost" size="sm"
                 type="button"
                 onClick={copy}
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-xs text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <CopyIcon />
                 {copied ? "Copied" : "Copy"}
-              </button>
+              </Button>
             )}
             {onEdit && (
-              <button
+              <Button variant="ghost" size="sm"
                 type="button"
                 onClick={onEdit}
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-xs text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <EditIcon />
                 Edit
-              </button>
+              </Button>
             )}
             {onRegenerate && (
-              <button
+              <Button variant="ghost" size="sm"
                 type="button"
                 onClick={onRegenerate}
-                className="inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-xs text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 <RegenerateIcon />
                 Regenerate
-              </button>
+              </Button>
             )}
           </div>
         )}
       </div>
 
-      {avatar ?? (
-        <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-zinc-200 text-xs font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">
-          You
-        </div>
-      )}
+      {avatar && <div className="shrink-0">{avatar}</div>}
     </div>
   );
 }

@@ -3,6 +3,9 @@ import { ArrowUpRight } from "lucide-react";
 import { ComponentPreview } from "./component-preview";
 import { AicssPreview } from "@/components/component-page/aicss-preview";
 import { RecreatedPreview } from "@/components/component-page/recreated-preview";
+import { ComponentStyleSample } from "./component-style-samples";
+import { isStyledComponent } from "@/lib/component-style";
+import { GalleryPreview } from "./gallery-preview";
 
 export function GalleryCard({
   slug, name, description, aicss = false, recreated = false, sourceSlug, variants = 1, pro = false, published = true,
@@ -20,9 +23,9 @@ export function GalleryCard({
   const content = (
     <>
       {aicss || recreated ? (
-        <div className="aicss-card-stage" inert aria-hidden="true">
-          <div className="aicss-card-demo">{aicss ? <AicssPreview slug={sourceSlug ?? slug} /> : <RecreatedPreview slug={slug} />}</div>
-        </div>
+        <GalleryPreview name={name} slug={slug}>{aicss ? <AicssPreview slug={sourceSlug ?? slug} /> : <RecreatedPreview slug={slug} />}</GalleryPreview>
+      ) : isStyledComponent(slug) ? (
+        <GalleryPreview name={name} slug={slug}><ComponentStyleSample slug={slug} /></GalleryPreview>
       ) : <ComponentPreview slug={slug} />}
       <div className="flex items-center justify-between gap-3 px-5 py-4">
         <div className="min-w-0">

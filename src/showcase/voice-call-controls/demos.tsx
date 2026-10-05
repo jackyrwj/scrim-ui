@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { VoiceCallControls } from "./voice-call-controls";
 
@@ -16,15 +17,15 @@ export function DemoVoiceCall() {
 
   if (ended) {
     return (
-      <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-center text-sm text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
+      <div className="rounded-xl border border-border bg-muted px-4 py-3 text-center text-sm text-muted-foreground">
         Call ended · {Math.floor(elapsed / 60)}:{(elapsed % 60).toString().padStart(2, "0")}
-        <button
+        <Button variant="ghost" size="sm"
           type="button"
           onClick={() => { setEnded(false); setElapsed(0); setMuted(false); }}
-          className="ml-2 text-xs font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-700 dark:hover:text-zinc-300"
+          className="ml-2 text-xs font-medium text-muted-foreground underline underline-offset-2 hover:text-foreground"
         >
           Restart demo
-        </button>
+        </Button>
       </div>
     );
   }

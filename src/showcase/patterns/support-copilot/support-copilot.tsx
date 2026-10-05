@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { ConversationSidebar, type ConversationGroup } from "../../conversation-sidebar/conversation-sidebar";
 import { ContextPicker, type ContextItem } from "../../context-picker/context-picker";
@@ -151,9 +152,9 @@ export function SupportCopilotPattern() {
   );
 
   return (
-    <div className="flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Ticket rail */}
-      <aside className="hidden w-56 shrink-0 border-r border-zinc-200 dark:border-zinc-800 md:block">
+      <aside className="hidden w-56 shrink-0 border-r border-border md:block">
         <ConversationSidebar
           groups={SIDEBAR_GROUPS}
           activeId="t1042"
@@ -165,18 +166,18 @@ export function SupportCopilotPattern() {
 
       {/* Copilot thread */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Ticket #1042 — Refund request</p>
-          <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="border-b border-border px-4 py-3">
+          <p className="text-sm font-semibold text-foreground">Ticket #1042 — Refund request</p>
+          <p className="truncate text-xs text-muted-foreground">
             Customer: Ana R. · Pro plan since 2024 · Order #8182 · “I was charged but already cancelled”
           </p>
         </div>
 
         <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
           {turns.length === 0 && (
-            <div className="rounded-xl border border-dashed border-zinc-300 px-4 py-6 text-center dark:border-zinc-700">
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">Paste the customer&#39;s message to get a grounded draft</p>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="rounded-xl border border-dashed border-border px-4 py-6 text-center">
+              <p className="text-sm font-medium text-foreground">Paste the customer&#39;s message to get a grounded draft</p>
+              <p className="mt-1 text-xs text-muted-foreground">
                 Answers cite the Help Center and refund policy — the copilot says when it&#39;s guessing.
               </p>
             </div>
@@ -185,7 +186,7 @@ export function SupportCopilotPattern() {
           {turns.map((turn) =>
             turn.role === "agent" ? (
               <div key={turn.id} className="flex justify-end">
-                <p className="max-w-[85%] rounded-2xl rounded-br-md bg-zinc-900 px-4 py-2.5 text-sm leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+                <p className="max-w-[85%] rounded-xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-6 text-primary-foreground">
                   {turn.text}
                 </p>
               </div>
@@ -194,7 +195,7 @@ export function SupportCopilotPattern() {
               <div key={turn.id} className="space-y-2">
                 <ConfidenceAnswer confidence="low" text={turn.text} hedge={HEDGE_LOW} />
                 <div className="ml-1 space-y-1">
-                  <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <p className="text-xs font-medium text-muted-foreground">
                     Correct the copilot
                   </p>
                   <InlineCorrection
@@ -227,11 +228,11 @@ export function SupportCopilotPattern() {
                     {turn.kind === "cited" && (
                       <>
                         <CitationList citations={CITATIONS} />
-                        <details className="group rounded-xl border border-zinc-200 dark:border-zinc-800">
-                          <summary className="cursor-pointer select-none px-3 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+                        <details className="group rounded-xl border border-border">
+                          <summary className="cursor-pointer select-none px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground">
                             Inspect retrieved passages
                           </summary>
-                          <div className="border-t border-zinc-200 p-2 dark:border-zinc-800">
+                          <div className="border-t border-border p-2">
                             <SourceList sources={RETRIEVED} floor={0.5} />
                           </div>
                         </details>
@@ -262,7 +263,7 @@ export function SupportCopilotPattern() {
           )}
         </div>
 
-        <div className="border-t border-zinc-200 p-3 dark:border-zinc-800">
+        <div className="border-t border-border p-3">
           <ContextPicker
             className="mb-2"
             items={contextItems}
@@ -278,6 +279,6 @@ export function SupportCopilotPattern() {
           />
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

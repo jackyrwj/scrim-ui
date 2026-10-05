@@ -52,7 +52,7 @@ export const voiceWaveformControls: ComponentControls = {
 
 export function renderVoiceWaveform(v: ControlValues, key: string) {
   return (
-    <div key={key} className="flex justify-center text-violet-600 dark:text-violet-400">
+    <div key={key} className="flex justify-center text-muted-foreground">
       <VoiceWaveform state={v.state as WaveformState} bars={Number(v.bars)} className="h-10 w-64" />
     </div>
   );

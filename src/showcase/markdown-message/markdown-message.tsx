@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -81,26 +82,25 @@ function CodeBlock({ lang, code }: { lang: string; code: string }) {
   };
 
   return (
-    <div className="my-3 overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
-      <div className="flex items-center justify-between bg-zinc-100 px-3 py-1.5 dark:bg-zinc-800/80">
-        {/* zinc-600: this header sits on bg-zinc-100, where zinc-500 is
-            4.39:1 — under AA at 11px. Dark mode is unaffected. */}
-        <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">
+    <div className="my-3 overflow-hidden rounded-xl border border-border">
+      <div className="flex items-center justify-between bg-muted px-3 py-1.5">
+        {}
+        <span className="text-xs font-medium text-muted-foreground">
           {lang || "text"}
         </span>
-        <button
+        <Button variant="ghost" size="sm"
           type="button"
           onClick={copy}
-          className="inline-flex h-6 items-center gap-1 rounded-md px-1.5 text-[11px] text-zinc-600 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-zinc-100"
+          className="inline-flex h-8 items-center gap-1 rounded-md px-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
             <rect x="9" y="9" width="13" height="13" rx="2" />
             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
           </svg>
           {copied ? "Copied" : "Copy"}
-        </button>
+        </Button>
       </div>
-      <pre className="overflow-x-auto bg-zinc-950 px-3 py-3 text-[13px] leading-5 text-zinc-100 dark:bg-zinc-900">
+      <pre className="overflow-x-auto bg-muted px-3 py-3 text-sm leading-5 text-muted-foreground">
         <code>{code}</code>
       </pre>
     </div>
@@ -159,13 +159,13 @@ function MarkdownBlocks({ text }: { text: string }) {
       }
       blocks.push(
         <div key={key++} className="my-3 overflow-x-auto">
-          <table className="w-full border-collapse text-[13px] leading-5">
+          <table className="w-full border-collapse text-sm leading-5">
             <thead>
               <tr>
                 {header.map((h, hk) => (
                   <th
                     key={hk}
-                    className="border-b border-zinc-200 px-3 py-1.5 text-left font-medium text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
+                    className="border-b border-border px-3 py-1.5 text-left font-medium text-muted-foreground"
                   >
                     {renderInline(h, `th${hk}`)}
                   </th>
@@ -178,7 +178,7 @@ function MarkdownBlocks({ text }: { text: string }) {
                   {row.map((cell, ck) => (
                     <td
                       key={ck}
-                      className="border-b border-zinc-200/70 px-3 py-1.5 text-zinc-700 dark:border-zinc-800/70 dark:text-zinc-300"
+                      className="border-b border-border/70 px-3 py-1.5 text-foreground"
                     >
                       {renderInline(cell, `td${rk}-${ck}`)}
                     </td>
@@ -234,7 +234,7 @@ function MarkdownBlocks({ text }: { text: string }) {
 
 export function MarkdownMessage({ text, className = "" }: MarkdownMessageProps) {
   return (
-    <div className={`whitespace-pre-wrap text-[15px] leading-7 text-zinc-800 dark:text-zinc-100 ${className}`}>
+    <div className={`whitespace-pre-wrap text-sm leading-7 text-foreground ${className}`}>
       <MarkdownBlocks text={text} />
     </div>
   );

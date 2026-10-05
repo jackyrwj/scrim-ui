@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -186,22 +187,22 @@ function CodeBlock({
 }) {
   const [copied, setCopied] = React.useState(false);
   return (
-    <div className="my-3 overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
-      <div className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-3 py-1.5 dark:border-zinc-800 dark:bg-zinc-900/60">
-        <span className="font-mono text-[11px] text-(--muted-foreground)">{lang || "text"}</span>
-        <button
+    <div className="my-3 overflow-hidden rounded-lg border border-border">
+      <div className="flex items-center justify-between border-b border-border bg-muted px-3 py-1.5">
+        <span className="font-mono text-xs text-(--muted-foreground)">{lang || "text"}</span>
+        <Button variant="ghost" size="sm"
           type="button"
           onClick={() => {
             void navigator.clipboard?.writeText(code);
             setCopied(true);
             window.setTimeout(() => setCopied(false), 1500);
           }}
-          className="text-[11px] text-(--muted-foreground) transition-colors hover:text-(--foreground)"
+          className="text-xs text-(--muted-foreground) transition-colors hover:text-(--foreground)"
         >
           {copied ? "Copied" : "Copy"}
-        </button>
+        </Button>
       </div>
-      <pre className="overflow-x-auto bg-zinc-950 px-3 py-3 text-[13px] leading-5 text-zinc-100 dark:bg-zinc-900">
+      <pre className="overflow-x-auto bg-muted px-3 py-3 text-sm leading-5 text-muted-foreground">
         <code>
           {code}
           {caret}
@@ -352,11 +353,11 @@ function parseBlocks(
       }
       blocks.push(
         <div key={k} className="my-3 overflow-x-auto">
-          <table className="w-full border-collapse text-[13px] leading-5">
+          <table className="w-full border-collapse text-sm leading-5">
             <thead>
               <tr>
                 {header.map((h, hk) => (
-                  <th key={hk} className="border-b border-zinc-200 px-2 py-1.5 text-left font-medium dark:border-zinc-800">
+                  <th key={hk} className="border-b border-border px-2 py-1.5 text-left font-medium">
                     {renderInline(h, false, `${k}-h${hk}`)}
                   </th>
                 ))}
@@ -369,7 +370,7 @@ function parseBlocks(
                       arriving has fewer cells, and letting the column count
                       change would make the whole table jump. */}
                   {header.map((_, ck) => (
-                    <td key={ck} className="border-b border-zinc-100 px-2 py-1.5 align-top dark:border-zinc-900">
+                    <td key={ck} className="border-b border-border px-2 py-1.5 align-top">
                       {renderInline(row[ck] ?? "", false, `${k}-r${rk}c${ck}`)}
                       {/* Last *filled* cell, not the last column: a row that
                           is still arriving is padded out with empty cells,
@@ -524,7 +525,7 @@ export function StreamingMarkdown({ text, streaming = false, className }: Stream
   const tailBlocks = parseBlocks(tail, streaming, "t", streaming);
 
   return (
-    <div className={`text-[15px] leading-6 ${className ?? ""}`}>
+    <div className={`text-sm leading-6 ${className ?? ""}`}>
       {stableBlocks}
       {tailBlocks}
     </div>

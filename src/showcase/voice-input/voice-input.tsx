@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -28,7 +30,7 @@ function MicIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="16"
@@ -56,7 +58,7 @@ function XIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="12"
@@ -110,56 +112,56 @@ export function VoiceInput({
 }: VoiceInputProps) {
   if (state === "recording") {
     return (
-      <div
-        className={`rounded-xl border border-red-200 bg-white p-3 dark:border-red-900/50 dark:bg-zinc-900 ${className}`}
+      <Card
+        className={`gap-0 py-0 rounded-xl border border-red-200 bg-card p-3 dark:border-red-900/50 ${className}`}
       >
         <div className="flex items-center gap-3">
-          <button
+          <Button variant="destructive" size="icon-sm"
             type="button"
             onClick={onStop}
             aria-label="Stop recording"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 text-white transition-transform hover:scale-105"
+            className="min-h-6 min-w-6 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 text-white transition-transform"
           >
             <StopIcon />
-          </button>
+          </Button>
           <div className="min-w-0 flex-1 text-red-500 dark:text-red-400">
             <Bars active />
           </div>
-          <span className="shrink-0 text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{recordingTime}</span>
+          <span className="shrink-0 text-xs tabular-nums text-muted-foreground">{recordingTime}</span>
           {onCancel && (
-            <button
+            <Button variant="ghost" size="icon-sm"
               type="button"
               onClick={onCancel}
               aria-label="Cancel recording"
-              className="shrink-0 rounded-md p-1 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
+              className="min-h-6 min-w-6 shrink-0 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-muted-foreground"
             >
               <XIcon />
-            </button>
+            </Button>
           )}
         </div>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
+        <p className="mt-2 text-sm text-muted-foreground">
           {transcript || "Listening…"}
         </p>
-      </div>
+      </Card>
     );
   }
 
   return (
-    <div
-      className={`flex items-center gap-3 rounded-xl border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900 ${className}`}
+    <Card
+      className={`flex-row gap-0 py-0 flex items-center gap-3 rounded-xl border border-border bg-card p-3 ${className}`}
     >
-      <button
+      <Button variant="default" size="icon-sm"
         type="button"
         onClick={onStart}
         aria-label="Start voice input"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-white transition-transform hover:scale-105 dark:bg-zinc-100 dark:text-zinc-900"
+        className="min-h-6 min-w-6 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform"
       >
         <MicIcon />
-      </button>
-      <span className="text-sm text-zinc-500 dark:text-zinc-400">Click to talk</span>
-      <div className="ml-auto text-zinc-300 dark:text-zinc-600">
+      </Button>
+      <span className="text-sm text-muted-foreground">Click to talk</span>
+      <div className="ml-auto text-muted-foreground">
         <Bars active={false} />
       </div>
-    </div>
+    </Card>
   );
 }

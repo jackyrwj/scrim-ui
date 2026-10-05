@@ -25,6 +25,7 @@ const KEYFRAMES = `
    1.68:1 against the bubble — unreadable for part of every cycle. The dots
    above may fade further because they are decorative and aria-hidden. */
 @keyframes aiui-think-pulse{0%,100%{opacity:.85}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.scrim-thinking *{animation:none!important}}
 `;
 
 function Dots() {
@@ -62,19 +63,16 @@ export function ThinkingIndicator({
 }: ThinkingIndicatorProps) {
   return (
     <div
-      className={`inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 ${className}`}
+      className={`scrim-thinking inline-flex items-center gap-2 text-sm text-muted-foreground ${className}`}
     >
       <style>{KEYFRAMES}</style>
-      <span className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-zinc-900 text-xs font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
-        AI
-      </span>
-      <span className="flex min-h-8 items-center gap-2 rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-3.5 py-2 dark:border-zinc-800 dark:bg-zinc-800/60">
+      <span className="flex min-h-8 items-center gap-2">
         {variant === "dots" && <Dots />}
         {variant === "caret" && <Caret />}
         {variant === "label" && (
           <span
-            /* zinc-600 so the trough of the pulse still clears AA (5.05:1). */
-            className="inline-block text-zinc-600 dark:text-zinc-300"
+
+            className="inline-block text-muted-foreground"
             style={{ animation: "aiui-think-pulse 1.4s infinite ease-in-out" }}
           >
             {label}…

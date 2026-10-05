@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { PromptInput } from "../../prompt-input/prompt-input";
 import { ModelSelector } from "../../model-selector/model-selector";
@@ -151,13 +152,13 @@ export function ImageStudioPattern() {
   }
 
   return (
-    <div className="flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Composer rail */}
-      <aside className="hidden w-72 shrink-0 flex-col gap-3 border-r border-zinc-200 p-3 dark:border-zinc-800 md:flex">
-        <p className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Image Studio</p>
+      <aside className="hidden w-72 shrink-0 flex-col gap-3 border-r border-border p-3 md:flex">
+        <p className="text-sm font-semibold text-foreground">Image Studio</p>
         <ModelSelector options={MODELS} value={model} onSelect={setModel} />
         {draftPrompt && (
-          <p className="rounded-lg bg-zinc-50 px-2.5 py-2 text-[11px] leading-4 text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
+          <p className="rounded-lg bg-muted px-2.5 py-2 text-xs leading-4 text-muted-foreground">
             Reusing: “{draftPrompt}”
           </p>
         )}
@@ -174,7 +175,7 @@ export function ImageStudioPattern() {
 
       {/* Results feed */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="border-b border-zinc-200 px-4 py-3 dark:border-zinc-800 md:hidden">
+        <div className="border-b border-border px-4 py-3 md:hidden">
           <PromptInput
             placeholder="Describe the image…"
             onSubmit={(v) => runGeneration(v)}
@@ -205,6 +206,6 @@ export function ImageStudioPattern() {
           ))}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

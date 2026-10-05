@@ -15,7 +15,7 @@ export function generateMetadata({ params }: { params: Promise<{ slug: string }>
     if (!cat) return {};
     return {
       title: `${cat.name} UI Components`,
-      description: `${cat.description} Copy-ready React + Tailwind components with live previews and zero dependencies.`,
+      description: `${cat.description} Copy-ready React + Tailwind components with live previews and shadcn/ui styling.`,
     };
   });
 }

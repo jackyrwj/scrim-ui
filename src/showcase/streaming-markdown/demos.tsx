@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { StreamingMarkdown } from "./streaming-markdown";
 import { MarkdownMessage } from "../markdown-message/markdown-message";
@@ -65,24 +66,24 @@ export function DemoComparison() {
   return (
     <div className="w-full">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-[13px] text-(--muted-foreground)">
+        <p className="text-sm text-(--muted-foreground)">
           Same token stream, two renderers. Watch the left column correct itself.
         </p>
-        <button
+        <Button variant="outline" size="sm"
           type="button"
           onClick={() => setRunId((r) => r + 1)}
           disabled={playing}
-          className="h-8 shrink-0 rounded-lg border border-(--border) px-3 text-[13px] font-medium transition-colors hover:bg-(--muted) disabled:opacity-50"
+          className="h-8 shrink-0 rounded-md border border-(--border) px-3 text-sm font-medium transition-colors hover:bg-(--muted) disabled:opacity-50"
         >
           {playing ? "Streaming..." : "Replay"}
-        </button>
+        </Button>
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
         <div>
           <div className="mb-1.5 flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-red-500/70" aria-hidden />
-            <span className="text-[11px] font-medium text-(--muted-foreground)">
+            <span className="text-xs font-medium text-(--muted-foreground)">
               Re-parsed each token
             </span>
           </div>
@@ -94,7 +95,7 @@ export function DemoComparison() {
         <div>
           <div className="mb-1.5 flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-emerald-500/70" aria-hidden />
-            <span className="text-[11px] font-medium text-(--muted-foreground)">
+            <span className="text-xs font-medium text-(--muted-foreground)">
               StreamingMarkdown
             </span>
           </div>
@@ -124,7 +125,7 @@ export function DemoMidToken() {
         { label: "Table still filling", text: MID_TABLE },
       ].map((row) => (
         <div key={row.label} className="rounded-xl border border-(--border) bg-(--card) px-4 py-3">
-          <div className="mb-2 font-mono text-[11px] text-(--muted-foreground)">{row.label}</div>
+          <div className="mb-2 font-mono text-xs text-(--muted-foreground)">{row.label}</div>
           <StreamingMarkdown text={row.text} streaming />
         </div>
       ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { InlineCitation, CitationList, type Citation } from "./citation-ui";
 
@@ -30,7 +31,7 @@ const CITATIONS: Citation[] = [
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-200">
+    <p className="text-sm leading-7 text-foreground">
       {children}
     </p>
   );
@@ -78,8 +79,8 @@ export function DemoHoverCard() {
 
 export function DemoSourceList() {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="gap-0 py-0 rounded-xl border border-border bg-card p-4">
       <CitationList citations={CITATIONS} />
-    </div>
+    </Card>
   );
 }

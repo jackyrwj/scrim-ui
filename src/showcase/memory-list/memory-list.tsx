@@ -1,5 +1,9 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -33,7 +37,7 @@ function SparkleIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="14"
@@ -51,7 +55,7 @@ function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="12"
@@ -69,7 +73,7 @@ function XIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="12"
@@ -106,43 +110,43 @@ export function MemoryList({
   }
 
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
+    <Card className={`gap-0 py-0 rounded-xl border border-border bg-card ${className}`}>
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
         <div>
-          <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{title}</p>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
+          <p className="text-sm font-medium text-foreground">{title}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
         </div>
-        <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+        <Badge variant="secondary" className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
           {items.length} {items.length === 1 ? "item" : "items"}
-        </span>
+        </Badge>
       </div>
 
       {/* Items */}
       {items.length === 0 ? (
-        <p className="px-4 py-8 text-center text-xs text-zinc-500 dark:text-zinc-400">{emptyText}</p>
+        <p className="px-4 py-8 text-center text-xs text-muted-foreground">{emptyText}</p>
       ) : (
-        <ul className="max-h-56 divide-y divide-zinc-100 overflow-y-auto dark:divide-zinc-800">
+        <ul className="max-h-56 divide-y divide-border overflow-y-auto">
           {items.map((item) => (
             <li key={item.id} className="group flex items-center gap-3 px-4 py-2.5">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
                 <SparkleIcon />
               </span>
-              <p className="min-w-0 flex-1 text-[13px] leading-5 text-zinc-700 dark:text-zinc-300">
+              <p className="min-w-0 flex-1 text-sm leading-5 text-foreground">
                 {item.text}
               </p>
               {item.updatedAt && (
-                <span className="shrink-0 text-[11px] text-zinc-500 dark:text-zinc-400">{item.updatedAt}</span>
+                <span className="shrink-0 text-xs text-muted-foreground">{item.updatedAt}</span>
               )}
               {onForget && (
-                <button
+                <Button variant="ghost" size="icon-sm"
                   type="button"
                   aria-label={`Forget: ${item.text}`}
                   onClick={() => onForget(item.id)}
-                  className="shrink-0 rounded-md p-1 text-zinc-300 opacity-0 transition-opacity hover:bg-zinc-100 hover:text-zinc-600 group-hover:opacity-100 dark:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                  className="min-h-6 min-w-6 shrink-0 rounded-md p-1 text-muted-foreground opacity-100 transition-opacity hover:bg-muted hover:text-muted-foreground group-hover:opacity-100"
                 >
                   <XIcon />
-                </button>
+                </Button>
               )}
             </li>
           ))}
@@ -153,25 +157,25 @@ export function MemoryList({
       {onAdd && (
         <form
           onSubmit={handleSubmit}
-          className="flex items-center gap-2 border-t border-zinc-100 px-4 py-3 dark:border-zinc-800"
+          className="flex items-center gap-2 border-t border-border px-4 py-3"
         >
-          <input
+          <Input
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder={addPlaceholder}
             aria-label="Add a memory"
-            className="min-w-0 flex-1 bg-transparent text-[13px] text-zinc-700 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-300"
+            className="min-w-0 flex-1 bg-transparent text-base sm:text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           />
-          <button
+          <Button variant="default" size="sm"
             type="submit"
             disabled={!draft.trim()}
-            className="inline-flex h-7 shrink-0 items-center gap-1 rounded-lg bg-zinc-900 px-2.5 text-xs font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900"
+            className="inline-flex h-8 shrink-0 items-center gap-1 rounded-md bg-primary px-2.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40"
           >
             <PlusIcon />
             Add
-          </button>
+          </Button>
         </form>
       )}
-    </div>
+    </Card>
   );
 }

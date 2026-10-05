@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import * as React from "react";
 
 /**
@@ -58,7 +60,7 @@ export type ResponseVersionsProps = {
 
 function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
       <path d="m15 18-6-6 6-6" />
     </svg>
   );
@@ -66,7 +68,7 @@ function ChevronLeftIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
       <path d="m9 18 6-6-6-6" />
     </svg>
   );
@@ -74,7 +76,7 @@ function ChevronRightIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function BranchIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="11" height="11" {...props}>
       <path d="M6 3v12" />
       <circle cx="18" cy="6" r="3" />
       <circle cx="6" cy="18" r="3" />
@@ -85,7 +87,7 @@ function BranchIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function RegenerateIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" {...props}>
       <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
       <path d="M21 3v5h-5" />
       <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
@@ -134,13 +136,13 @@ export function ResponseVersions({
   }
 
   const navBtn =
-    "rounded-md p-1 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 disabled:opacity-30 disabled:hover:bg-transparent dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200";
+    "rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground disabled:opacity-30 disabled:hover:bg-transparent";
 
   return (
     <div className={className}>
       {status === "generating" && (
-        <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" />
+        <p className="mb-1.5 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
           Generating a new version…
         </p>
       )}
@@ -153,18 +155,18 @@ export function ResponseVersions({
             This version failed to finish — the partial answer is kept above.
           </span>
           {onRegenerate && (
-            <button
+            <Button variant="destructive" size="sm"
               type="button"
               onClick={onRegenerate}
               className="shrink-0 rounded-md bg-red-600 px-2.5 py-1 text-xs font-medium text-white transition-opacity hover:opacity-90"
             >
               Retry
-            </button>
+            </Button>
           )}
         </div>
       )}
       {status === "stopped" && (
-        <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="mt-2 text-xs text-muted-foreground">
           Stopped — this version is incomplete.
         </p>
       )}
@@ -173,7 +175,7 @@ export function ResponseVersions({
         <div role="group" aria-label="Response versions" className="mt-2 flex items-center gap-1">
           {versions.length > 1 && (
             <>
-              <button
+              <Button variant="ghost" size="icon-sm"
                 type="button"
                 aria-label={`Previous version (${index} of ${versions.length})`}
                 disabled={index === 0}
@@ -181,14 +183,14 @@ export function ResponseVersions({
                 className={navBtn}
               >
                 <ChevronLeftIcon />
-              </button>
+              </Button>
               <span
                 aria-live="polite"
-                className="min-w-9 text-center text-xs tabular-nums text-zinc-500 dark:text-zinc-400"
+                className="min-w-9 text-center text-xs tabular-nums text-muted-foreground"
               >
                 {index + 1} / {versions.length}
               </span>
-              <button
+              <Button variant="ghost" size="icon-sm"
                 type="button"
                 aria-label={`Next version (${index + 2} of ${versions.length})`}
                 disabled={index === versions.length - 1}
@@ -196,12 +198,12 @@ export function ResponseVersions({
                 className={navBtn}
               >
                 <ChevronRightIcon />
-              </button>
+              </Button>
               {branchIndex >= 0 && (
-                <span className="ml-1 flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                <Badge variant="secondary" className="ml-1 flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                   <BranchIcon />
                   from v{branchIndex + 1}
-                </span>
+                </Badge>
               )}
             </>
           )}
@@ -209,32 +211,32 @@ export function ResponseVersions({
           <span className="flex-1" />
 
           {onCompare && versions.filter((v) => (v.status ?? "ready") === "ready").length > 1 && (
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={() => onCompare(current.id)}
-              className="rounded-md px-2 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              className="rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               Compare
-            </button>
+            </Button>
           )}
           {index < versions.length - 1 && onContinueFrom && status === "ready" && (
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={() => onContinueFrom(current.id)}
-              className="rounded-md px-2 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              className="rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               Continue from here
-            </button>
+            </Button>
           )}
           {onRegenerate && status !== "failed" && (
-            <button
+            <Button variant="ghost" size="icon-sm"
               type="button"
               aria-label="Regenerate response"
               onClick={onRegenerate}
               className={navBtn}
             >
               <RegenerateIcon />
-            </button>
+            </Button>
           )}
         </div>
       )}

@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 
 /**
@@ -46,7 +48,7 @@ export type SourceListProps = {
 
 function ChevronIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="m6 9 6 6 6-6" />
     </svg>
   );
@@ -67,24 +69,24 @@ function Row({
     <>
       <div className="flex items-baseline gap-2">
         {n !== undefined && (
-          <span className="flex h-[1.35em] min-w-[1.35em] shrink-0 items-center justify-center rounded-[0.3em] bg-amber-100 px-[0.3em] text-[11px] font-medium text-amber-900 tabular-nums dark:bg-amber-400/20 dark:text-amber-200">
+          <span className="flex h-[1.35em] min-w-[1.35em] shrink-0 items-center justify-center rounded-[0.3em] bg-amber-100 px-[0.3em] text-xs font-medium text-amber-900 tabular-nums dark:bg-amber-400/20 dark:text-amber-200">
             {n}
           </span>
         )}
-        <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-100">
+        <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
           {source.title}
         </span>
         <span
-          className={`shrink-0 tabular-nums text-[11px] ${
-            below ? "text-zinc-400 dark:text-zinc-500" : "text-zinc-500 dark:text-zinc-400"
+          className={`shrink-0 tabular-nums text-xs ${
+            below ? "text-muted-foreground" : "text-muted-foreground"
           }`}
         >
           {source.score.toFixed(3)}
         </span>
       </div>
       <p
-        className={`mt-1 line-clamp-2 text-[12px] leading-5 ${
-          below ? "text-zinc-400 dark:text-zinc-500" : "text-zinc-600 dark:text-zinc-300"
+        className={`mt-1 line-clamp-2 text-xs leading-5 ${
+          below ? "text-muted-foreground" : "text-muted-foreground"
         }`}
       >
         {source.passage}
@@ -96,13 +98,13 @@ function Row({
     return <div className="px-3.5 py-2.5">{body}</div>;
   }
   return (
-    <button
+    <Button variant="ghost" size="sm"
       type="button"
       onClick={() => onOpen(source.id)}
-      className="block w-full px-3.5 py-2.5 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+      className="h-auto min-h-8 whitespace-normal justify-start block w-full px-3.5 py-2.5 text-left transition-colors hover:bg-muted"
     >
       {body}
-    </button>
+    </Button>
   );
 }
 
@@ -117,16 +119,16 @@ export function SourceList({ sources, floor = 0, onOpen, className = "" }: Sourc
   const below = ranked.filter((s) => s.score < floor);
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
-      <div className="flex items-baseline gap-2 border-b border-zinc-100 px-3.5 py-2.5 dark:border-zinc-800">
-        <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+    <Card className={`gap-0 py-0 overflow-hidden rounded-xl border border-border bg-card ${className}`}>
+      <div className="flex items-baseline gap-2 border-b border-border px-3.5 py-2.5">
+        <span className="text-xs font-medium text-muted-foreground">
           Retrieved
         </span>
-        <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+        <span className="text-xs text-muted-foreground">
           {passed.length} of {ranked.length} candidates
         </span>
         {floor > 0 && (
-          <span className="ml-auto tabular-nums text-[11px] text-zinc-400 dark:text-zinc-500">
+          <span className="ml-auto tabular-nums text-xs text-muted-foreground">
             floor {floor.toFixed(2)}
           </span>
         )}
@@ -137,16 +139,16 @@ export function SourceList({ sources, floor = 0, onOpen, className = "" }: Sourc
            model call was made and the answer is a fixed sentence — which is
            the behaviour that makes the rest of the system worth trusting. */
         <div className="px-3.5 py-4">
-          <p className="text-[13px] font-medium text-zinc-800 dark:text-zinc-100">
+          <p className="text-sm font-medium text-foreground">
             Nothing cleared the floor.
           </p>
-          <p className="mt-1 text-[12px] leading-5 text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">
             The closest candidate scored {ranked[0]?.score.toFixed(3) ?? "—"}. No model call was
             made — an answer built from these passages would have been invented.
           </p>
         </div>
       ) : (
-        <div className="divide-y divide-zinc-100 dark:divide-zinc-800/80">
+        <div className="divide-y divide-border">
           {passed.map((s, i) => (
             <Row key={s.id} source={s} n={i + 1} below={false} onOpen={onOpen} />
           ))}
@@ -154,18 +156,18 @@ export function SourceList({ sources, floor = 0, onOpen, className = "" }: Sourc
       )}
 
       {below.length > 0 && (
-        <div className="border-t border-zinc-100 dark:border-zinc-800">
-          <button
+        <div className="border-t border-border">
+          <Button variant="ghost" size="sm"
             type="button"
             onClick={() => setShowBelow((v) => !v)}
             aria-expanded={showBelow}
-            className="flex w-full items-center gap-1.5 px-3.5 py-2 text-[11px] text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-200"
+            className="h-auto min-h-8 whitespace-normal justify-start flex w-full items-center gap-1.5 px-3.5 py-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <ChevronIcon className={showBelow ? "rotate-180" : ""} />
             {below.length} below the floor — not sent to the model
-          </button>
+          </Button>
           {showBelow && (
-            <div className="divide-y divide-zinc-100 bg-zinc-50/60 dark:divide-zinc-800/80 dark:bg-zinc-800/20">
+            <div className="divide-y divide-border bg-muted/60">
               {below.map((s) => (
                 <Row key={s.id} source={s} below onOpen={onOpen} />
               ))}
@@ -173,6 +175,6 @@ export function SourceList({ sources, floor = 0, onOpen, className = "" }: Sourc
           )}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

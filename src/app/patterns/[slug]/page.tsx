@@ -76,7 +76,7 @@ export default async function PatternPage({ params }: { params: Promise<{ slug: 
           {config.elements.filter((el) => el.componentSlug).length} components
         </span>
         <span aria-hidden>·</span>
-        <span>React + Tailwind, no dependencies</span>
+        <span>React + Tailwind + shadcn/ui</span>
       </p>
 
       {/* A pattern installs like a component, plus the components it is built

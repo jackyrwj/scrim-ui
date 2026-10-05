@@ -23,7 +23,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="11"
@@ -52,11 +52,11 @@ export function MemoryChip({
   return (
     <Comp
       {...(onClick ? { type: "button" as const, onClick } : {})}
-      className={`inline-flex h-6 max-w-full items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-medium transition-colors ${
+      className={`inline-flex h-6 max-w-full items-center gap-1.5 rounded-full border px-2.5 text-xs font-medium transition-colors ${
         saved
           ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900/50 dark:bg-emerald-900/25 dark:text-emerald-300"
-          : "border-zinc-200 bg-white text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
-      } ${onClick ? "cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-700" : ""} ${className}`}
+          : "border-border bg-card text-muted-foreground"
+      } ${onClick ? "cursor-pointer hover:bg-muted" : ""} ${className}`}
     >
       {saved ? <CheckIcon /> : <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-current" />}
       <span className="truncate">{text}</span>

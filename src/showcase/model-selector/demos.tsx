@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { withModelIcons } from "@/components/brands/brand-icon";
 import { ModelSelector, type ModelOption } from "./model-selector";
@@ -46,11 +47,11 @@ export function DemoOpen() {
 export function DemoSettings() {
   const [value, setValue] = React.useState("atlas");
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="gap-0 py-0 rounded-xl border border-border bg-card p-4">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Model</p>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">Which model answers your messages</p>
+          <p className="text-sm font-medium text-foreground">Model</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">Which model answers your messages</p>
         </div>
         <ModelSelector
           options={models}
@@ -59,6 +60,6 @@ export function DemoSettings() {
           className="w-44"
         />
       </div>
-    </div>
+    </Card>
   );
 }

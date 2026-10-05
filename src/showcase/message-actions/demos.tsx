@@ -6,12 +6,12 @@ import { MessageActions } from "./message-actions";
 function AssistantBubble({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-zinc-900 text-xs font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
+      <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-primary text-xs font-semibold text-primary-foreground">
         AI
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-sm font-medium">Assistant</div>
-        <div className="mt-1.5 rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-4 py-3 text-[15px] leading-6 text-zinc-800 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-100">
+        <div className="mt-1.5 rounded-xl border border-border bg-muted px-4 py-3 text-sm leading-6 text-foreground">
           {children}
         </div>
       </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import * as React from "react";
 
 /**
@@ -69,7 +71,7 @@ function Mark({ state }: { state: PlanStepState }) {
       );
     case "active":
       return (
-        <span className={`${base} border-blue-500 text-blue-500`}>
+        <span className={`${base} border-border text-muted-foreground`}>
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
         </span>
       );
@@ -83,14 +85,14 @@ function Mark({ state }: { state: PlanStepState }) {
       );
     case "skipped":
       return (
-        <span className={`${base} border-zinc-300 text-zinc-400 dark:border-zinc-600 dark:text-zinc-500`}>
+        <span className={`${base} border-border text-muted-foreground`}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" width="9" height="9">
             <path d="M5 12h14" />
           </svg>
         </span>
       );
     default:
-      return <span className={`${base} border-zinc-300 dark:border-zinc-600`} />;
+      return <span className={`${base} border-border`} />;
   }
 }
 
@@ -109,21 +111,21 @@ export function AgentPlan({
   const settled = steps.filter((s) => s.state !== "pending" && s.state !== "active").length;
 
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
-      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 border-b border-zinc-100 px-3.5 py-2.5 dark:border-zinc-800">
-        <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100">{title}</span>
-        <span className="tabular-nums text-[11px] text-zinc-500 dark:text-zinc-400">
+    <Card className={`gap-0 py-0 rounded-xl border border-border bg-card ${className}`}>
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 border-b border-border px-3.5 py-2.5">
+        <span className="text-sm font-medium text-foreground">{title}</span>
+        <span className="tabular-nums text-xs text-muted-foreground">
           {done}/{steps.length} done
         </span>
         {revision > 0 && (
           /* The reader's mental model of "the plan" is now out of date, and
              saying so costs one word. */
-          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+          <Badge variant="secondary" className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
             revised {revision}×
-          </span>
+          </Badge>
         )}
         {planning && (
-          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">
+          <span className="ml-auto inline-flex items-center gap-1.5 text-xs text-muted-foreground">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
             still planning
           </span>
@@ -136,30 +138,30 @@ export function AgentPlan({
             {/* Rail, drawn between marks rather than behind them, so a
                 skipped step reads as part of the sequence it was cut from. */}
             {i < steps.length - 1 && (
-              <span className="absolute left-2 top-5 h-[calc(100%-1.25rem)] w-px bg-zinc-200 dark:bg-zinc-700" aria-hidden />
+              <span className="absolute left-2 top-5 h-[calc(100%-1.25rem)] w-px bg-muted" aria-hidden />
             )}
             <Mark state={step.state} />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
                 <span
-                  className={`text-[13px] leading-5 ${
+                  className={`text-sm leading-5 ${
                     step.state === "skipped"
-                      ? "text-zinc-400 line-through decoration-zinc-300 dark:text-zinc-500 dark:decoration-zinc-600"
+                      ? "text-muted-foreground line-through decoration-border"
                       : step.state === "done"
-                        ? "text-zinc-500 dark:text-zinc-400"
-                        : "text-zinc-800 dark:text-zinc-100"
+                        ? "text-muted-foreground"
+                        : "text-foreground"
                   }`}
                 >
                   {step.text}
                 </span>
                 {step.added && (
-                  <span className="shrink-0 rounded-md bg-blue-100 px-1.5 py-px text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                  <span className="shrink-0 rounded-md bg-muted px-1.5 py-px text-xs font-medium text-foreground">
                     added
                   </span>
                 )}
               </div>
               {step.note && (
-                <p className="mt-0.5 text-[11px] leading-4 text-zinc-500 dark:text-zinc-400">
+                <p className="mt-0.5 text-xs leading-4 text-muted-foreground">
                   {step.note}
                 </p>
               )}
@@ -169,10 +171,10 @@ export function AgentPlan({
       </ol>
 
       {settled > 0 && settled === steps.length && (
-        <p className="border-t border-zinc-100 px-3.5 py-2 text-[11px] text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+        <p className="border-t border-border px-3.5 py-2 text-xs text-muted-foreground">
           Plan complete — {done} done, {steps.length - done} skipped or failed.
         </p>
       )}
-    </div>
+    </Card>
   );
 }

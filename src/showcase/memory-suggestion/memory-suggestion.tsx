@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -25,7 +27,7 @@ function SparkleIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="14"
@@ -43,7 +45,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="12"
@@ -75,55 +77,55 @@ export function MemorySuggestion({
         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
           <CheckIcon />
         </span>
-        <p className="min-w-0 flex-1 text-[13px] font-medium text-emerald-800 dark:text-emerald-300">
+        <p className="min-w-0 flex-1 text-sm font-medium text-emerald-800 dark:text-emerald-300">
           Saved to memory
         </p>
         {onUndo && (
-          <button
+          <Button variant="ghost" size="sm"
             type="button"
             onClick={onUndo}
             className="shrink-0 text-xs font-medium text-emerald-700 hover:underline dark:text-emerald-300"
           >
             Undo
-          </button>
+          </Button>
         )}
       </div>
     );
   }
 
   return (
-    <div
-      className={`flex items-start gap-3 rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900 ${className}`}
+    <Card
+      className={`flex-row gap-0 py-0 flex items-start gap-3 rounded-xl border border-border bg-card p-4 ${className}`}
     >
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-900/40 dark:text-violet-400">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
         <SparkleIcon />
       </span>
 
       <div className="min-w-0 flex-1">
-        <p className="text-[13px] leading-5 text-zinc-600 dark:text-zinc-400">
+        <p className="text-sm leading-5 text-muted-foreground">
           Want me to remember this?{" "}
-          <span className="font-medium text-zinc-900 dark:text-zinc-100">“{fact}”</span>
+          <span className="font-medium text-foreground">“{fact}”</span>
         </p>
         <div className="mt-2.5 flex items-center gap-2">
-          <button
+          <Button variant="default" size="sm"
             type="button"
             onClick={onSave}
-            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-violet-600 px-3 text-xs font-medium text-white transition-opacity hover:opacity-90"
+            className="inline-flex h-8 items-center gap-1.5 rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
             <CheckIcon />
             Save to memory
-          </button>
+          </Button>
           {onDismiss && (
-            <button
+            <Button variant="outline" size="sm"
               type="button"
               onClick={onDismiss}
-              className="inline-flex h-8 items-center rounded-lg border border-zinc-200 px-3 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
             >
               Not now
-            </button>
+            </Button>
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

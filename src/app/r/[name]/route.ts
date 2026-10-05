@@ -2,6 +2,7 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { components, patterns, getCategory } from "@/lib/registry";
 import { SITE_URL } from "@/lib/site";
+import { componentDependencies, shadcnPrimitives } from "@/lib/component-dependencies";
 
 /**
  * The shadcn registry, served straight from src/lib/registry.ts.
@@ -75,22 +76,13 @@ function allItem() {
 }
 
 /**
- * Every component is one file under src/showcase/<slug>/<slug>.tsx importing
- * nothing but React — verified, not assumed: a component that grew a
- * dependency would need it declared here, and this throws rather than ship a
- * registry entry that installs something broken.
+ * Each source may import React and explicitly supported shadcn primitives.
+ * Reject all other imports so every copied or installed source has known dependencies.
  */
 function readSource(slug: string) {
   const file = path.join(process.cwd(), "src", "showcase", slug, `${slug}.tsx`);
   const content = fs.readFileSync(file, "utf8");
-  const bare = [...content.matchAll(/from "([^"]+)"/g)]
-    .map((m) => m[1])
-    .filter((s) => !s.startsWith(".") && !s.startsWith("@/") && s !== "react");
-  if (bare.length > 0) {
-    throw new Error(
-      `${slug} imports ${bare.join(", ")}. Declare them in the registry item's "dependencies" before shipping it.`,
-    );
-  }
+  componentDependencies(content);
   return content;
 }
 
@@ -124,7 +116,7 @@ function readPatternSource(slug: string): { content: string; deps: string[] } {
 
   const unresolved = [...content.matchAll(/from "([^"]+)"/g)]
     .map((m) => m[1])
-    .filter((s) => s !== "react" && !s.startsWith("@/components/ui/"));
+    .filter((s) => s !== "react" && ![...deps, ...shadcnPrimitives].some((dep) => s === `@/components/ui/${dep}`));
   if (unresolved.length > 0) {
     throw new Error(
       `Pattern ${slug} imports ${unresolved.join(", ")}, which will not resolve in a consumer's project. Rewrite the import or declare it on the registry item.`,
@@ -138,7 +130,8 @@ function readPatternSource(slug: string): { content: string; deps: string[] } {
     );
   }
 
-  return { content, deps: [...deps] };
+  const primitives = shadcnPrimitives.filter((name) => content.includes(`from "@/components/ui/${name}"`));
+  return { content, deps: [...deps, ...primitives] };
 }
 
 function patternItem(slug: string) {
@@ -154,7 +147,7 @@ function patternItem(slug: string) {
     categories: ["pattern"],
     docs: `${SITE_URL}/patterns/${entry.slug}`,
     dependencies: [],
-    registryDependencies: deps.map((d) => `${SITE_URL}/r/${d}.json`),
+    registryDependencies: deps.map((d) => shadcnPrimitives.some((name) => name === d) ? d : `${SITE_URL}/r/${d}.json`),
     files: [
       {
         path: `src/showcase/patterns/${entry.slug}/${entry.slug}.tsx`,
@@ -168,6 +161,7 @@ function patternItem(slug: string) {
 
 function item(slug: string) {
   const entry = published.find((c) => c.slug === slug)!;
+  const content = readSource(entry.slug);
   return {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
     name: entry.slug,
@@ -178,11 +172,11 @@ function item(slug: string) {
     categories: [entry.category],
     docs: `${SITE_URL}/components/${entry.slug}`,
     dependencies: [],
-    registryDependencies: [],
+    registryDependencies: componentDependencies(content),
     files: [
       {
         path: `src/showcase/${entry.slug}/${entry.slug}.tsx`,
-        content: readSource(entry.slug),
+        content,
         type: "registry:ui",
         target: `components/ui/${entry.slug}.tsx`,
       },
@@ -211,6 +205,7 @@ function index() {
         title: c.name,
         description: c.description,
         categories: [getCategory(c.category)?.slug ?? c.category],
+        registryDependencies: componentDependencies(readSource(c.slug)),
         files: [
           {
             path: `src/showcase/${c.slug}/${c.slug}.tsx`,
@@ -225,6 +220,7 @@ function index() {
         title: p.name,
         description: p.description,
         categories: ["pattern"],
+        registryDependencies: readPatternSource(p.slug).deps.map((dep) => shadcnPrimitives.some((name) => name === dep) ? dep : `${SITE_URL}/r/${dep}.json`),
         files: [
           {
             path: `src/showcase/patterns/${p.slug}/${p.slug}.tsx`,

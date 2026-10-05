@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -50,7 +52,7 @@ const LABELS = {
 
 function MemoryIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
       <ellipse cx="12" cy="5" rx="8" ry="3" />
       <path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
       <path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6" />
@@ -70,42 +72,42 @@ export function MemoryToast({
   className = "",
 }: MemoryToastProps) {
   return (
-    <div
+    <Card
       role="status"
-      className={`flex items-center gap-3 rounded-xl border border-zinc-200 bg-white px-3.5 py-2.5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 ${className}`}
+      className={`flex-row gap-0 py-0 flex items-center gap-3 rounded-xl border border-border bg-card px-3.5 py-2.5 shadow-sm ${className}`}
     >
-      <span className="shrink-0 text-zinc-500 dark:text-zinc-400">
+      <span className="shrink-0 text-muted-foreground">
         <MemoryIcon />
       </span>
       <div className="min-w-0 flex-1">
-        <div className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+        <div className="text-xs font-medium text-muted-foreground">
           {LABELS[kind]}
         </div>
-        <p className="truncate text-sm text-zinc-900 dark:text-zinc-100">{fact}</p>
+        <p className="truncate text-sm text-foreground">{fact}</p>
       </div>
 
       {(onUndo || onManage) && (
         <div className="flex shrink-0 items-center gap-2.5">
           {onUndo && (
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={onUndo}
-              className="text-xs font-medium text-zinc-900 underline underline-offset-2 hover:text-zinc-600 dark:text-zinc-100 dark:hover:text-zinc-300"
+              className="text-xs font-medium text-foreground underline underline-offset-2 hover:text-muted-foreground"
             >
               Undo
-            </button>
+            </Button>
           )}
           {onManage && (
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={onManage}
-              className="text-xs font-medium text-zinc-500 underline underline-offset-2 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
+              className="text-xs font-medium text-muted-foreground underline underline-offset-2 hover:text-foreground"
             >
               Manage
-            </button>
+            </Button>
           )}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

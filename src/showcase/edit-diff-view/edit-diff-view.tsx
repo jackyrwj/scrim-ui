@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -223,63 +226,63 @@ function Hunk({
   }, [segment.original, segment.edited, wordDiff]);
 
   return (
-    <div
+    <Card
       data-decision={decision}
-      className="overflow-hidden rounded-xl border border-zinc-200 bg-white data-[decision=accepted]:border-emerald-300 data-[decision=rejected]:border-zinc-200 data-[decision=rejected]:opacity-60 dark:border-zinc-800 dark:bg-zinc-900 dark:data-[decision=accepted]:border-emerald-800"
+      className="gap-0 py-0 overflow-hidden rounded-xl border border-border bg-card data-[decision=accepted]:border-emerald-300 data-[decision=rejected]:border-border data-[decision=rejected]:opacity-60 dark:data-[decision=accepted]:border-emerald-800"
     >
-      <div className="flex items-center gap-2 border-b border-zinc-100 px-3 py-2 dark:border-zinc-800">
-        <span className="min-w-0 flex-1 truncate font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
+      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+        <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
           {segment.context ?? "Edit"}
         </span>
 
         {!complete && (
-          <span className="flex shrink-0 items-center gap-1.5 text-[11px] text-zinc-400 dark:text-zinc-500">
-            <span className="inline-block h-3 w-[6px] animate-pulse rounded-[2px] bg-zinc-400 dark:bg-zinc-500" aria-hidden />
+          <span className="flex shrink-0 items-center gap-1.5 text-xs text-muted-foreground">
+            <span className="inline-block h-3 w-[6px] animate-pulse rounded-[2px] bg-muted" aria-hidden />
             arriving
           </span>
         )}
         {decision === "accepted" && (
-          <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+          <Badge variant="secondary" className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
             Accepted
-          </span>
+          </Badge>
         )}
         {decision === "rejected" && (
-          <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+          <Badge variant="secondary" className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
             Rejected
-          </span>
+          </Badge>
         )}
 
         {/* Disabled while the hunk is still arriving: accepting half an edit
             is how a merged document ends up with half a function. */}
         <div className="flex shrink-0 gap-1">
-          <button
+          <Button variant="ghost" size="sm"
             type="button"
             disabled={!complete}
             onClick={() => onDecide(segment.id, decision === "accepted" ? "rejected" : "accepted")}
             title={complete ? (decision === "accepted" ? "Undo — reject instead" : "Accept this hunk") : "Still arriving"}
             aria-pressed={decision === "accepted"}
-            className={`h-7 rounded-lg px-2.5 text-[12px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+            className={`h-8 rounded-md px-2.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
               decision === "accepted"
-                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "border border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                ? "bg-muted text-foreground hover:bg-muted/80"
+                : "border border-border text-muted-foreground hover:bg-muted"
             }`}
           >
             Accept
-          </button>
-          <button
+          </Button>
+          <Button variant="ghost" size="sm"
             type="button"
             disabled={!complete}
             onClick={() => onDecide(segment.id, decision === "rejected" ? "accepted" : "rejected")}
             title={complete ? (decision === "rejected" ? "Undo — accept instead" : "Reject this hunk") : "Still arriving"}
             aria-pressed={decision === "rejected"}
-            className={`h-7 rounded-lg px-2.5 text-[12px] font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+            className={`h-8 rounded-md px-2.5 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
               decision === "rejected"
-                ? "bg-zinc-700 text-white hover:bg-zinc-800 dark:bg-zinc-600 dark:hover:bg-zinc-500"
-                : "border border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                ? "bg-muted text-foreground hover:bg-muted/80"
+                : "border border-border text-muted-foreground hover:bg-muted"
             }`}
           >
             Reject
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -303,7 +306,7 @@ function Hunk({
           />
         ))}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -370,32 +373,32 @@ export function EditDiffView({
   }
 
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 ${className}`}>
+    <div className={`rounded-xl border border-border bg-muted ${className}`}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3.5 py-2.5">
-        <span className="min-w-0 truncate font-mono text-[12px] text-zinc-600 dark:text-zinc-300">
+        <span className="min-w-0 truncate font-mono text-xs text-muted-foreground">
           {fileName ?? "Proposed edits"}
         </span>
-        <span className="text-[11px] text-zinc-400 dark:text-zinc-500" aria-live="polite">
+        <span className="text-xs text-muted-foreground" aria-live="polite">
           {decidedCount} of {edits.length} decided
           {streaming ? " · still arriving" : ""}
         </span>
         <div className="ml-auto flex gap-1.5">
-          <button
+          <Button variant="outline" size="sm"
             type="button"
             onClick={() => decideAll("accepted")}
             disabled={completeEdits.length === 0}
-            className="h-7 rounded-lg border border-zinc-200 px-2.5 text-[12px] font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="h-8 rounded-md border border-border px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted disabled:opacity-40"
           >
             Accept all
-          </button>
-          <button
+          </Button>
+          <Button variant="outline" size="sm"
             type="button"
             onClick={() => decideAll("rejected")}
             disabled={completeEdits.length === 0}
-            className="h-7 rounded-lg border border-zinc-200 px-2.5 text-[12px] font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-40 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="h-8 rounded-md border border-border px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted disabled:opacity-40"
           >
             Reject all
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -414,7 +417,7 @@ export function EditDiffView({
           }
           if (!collapseContext) {
             return (
-              <div key={i} className="px-3 font-mono text-[12.5px] leading-6 whitespace-pre-wrap text-zinc-500 dark:text-zinc-400">
+              <div key={i} className="px-3 font-mono text-[12.5px] leading-6 whitespace-pre-wrap text-muted-foreground">
                 {segment.text.replace(/\n$/, "")}
               </div>
             );
@@ -423,7 +426,7 @@ export function EditDiffView({
           return (
             <div
               key={i}
-              className="select-none px-3 py-1 text-center text-[11px] tracking-wide text-zinc-400 dark:text-zinc-500"
+              className="select-none px-3 py-1 text-center text-xs tracking-wide text-muted-foreground"
             >
               ··· {lines} unchanged {lines === 1 ? "line" : "lines"} ···
             </div>
@@ -431,7 +434,7 @@ export function EditDiffView({
         })}
 
         {edits.length === 0 && (
-          <p className="px-3 py-8 text-center text-[13px] text-zinc-400 dark:text-zinc-500">
+          <p className="px-3 py-8 text-center text-sm text-muted-foreground">
             {streaming ? "Waiting for the first edit…" : "No edits."}
           </p>
         )}

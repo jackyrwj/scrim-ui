@@ -1,5 +1,7 @@
 "use client";
 
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -50,7 +52,7 @@ export type InlineCorrectionProps = {
 
 function PencilIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z" />
     </svg>
   );
@@ -58,7 +60,7 @@ function PencilIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M20 6 9 17l-5-5" />
     </svg>
   );
@@ -112,7 +114,7 @@ export function InlineCorrection({
   if (editing) {
     return (
       <div className={className}>
-        <textarea
+        <Textarea
           ref={areaRef}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
@@ -131,25 +133,25 @@ export function InlineCorrection({
             }
           }}
           rows={Math.min(12, Math.max(3, draft.split("\n").length + 1))}
-          className="w-full resize-y rounded-xl border border-zinc-300 bg-white px-3 py-2.5 text-[15px] leading-7 text-zinc-900 outline-none focus:border-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100 dark:focus:border-zinc-400"
+          className="border-0 rounded-none shadow-none focus-visible:ring-0 field-sizing-fixed dark:bg-transparent w-full resize-y rounded-xl border border-border bg-card px-3 py-2.5 text-base sm:text-sm leading-7 text-foreground outline-none focus:border-border"
         />
         <div className="mt-2 flex items-center gap-2">
-          <button
+          <Button variant="default" size="sm"
             type="button"
             onClick={save}
-            className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-zinc-900 px-3.5 text-xs font-medium text-white transition-opacity hover:opacity-90 dark:bg-zinc-100 dark:text-zinc-900"
+            className="inline-flex h-8 items-center gap-1.5 rounded-md bg-primary px-3.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
             <CheckIcon />
             Save correction
-          </button>
-          <button
+          </Button>
+          <Button variant="ghost" size="sm"
             type="button"
             onClick={() => setEditing(false)}
-            className="inline-flex h-8 items-center rounded-lg px-3 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            className="inline-flex h-8 items-center rounded-md px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
           >
             Cancel
-          </button>
-          <span className="ml-auto text-[11px] text-zinc-400 dark:text-zinc-500">
+          </Button>
+          <span className="ml-auto text-xs text-muted-foreground">
             This does not send a message
           </span>
         </div>
@@ -160,10 +162,10 @@ export function InlineCorrection({
   return (
     <div className={`group ${className}`}>
       <p
-        className={`whitespace-pre-wrap text-[15px] leading-7 ${
+        className={`whitespace-pre-wrap text-sm leading-7 ${
           correction !== undefined && showOriginal
-            ? "text-zinc-400 line-through decoration-zinc-300 dark:text-zinc-500 dark:decoration-zinc-600"
-            : "text-zinc-700 dark:text-zinc-200"
+            ? "text-muted-foreground line-through decoration-border"
+            : "text-foreground"
         }`}
       >
         {shown}
@@ -171,44 +173,44 @@ export function InlineCorrection({
 
       <div className="mt-1.5 flex flex-wrap items-center gap-2">
         {correction === undefined ? (
-          <button
+          <Button variant="ghost" size="sm"
             type="button"
             onClick={open}
             /* Visible on focus as well as hover: a hover-only edit affordance
                is unreachable by keyboard and invisible on touch. */
-            className="inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-[11px] font-medium text-zinc-400 opacity-0 transition-opacity hover:bg-zinc-100 hover:text-zinc-700 focus-visible:opacity-100 group-hover:opacity-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+            className="inline-flex h-8 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground opacity-100 transition-opacity hover:bg-muted hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
           >
             <PencilIcon />
             Fix this
-          </button>
+          </Button>
         ) : (
           <>
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-100 px-2 py-1 text-[11px] font-medium text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+            <span className="inline-flex items-center gap-1.5 rounded-lg bg-amber-100 px-2 py-1 text-xs font-medium text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
               <PencilIcon />
               Corrected{correctedBy ? ` by ${correctedBy}` : ""}
             </span>
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={() => setShowOriginal((v) => !v)}
-              className="inline-flex h-7 items-center rounded-lg px-2 text-[11px] text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              className="inline-flex h-8 items-center rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               {showOriginal ? "Show correction" : "Show what the model said"}
-            </button>
-            <button
+            </Button>
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={open}
-              className="inline-flex h-7 items-center rounded-lg px-2 text-[11px] text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              className="inline-flex h-8 items-center rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
               Edit again
-            </button>
+            </Button>
             {onRevert && (
-              <button
+              <Button variant="ghost" size="sm"
                 type="button"
                 onClick={onRevert}
-                className="inline-flex h-7 items-center rounded-lg px-2 text-[11px] text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                className="inline-flex h-8 items-center rounded-md px-2 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 Withdraw
-              </button>
+              </Button>
             )}
           </>
         )}

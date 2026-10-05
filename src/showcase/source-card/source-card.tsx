@@ -20,21 +20,6 @@ export type SourceCardProps = {
 /* Helpers                                                             */
 /* ------------------------------------------------------------------ */
 
-const FALLBACK_COLORS = [
-  "bg-slate-500",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-rose-500",
-  "bg-indigo-500",
-  "bg-teal-500",
-];
-
-function colorFor(title: string) {
-  let h = 0;
-  for (let i = 0; i < title.length; i++) h = (h * 31 + title.charCodeAt(i)) >>> 0;
-  return FALLBACK_COLORS[h % FALLBACK_COLORS.length];
-}
-
 function domainFromUrl(url: string) {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
@@ -63,9 +48,9 @@ export function SourceCard({
       href={url}
       target="_blank"
       rel="noreferrer noopener"
-      className={`group block rounded-xl border border-zinc-200 bg-white p-3.5 transition-colors hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700 dark:hover:bg-zinc-800/60 ${className}`}
+      className={`group block rounded-xl border border-border shadow-sm bg-card p-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring hover:border-border hover:bg-muted ${className}`}
     >
-      <div className="flex items-start gap-2.5">
+      <div className="flex items-start gap-3">
         {favicon ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -77,24 +62,24 @@ export function SourceCard({
           />
         ) : (
           <span
-            className={`flex h-5 w-5 shrink-0 select-none items-center justify-center rounded text-[9px] font-bold text-white ${colorFor(title)}`}
+            className={`flex h-5 w-5 shrink-0 select-none items-center justify-center rounded text-xs font-medium bg-muted text-muted-foreground`}
           >
             {title.slice(0, 1).toUpperCase()}
           </span>
         )}
-        <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-zinc-800 group-hover:underline dark:text-zinc-100">
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium text-foreground leading-5">
             {title}
           </p>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{host}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">{host}</p>
           {snippet && (
-            <p className="mt-1.5 line-clamp-2 text-[13px] leading-5 text-zinc-500 dark:text-zinc-400">
+            <p className="mt-3 line-clamp-2 text-sm leading-5 text-muted-foreground">
               {snippet}
             </p>
           )}
         </div>
         {index !== undefined && (
-          <span className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded bg-zinc-100 text-[11px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+          <span className="ml-auto flex h-5 w-5 shrink-0 items-center justify-center rounded bg-muted text-xs font-medium text-muted-foreground">
             {index}
           </span>
         )}

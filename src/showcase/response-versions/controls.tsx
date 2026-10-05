@@ -32,7 +32,7 @@ function parse(text: string): { versions: ResponseVersion[]; error?: string } {
       id: `v${versions.length + 1}`,
       status,
       branchedFrom,
-      content: <p className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-300">{text}</p>,
+      content: <p className="text-sm leading-7 text-foreground">{text}</p>,
     });
   }
 

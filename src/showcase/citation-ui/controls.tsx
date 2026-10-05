@@ -93,7 +93,7 @@ export const citationUiControls: ComponentControls = {
 };
 
 function Prose({ children }: { children: React.ReactNode }) {
-  return <p className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-200">{children}</p>;
+  return <p className="text-sm leading-7 text-foreground">{children}</p>;
 }
 
 export function renderCitationUi(v: ControlValues, key: string) {

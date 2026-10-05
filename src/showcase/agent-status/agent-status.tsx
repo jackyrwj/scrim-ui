@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -26,7 +29,7 @@ export type AgentStatusProps = {
 
 function BotIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" {...props}>
       <rect width="18" height="10" x="3" y="8" rx="2" />
       <path d="M12 8V4a2 2 0 0 1 2-2h2" />
       <circle cx="9" cy="13" r="0.5" fill="currentColor" />
@@ -38,7 +41,7 @@ function BotIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M20 6 9 17l-5-5" />
     </svg>
   );
@@ -46,7 +49,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
 
 function XIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12" {...props}>
       <path d="M18 6 6 18M6 6l12 12" />
     </svg>
   );
@@ -75,7 +78,7 @@ function StopIcon(props: React.SVGProps<SVGSVGElement>) {
 
 const STATUS_STYLES: Record<AgentState, { pill: string; icon: React.ReactNode; label: string }> = {
   running: {
-    pill: "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400",
+    pill: "bg-muted text-foreground",
     icon: (
       <span className="h-2.5 w-2.5 animate-spin rounded-full border-[1.5px] border-current border-t-transparent" />
     ),
@@ -116,12 +119,12 @@ export function AgentStatus({
   const s = STATUS_STYLES[status];
 
   return (
-    <div
-      className={`rounded-xl border border-zinc-200 bg-white p-3.5 transition-colors dark:border-zinc-800 dark:bg-zinc-900 ${
+    <Card
+      className={`gap-0 py-0 rounded-xl border border-border bg-card p-3.5 transition-colors ${
         status === "failed"
           ? "border-red-200 dark:border-red-900/60"
           : status === "running"
-            ? "border-zinc-300 dark:border-zinc-700"
+            ? "border-border"
             : ""
       } ${className}`}
     >
@@ -132,7 +135,7 @@ export function AgentStatus({
               ? "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"
               : status === "completed"
                 ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400"
-                : "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"
+                : "bg-muted text-muted-foreground"
           }`}
         >
           {icon ?? <BotIcon />}
@@ -140,54 +143,54 @@ export function AgentStatus({
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            <span className="truncate text-sm font-medium text-foreground">
               {name}
             </span>
-            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] ${s.pill}`}>
+            <Badge variant="secondary" className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs ${s.pill}`}>
               {s.icon}
               {s.label}
-            </span>
-            {elapsed && <span className="text-xs tabular-nums text-zinc-500 dark:text-zinc-400">{elapsed}</span>}
+            </Badge>
+            {elapsed && <span className="text-xs tabular-nums text-muted-foreground">{elapsed}</span>}
           </div>
           {action && (
-            <p className="mt-0.5 truncate text-[13px] text-zinc-500 dark:text-zinc-400">{action}</p>
+            <p className="mt-0.5 truncate text-sm text-muted-foreground">{action}</p>
           )}
         </div>
 
         {status === "running" && onStop && (
-          <button
+          <Button variant="outline" size="icon-sm"
             type="button"
             onClick={onStop}
             aria-label={`Stop ${name}`}
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-zinc-200 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            className="min-h-6 min-w-6 flex h-8 w-7 shrink-0 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
             <StopIcon />
-          </button>
+          </Button>
         )}
         {status === "failed" && onRetry && (
-          <button
+          <Button variant="outline" size="sm"
             type="button"
             onClick={onRetry}
-            className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
               <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
               <path d="M21 3v5h-5" />
             </svg>
             Retry
-          </button>
+          </Button>
         )}
       </div>
 
       {/* Progress bar */}
       {status === "running" && progress !== undefined && (
-        <div className="mt-3 h-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+        <div className="mt-3 h-1 overflow-hidden rounded-full bg-muted">
           <div
-            className="h-full rounded-full bg-blue-500 transition-all duration-300"
+            className="h-full rounded-full bg-primary transition-[color,background-color,border-color,box-shadow] duration-300"
             style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
           />
         </div>
       )}
-    </div>
+    </Card>
   );
 }

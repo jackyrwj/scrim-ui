@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 
 /**
@@ -50,8 +51,8 @@ export type ContextUsageProps = {
 };
 
 const COLORS = [
-  "bg-blue-500",
-  "bg-violet-500",
+  "bg-primary",
+  "bg-primary",
   "bg-teal-500",
   "bg-amber-500",
   "bg-rose-500",
@@ -88,23 +89,23 @@ export function ContextUsage({
   const firstOut = evictable[0];
 
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-white p-3.5 dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
+    <Card className={`gap-0 py-0 rounded-xl border border-border bg-card p-3.5 ${className}`}>
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+        <span className="text-sm font-medium text-foreground">
           {estimated && "~"}
           {formatTokens(used)}
         </span>
-        <span className="text-[11px] text-zinc-500 dark:text-zinc-400">
+        <span className="text-xs text-muted-foreground">
           of {formatTokens(usable)} usable
           {reserve > 0 && ` · ${formatTokens(reserve)} held for the reply`}
         </span>
         <span
-          className={`ml-auto text-[11px] font-medium tabular-nums ${
+          className={`ml-auto text-xs font-medium tabular-nums ${
             overflowing
               ? "text-red-600 dark:text-red-400"
               : tight
                 ? "text-amber-600 dark:text-amber-500"
-                : "text-zinc-400 dark:text-zinc-500"
+                : "text-muted-foreground"
           }`}
         >
           {overflowing ? `${formatTokens(-free)} over` : `${formatTokens(free)} left`}
@@ -113,7 +114,7 @@ export function ContextUsage({
 
       {/* One track, segmented. Separate bars per segment would let each one
           look full on its own scale, which is the opposite of the point. */}
-      <div className="mt-2 flex h-2 gap-px overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+      <div className="mt-2 flex h-2 gap-px overflow-hidden rounded-full bg-muted">
         {segments.map((s, i) => (
           <div
             key={s.label}
@@ -135,15 +136,15 @@ export function ContextUsage({
 
       <dl className="mt-2.5 space-y-1">
         {segments.map((s, i) => (
-          <div key={s.label} className="flex items-baseline gap-2 text-[11px]">
+          <div key={s.label} className="flex items-baseline gap-2 text-xs">
             <span className={`h-2 w-2 shrink-0 rounded-sm ${COLORS[i % COLORS.length]}`} />
-            <dt className="text-zinc-600 dark:text-zinc-300">{s.label}</dt>
+            <dt className="text-muted-foreground">{s.label}</dt>
             {s.evictionRank === undefined && (
-              <span className="rounded bg-zinc-100 px-1 text-[10px] text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+              <span className="rounded bg-muted px-1 text-xs text-muted-foreground">
                 pinned
               </span>
             )}
-            <dd className="ml-auto shrink-0 tabular-nums text-zinc-500 dark:text-zinc-400">
+            <dd className="ml-auto shrink-0 tabular-nums text-muted-foreground">
               {formatTokens(s.tokens)}
             </dd>
           </div>
@@ -152,10 +153,10 @@ export function ContextUsage({
 
       {(tight || overflowing) && (
         <p
-          className={`mt-2.5 border-t pt-2 text-[11px] leading-4 ${
+          className={`mt-2.5 border-t pt-2 text-xs leading-4 ${
             overflowing
               ? "border-red-100 text-red-600 dark:border-red-900/40 dark:text-red-400"
-              : "border-zinc-100 text-amber-600 dark:border-zinc-800 dark:text-amber-500"
+              : "border-border text-amber-600 dark:text-amber-500"
           }`}
         >
           {firstOut
@@ -165,10 +166,10 @@ export function ContextUsage({
       )}
 
       {estimated && (
-        <p className="mt-1.5 text-[11px] leading-4 text-zinc-400 dark:text-zinc-500">
+        <p className="mt-1.5 text-xs leading-4 text-muted-foreground">
           Counted with a different tokenizer than the model uses — treat it as an estimate.
         </p>
       )}
-    </div>
+    </Card>
   );
 }

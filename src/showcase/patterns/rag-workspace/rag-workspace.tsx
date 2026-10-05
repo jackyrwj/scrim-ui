@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { FileUpload, type FileUploadStatus } from "../../file-upload/file-upload";
 import { ContextFiles } from "../../context-files/context-files";
@@ -178,7 +180,7 @@ export function RagWorkspacePattern() {
 
   const docsPanel = (
     <div className="flex h-full flex-col gap-3 overflow-y-auto p-3">
-      <p className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Documents</p>
+      <p className="text-sm font-semibold text-foreground">Documents</p>
       <FileUpload
         status={upload?.status ?? "idle"}
         progress={upload?.progress}
@@ -207,7 +209,7 @@ export function RagWorkspacePattern() {
         ]}
       />
       {nearLimit && (
-        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[11px] leading-4 text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300">
+        <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-4 text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300">
           Context is nearly full — the oldest documents are evicted first when it overflows.
         </p>
       )}
@@ -215,33 +217,33 @@ export function RagWorkspacePattern() {
   );
 
   return (
-    <div className="relative flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 relative flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Documents rail */}
-      <aside className="hidden w-64 shrink-0 border-r border-zinc-200 dark:border-zinc-800 md:block">
+      <aside className="hidden w-64 shrink-0 border-r border-border md:block">
         {docsPanel}
       </aside>
 
       {/* Q&A */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Document Q&amp;A</p>
-            <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm font-semibold text-foreground">Document Q&amp;A</p>
+            <p className="truncate text-xs text-muted-foreground">
               Answers only from your documents, with receipts
             </p>
           </div>
-          <button
+          <Button variant="outline" size="sm"
             type="button"
             onClick={() => setDocsOpen(true)}
-            className="shrink-0 rounded-lg border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 md:hidden"
+            className="shrink-0 rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted md:hidden"
           >
             Documents ({readyDocs.length})
-          </button>
+          </Button>
         </div>
 
         <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto px-4 py-5">
           {turns.length === 0 && !pending && (
-            <p className="pt-16 text-center text-[13px] leading-6 text-zinc-400 dark:text-zinc-500">
+            <p className="pt-16 text-center text-sm leading-6 text-muted-foreground">
               Ask about the vacation policy — the answer cites its passages.
               <br />
               Then ask something the handbook doesn&apos;t cover.
@@ -251,21 +253,21 @@ export function RagWorkspacePattern() {
           {removedNotice && (
             <div role="status" className="flex items-start justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-300">
               <span>{removedNotice}</span>
-              <button
+              <Button variant="ghost" size="icon-sm"
                 type="button"
                 onClick={() => setRemovedNotice(null)}
                 aria-label="Dismiss"
-                className="shrink-0 rounded px-1 hover:bg-amber-100 dark:hover:bg-amber-900/50"
+                className="min-h-6 min-w-6 shrink-0 rounded px-1 hover:bg-amber-100 dark:hover:bg-amber-900/50"
               >
                 ✕
-              </button>
+              </Button>
             </div>
           )}
 
           {turns.map((t) =>
             t.role === "user" ? (
               <div key={t.id} className="flex justify-end">
-                <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-md bg-zinc-900 px-4 py-3 text-[15px] leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+                <div className="max-w-[85%] whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm leading-6 text-foreground">
                   {t.text}
                 </div>
               </div>
@@ -278,11 +280,11 @@ export function RagWorkspacePattern() {
                   </div>
                 )}
                 {(t.kind === "cited" || t.kind === "not-found") && (
-                  <details className="mt-2 rounded-xl border border-zinc-200 dark:border-zinc-800">
-                    <summary className="cursor-pointer px-3 py-2 text-xs font-medium text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
+                  <details className="mt-2 rounded-xl border border-border">
+                    <summary className="cursor-pointer px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground">
                       {t.kind === "cited" ? "Retrieved passages (3 of 4 used)" : "Nothing passed the relevance floor"}
                     </summary>
-                    <div className="border-t border-zinc-100 p-2 dark:border-zinc-800">
+                    <div className="border-t border-border p-2">
                       <SourceList sources={t.kind === "cited" ? CITED_SOURCES : NOT_FOUND_SOURCES} floor={SCORE_FLOOR} />
                     </div>
                   </details>
@@ -296,7 +298,7 @@ export function RagWorkspacePattern() {
           )}
         </div>
 
-        <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="border-t border-border px-4 py-3">
           <PromptInput
             placeholder={readyDocs.length === 0 ? "Upload a document first…" : "Ask your documents…"}
             onSubmit={submit}
@@ -306,20 +308,20 @@ export function RagWorkspacePattern() {
 
       {/* Documents as an overlay on narrow screens */}
       {docsOpen && (
-        <div className="absolute inset-0 z-10 bg-white dark:bg-zinc-900 md:hidden">
-          <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Documents</p>
-            <button
+        <div className="absolute inset-0 z-10 bg-card md:hidden">
+          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+            <p className="text-sm font-semibold text-foreground">Documents</p>
+            <Button variant="outline" size="sm"
               type="button"
               onClick={() => setDocsOpen(false)}
-              className="rounded-lg border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
             >
               Back to chat
-            </button>
+            </Button>
           </div>
           {docsPanel}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

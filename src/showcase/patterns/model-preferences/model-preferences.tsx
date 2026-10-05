@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import * as React from "react";
 import { ModelSelector, type ModelOption } from "../../model-selector/model-selector";
 import {
@@ -80,7 +82,7 @@ function ClaudeMark() {
 
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
       <circle cx="11" cy="11" r="7" />
       <path d="m21 21-4.3-4.3" />
     </svg>
@@ -89,7 +91,7 @@ function SearchIcon() {
 
 function CodeIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
       <path d="m8 7-5 5 5 5" />
       <path d="m16 7 5 5-5 5" />
     </svg>
@@ -98,7 +100,7 @@ function CodeIcon() {
 
 function FileIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
       <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2Z" />
       <path d="M14 2v6h6" />
     </svg>
@@ -107,7 +109,7 @@ function FileIcon() {
 
 function GlobeIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
       <circle cx="12" cy="12" r="10" />
       <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20Z" />
     </svg>
@@ -138,21 +140,21 @@ export function ModelPreferencesPattern() {
   }
 
   return (
-    <div className="flex h-[560px] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="gap-0 py-0 flex h-[560px] flex-col overflow-hidden rounded-xl border border-border bg-card">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-zinc-200 px-5 py-3.5 dark:border-zinc-800">
+      <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
         <div>
-          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+          <p className="text-sm font-semibold text-foreground">
             Model &amp; Memory Preferences
           </p>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             How the assistant thinks, which tools it may use, and what it remembers.
           </p>
         </div>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+        <Badge variant="secondary" className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
           <span className="h-1.5 w-1.5 rounded-full bg-current" />
           Saved
-        </span>
+        </Badge>
       </div>
 
       <div className="flex min-h-0 flex-1">
@@ -160,8 +162,8 @@ export function ModelPreferencesPattern() {
         <div className="flex-1 space-y-6 overflow-y-auto p-5">
           <section className="space-y-2">
             <div>
-              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">Default model</p>
-              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+              <p className="text-sm font-medium text-foreground">Default model</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">
                 Used for new conversations; you can still switch per message.
               </p>
             </div>
@@ -179,19 +181,19 @@ export function ModelPreferencesPattern() {
         </div>
 
         {/* Memory */}
-        <div className="hidden w-80 shrink-0 flex-col overflow-y-auto border-l border-zinc-200 p-5 dark:border-zinc-800 md:flex">
+        <div className="hidden w-80 shrink-0 flex-col overflow-y-auto border-l border-border p-5 md:flex">
           <MemoryList
             items={memories}
             onAdd={addMemory}
             onForget={forgetMemory}
             description="Facts the assistant keeps across conversations"
           />
-          <p className="mt-3 text-[11px] leading-5 text-zinc-500 dark:text-zinc-400">
+          <p className="mt-3 text-xs leading-5 text-muted-foreground">
             Memories are included with each message so the assistant stays consistent. Remove
             anything you do not want stored.
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

@@ -85,7 +85,7 @@ export function InteractiveSidebar({
   const counter = React.useRef(100);
 
   return (
-    <div className="h-[520px] w-full max-w-[300px] overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800">
+    <div className="h-[520px] w-full max-w-[300px] overflow-hidden rounded-xl border border-border">
       <ConversationSidebar
         groups={groups}
         activeId={activeId}

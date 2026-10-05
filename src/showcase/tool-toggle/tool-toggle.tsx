@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -38,30 +40,30 @@ export function ToolToggle({
   const uid = React.useId();
 
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
-      <div className="border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
-        <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{title}</p>
-        <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
+    <Card className={`gap-0 py-0 rounded-xl border border-border bg-card ${className}`}>
+      <div className="border-b border-border px-4 py-3">
+        <p className="text-sm font-medium text-foreground">{title}</p>
+        <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
       </div>
 
-      <ul className="divide-y divide-zinc-100 dark:divide-zinc-800">
+      <ul className="divide-y divide-border">
         {tools.map((tool) => (
           <li key={tool.id} className="flex items-center gap-3 px-4 py-3">
             {tool.icon && (
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
                 {tool.icon}
               </span>
             )}
             <div className="min-w-0 flex-1">
               <p
                 id={`${uid}-${tool.id}-name`}
-                className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200"
+                className="text-sm font-medium text-foreground"
               >
                 {tool.name}
               </p>
               <p
                 id={`${uid}-${tool.id}-desc`}
-                className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400"
+                className="mt-0.5 text-xs text-muted-foreground"
               >
                 {tool.description}
               </p>
@@ -71,7 +73,7 @@ export function ToolToggle({
                 with no clue which tool it governs. Pointing at the visible
                 label rather than duplicating the string in an aria-label keeps
                 the two from drifting apart. */}
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               role="switch"
               aria-checked={tool.enabled}
@@ -80,7 +82,7 @@ export function ToolToggle({
               aria-describedby={`${uid}-${tool.id}-desc`}
               onClick={() => !tool.disabled && onToggle?.(tool.id, !tool.enabled)}
               className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
-                tool.enabled ? "bg-violet-600" : "bg-zinc-200 dark:bg-zinc-700"
+                tool.enabled ? "bg-primary" : "bg-muted"
               } ${tool.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
             >
               <span
@@ -88,10 +90,10 @@ export function ToolToggle({
                   tool.enabled ? "translate-x-4" : ""
                 }`}
               />
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   );
 }

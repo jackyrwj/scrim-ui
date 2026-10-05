@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { VoiceConversation, type VoiceTurn } from "./voice-conversation";
 
@@ -39,13 +40,13 @@ export function DemoPlaying() {
 
   return (
     <div className="space-y-3">
-      <button
+      <Button variant="outline" size="sm"
         type="button"
         onClick={() => setPlaying((p) => !p)}
-        className="inline-flex h-8 items-center rounded-lg border border-zinc-200 px-3 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
       >
         {playing ? "Pause" : "Replay conversation"}
-      </button>
+      </Button>
       <VoiceConversation turns={rendered} />
     </div>
   );

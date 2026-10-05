@@ -31,11 +31,11 @@ const FLIGHT_FALLBACK =
    card would be the one part of the snippet nobody wants. */
 const PREAMBLE = `// Your own components — whatever the app already renders.
 function WeatherCard() {
-  return <div className="text-sm">29° Shenzhen — humid, feels like 34°</div>;
+ return <div className="text-sm">29° Shenzhen — humid, feels like 34°</div>;
 }
 
 function WeatherSkeleton() {
-  return <div className="h-12 animate-pulse rounded-xl bg-zinc-200" />;
+ return <div className="h-12 animate-pulse rounded-xl bg-muted" />;
 }`;
 
 export const generativeUiControls: ComponentControls = {

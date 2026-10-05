@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import * as React from "react";
 import { FileUpload } from "../../file-upload/file-upload";
 import { AgentStatus, type AgentState } from "../../agent-status/agent-status";
@@ -146,31 +149,31 @@ export function ExtractionReviewPattern() {
   }
 
   return (
-    <div className="flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Documents rail */}
-      <aside className="hidden w-56 shrink-0 flex-col gap-3 overflow-y-auto border-r border-zinc-200 p-3 dark:border-zinc-800 md:flex">
-        <p className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Documents</p>
+      <aside className="hidden w-56 shrink-0 flex-col gap-3 overflow-y-auto border-r border-border p-3 md:flex">
+        <p className="text-sm font-semibold text-foreground">Documents</p>
         <FileUpload status="idle" accept=".pdf,.png,.jpg" onSelect={() => {}} />
         <ul className="space-y-1">
-          <li className="flex items-center gap-2 rounded-lg bg-zinc-100 px-2.5 py-2 dark:bg-zinc-800">
-            <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-100">
+          <li className="flex items-center gap-2 rounded-lg bg-muted px-2.5 py-2">
+            <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
               invoice-1042.pdf
             </span>
-            <span className="shrink-0 text-[11px] text-zinc-400">1 page</span>
+            <span className="shrink-0 text-xs text-muted-foreground">1 page</span>
           </li>
         </ul>
       </aside>
 
       {/* Review table */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Extraction Review</p>
-          <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="border-b border-border px-4 py-3">
+          <p className="text-sm font-semibold text-foreground">Extraction Review</p>
+          <p className="truncate text-xs text-muted-foreground">
             Fields land as they&apos;re read — confirm or correct the flagged ones
           </p>
         </div>
 
-        <div className="border-b border-zinc-100 px-4 py-3 dark:border-zinc-800/60">
+        <div className="border-b border-border px-4 py-3">
           <AgentStatus
             name="Extractor"
             status={runState === "idle" ? "waiting" : runState}
@@ -185,31 +188,31 @@ export function ExtractionReviewPattern() {
             }
           />
           {runState === "idle" && (
-            <button
+            <Button variant="default" size="sm"
               type="button"
               onClick={runExtraction}
-              className="mt-2 rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+              className="mt-2 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary"
             >
               Run extraction
-            </button>
+            </Button>
           )}
         </div>
 
         <div className="flex-1 overflow-y-auto px-4 py-3">
-          <ul className="divide-y divide-zinc-100 dark:divide-zinc-800/60">
+          <ul className="divide-y divide-border">
             {fields.map((f) => {
               const displayValue = f.corrected ?? f.value;
               const needsReview = f.value !== undefined && f.confidence !== "high" && !f.corrected && !confirmed.includes(f.id);
               const style = f.confidence && f.confidence !== "high" ? CONFIDENCE_STYLES[f.confidence] : null;
               return (
                 <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
-                  <span className="w-28 shrink-0 text-xs font-medium text-zinc-500 dark:text-zinc-400">{f.label}</span>
+                  <span className="w-28 shrink-0 text-xs font-medium text-muted-foreground">{f.label}</span>
 
                   {f.value === undefined ? (
-                    <span className="h-4 w-24 animate-pulse rounded bg-zinc-100 dark:bg-zinc-800" aria-label="Extracting…" />
+                    <span className="h-4 w-24 animate-pulse rounded bg-muted" aria-label="Extracting…" />
                   ) : editingId === f.id ? (
                     <span className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-                      <input
+                      <Input
                         autoFocus
                         value={draft}
                         onChange={(e) => setDraft(e.target.value)}
@@ -218,28 +221,28 @@ export function ExtractionReviewPattern() {
                           if (e.key === "Escape") setEditingId(null);
                         }}
                         aria-label={`Correct ${f.label}`}
-                        className="w-44 rounded-md border border-zinc-300 bg-white px-2 py-1 text-[13px] text-zinc-900 outline-none focus:border-zinc-500 dark:border-zinc-600 dark:bg-zinc-900 dark:text-zinc-100"
+                        className="w-44 rounded-md border border-border bg-card px-2 py-1 text-base sm:text-sm text-foreground outline-none focus:border-border"
                       />
-                      <button
+                      <Button variant="default" size="sm"
                         type="button"
                         onClick={() => commitEdit(f)}
-                        className="rounded-md bg-zinc-900 px-2 py-1 text-[11px] font-medium text-white dark:bg-zinc-100 dark:text-zinc-900"
+                        className="rounded-md bg-primary px-2 py-1 text-xs font-medium text-primary-foreground"
                       >
                         Save
-                      </button>
-                      <button
+                      </Button>
+                      <Button variant="ghost" size="sm"
                         type="button"
                         onClick={() => setEditingId(null)}
-                        className="text-[11px] text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                        className="text-xs text-muted-foreground hover:text-foreground"
                       >
                         Cancel
-                      </button>
+                      </Button>
                     </span>
                   ) : (
                     <span className="min-w-0 flex-1">
-                      <span className="text-[13px] font-medium text-zinc-900 dark:text-zinc-100">{displayValue}</span>
+                      <span className="text-sm font-medium text-foreground">{displayValue}</span>
                       {f.corrected && (
-                        <span className="ml-2 text-[11px] text-zinc-400 dark:text-zinc-500">
+                        <span className="ml-2 text-xs text-muted-foreground">
                           was: <s>{f.value}</s>
                         </span>
                       )}
@@ -250,40 +253,40 @@ export function ExtractionReviewPattern() {
                     <span className="flex shrink-0 items-center gap-2">
                       {needsReview && style && (
                         <>
-                          <span className={`inline-flex items-center gap-1 text-[11px] font-medium ${style.text}`}>
+                          <span className={`inline-flex items-center gap-1 text-xs font-medium ${style.text}`}>
                             <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
                             {style.label}
                           </span>
-                          <button
+                          <Button variant="outline" size="sm"
                             type="button"
                             onClick={() => setConfirmed((c) => [...c, f.id])}
-                            className="rounded-md border border-zinc-200 px-2 py-0.5 text-[11px] font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                            className="rounded-md border border-border px-2 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted"
                           >
                             Confirm
-                          </button>
+                          </Button>
                         </>
                       )}
                       {(f.corrected || confirmed.includes(f.id)) && (
-                        <span className="text-[11px] font-medium text-teal-600 dark:text-teal-400">
+                        <span className="text-xs font-medium text-teal-600 dark:text-teal-400">
                           {f.corrected ? "Corrected" : "Confirmed"}
                         </span>
                       )}
-                      <button
+                      <Button variant="outline" size="sm"
                         type="button"
                         onClick={() => startEdit(f)}
-                        className="rounded-md border border-zinc-200 px-2 py-0.5 text-[11px] font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                        className="rounded-md border border-border px-2 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted"
                       >
                         Edit
-                      </button>
+                      </Button>
                     </span>
                   )}
 
                   {(f.error || (needsReview && f.note)) && (
                     <span className="w-full pl-28">
                       {f.error ? (
-                        <span role="alert" className="text-[11px] text-red-600 dark:text-red-400">{f.error}</span>
+                        <span role="alert" className="text-xs text-red-600 dark:text-red-400">{f.error}</span>
                       ) : (
-                        <span className="text-[11px] text-zinc-400 dark:text-zinc-500">{f.note}</span>
+                        <span className="text-xs text-muted-foreground">{f.note}</span>
                       )}
                     </span>
                   )}
@@ -294,7 +297,7 @@ export function ExtractionReviewPattern() {
 
           {runState === "completed" && (
             <div className="mt-3">
-              <p className="mb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">Payment terms (free text)</p>
+              <p className="mb-1 text-xs font-medium text-muted-foreground">Payment terms (free text)</p>
               <InlineCorrection
                 text={TERMS_TEXT}
                 correction={termsCorrection}
@@ -307,24 +310,24 @@ export function ExtractionReviewPattern() {
         </div>
 
         {/* Export footer — earned, not assumed */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border px-4 py-3">
+          <p className="text-xs text-muted-foreground">
             {runState === "completed"
               ? readyToExport
                 ? `${fields.length} fields · ${correctedCount} corrected · ready to export`
                 : `${flagged.length} flagged · ${errors.length} invalid — resolve before export`
               : "Run extraction to begin review"}
           </p>
-          <button
+          <Button variant="default" size="sm"
             type="button"
             disabled={!readyToExport || exported}
             onClick={() => setExported(true)}
-            className="rounded-lg bg-zinc-900 px-3.5 py-1.5 text-xs font-medium text-white transition-colors enabled:hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900 dark:enabled:hover:bg-zinc-300"
+            className="rounded-md bg-primary px-3.5 py-1.5 text-xs font-medium text-primary-foreground transition-colors enabled:hover:bg-primary disabled:cursor-not-allowed disabled:opacity-40"
           >
             {exported ? "Exported ✓" : "Export JSON"}
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

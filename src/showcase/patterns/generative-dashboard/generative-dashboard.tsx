@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { GenerativeUi } from "../../generative-ui/generative-ui";
 import { ToolCall } from "../../tool-call/tool-call";
@@ -70,8 +72,8 @@ const SCATTER_JSON = `{
 function MetricCard({ label, value, delta }: { label: string; value: string; delta: string }) {
   return (
     <div className="px-4 py-3">
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">{label}</p>
-      <p className="mt-0.5 text-xl font-semibold tabular-nums text-zinc-900 dark:text-zinc-100">{value}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="mt-0.5 text-xl font-semibold tabular-nums text-foreground">{value}</p>
       <p className="text-xs font-medium text-teal-600 dark:text-teal-400">{delta}</p>
     </div>
   );
@@ -81,19 +83,19 @@ function BarChart({ onPick }: { onPick?: (region: string) => void }) {
   const max = Math.max(...REGIONS.map((r) => r.value));
   return (
     <div className="space-y-2 px-4 py-3">
-      <p className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Revenue by region — click a bar to filter</p>
+      <p className="text-xs font-medium text-muted-foreground">Revenue by region — click a bar to filter</p>
       {REGIONS.map((r) => (
-        <button
+        <Button variant="ghost" size="sm"
           key={r.label}
           type="button"
           onClick={() => onPick?.(r.label)}
-          className="group flex w-full items-center gap-2 text-left"
+          className="h-auto min-h-8 whitespace-normal justify-start group flex w-full items-center gap-2 text-left"
           aria-label={`Filter to ${r.label}, $${r.value}k`}
         >
-          <span className="w-10 text-xs text-zinc-500 dark:text-zinc-400">{r.label}</span>
-          <span className="h-4 rounded bg-zinc-300 transition-colors group-hover:bg-zinc-900 dark:bg-zinc-700 dark:group-hover:bg-zinc-100" style={{ width: `${(r.value / max) * 70}%` }} />
-          <span className="text-xs tabular-nums text-zinc-600 dark:text-zinc-300">${r.value}k</span>
-        </button>
+          <span className="w-10 text-xs text-muted-foreground">{r.label}</span>
+          <span className="h-4 rounded bg-muted transition-colors group-hover:bg-muted" style={{ width: `${(r.value / max) * 70}%` }} />
+          <span className="text-xs tabular-nums text-muted-foreground">${r.value}k</span>
+        </Button>
       ))}
     </div>
   );
@@ -103,7 +105,7 @@ function DataTable() {
   return (
     <table className="w-full text-sm">
       <thead>
-        <tr className="border-b border-zinc-200 text-left text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+        <tr className="border-b border-border text-left text-xs text-muted-foreground">
           <th className="px-4 py-2 font-medium">Week</th>
           <th className="px-4 py-2 font-medium">Revenue</th>
           <th className="px-4 py-2 font-medium">Deals</th>
@@ -111,10 +113,10 @@ function DataTable() {
       </thead>
       <tbody>
         {WEEKS.map((w) => (
-          <tr key={w.week} className="border-b border-zinc-100 last:border-0 dark:border-zinc-800/60">
-            <td className="px-4 py-2 text-zinc-700 dark:text-zinc-300">{w.week}</td>
-            <td className="px-4 py-2 tabular-nums text-zinc-900 dark:text-zinc-100">{w.revenue}</td>
-            <td className="px-4 py-2 tabular-nums text-zinc-700 dark:text-zinc-300">{w.deals}</td>
+          <tr key={w.week} className="border-b border-border last:border-0">
+            <td className="px-4 py-2 text-foreground">{w.week}</td>
+            <td className="px-4 py-2 tabular-nums text-foreground">{w.revenue}</td>
+            <td className="px-4 py-2 tabular-nums text-foreground">{w.deals}</td>
           </tr>
         ))}
       </tbody>
@@ -124,8 +126,8 @@ function DataTable() {
 
 function ReportBody() {
   return (
-    <div className="space-y-2 px-4 py-3 text-sm leading-6 text-zinc-700 dark:text-zinc-300">
-      <p>West leads at <strong className="text-zinc-900 dark:text-zinc-100">$412k</strong> (+8% vs Q2), East close behind at $368k.</p>
+    <div className="space-y-2 px-4 py-3 text-sm leading-6 text-foreground">
+      <p>West leads at <strong className="text-foreground">$412k</strong> (+8% vs Q2), East close behind at $368k.</p>
       <p>North recovered after a slow July; South is flat. Recommended: shift two East reps to the South pipeline review.</p>
     </div>
   );
@@ -257,19 +259,19 @@ export function GenerativeDashboardPattern() {
   }
 
   return (
-    <div className="flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Conversation drives the canvas */}
-      <div className="flex w-[320px] shrink-0 flex-col border-r border-zinc-200 dark:border-zinc-800 max-md:w-full">
-        <div className="border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
-          <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Analytics copilot</p>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">Registry: metric card · bar chart · data table · report</p>
+      <div className="flex w-[320px] shrink-0 flex-col border-r border-border max-md:w-full">
+        <div className="border-b border-border px-4 py-3">
+          <p className="text-sm font-semibold text-foreground">Analytics copilot</p>
+          <p className="text-xs text-muted-foreground">Registry: metric card · bar chart · data table · report</p>
         </div>
 
         <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3">
           {chat.length === 0 && (
-            <div className="rounded-xl border border-dashed border-zinc-300 px-3 py-5 text-center dark:border-zinc-700">
-              <p className="text-sm font-medium text-zinc-700 dark:text-zinc-200">Ask for a number, get a dashboard</p>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <div className="rounded-xl border border-dashed border-border px-3 py-5 text-center">
+              <p className="text-sm font-medium text-foreground">Ask for a number, get a dashboard</p>
+              <p className="mt-1 text-xs text-muted-foreground">
                 Try: “Revenue by region for Q3”, then “Show a 3D scatter of reps”, then “Break it down by week”.
               </p>
             </div>
@@ -277,30 +279,30 @@ export function GenerativeDashboardPattern() {
           {chat.map((item) =>
             item.kind === "user" ? (
               <div key={item.id} className="flex justify-end">
-                <p className="max-w-[90%] rounded-2xl rounded-br-md bg-zinc-900 px-3.5 py-2 text-sm leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+                <p className="max-w-[90%] rounded-xl rounded-br-md bg-primary px-3.5 py-2 text-sm leading-6 text-primary-foreground">
                   {item.text}
                 </p>
               </div>
             ) : item.kind === "tool" ? (
               <ToolCall key={item.id} name={item.name} input={item.input} output={item.output} status={item.status} duration={item.duration} />
             ) : (
-              <p key={item.id} className="rounded-2xl rounded-tl-md border border-zinc-200 bg-white px-3.5 py-2 text-sm leading-6 text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+              <p key={item.id} className="rounded-xl border border-border bg-card px-3.5 py-2 text-sm leading-6 text-foreground">
                 {item.text}
               </p>
             ),
           )}
         </div>
 
-        <div className="border-t border-zinc-200 p-3 dark:border-zinc-800">
+        <div className="border-t border-border p-3">
           <PromptInput onSubmit={submit} placeholder="Ask for a metric…" loading={busy} />
         </div>
       </div>
 
       {/* Canvas — only registry widgets may appear here */}
-      <div className="flex-1 overflow-y-auto bg-zinc-50 p-4 dark:bg-zinc-950 max-md:hidden">
+      <div className="flex-1 overflow-y-auto bg-muted p-4 max-md:hidden">
         {widgets.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <p className="text-sm text-zinc-400 dark:text-zinc-500">The canvas is empty — widgets land here as the model renders them.</p>
+            <p className="text-sm text-muted-foreground">The canvas is empty — widgets land here as the model renders them.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
@@ -312,9 +314,9 @@ export function GenerativeDashboardPattern() {
                   state={w.state === "ready" ? "ready" : "streaming"}
                   skeleton={
                     <div className="space-y-2 px-4 py-3">
-                      <div className="h-3 w-20 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-                      <div className="h-6 w-24 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
-                      <div className="h-3 w-14 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                      <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+                      <div className="h-6 w-24 animate-pulse rounded bg-muted" />
+                      <div className="h-3 w-14 animate-pulse rounded bg-muted" />
                     </div>
                   }
                 >
@@ -328,7 +330,7 @@ export function GenerativeDashboardPattern() {
                     skeleton={
                       <div className="space-y-2.5 px-4 py-3">
                         {[70, 62, 50, 38].map((pct) => (
-                          <div key={pct} className="h-4 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" style={{ width: `${pct}%` }} />
+                          <div key={pct} className="h-4 animate-pulse rounded bg-muted" style={{ width: `${pct}%` }} />
                         ))}
                       </div>
                     }
@@ -344,7 +346,7 @@ export function GenerativeDashboardPattern() {
                     skeleton={
                       <div className="space-y-2 px-4 py-3">
                         {[0, 1, 2, 3].map((i) => (
-                          <div key={i} className="h-4 w-full animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" />
+                          <div key={i} className="h-4 w-full animate-pulse rounded bg-muted" />
                         ))}
                       </div>
                     }
@@ -381,7 +383,7 @@ export function GenerativeDashboardPattern() {
                   state="unsupported"
                   fallback={
                     <span>
-                      The registry has no <code className="rounded bg-zinc-100 px-1 dark:bg-zinc-800">scatter_3d</code> widget — the model
+                      The registry has no <code className="rounded bg-muted px-1">scatter_3d</code> widget — the model
                       asked for one anyway. Refused, not improvised: the raw result is under Data.
                     </span>
                   }
@@ -392,6 +394,6 @@ export function GenerativeDashboardPattern() {
           </div>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

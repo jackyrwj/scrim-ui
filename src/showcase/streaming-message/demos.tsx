@@ -53,10 +53,10 @@ export function DemoStopped() {
 export function DemoUserTurn() {
   return (
     <div className="flex items-start justify-end gap-3">
-      <div className="max-w-[80%] whitespace-pre-wrap rounded-2xl rounded-tr-md bg-zinc-900 px-4 py-3 text-[15px] leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+      <div className="max-w-[80%] whitespace-pre-wrap rounded-xl bg-primary px-4 py-3 text-sm leading-6 text-primary-foreground">
         Draft an answer in plain English, then give me the same answer in markdown.
       </div>
-      <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-zinc-200 text-xs font-semibold text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200">
+      <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-muted text-xs font-semibold text-foreground">
         You
       </div>
     </div>

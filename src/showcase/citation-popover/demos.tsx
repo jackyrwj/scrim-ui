@@ -10,7 +10,7 @@ const PASSAGE_2 =
   "Sources are written to the stream as a data part before the first token of the answer. A marker that arrives at token 40 can then resolve immediately, rather than rendering as inert text until the response settles.";
 
 function Prose({ children }: { children: React.ReactNode }) {
-  return <p className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-200">{children}</p>;
+  return <p className="text-sm leading-7 text-foreground">{children}</p>;
 }
 
 export function DemoDefault() {

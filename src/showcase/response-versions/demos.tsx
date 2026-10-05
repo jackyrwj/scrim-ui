@@ -11,7 +11,7 @@ const ANSWERS = [
 ];
 
 function prose(text: string) {
-  return <p className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-300">{text}</p>;
+  return <p className="text-sm leading-7 text-foreground">{text}</p>;
 }
 
 /** A single assistant answer with the full regenerate loop wired up:

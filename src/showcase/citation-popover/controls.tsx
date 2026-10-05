@@ -66,7 +66,7 @@ export const citationPopoverControls: ComponentControls = {
 export function renderCitationPopover(v: ControlValues, key: string) {
   const passage = String(v.passage).trim();
   return (
-    <p key={key} className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-200">
+    <p key={key} className="text-sm leading-7 text-foreground">
       Retrieval keeps the offsets rather than the text, so a citation resolves to a range in the
       original document{" "}
       <CitationPopover

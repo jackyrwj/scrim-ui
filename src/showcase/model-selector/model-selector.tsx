@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -38,7 +40,7 @@ function CheckIcon(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       width="12"
@@ -67,28 +69,28 @@ export function ModelSelector({
 
   return (
     <div className={`relative ${className}`}>
-      <button
+      <Button variant="outline" size="sm"
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="inline-flex h-9 w-full items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-800 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800"
+        className="h-auto min-h-8 whitespace-normal justify-start inline-flex h-9 w-full items-center justify-between gap-2 rounded-md border border-border bg-card px-3 text-sm text-foreground transition-colors hover:bg-muted"
       >
         <span className="flex min-w-0 items-center gap-2">
           <span className="truncate font-medium">
             {selected?.name ?? placeholder}
           </span>
           {selected?.badges?.[0] && (
-            <span className="shrink-0 rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            <Badge variant="secondary" className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
               {selected.badges[0]}
-            </span>
+            </Badge>
           )}
         </span>
         <svg
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
           width="14"
@@ -97,7 +99,7 @@ export function ModelSelector({
         >
           <path d="m6 9 6 6 6-6" />
         </svg>
-      </button>
+      </Button>
 
       {open && (
         <>
@@ -111,12 +113,12 @@ export function ModelSelector({
           <div
             role="listbox"
             aria-label="Model"
-            className="absolute left-0 right-0 top-full z-20 mt-1.5 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+            className="absolute left-0 right-0 top-full z-20 mt-1.5 overflow-hidden rounded-xl border border-border bg-card shadow-md"
           >
             {options.map((opt) => {
               const active = opt.id === selected?.id;
               return (
-                <button
+                <Button variant="ghost" size="sm"
                   key={opt.id}
                   type="button"
                   role="option"
@@ -125,39 +127,39 @@ export function ModelSelector({
                     onSelect?.(opt.id);
                     setOpen(false);
                   }}
-                  className={`flex w-full items-start gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800 ${
-                    active ? "bg-zinc-50 dark:bg-zinc-800" : ""
+                  className={`h-auto min-h-8 whitespace-normal justify-start flex w-full items-start gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-muted ${
+                    active ? "bg-muted" : ""
                   }`}
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       {opt.icon}
-                      <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                      <span className="text-sm font-medium text-foreground">
                         {opt.name}
                       </span>
                       {active && (
-                        <span className="text-violet-600 dark:text-violet-400">
+                        <span className="text-muted-foreground">
                           <CheckIcon />
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {opt.hint}
                     </p>
                   </div>
                   {opt.badges && opt.badges.length > 0 && (
                     <div className="flex shrink-0 flex-wrap items-center gap-1 pt-0.5">
                       {opt.badges.map((b) => (
-                        <span
+                        <Badge variant="secondary"
                           key={b}
-                          className="rounded-full bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                          className="rounded-full bg-muted px-1.5 py-0.5 text-xs text-muted-foreground"
                         >
                           {b}
-                        </span>
+                        </Badge>
                       ))}
                     </div>
                   )}
-                </button>
+                </Button>
               );
             })}
           </div>

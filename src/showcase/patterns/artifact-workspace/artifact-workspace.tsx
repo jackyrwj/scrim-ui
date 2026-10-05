@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { PromptInput } from "../../prompt-input/prompt-input";
 import { StreamingMessage } from "../../streaming-message/streaming-message";
@@ -55,29 +57,29 @@ const CONVERSATIONS: ConversationGroup[] = [
 ];
 
 const CHART_V1 = `export function SignupChart({ data }: { data: number[] }) {
-  const max = Math.max(...data);
-  return (
-    <div className="flex items-end gap-2">
-      {data.map((v, i) => (
-        <div key={i} style={{ height: (v / max) * 160 }} className="w-10 rounded-t bg-blue-500" />
-      ))}
-    </div>
-  );
+ const max = Math.max(...data);
+ return (
+ <div className="flex items-end gap-2">
+ {data.map((v, i) => (
+ <div key={i} style={{ height: (v / max) * 160 }} className="w-10 rounded-t bg-primary" />
+ ))}
+ </div>
+ );
 }`;
 
 const CHART_V2 = `export function SignupChart({ data }: { data: number[] }) {
-  const max = Math.max(...data);
-  const total = data.reduce((a, b) => a + b, 0);
-  return (
-    <figure>
-      <div className="flex items-end gap-2">
-        {data.map((v, i) => (
-          <div key={i} style={{ height: (v / max) * 160 }} className="w-10 rounded-t bg-blue-500" />
-        ))}
-      </div>
-      <figcaption>Total signups: {total.toLocaleString()}</figcaption>
-    </figure>
-  );
+ const max = Math.max(...data);
+ const total = data.reduce((a, b) => a + b, 0);
+ return (
+ <figure>
+ <div className="flex items-end gap-2">
+ {data.map((v, i) => (
+ <div key={i} style={{ height: (v / max) * 160 }} className="w-10 rounded-t bg-primary" />
+ ))}
+ </div>
+ <figcaption>Total signups: {total.toLocaleString()}</figcaption>
+ </figure>
+ );
 }`;
 
 const CHART_V3_BROKEN = `export function SignupChart({ data }: { data: number[] }) {
@@ -111,11 +113,11 @@ function ChartMock({ values, caption }: { values: number[]; caption?: string }) 
           <div
             key={i}
             style={{ height: `${(v / max) * 100}%` }}
-            className="w-10 rounded-t-md bg-blue-500/80 dark:bg-blue-400/80"
+            className="w-10 rounded-t-md bg-primary/80"
           />
         ))}
       </div>
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">{caption ?? "Monthly signups"}</p>
+      <p className="text-xs text-muted-foreground">{caption ?? "Monthly signups"}</p>
     </div>
   );
 }
@@ -313,23 +315,23 @@ export function ArtifactWorkspacePattern() {
   }
 
   const openArtifactChip = (
-    <button
+    <Button variant="outline" size="sm"
       type="button"
       onClick={() => setOverlay(true)}
-      className="mt-1.5 inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+      className="mt-1.5 inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
     >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
         <rect width="18" height="18" x="3" y="3" rx="2" />
         <path d="M15 3v18" />
       </svg>
       Open artifact
-    </button>
+    </Button>
   );
 
   return (
-    <div className="relative flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 relative flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Conversation history */}
-      <aside className="hidden w-56 shrink-0 border-r border-zinc-200 dark:border-zinc-800 md:block">
+      <aside className="hidden w-56 shrink-0 border-r border-border md:block">
         <ConversationSidebar
           groups={conversations}
           activeId={activeConvo}
@@ -340,27 +342,27 @@ export function ArtifactWorkspacePattern() {
 
       {/* Chat */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">Artifact Workspace</p>
-            <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm font-semibold text-foreground">Artifact Workspace</p>
+            <p className="truncate text-xs text-muted-foreground">
               Ask for a chart — it opens in the panel
             </p>
           </div>
           {artifact.open && (
-            <button
+            <Button variant="outline" size="sm"
               type="button"
               onClick={() => setOverlay(true)}
-              className="shrink-0 rounded-lg border border-zinc-200 px-2.5 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 lg:hidden"
+              className="shrink-0 rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted lg:hidden"
             >
               View artifact
-            </button>
+            </Button>
           )}
         </div>
 
         <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto px-4 py-5">
           {turns.length === 0 && answerVersions.length === 0 && !pending && (
-            <p className="pt-16 text-center text-[13px] leading-6 text-zinc-400 dark:text-zinc-500">
+            <p className="pt-16 text-center text-sm leading-6 text-muted-foreground">
               Ask for a signup chart.
               <br />
               The answer builds it in the artifact panel — then revise it, then break it.
@@ -377,7 +379,7 @@ export function ArtifactWorkspacePattern() {
           {turns.map((t) =>
             t.role === "user" ? (
               <div key={t.id} className="flex justify-end">
-                <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-md bg-zinc-900 px-4 py-3 text-[15px] leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+                <div className="max-w-[85%] whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm leading-6 text-foreground">
                   {t.text}
                 </div>
               </div>
@@ -394,14 +396,14 @@ export function ArtifactWorkspacePattern() {
           )}
         </div>
 
-        <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="border-t border-border px-4 py-3">
           <PromptInput placeholder="Ask for a signup chart…" onSubmit={submit} />
         </div>
       </div>
 
       {/* Artifact panel — docked on wide screens, an overlay below lg. */}
       {artifact.open && (
-        <aside className="hidden w-[44%] shrink-0 border-l border-zinc-200 dark:border-zinc-800 lg:block">
+        <aside className="hidden w-[44%] shrink-0 border-l border-border lg:block">
           {renderArtifactPanel(() => setArtifact((a) => ({ ...a, open: false })))}
         </aside>
       )}
@@ -410,6 +412,6 @@ export function ArtifactWorkspacePattern() {
           {renderArtifactPanel(() => setOverlay(false))}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

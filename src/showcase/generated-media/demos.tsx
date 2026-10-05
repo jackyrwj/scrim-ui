@@ -30,7 +30,7 @@ export function AudioMock() {
           <span key={i} style={{ height: `${h * 4}px` }} className="w-1.5 rounded-full bg-teal-500/80 dark:bg-teal-400/80" />
         ))}
       </div>
-      <p className="text-xs tabular-nums text-zinc-500 dark:text-zinc-400">0:12 · lo-fi piano loop</p>
+      <p className="text-xs tabular-nums text-muted-foreground">0:12 · lo-fi piano loop</p>
     </div>
   );
 }
@@ -43,12 +43,12 @@ export function VideoMock() {
       aria-label="Generated video: waves rolling onto a beach, 4 seconds"
       style={{ background: "linear-gradient(180deg, hsl(200 60% 60%) 0%, hsl(190 55% 40%) 55%, hsl(45 40% 75%) 100%)" }}
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/85 text-zinc-800 shadow">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-card/85 text-foreground shadow">
         <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
           <path d="M8 5v14l11-7z" />
         </svg>
       </span>
-      <span className="absolute bottom-2 right-3 rounded bg-black/50 px-1.5 py-0.5 text-[10px] font-medium text-white">0:04</span>
+      <span className="absolute bottom-2 right-3 rounded bg-primary/50 px-1.5 py-0.5 text-xs font-medium text-white">0:04</span>
     </div>
   );
 }

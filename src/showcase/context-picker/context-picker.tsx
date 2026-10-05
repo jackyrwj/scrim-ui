@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import * as React from "react";
 
 /**
@@ -61,7 +63,7 @@ const ICON_PROPS = {
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 2,
+  strokeWidth: 1.5,
   strokeLinecap: "round",
   strokeLinejoin: "round",
 } as const;
@@ -295,44 +297,44 @@ export function ContextPicker({
         onMouseEnter={() => !inert && setActiveId(item.id)}
         onClick={() => activate(item)}
         className={`flex cursor-pointer items-center gap-2.5 px-3 py-2 ${
-          active ? "bg-zinc-100 dark:bg-zinc-800" : ""
+          active ? "bg-muted" : ""
         } ${inert ? "cursor-default opacity-60" : ""}`}
       >
-        <span className="shrink-0 text-zinc-400 dark:text-zinc-500">{kindIcon(item.kind)}</span>
+        <span className="shrink-0 text-muted-foreground">{kindIcon(item.kind)}</span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-100">
+          <span className="block truncate text-sm font-medium text-foreground">
             {item.title}
           </span>
           {item.detail && (
-            <span className="block truncate text-xs text-zinc-500 dark:text-zinc-400">{item.detail}</span>
+            <span className="block truncate text-xs text-muted-foreground">{item.detail}</span>
           )}
         </span>
         {status === "permission-required" && (
-          <button
+          <Button variant="outline" size="sm"
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onRequestAccess?.(item);
             }}
-            className="inline-flex shrink-0 items-center gap-1 rounded-md border border-zinc-200 px-2 py-0.5 text-[11px] font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border px-2 py-0.5 text-xs font-medium text-muted-foreground hover:bg-muted"
           >
             <LockIcon />
             Grant
-          </button>
+          </Button>
         )}
         {status === "connecting" && (
-          <span className="shrink-0 text-[11px] text-zinc-400 dark:text-zinc-500">Connecting…</span>
+          <span className="shrink-0 text-xs text-muted-foreground">Connecting…</span>
         )}
         {status === "unavailable" && (
-          <span className="shrink-0 text-[11px] text-zinc-400 dark:text-zinc-500">Unavailable</span>
+          <span className="shrink-0 text-xs text-muted-foreground">Unavailable</span>
         )}
         {status === "available" && item.tokens != null && (
-          <span className="shrink-0 text-[11px] tabular-nums text-zinc-400 dark:text-zinc-500">
+          <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
             {formatTokens(item.tokens)}
           </span>
         )}
         {selected && (
-          <span className="shrink-0 text-blue-600 dark:text-blue-400" aria-label="Selected">
+          <span className="shrink-0 text-muted-foreground" aria-label="Selected">
             <svg {...ICON_PROPS} width="14" height="14">
               <path d="M20 6 9 17l-5-5" />
             </svg>
@@ -350,43 +352,43 @@ export function ContextPicker({
           {selectedItems.map((item) => (
             <li
               key={item.id}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-zinc-50 py-1 pl-2 pr-1 text-xs font-medium text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800/70 dark:text-zinc-200"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-muted py-1 pl-2 pr-1 text-xs font-medium text-foreground"
             >
-              <span className="text-zinc-400 dark:text-zinc-500">{kindIcon(item.kind)}</span>
+              <span className="text-muted-foreground">{kindIcon(item.kind)}</span>
               <span className="max-w-[180px] truncate">{item.title}</span>
-              <button
+              <Button variant="ghost" size="icon-sm"
                 type="button"
                 onClick={() => toggle(item)}
                 aria-label={`Remove ${item.title} from context`}
-                className="rounded p-0.5 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+                className="min-h-6 min-w-6 rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-muted-foreground"
               >
                 <XIcon />
-              </button>
+              </Button>
             </li>
           ))}
           {selectedTokens > 0 && (
-            <li className="pl-1 text-[11px] tabular-nums text-zinc-400 dark:text-zinc-500">
+            <li className="pl-1 text-xs tabular-nums text-muted-foreground">
               {formatTokens(selectedTokens)}
             </li>
           )}
         </ul>
       )}
 
-      <button
+      <Button variant="outline" size="sm"
         type="button"
         onClick={() => (open ? setOpen(false) : openPanel())}
         aria-expanded={open}
         aria-controls={`${idBase}-listbox`}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-[13px] font-medium text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted"
       >
         <AtSignIcon />
         {triggerLabel}
-      </button>
+      </Button>
 
       {open && (
-        <div className="absolute bottom-full left-0 z-20 mb-2 w-[320px] overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-          <div className="border-b border-zinc-100 px-3 py-2 dark:border-zinc-800">
-            <input
+        <div className="absolute bottom-full left-0 z-20 mb-2 w-[320px] overflow-hidden rounded-xl border border-border bg-card shadow-md">
+          <div className="border-b border-border px-3 py-2">
+            <Input
               ref={inputRef}
               role="combobox"
               aria-expanded="true"
@@ -397,29 +399,29 @@ export function ContextPicker({
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={onInputKeyDown}
               placeholder={searchPlaceholder}
-              className="w-full bg-transparent text-[13px] text-zinc-800 outline-none placeholder:text-zinc-400 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+              className="w-full bg-transparent text-base sm:text-sm text-foreground outline-none placeholder:text-muted-foreground"
             />
           </div>
 
           <div className="max-h-[280px] overflow-y-auto">
             {matches.length === 0 ? (
-              <div className="px-3 py-6 text-center text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="px-3 py-6 text-center text-xs text-muted-foreground">
                 <p>{emptyText}</p>
                 {q && (
-                  <button
+                  <Button variant="outline" size="sm"
                     type="button"
                     onClick={() => setQuery("")}
-                    className="mt-2 rounded-md border border-zinc-200 px-2.5 py-1 text-[11px] font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                    className="mt-2 rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
                   >
                     Clear search
-                  </button>
+                  </Button>
                 )}
               </div>
             ) : (
               <ul role="listbox" id={`${idBase}-listbox`} aria-label="Available context" className="py-1">
                 {recentItems.length > 0 && (
                   <>
-                    <li className="px-3 pb-1 pt-2 text-[11px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                    <li className="px-3 pb-1 pt-2 text-xs font-medium text-muted-foreground">
                       Recent
                     </li>
                     {recentItems.map(renderOption)}
@@ -427,7 +429,7 @@ export function ContextPicker({
                 )}
                 {grouped.map((g) => (
                   <React.Fragment key={g.kind}>
-                    <li className="px-3 pb-1 pt-2 text-[11px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                    <li className="px-3 pb-1 pt-2 text-xs font-medium text-muted-foreground">
                       {KIND_LABELS[g.kind]}
                     </li>
                     {g.items.map(renderOption)}
@@ -438,7 +440,7 @@ export function ContextPicker({
           </div>
 
           {selectedItems.length > 0 && (
-            <div className="border-t border-zinc-100 px-3 py-1.5 text-[11px] text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+            <div className="border-t border-border px-3 py-1.5 text-xs text-muted-foreground">
               {selectedItems.length} in this turn
               {selectedTokens > 0 && ` · ${formatTokens(selectedTokens)}`}
             </div>

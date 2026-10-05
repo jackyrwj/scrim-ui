@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 
 /**
@@ -71,7 +73,7 @@ const ICON_PROPS = {
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 2,
+  strokeWidth: 1.5,
   strokeLinecap: "round",
   strokeLinejoin: "round",
 } as const;
@@ -242,61 +244,61 @@ export function AgentRunTimeline({
         : e.kind === "approval" && e.status === "waiting"
           ? "border-l-2 border-amber-400 dark:border-amber-500"
           : e.status === "running"
-            ? "border-l-2 border-blue-400 dark:border-blue-500"
+            ? "border-l-2 border-border"
             : "border-l-2 border-transparent";
     return (
       <li key={e.id} data-event-id={e.id} className={`flex flex-wrap items-baseline gap-x-2.5 py-1.5 pl-2 pr-3 ${highlight}`}>
-        <span className="w-14 shrink-0 text-[11px] tabular-nums text-zinc-400 dark:text-zinc-500">{e.at}</span>
-        <span className={`shrink-0 self-center ${e.status === "failed" ? "text-red-500" : "text-zinc-400 dark:text-zinc-500"}`}>
+        <span className="w-14 shrink-0 text-xs tabular-nums text-muted-foreground">{e.at}</span>
+        <span className={`shrink-0 self-center ${e.status === "failed" ? "text-red-500" : "text-muted-foreground"}`}>
           {KIND_ICONS[e.kind]}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-100">{e.title}</span>
+          <span className="text-sm font-medium text-foreground">{e.title}</span>
           {e.retryOf && (
-            <span className="ml-1.5 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="ml-1.5 rounded bg-muted px-1.5 py-0.5 text-xs font-medium text-muted-foreground">
               retry of “{retryTitles.get(e.retryOf) ?? e.retryOf}”
             </span>
           )}
           {e.detail && (
-            <span className="block truncate text-xs text-zinc-500 dark:text-zinc-400">{e.detail}</span>
+            <span className="block truncate text-xs text-muted-foreground">{e.detail}</span>
           )}
         </span>
         <span className="flex shrink-0 items-center gap-2 self-center">
           {e.durationMs != null && (
-            <span className="text-[11px] tabular-nums text-zinc-400 dark:text-zinc-500">{formatDuration(e.durationMs)}</span>
+            <span className="text-xs tabular-nums text-muted-foreground">{formatDuration(e.durationMs)}</span>
           )}
           {e.status === "running" && (
-            <span className="h-2 w-2 animate-pulse rounded-full bg-blue-500" aria-label="Running" />
+            <span className="h-2 w-2 animate-pulse rounded-full bg-primary" aria-label="Running" />
           )}
           {e.status === "waiting" && e.kind !== "approval" && (
-            <span className="text-[11px] font-medium text-amber-600 dark:text-amber-400">Waiting</span>
+            <span className="text-xs font-medium text-amber-600 dark:text-amber-400">Waiting</span>
           )}
           {e.status === "failed" && (
-            <span className="text-[11px] font-medium text-red-600 dark:text-red-400">Failed</span>
+            <span className="text-xs font-medium text-red-600 dark:text-red-400">Failed</span>
           )}
           {e.status === "cancelled" && (
-            <span className="text-[11px] font-medium text-zinc-400 dark:text-zinc-500">Cancelled</span>
+            <span className="text-xs font-medium text-muted-foreground">Cancelled</span>
           )}
         </span>
         {e.kind === "approval" && e.status === "waiting" && (onApprove || onReject) && (
           <span className="flex w-full gap-2 pl-[4.75rem] pt-1">
             {onApprove && (
-              <button
+              <Button variant="default" size="sm"
                 type="button"
                 onClick={() => onApprove(e.id)}
-                className="rounded-md bg-zinc-900 px-2.5 py-1 text-[11px] font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+                className="rounded-md bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground hover:bg-primary"
               >
                 Approve
-              </button>
+              </Button>
             )}
             {onReject && (
-              <button
+              <Button variant="outline" size="sm"
                 type="button"
                 onClick={() => onReject(e.id)}
-                className="rounded-md border border-zinc-200 px-2.5 py-1 text-[11px] font-medium text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                className="rounded-md border border-border px-2.5 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
               >
                 Reject
-              </button>
+              </Button>
             )}
           </span>
         )}
@@ -305,7 +307,7 @@ export function AgentRunTimeline({
   }
 
   return (
-    <div className={`relative flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
+    <Card className={`gap-0 py-0 relative flex flex-col overflow-hidden rounded-xl border border-border bg-card ${className}`}>
       <div
         ref={scrollRef}
         onScroll={onScroll}
@@ -314,7 +316,7 @@ export function AgentRunTimeline({
         aria-label="Agent run activity"
       >
         {events.length === 0 ? (
-          <p className="px-4 py-8 text-center text-xs text-zinc-500 dark:text-zinc-400">{emptyText}</p>
+          <p className="px-4 py-8 text-center text-xs text-muted-foreground">{emptyText}</p>
         ) : (
           <ul>
             {rows.map((row) =>
@@ -323,27 +325,27 @@ export function AgentRunTimeline({
               ) : expanded.has(row.key) ? (
                 <React.Fragment key={row.key}>
                   <li className="py-1 pl-2">
-                    <button
+                    <Button variant="ghost" size="sm"
                       type="button"
                       onClick={() => toggleCluster(row.key)}
                       aria-expanded="true"
-                      className="rounded-md bg-zinc-100 px-2 py-1 text-[11px] font-medium text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                      className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
                     >
                       Hide {row.events.length} completed steps
-                    </button>
+                    </Button>
                   </li>
                   {row.events.map(renderEvent)}
                 </React.Fragment>
               ) : (
                 <li key={row.key} className="py-1 pl-2">
-                  <button
+                  <Button variant="ghost" size="sm"
                     type="button"
                     onClick={() => toggleCluster(row.key)}
                     aria-expanded="false"
-                    className="rounded-md bg-zinc-100 px-2 py-1 text-[11px] font-medium text-zinc-500 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                    className="rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
                   >
                     {row.events.length} completed steps · {row.events[0].at}–{row.events[row.events.length - 1].at}
-                  </button>
+                  </Button>
                 </li>
               ),
             )}
@@ -352,22 +354,22 @@ export function AgentRunTimeline({
       </div>
 
       {!atBottom && (
-        <button
+        <Button variant="default" size="sm"
           type="button"
           onClick={jumpToLatest}
-          className="absolute bottom-3 right-3 rounded-full bg-zinc-900 px-3 py-1.5 text-[11px] font-medium text-white shadow-lg hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="absolute bottom-3 right-3 rounded-full bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-md hover:bg-primary"
         >
           ↓ {activeId ? "Back to active step" : "Back to latest"}
-        </button>
+        </Button>
       )}
 
       {summary && (summary.tokens != null || summary.cost || summary.elapsed) && (
-        <div className="flex flex-wrap gap-x-4 border-t border-zinc-100 px-3 py-2 text-[11px] tabular-nums text-zinc-500 dark:border-zinc-800/60 dark:text-zinc-400">
+        <div className="flex flex-wrap gap-x-4 border-t border-border px-3 py-2 text-xs tabular-nums text-muted-foreground">
           {summary.elapsed && <span>Elapsed {summary.elapsed}</span>}
           {summary.tokens != null && <span>{summary.tokens.toLocaleString()} tokens</span>}
           {summary.cost && <span>{summary.cost}</span>}
         </div>
       )}
-    </div>
+    </Card>
   );
 }

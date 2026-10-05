@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -110,7 +111,7 @@ export function CitationPopover({ n, passage, source, score, onJump }: CitationP
   if (!resolved) {
     return (
       <span
-        className="mx-0.5 align-baseline text-[0.85em] text-zinc-400 line-through dark:text-zinc-600"
+        className="mx-0.5 align-baseline text-[0.85em] text-muted-foreground line-through"
         title={`The answer cited [${n}], but no passage with that number was retrieved.`}
       >
         [{n}]
@@ -120,7 +121,7 @@ export function CitationPopover({ n, passage, source, score, onJump }: CitationP
 
   return (
     <>
-      <button
+      <Button variant="ghost" size="icon-sm"
         ref={chipRef}
         type="button"
         onClick={() => (onJump ? onJump() : setOpen((v) => !v))}
@@ -139,10 +140,10 @@ export function CitationPopover({ n, passage, source, score, onJump }: CitationP
         }}
         aria-expanded={open}
         aria-label={`Source ${n}${onJump ? " — jump to it in the document" : ""}`}
-        className="mx-0.5 inline-flex h-[1.35em] min-w-[1.35em] items-center justify-center rounded-[0.3em] bg-amber-100 px-[0.3em] align-[-0.1em] text-[0.75em] font-medium text-amber-900 tabular-nums transition-colors hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-amber-500 dark:bg-amber-400/20 dark:text-amber-200 dark:hover:bg-amber-400/30"
+        className="min-h-6 min-w-6 mx-0.5 inline-flex h-[1.35em] min-w-[1.35em] items-center justify-center rounded-[0.3em] bg-amber-100 px-[0.3em] align-[-0.1em] text-[0.75em] font-medium text-amber-900 tabular-nums transition-colors hover:bg-amber-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-amber-500 dark:bg-amber-400/20 dark:text-amber-200 dark:hover:bg-amber-400/30"
       >
         {n}
-      </button>
+      </Button>
 
       {open && position && (
         <span
@@ -150,7 +151,7 @@ export function CitationPopover({ n, passage, source, score, onJump }: CitationP
           /* pointer-events-none: the panel is a preview, and a preview the
              pointer can enter is a preview that has to solve the gap between
              the chip and itself. It cannot be hovered, so there is no gap. */
-          className="pointer-events-none fixed z-50 block rounded-lg border border-zinc-200 bg-white p-3 shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+          className="pointer-events-none fixed z-50 block rounded-lg border border-border bg-card p-3 shadow-md"
           style={{
             left: position.left,
             top: position.top,
@@ -158,18 +159,18 @@ export function CitationPopover({ n, passage, source, score, onJump }: CitationP
             transform: position.above ? "translateY(-100%)" : undefined,
           }}
         >
-          <span className="mb-1.5 flex items-center justify-between gap-3 text-[10px] font-medium uppercase tracking-wide text-zinc-400">
+          <span className="mb-1.5 flex items-center justify-between gap-3 text-xs font-medium text-muted-foreground">
             <span className="min-w-0 truncate">{source ?? `Source ${n}`}</span>
             {score !== undefined && <span className="shrink-0 tabular-nums">{score.toFixed(3)}</span>}
           </span>
           {/* Capped, and scrolling is not an option on a pointer-events:none
               panel — a passage longer than this is a sign the chunk size is
               too big, which is a retrieval problem rather than a UI one. */}
-          <span className="block max-h-[180px] overflow-hidden text-[12px] leading-5 text-zinc-600 dark:text-zinc-300">
+          <span className="block max-h-[180px] overflow-hidden text-xs leading-5 text-muted-foreground">
             {passage}
           </span>
           {onJump && (
-            <span className="mt-2 block text-[10px] text-zinc-400">
+            <span className="mt-2 block text-xs text-muted-foreground">
               Click to jump to it in the document
             </span>
           )}

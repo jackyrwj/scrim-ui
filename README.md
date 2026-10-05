@@ -69,7 +69,7 @@ repository and delivered only after an entitlement check.
 | | |
 |---|---|
 | **[Tools](https://scrimui.dev/tools)** | Nine in-browser tools. Compose a chat or voice mockup and export a PNG, generate a theme from one brand colour, count tokens and costs, frame a screenshot. Nothing uploads; it all runs locally. |
-| **[Components](https://scrimui.dev/components)** | 29 single-file React + Tailwind components, each with a live prop explorer that regenerates the call site as you change it. |
+| **[Components](https://scrimui.dev/components)** | 55 React + Tailwind components styled with shadcn/ui, each with a live prop explorer that regenerates the call site as you change it. |
 | **[Patterns](https://scrimui.dev/patterns)** | Five whole screens — chat, research, coding agent, voice, preferences — assembled from those components. |
 | **[Icons](https://scrimui.dev/icons)** | Lucide ships 2,034 icons and no opinion about which one means "tool call". This is that opinion: one icon per concept, each on a page where you can set size, stroke and colour before you copy it. |
 | **[Resources](https://scrimui.dev/resources)** | A curated directory of 102 libraries, generators and guides, each with a note on why it is listed. |

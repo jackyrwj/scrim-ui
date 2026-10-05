@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import * as React from "react";
 import { SearchToolCall, type SearchResult } from "../../search-tool-call/search-tool-call";
 import { Reasoning } from "../../reasoning/reasoning";
@@ -89,11 +90,11 @@ export function ResearchAssistantPattern() {
   }, [phase]);
 
   return (
-    <div className="rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="gap-0 py-0 rounded-xl border border-border bg-card">
       {/* Question header */}
-      <div className="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
-        <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Research Question</p>
-        <h3 className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+      <div className="border-b border-border px-5 py-4">
+        <p className="text-xs font-medium text-muted-foreground">Research Question</p>
+        <h3 className="mt-1 text-lg font-semibold text-foreground">
           Which Claude 5 model is most cost-effective for a high-volume support bot?
         </h3>
       </div>
@@ -122,14 +123,14 @@ export function ResearchAssistantPattern() {
 
           {/* Answer */}
           {phase === 2 && (
-            <div className="space-y-3 rounded-xl border border-zinc-200 p-4 dark:border-zinc-800">
-              <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+            <div className="space-y-3 rounded-xl border border-border p-4">
+              <p className="flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
                 Final Answer
               </p>
-              <p className="text-[15px] leading-7 text-zinc-700 dark:text-zinc-200">
+              <p className="text-sm leading-7 text-foreground">
                 For high-volume support traffic, <strong>Claude Haiku 4.5</strong> is the most
                 cost-effective tier: it keeps per-token cost a fraction of Opus while still handling
                 the routine routing and drafting that support bots handle best{" "}
@@ -145,7 +146,7 @@ export function ResearchAssistantPattern() {
 
         {/* Sources sidebar */}
         <aside className="hidden lg:block">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400">Sources</p>
+          <p className="text-xs font-medium text-muted-foreground">Sources</p>
           <div className="mt-2 space-y-2">
             {SEARCH_RESULTS.map((r, i) => (
               <SourceCard key={i} title={r.title} url={r.url} snippet={r.snippet} index={i + 1} />
@@ -153,6 +154,6 @@ export function ResearchAssistantPattern() {
           </div>
         </aside>
       </div>
-    </div>
+    </Card>
   );
 }

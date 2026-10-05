@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { AgentStatus, type AgentState } from "../../agent-status/agent-status";
 import { AgentHandoff, type HandoffState } from "../../agent-handoff/agent-handoff";
@@ -167,25 +169,25 @@ export function AgentConsolePattern() {
   }
 
   return (
-    <div className="flex h-[640px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 flex h-[640px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Fleet roster */}
-      <aside className="hidden w-64 shrink-0 flex-col gap-2 overflow-y-auto border-r border-zinc-200 p-3 dark:border-zinc-800 md:flex">
-        <p className="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Fleet · {agents.length} agents</p>
+      <aside className="hidden w-64 shrink-0 flex-col gap-2 overflow-y-auto border-r border-border p-3 md:flex">
+        <p className="text-sm font-semibold text-foreground">Fleet · {agents.length} agents</p>
         {agents.map((a) => (
-          <button
+          <Button variant="ghost" size="sm"
             key={a.id}
             type="button"
             onClick={() => setSelectedId(a.id)}
             aria-current={a.id === selectedId ? "true" : undefined}
             className={`rounded-xl text-left transition-shadow ${
-              a.id === selectedId ? "ring-2 ring-zinc-900 dark:ring-zinc-100" : "hover:ring-1 hover:ring-zinc-300 dark:hover:ring-zinc-700"
+              a.id === selectedId ? "ring-2 ring-ring" : "hover:ring-1 hover:ring-ring"
             }`}
           >
             <AgentStatus name={a.name} status={a.state} action={a.action} />
-          </button>
+          </Button>
         ))}
-        <div className="mt-auto rounded-xl bg-zinc-50 px-3 py-2 text-[11px] leading-5 text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
-          <p className="font-medium text-zinc-700 dark:text-zinc-200">Fleet total</p>
+        <div className="mt-auto rounded-xl bg-muted px-3 py-2 text-xs leading-5 text-muted-foreground">
+          <p className="font-medium text-foreground">Fleet total</p>
           <p className="tabular-nums">{totalTokens.toLocaleString()} tokens · $0.11</p>
           {pendingApprovals > 0 && (
             <p className="font-medium text-amber-600 dark:text-amber-400">
@@ -197,10 +199,10 @@ export function AgentConsolePattern() {
 
       {/* Selected agent */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{selected.name}</p>
-            <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm font-semibold text-foreground">{selected.name}</p>
+            <p className="truncate text-xs text-muted-foreground">
               {selected.tokens.toLocaleString()} tokens · {selected.cost} this run
             </p>
           </div>
@@ -209,7 +211,7 @@ export function AgentConsolePattern() {
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
               aria-label="Select agent"
-              className="rounded-lg border border-zinc-200 bg-white px-2 py-1 text-xs text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 md:hidden"
+              className="rounded-lg border border-border bg-card px-2 py-1 text-xs text-foreground md:hidden"
             >
               {agents.map((a) => (
                 <option key={a.id} value={a.id}>
@@ -218,13 +220,13 @@ export function AgentConsolePattern() {
               ))}
             </select>
             {selected.state === "failed" && (
-              <button
+              <Button variant="default" size="sm"
                 type="button"
                 onClick={() => rerun(selected.id)}
-                className="rounded-lg bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+                className="rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary"
               >
                 Rerun failed step
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -250,6 +252,6 @@ export function AgentConsolePattern() {
           />
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

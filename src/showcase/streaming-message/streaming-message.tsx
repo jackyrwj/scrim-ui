@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /* ------------------------------------------------------------------ */
@@ -26,10 +27,10 @@ export type StreamingMessageProps = {
 function Caret() {
   return (
     <>
-      <style>{`@keyframes aiui-caret{50%{opacity:0}}`}</style>
+      <style>{`@keyframes aiui-caret{50%{opacity:0}} @media(prefers-reduced-motion:reduce){.scrim-stream-caret{animation:none!important}}`}</style>
       <span
         aria-hidden
-        className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-full bg-current"
+        className="scrim-stream-caret ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-full bg-current"
         style={{ animation: "aiui-caret 1s steps(1) infinite" }}
       />
     </>
@@ -88,29 +89,25 @@ export function StreamingMessage({
 
   return (
     <div className={`flex items-start gap-3 ${className}`}>
-      {avatar ?? (
-        <div className="flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-lg bg-zinc-900 text-xs font-semibold text-white dark:bg-zinc-100 dark:text-zinc-900">
-          AI
-        </div>
-      )}
+      {avatar && <div className="shrink-0">{avatar}</div>}
 
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium">Assistant</span>
+          <span className="text-xs font-medium text-muted-foreground">Assistant</span>
           {isStreaming && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="inline-flex items-center gap-1 px-0 py-0.5 text-xs text-muted-foreground">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
               Generating
             </span>
           )}
           {stopped && (
-            <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            <span className="px-0 py-0.5 text-xs text-muted-foreground">
               Stopped generating
             </span>
           )}
         </div>
 
-        <div className="mt-1.5 whitespace-pre-wrap rounded-2xl rounded-tl-md border border-zinc-200 bg-zinc-50 px-4 py-3 text-[15px] leading-6 text-zinc-800 dark:border-zinc-800 dark:bg-zinc-800/60 dark:text-zinc-100">
+        <div className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-foreground">
           {displayed}
           {isStreaming && <Caret />}
         </div>
@@ -118,32 +115,32 @@ export function StreamingMessage({
         {/* Actions row */}
         {!isStreaming && showActions && onRegenerate && (
           <div className="mt-2 flex items-center gap-1">
-            <button
+            <Button variant="ghost" size="sm"
               type="button"
               onClick={onRegenerate}
-              className="inline-flex h-7 items-center gap-1.5 rounded-lg px-2 text-xs text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              className="inline-flex min-h-8 items-center gap-1.5 rounded-md px-2 text-xs text-muted-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring hover:bg-muted hover:text-foreground"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="15" height="15">
                 <path d="M21 12a9 9 0 1 1-2.64-6.36L21 8" />
                 <path d="M21 3v5h-5" />
               </svg>
               Regenerate
-            </button>
+            </Button>
           </div>
         )}
 
         {/* Stop pill */}
         {isStreaming && onStop && (
-          <button
+          <Button variant="outline" size="sm"
             type="button"
             onClick={onStop}
-            className="mt-2 inline-flex h-7 items-center gap-1.5 rounded-lg border border-zinc-200 px-2.5 text-xs text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="mt-2 inline-flex min-h-8 items-center gap-1.5 rounded-md border border-border px-2.5 text-xs text-muted-foreground transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring hover:bg-muted"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" width="10" height="10">
               <rect x="6" y="6" width="12" height="12" rx="2" />
             </svg>
             Stop generating
-          </button>
+          </Button>
         )}
       </div>
     </div>

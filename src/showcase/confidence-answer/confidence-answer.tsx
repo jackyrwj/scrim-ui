@@ -58,11 +58,11 @@ export function ConfidenceAnswer({
       ? "border-red-200 bg-red-50/50 dark:border-red-900/40 dark:bg-red-950/20"
       : confidence === "medium"
         ? "border-amber-200 bg-amber-50/50 dark:border-amber-900/40 dark:bg-amber-950/20"
-        : "border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900";
+        : "border-border bg-card";
 
   return (
-    <div className={`rounded-2xl rounded-tl-md border px-4 py-3 ${surface} ${className}`}>
-      <p className="text-sm leading-6 text-zinc-900 dark:text-zinc-100">{text}</p>
+    <div className={`rounded-xl border px-4 py-3 ${surface} ${className}`}>
+      <p className="text-sm leading-6 text-foreground">{text}</p>
 
       {/* High confidence renders as a plain answer — badging certainty trains
           the eye to skip the badge row, and the warning that matters gets
@@ -74,9 +74,9 @@ export function ConfidenceAnswer({
         </div>
       )}
 
-      {/* zinc-600 on the amber surface: zinc-500 measures under AA at 13px. */}
+      {}
       {warn && hedge && (
-        <p className="mt-1 text-[13px] leading-5 text-zinc-600 dark:text-zinc-400">{hedge}</p>
+        <p className="mt-1 text-sm leading-5 text-muted-foreground">{hedge}</p>
       )}
     </div>
   );

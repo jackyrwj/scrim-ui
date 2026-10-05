@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import * as React from "react";
 
 /**
@@ -114,7 +117,7 @@ function tokenize(template: string, known: string[] | undefined): Token[] {
 
 /* Shared by both layers — the whole trick fails if these drift. */
 const LAYER_CLASSES =
-  "m-0 whitespace-pre-wrap break-words p-3 font-mono text-[13px] leading-6";
+  "m-0 whitespace-pre-wrap break-words p-3 font-mono text-base sm:text-sm leading-6";
 
 /* ------------------------------------------------------------------ */
 /* Component                                                           */
@@ -157,25 +160,25 @@ export function PromptEditor({
   );
 
   return (
-    <div className={`overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}>
+    <Card className={`gap-0 py-0 overflow-hidden rounded-xl border border-border bg-card ${className}`}>
       {previewValues !== undefined && (
-        <div className="flex items-center gap-1 border-b border-zinc-100 px-2 py-1.5 dark:border-zinc-800">
+        <div className="flex items-center gap-1 border-b border-border px-2 py-1.5">
           {(["write", "preview"] as const).map((t) => (
-            <button
+            <Button variant="ghost" size="sm"
               key={t}
               type="button"
               onClick={() => setTab(t)}
               aria-pressed={tab === t}
-              className={`h-7 rounded-lg px-2.5 text-[12px] font-medium capitalize transition-colors ${
+              className={`h-8 rounded-md px-2.5 text-xs font-medium capitalize transition-colors ${
                 tab === t
-                  ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                  : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  ? "bg-muted text-foreground"
+                  : "text-muted-foreground hover:bg-muted"
               }`}
             >
               {t}
-            </button>
+            </Button>
           ))}
-          <span className="ml-auto text-[11px] text-zinc-400 dark:text-zinc-500">
+          <span className="ml-auto text-xs text-muted-foreground">
             {used.length} {used.length === 1 ? "variable" : "variables"} · {value.length} chars
           </span>
         </div>
@@ -183,15 +186,15 @@ export function PromptEditor({
 
       {tab === "preview" && previewValues !== undefined ? (
         <div
-          className={`${LAYER_CLASSES} text-zinc-800 dark:text-zinc-200`}
+          className={`${LAYER_CLASSES} text-foreground`}
           style={{ minHeight: `${rows * 1.5 + 1.6}rem` }}
         >
-          {renderTemplate(value, previewValues) || <span className="text-zinc-400 dark:text-zinc-500">Nothing to preview.</span>}
+          {renderTemplate(value, previewValues) || <span className="text-muted-foreground">Nothing to preview.</span>}
         </div>
       ) : (
         <div className="relative">
           {/* Highlight mirror. aria-hidden: the textarea carries the text. */}
-          <pre ref={mirrorRef} aria-hidden className={`${LAYER_CLASSES} pointer-events-none absolute inset-0 overflow-hidden text-zinc-800 dark:text-zinc-200`}>
+          <pre ref={mirrorRef} aria-hidden className={`${LAYER_CLASSES} pointer-events-none absolute inset-0 overflow-hidden text-foreground`}>
             {tokens.map((token, i) =>
               token.variable === null ? (
                 <React.Fragment key={i}>{token.text}</React.Fragment>
@@ -212,7 +215,7 @@ export function PromptEditor({
                 the zero-width space keeps the last line in both layers. */}
             {"\u200B"}
           </pre>
-          <textarea
+          <Textarea
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onScroll={(e) => {
@@ -225,26 +228,26 @@ export function PromptEditor({
             placeholder={placeholder}
             rows={rows}
             spellCheck={false}
-            className={`${LAYER_CLASSES} relative block w-full resize-y bg-transparent text-transparent caret-zinc-900 outline-none placeholder:text-zinc-400 dark:caret-zinc-100 dark:placeholder:text-zinc-500`}
+            className={`border-0 rounded-none shadow-none focus-visible:ring-0 field-sizing-fixed dark:bg-transparent ${LAYER_CLASSES} relative block w-full resize-y bg-transparent text-transparent caret-foreground outline-none placeholder:text-muted-foreground `}
           />
         </div>
       )}
 
       {unknown.length > 0 && tab === "write" && (
-        <p className="border-t border-amber-100 bg-amber-50 px-3 py-1.5 text-[12px] text-amber-800 dark:border-amber-950 dark:bg-amber-950/40 dark:text-amber-300">
+        <p className="border-t border-amber-100 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 dark:border-amber-950 dark:bg-amber-950/40 dark:text-amber-300">
           {unknown.length === 1 ? "Unknown variable" : "Unknown variables"}: {unknown.map((n) => `{{${n}}}`).join(", ")} — not in the variables list, left as-is in preview.
         </p>
       )}
 
       {diff !== null && (
-        <div className="border-t border-zinc-100 dark:border-zinc-800">
-          <p className="px-3 pt-2 text-[11px] font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+        <div className="border-t border-border">
+          <p className="px-3 pt-2 text-xs font-medium text-muted-foreground">
             Against the previous version
           </p>
-          <div className="py-1.5 font-mono text-[12px] leading-5">
+          <div className="py-1.5 font-mono text-xs leading-5">
             {diff.map((line, i) =>
               line.side === "same" ? (
-                <div key={i} className="truncate px-3 text-zinc-400 dark:text-zinc-500">
+                <div key={i} className="truncate px-3 text-muted-foreground">
                   {"  "}
                   {line.text}
                 </div>
@@ -265,6 +268,6 @@ export function PromptEditor({
           </div>
         </div>
       )}
-    </div>
+    </Card>
   );
 }

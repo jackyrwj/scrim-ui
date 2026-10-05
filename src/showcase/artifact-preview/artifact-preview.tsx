@@ -1,5 +1,8 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import * as React from "react";
 
 /**
@@ -68,7 +71,7 @@ const iconProps = {
   viewBox: "0 0 24 24",
   fill: "none",
   stroke: "currentColor",
-  strokeWidth: 2,
+  strokeWidth: 1.5,
   strokeLinecap: "round",
   strokeLinejoin: "round",
 } as const;
@@ -302,145 +305,145 @@ export function ArtifactPreview({
   }
 
   const actionBtn =
-    "rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200";
+    "rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground";
 
   return (
-    <div
+    <Card
       ref={rootRef}
       role="region"
       aria-label={`Artifact: ${title}`}
-      className={`flex flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 ${className}`}
+      className={`gap-0 py-0 flex flex-col overflow-hidden rounded-xl border border-border bg-card ${className}`}
     >
       {/* Header — wraps instead of squeezing actions off a narrow panel. */}
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 border-b border-zinc-100 px-3 py-2 dark:border-zinc-800">
-        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 border-b border-border px-3 py-2">
+        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
           <TypeIcon />
         </span>
-        <span className="min-w-0 truncate text-[13px] font-medium text-zinc-900 dark:text-zinc-100">
+        <span className="min-w-0 truncate text-sm font-medium text-foreground">
           {title}
         </span>
-        <span className="shrink-0 text-[11px] text-zinc-400 dark:text-zinc-500">{typeLabel}</span>
+        <span className="shrink-0 text-xs text-muted-foreground">{typeLabel}</span>
 
         {status === "streaming" && (
-          <span className="flex shrink-0 items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-400">
+          <Badge variant="secondary" className="flex shrink-0 items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" />
             Generating
-          </span>
+          </Badge>
         )}
         {status === "error" && (
-          <span className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-medium text-red-600 dark:bg-red-950/60 dark:text-red-400">
+          <Badge variant="secondary" className="shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-600 dark:bg-red-950/60 dark:text-red-400">
             Failed
-          </span>
+          </Badge>
         )}
         {status === "stale" && (
-          <span
+          <Badge variant="secondary"
             title={staleNote}
-            className="shrink-0 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-600 dark:bg-amber-950/60 dark:text-amber-400"
+            className="shrink-0 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-600 dark:bg-amber-950/60 dark:text-amber-400"
           >
             Outdated
-          </span>
+          </Badge>
         )}
 
         {versions && versions.length > 1 && (
-          <span className="flex shrink-0 items-center gap-0.5 text-zinc-400 dark:text-zinc-500">
-            <button
+          <span className="flex shrink-0 items-center gap-0.5 text-muted-foreground">
+            <Button variant="ghost" size="icon-sm"
               type="button"
               aria-label="Previous version"
               disabled={versionIndex <= 0}
               onClick={() => onVersionChange?.(versions[versionIndex - 1].id)}
-              className={`${actionBtn} disabled:opacity-30 disabled:hover:bg-transparent`}
+              className={`min-h-6 min-w-6 ${actionBtn} disabled:opacity-30 disabled:hover:bg-transparent`}
             >
               <ChevronLeftIcon />
-            </button>
-            <span className="min-w-7 text-center text-[11px] tabular-nums">
+            </Button>
+            <span className="min-w-7 text-center text-xs tabular-nums">
               {versions[versionIndex]?.label ?? `v${versionIndex + 1}`}
             </span>
-            <button
+            <Button variant="ghost" size="icon-sm"
               type="button"
               aria-label="Next version"
               disabled={versionIndex >= versions.length - 1}
               onClick={() => onVersionChange?.(versions[versionIndex + 1].id)}
-              className={`${actionBtn} disabled:opacity-30 disabled:hover:bg-transparent`}
+              className={`min-h-6 min-w-6 ${actionBtn} disabled:opacity-30 disabled:hover:bg-transparent`}
             >
               <ChevronRightIcon />
-            </button>
+            </Button>
           </span>
         )}
 
         <span className="flex-1" />
 
         {hasCode && status !== "error" && (
-          <span className="flex shrink-0 items-center rounded-lg bg-zinc-100 p-0.5 dark:bg-zinc-800">
+          <span className="flex shrink-0 items-center rounded-lg bg-muted p-0.5">
             {(["preview", "code"] as const).map((v) => (
-              <button
+              <Button variant="ghost" size="sm"
                 key={v}
                 type="button"
                 aria-pressed={view === v}
                 onClick={() => setView(v)}
-                className={`flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium capitalize transition-colors ${
+                className={`flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium capitalize transition-colors ${
                   view === v
-                    ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-900 dark:text-zinc-100"
-                    : "text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {v === "preview" ? <EyeIcon /> : <CodeIcon />}
                 {v === "preview" ? "Preview" : "Code"}
-              </button>
+              </Button>
             ))}
           </span>
         )}
 
         <span className="flex shrink-0 items-center">
           {hasCode && (
-            <button
+            <Button variant="ghost" size="icon-sm"
               type="button"
               aria-label={copied ? "Copied" : "Copy source"}
               onClick={copyCode}
               className={actionBtn}
             >
               {copied ? <CheckIcon className="text-emerald-500" /> : <CopyIcon />}
-            </button>
+            </Button>
           )}
           {(hasCode || onDownload) && (
-            <button type="button" aria-label="Download" onClick={download} className={actionBtn}>
+            <Button variant="ghost" size="icon-sm" type="button" aria-label="Download" onClick={download} className={actionBtn}>
               <DownloadIcon />
-            </button>
+            </Button>
           )}
-          <button type="button" aria-label="Fullscreen" onClick={fullscreen} className={actionBtn}>
+          <Button variant="ghost" size="icon-sm" type="button" aria-label="Fullscreen" onClick={fullscreen} className={actionBtn}>
             <FullscreenIcon />
-          </button>
+          </Button>
           {onOpenExternal && (
-            <button type="button" aria-label="Open in new window" onClick={onOpenExternal} className={actionBtn}>
+            <Button variant="ghost" size="icon-sm" type="button" aria-label="Open in new window" onClick={onOpenExternal} className={actionBtn}>
               <ExternalIcon />
-            </button>
+            </Button>
           )}
           {onClose && (
-            <button type="button" aria-label="Close artifact" onClick={onClose} className={actionBtn}>
+            <Button variant="ghost" size="icon-sm" type="button" aria-label="Close artifact" onClick={onClose} className={actionBtn}>
               <XIcon />
-            </button>
+            </Button>
           )}
         </span>
       </div>
 
       {/* Streaming progress — indeterminate bar; the panel below never moves. */}
       {status === "streaming" && (
-        <div className="h-0.5 overflow-hidden bg-blue-100 dark:bg-blue-950">
-          <div className="h-full w-1/3 animate-[artifact-slide_1.2s_ease-in-out_infinite] rounded-full bg-blue-500" />
+        <div className="h-0.5 overflow-hidden bg-muted">
+          <div className="h-full w-1/3 animate-[artifact-slide_1.2s_ease-in-out_infinite] rounded-full bg-primary" />
         </div>
       )}
 
       {/* Content */}
-      <div className="min-h-[240px] bg-zinc-50 dark:bg-zinc-950">
+      <div className="min-h-[240px] bg-muted">
         {status === "error" && view === "preview" ? (
           <div className="flex min-h-[240px] flex-col items-center justify-center gap-2 px-6 text-center">
             <AlertIcon className="text-red-400" />
-            <p className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">{errorMessage}</p>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            <p className="text-sm font-medium text-foreground">{errorMessage}</p>
+            <p className="text-xs text-muted-foreground">
               The conversation is unaffected — ask for a fix, or read the source in the Code view.
             </p>
           </div>
         ) : view === "code" && hasCode ? (
-          <pre className="max-h-[420px] overflow-auto p-4 text-xs leading-5 text-zinc-800 dark:text-zinc-200">
+          <pre className="max-h-[420px] overflow-auto p-4 text-xs leading-5 text-foreground">
             <code>{code}</code>
           </pre>
         ) : preview ? (
@@ -450,11 +453,11 @@ export function ArtifactPreview({
              first token lands, so streaming never pushes the layout around. */
           <div className="space-y-3 p-5" aria-label="Artifact is being generated">
             {[85, 60, 75, 40].map((w, i) => (
-              <div key={i} className="h-3.5 animate-pulse rounded bg-zinc-200 dark:bg-zinc-800" style={{ width: `${w}%` }} />
+              <div key={i} className="h-3.5 animate-pulse rounded bg-muted" style={{ width: `${w}%` }} />
             ))}
           </div>
         ) : (
-          <div className="flex min-h-[240px] items-center justify-center px-6 text-center text-xs text-zinc-400 dark:text-zinc-500">
+          <div className="flex min-h-[240px] items-center justify-center px-6 text-center text-xs text-muted-foreground">
             Nothing to preview yet.
           </div>
         )}
@@ -462,6 +465,6 @@ export function ArtifactPreview({
 
       {/* Keyframes live in a style tag so the file stays self-contained. */}
       <style>{`@keyframes artifact-slide{0%{transform:translateX(-100%)}100%{transform:translateX(320%)}}`}</style>
-    </div>
+    </Card>
   );
 }

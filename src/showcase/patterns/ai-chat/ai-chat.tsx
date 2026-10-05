@@ -1,5 +1,7 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import * as React from "react";
 import { PromptInput } from "../../prompt-input/prompt-input";
 import { StreamingMessage } from "../../streaming-message/streaming-message";
@@ -108,7 +110,7 @@ function ClaudeMark() {
 
 function SearchIcon() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
       <circle cx="11" cy="11" r="8" />
       <path d="m21 21-4.3-4.3" />
     </svg>
@@ -208,9 +210,9 @@ export function AIChatPattern() {
     conversations.flatMap((g) => g.conversations).find((c) => c.id === activeConvo)?.title ?? "AI Chat";
 
   return (
-    <div className="flex h-[560px] overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+    <Card className="flex-row gap-0 py-0 flex h-[560px] overflow-hidden rounded-xl border border-border bg-card">
       {/* Sidebar — hidden below md; on small screens the chat takes over. */}
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-zinc-200 dark:border-zinc-800 md:flex">
+      <aside className="hidden w-60 shrink-0 flex-col border-r border-border md:flex">
         <div className="min-h-0 flex-1">
           <ConversationSidebar
             groups={conversations}
@@ -251,8 +253,8 @@ export function AIChatPattern() {
             }
           />
         </div>
-        <div className="border-t border-zinc-200 p-3 text-xs text-zinc-500 dark:text-zinc-400 dark:border-zinc-800">
-          <div className="mb-1 font-medium text-zinc-500 dark:text-zinc-400">Claude Sonnet 5</div>
+        <div className="border-t border-border p-3 text-xs text-muted-foreground">
+          <div className="mb-1 font-medium text-muted-foreground">Claude Sonnet 5</div>
           <div className="flex items-center gap-1">
             <SearchIcon />
             Search &amp; web browsing enabled
@@ -263,14 +265,14 @@ export function AIChatPattern() {
       {/* Main */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">AI Chat</p>
-            <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">{activeTitle}</p>
+            <p className="text-sm font-semibold text-foreground">AI Chat</p>
+            <p className="truncate text-xs text-muted-foreground">{activeTitle}</p>
           </div>
-          <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+          <Badge variant="secondary" className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
             Online
-          </span>
+          </Badge>
         </div>
 
         {/* Messages */}
@@ -279,7 +281,7 @@ export function AIChatPattern() {
           {turns.map((t) =>
             t.role === "user" ? (
               <div key={t.id} className="flex justify-end">
-                <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-md bg-zinc-900 px-4 py-3 text-[15px] leading-6 text-white dark:bg-zinc-100 dark:text-zinc-900">
+                <div className="max-w-[85%] whitespace-pre-wrap rounded-xl bg-muted px-4 py-3 text-sm leading-6 text-foreground">
                   {t.text}
                 </div>
               </div>
@@ -301,14 +303,14 @@ export function AIChatPattern() {
           )}
 
           {showSources && !pending && (
-            <div className="pl-11">
+            <div className="">
               <CitationList citations={SOURCES} />
             </div>
           )}
         </div>
 
         {/* Composer */}
-        <div className="border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
+        <div className="border-t border-border px-4 py-3">
           <ContextPicker
             className="mb-2"
             items={CONTEXT_SOURCES.map((it) =>
@@ -327,11 +329,11 @@ export function AIChatPattern() {
             showWebSearch
             onSubmit={submit}
           />
-          <p className="mt-1.5 text-center text-[11px] text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1.5 text-center text-xs text-muted-foreground">
             AI can make mistakes. Verify important information.
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
