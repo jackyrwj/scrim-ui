@@ -5,6 +5,7 @@ import { useProAccess } from "@/lib/pro-access";
 
 const ZONE_KEY = "9ea9ed85a4b75afcfbf32355563700fb";
 const SCRIPT_SRC = `https://www.highrevenueformat.com/${ZONE_KEY}/invoke.js`;
+const ADS_ENABLED = process.env.NEXT_PUBLIC_ADS_ENABLED === "true";
 
 declare global {
   interface Window {
@@ -19,6 +20,14 @@ declare global {
 }
 
 export function AdsterraBanner() {
+  // Ads are disabled by default. Keeping the switch outside the hook-using
+  // component also avoids entitlement and third-party requests while off.
+  if (!ADS_ENABLED) return null;
+
+  return <EnabledAdsterraBanner />;
+}
+
+function EnabledAdsterraBanner() {
   const hostRef = useRef<HTMLDivElement>(null);
   const access = useProAccess();
 
