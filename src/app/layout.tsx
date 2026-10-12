@@ -23,6 +23,23 @@ export const metadata: Metadata = {
   },
   description:
     "Copy-ready React components, complete interface patterns and practical tools for streaming, tool calls, citations, agents and more.",
+  /* Google ignores meta keywords for ranking, but other crawlers and SEO
+     auditing tools still expose the field. Keep this short and aligned with
+     phrases that the visible page copy actually supports. */
+  keywords: [
+    "AI UI components",
+    "React AI components",
+    "AI interface components",
+    "AI chat UI",
+    "React chat components",
+    "Tailwind CSS components",
+    "shadcn components",
+    "AI agent UI",
+    "streaming UI",
+    "tool call UI",
+    "citation UI",
+    "Next.js AI templates",
+  ],
   /* Every page declares its own address on the canonical host. metadataBase
      alone does NOT emit this tag — it only absolutises relative URLs — and
      without it the project's permanent *.vercel.app alias serves a second,
