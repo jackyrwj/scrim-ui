@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:public": "node scripts/check-public-boundary.mjs",
+    "test:response-diff": "node scripts/test-response-diff.mjs",
     "previews": "node scripts/capture-previews.mjs",
     "content-dates": "node scripts/content-dates.mjs"
   },
