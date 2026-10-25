@@ -1,12 +1,14 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { createServer } from "node:net";
+import { once } from "node:events";
 import { setTimeout as delay } from "node:timers/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+await verifyStopProcess();
 const url = `http://127.0.0.1:${await availablePort()}`;
 const nextBin = resolve(root, "node_modules/next/dist/bin/next");
 const serverMode = process.env.RESPONSE_DIFF_SERVER_MODE === "dev" ? "dev" : "start";
@@ -151,29 +153,87 @@ async function waitForServer(child, serverUrl, mode, getProcessError) {
       throw new Error(`Next.js ${mode} server exited with code ${child.exitCode}`);
     }
     try {
-      const response = await fetch(`${serverUrl}/tools/response-diff`);
+      const response = await fetch(`${serverUrl}/tools/response-diff`, {
+        signal: AbortSignal.timeout(Math.max(1, Math.min(1_000, deadline - Date.now()))),
+      });
       if (response.status === 200) return;
     } catch {
       // The server is not listening yet.
     }
     await delay(250);
   }
-  throw new Error("Timed out waiting for the Next.js production server");
+  throw new Error(`Timed out waiting for the Next.js ${mode} server`);
 }
 
-async function stopProcess(child) {
-  if (child.pid === undefined || child.exitCode !== null) return;
+async function stopProcess(child, gracePeriod = 5_000) {
+  if (child.pid === undefined || isTerminated(child)) return;
+  const exited = once(child, "exit");
+  if (isTerminated(child)) return;
+
   child.kill("SIGTERM");
-  await new Promise((resolveExit) => {
-    const timeout = setTimeout(resolveExit, 5_000);
-    timeout.unref();
-    child.once("exit", () => {
-      clearTimeout(timeout);
-      resolveExit();
-    });
-  });
-  if (child.exitCode === null) {
+  let timeout;
+  await Promise.race([
+    exited,
+    new Promise((resolveTimeout) => {
+      timeout = setTimeout(resolveTimeout, gracePeriod);
+    }),
+  ]);
+  clearTimeout(timeout);
+
+  if (!isTerminated(child)) {
     child.kill("SIGKILL");
-    await new Promise((resolveExit) => child.once("exit", resolveExit));
+    await exited;
   }
+}
+
+function isTerminated(child) {
+  return child.exitCode !== null || child.signalCode !== null;
+}
+
+async function verifyStopProcess() {
+  const graceful = spawn(
+    process.execPath,
+    [
+      "-e",
+      "process.on('SIGTERM', () => process.exit(0)); process.stdout.write('ready'); setInterval(() => {}, 1000)",
+    ],
+    { stdio: ["ignore", "pipe", "ignore"] },
+  );
+  try {
+    await once(graceful.stdout, "data");
+    await stopProcess(graceful, 1_000);
+    assert.equal(graceful.exitCode, 0, "SIGTERM should allow normal child termination");
+    assert.equal(graceful.signalCode, null);
+  } finally {
+    await stopProcess(graceful, 1_000);
+  }
+
+  const stopped = spawn(process.execPath, ["-e", "process.exit(0)"], { stdio: "ignore" });
+  await once(stopped, "exit");
+  let killCalls = 0;
+  const kill = stopped.kill.bind(stopped);
+  stopped.kill = (...args) => {
+    killCalls += 1;
+    return kill(...args);
+  };
+  await stopProcess(stopped);
+  assert.equal(killCalls, 0, "an already-stopped child should not be signalled");
+
+  const stubborn = spawn(
+    process.execPath,
+    [
+      "-e",
+      "process.on('SIGTERM', () => {}); process.stdout.write('ready'); setInterval(() => {}, 1000)",
+    ],
+    { stdio: ["ignore", "pipe", "ignore"] },
+  );
+  try {
+    await once(stubborn.stdout, "data");
+    await stopProcess(stubborn, 25);
+    assert.equal(stubborn.signalCode, "SIGKILL", "unresponsive child should be forcefully stopped");
+  } finally {
+    await stopProcess(stubborn, 25);
+  }
+
+  console.log("Passed: child process cleanup (graceful, already stopped, SIGKILL fallback)");
 }
