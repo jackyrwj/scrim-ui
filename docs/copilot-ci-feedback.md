@@ -34,11 +34,13 @@ distinct failed head may reserve one repair, up to two across the PR's lifetime.
 A rerun on the same failed commit does not request another repair. Reservations
 are made before requesting Copilot. An ambiguous delivery consumes its reserved
 attempt and requires inspection, rather than silently duplicating a coding task.
+If the PR or CI run changes before any external request is attempted, the unused
+reservation is released so the latest CI can act normally.
 Do not delete or edit the ledger while automation is active.
 
 The visible `@copilot` request links the exact failed CI run and requires a
 minimal fix on the existing branch. Changes to workflows, automation scripts,
-all CI scripts, nested agent instructions, build/lint/typecheck configuration,
+all CI scripts, nested agent instructions, build/lint/typecheck/PostCSS configuration,
 or dependency manifests require human investigation. The
 controller refuses automatic repair on PRs containing those changes. It never
 checks out or executes the PR branch in its privileged workflow, reads artifacts,

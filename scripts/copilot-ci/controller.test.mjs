@@ -15,7 +15,7 @@ function fixture(conclusion = "failure") {
   const f = { event: { repository: repo, workflow_run: { id: 100, run_attempt: 1 } }, run, pull,
     workflow: { name: "CI", path: ".github/workflows/ci.yml" }, comments: [], reviews: [],
     files: [{ filename: "src/lib/example.ts" }], mutations: [], runs: [], user,
-    failRepair: false, onGetPull: null, onGetRuns: null };
+    failRepair: false, failReview: false, onGetPull: null, onGetRuns: null };
   f.api = {
     get: async (path) => {
       if (path === "/user") return f.user;
@@ -41,6 +41,7 @@ function fixture(conclusion = "failure") {
     post: async (path, body) => {
       f.mutations.push({ method: "POST", path, body });
       if (body.body?.startsWith("@copilot") && f.failRepair) throw new Error("Network acknowledgement lost");
+      if (path.endsWith("/requested_reviewers") && f.failReview) throw new Error("Network acknowledgement lost");
       const comment = { id: f.comments.length + 1, user, ...body, html_url: "https://github.com/jackyrwj/scrim-ui/pull/8#test" };
       if (path.endsWith("/comments")) f.comments.push(comment);
       return comment;
@@ -129,6 +130,15 @@ test("current-head reviews and pending Copilot requests are not duplicated", asy
   }
 });
 
+test("an ambiguous review POST remains reserved and is not retried", async () => {
+  const f = fixture("success");
+  f.failReview = true;
+  await assert.rejects(f.execute(), /acknowledgement lost/);
+  assert.equal((await f.execute()).reason, "review-already-present-or-reserved");
+  assert.equal(f.reviewRequests().length, 1);
+  assert.match(f.comments[0].body, /"status":"unknown"/);
+});
+
 test("old-head reviews do not suppress a successful new-head review", async () => {
   const f = fixture("success");
   f.reviews = [{ commit_id: "b".repeat(40), user: { id: 175728472 } }];
@@ -186,6 +196,11 @@ test("protected paths and renamed protected paths stop repair", async () => {
     { filename: "templates/ai-chat/package.json" },
     { filename: "eslint.config.mjs" },
     { filename: "tsconfig.json" },
+    { filename: "postcss.config.mjs" },
+    { filename: "nested/postcss.config.cjs" },
+    { filename: ".postcssrc" },
+    { filename: "nested/.postcssrc.yaml" },
+    { filename: "renamed.txt", previous_filename: "postcss.config.js" },
     { filename: "renamed.md", previous_filename: ".github/copilot-instructions.md" },
   ]) {
     const f = fixture();
@@ -221,6 +236,42 @@ test("a newer same-head run after reservation prevents the external request", as
     assert.equal((await f.execute()).reason, "changed-after-reservation");
     assert.equal(f.repairs().length + f.reviewRequests().length, 0);
   }
+});
+
+test("a newer successful run can request a review after an undispatched reservation", async () => {
+  const f = fixture("success");
+  let reads = 0;
+  f.onGetRuns = () => {
+    if (++reads === 3) f.runs = [{ id: 101, head_sha: SHA, status: "in_progress" }];
+  };
+  assert.equal((await f.execute()).reason, "changed-after-reservation");
+  assert.equal(f.reviewRequests().length, 0);
+  assert.match(f.comments[0].body, /"reviews":\[\]/);
+  f.onGetRuns = null;
+  f.run.id = 101;
+  f.event.workflow_run.id = 101;
+  f.runs = [];
+  assert.equal((await f.execute()).result, "review-requested");
+  assert.equal((await f.execute()).reason, "review-already-present-or-reserved");
+  assert.equal(f.reviewRequests().length, 1);
+});
+
+test("an undispatched repair does not consume the two-attempt budget", async () => {
+  const f = fixture();
+  let reads = 0;
+  f.onGetRuns = () => {
+    if (++reads === 4) f.runs = [{ id: 101, head_sha: SHA, status: "in_progress" }];
+  };
+  assert.equal((await f.execute()).reason, "changed-after-reservation");
+  assert.equal(f.repairs().length, 0);
+  assert.match(f.comments[0].body, /"repairs":\[\]/);
+  f.onGetRuns = null;
+  f.run.id = 101;
+  f.event.workflow_run.id = 101;
+  f.runs = [];
+  assert.equal((await f.execute()).round, 1);
+  f.nextFailure(102, "b");
+  assert.equal((await f.execute()).round, 2);
 });
 
 test("a non-owner token, forged ledger, and corrupt owner ledger fail closed", async () => {

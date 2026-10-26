@@ -4,7 +4,7 @@ import { pathToFileURL } from "node:url";
 export const LABEL = "copilot-ci";
 export const MARKER = "<!-- copilot-ci-state:v1\n";
 const MAX_REPAIRS = 2;
-const PROTECTED = /^(?:\.github\/|scripts\/)|(?:^|\/)(?:AGENTS\.md|CLAUDE\.md|GEMINI\.md|package(?:-lock)?\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|yarn\.lock|eslint\.config\.[^/]+|\.eslintrc(?:\.[^/]+)?|tsconfig(?:\.[^/]+)?\.json|next\.config\.[^/]+)$/i;
+const PROTECTED = /^(?:\.github\/|scripts\/)|(?:^|\/)(?:AGENTS\.md|CLAUDE\.md|GEMINI\.md|package(?:-lock)?\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|yarn\.lock|eslint\.config\.[^/]+|\.eslintrc(?:\.[^/]+)?|tsconfig(?:\.[^/]+)?\.json|next\.config\.[^/]+|postcss\.config\.[^/]+|\.postcssrc(?:\.[^/]+)?)$/i;
 const isCopilot = (user) => user?.id === 175728472 ||
   ["copilot", "copilot-pull-request-reviewer[bot]"].includes(user?.login?.toLowerCase());
 
@@ -103,6 +103,8 @@ export async function runController(api, event, { now = () => new Date().toISOSt
     // Reserve before invoking the agent; ambiguous network outcomes never dispatch twice.
     await save(`Reserving Copilot repair ${state.repairs.length}/${MAX_REPAIRS} for CI run ${run.id}.`);
     if (!await stillCurrent()) {
+      // No external POST was attempted, so this reservation can safely be released.
+      state.repairs.splice(state.repairs.indexOf(repair), 1);
       await save("Stopped: the PR or CI run changed during reservation. No repair was dispatched.");
       return { result: "stopped", reason: "changed-after-reservation", pr: number };
     }
@@ -141,6 +143,8 @@ export async function runController(api, event, { now = () => new Date().toISOSt
   state.reviews.push(review);
   await save(`Reserving Copilot code review after successful CI run ${run.id}.`);
   if (!await stillCurrent()) {
+    // Release only a provably undispatched request; ambiguous POSTs stay reserved.
+    state.reviews.splice(state.reviews.indexOf(review), 1);
     await save("Stopped: the PR or CI run changed during reservation. No review was requested.");
     return { result: "stopped", reason: "changed-after-reservation", pr: number };
   }
