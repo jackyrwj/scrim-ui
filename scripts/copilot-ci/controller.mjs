@@ -4,6 +4,7 @@ import { pathToFileURL } from "node:url";
 export const LABEL = "copilot-ci";
 export const MARKER = "<!-- copilot-ci-state:v1\n";
 const MAX_REPAIRS = 2;
+const MAX_REVIEWS = 100;
 const PROTECTED = /^(?:\.github\/|scripts\/)|(?:^|\/)(?:AGENTS\.md|CLAUDE\.md|GEMINI\.md|package(?:-lock)?\.json|npm-shrinkwrap\.json|pnpm-lock\.yaml|yarn\.lock|eslint\.config\.[^/]+|\.eslintrc(?:\.[^/]+)?|tsconfig(?:\.[^/]+)?\.json|next\.config\.[^/]+|postcss\.config\.[^/]+|\.postcssrc(?:\.[^/]+)?)$/i;
 const isCopilot = (user) => user?.id === 175728472 ||
   ["copilot", "copilot-pull-request-reviewer[bot]"].includes(user?.login?.toLowerCase());
@@ -16,7 +17,7 @@ function stateFrom(comments, user) {
   const tail = comment.body.split(MARKER)[1];
   const state = JSON.parse(tail.slice(0, tail.indexOf("\n-->")));
   if (state.version !== 1 || !Array.isArray(state.repairs) || !Array.isArray(state.reviews) ||
-      state.repairs.length > MAX_REPAIRS || state.reviews.length > 100 ||
+      state.repairs.length > MAX_REPAIRS || state.reviews.length > MAX_REVIEWS ||
       [...state.repairs, ...state.reviews].some((r) =>
         !/^[a-f0-9]{40}$/.test(r.sha) || !Number.isSafeInteger(r.run) ||
         !["reserved", "requested", "unknown"].includes(r.status))) {
@@ -82,6 +83,19 @@ export async function runController(api, event, { now = () => new Date().toISOSt
     return eligible(latestPull) && latestRun.run_attempt === run.run_attempt &&
       latestRun.status === "completed" && latestRun.conclusion === run.conclusion && !newerRun;
   };
+  const revalidateReservation = async (entries, entry, noDispatch) => {
+    try {
+      if (await stillCurrent()) return true;
+    } catch (error) {
+      // Only GETs have run since reservation: no external dispatch is ambiguous.
+      entries.splice(entries.indexOf(entry), 1);
+      await save(`Stopped: CI revalidation failed. ${noDispatch}`);
+      throw error;
+    }
+    entries.splice(entries.indexOf(entry), 1);
+    await save(`Stopped: the PR or CI run changed during reservation. ${noDispatch}`);
+    return false;
+  };
 
   if (run.conclusion === "failure") {
     if (!await stillCurrent()) return { result: "skipped", reason: "head-or-run-changed", pr: number };
@@ -102,10 +116,7 @@ export async function runController(api, event, { now = () => new Date().toISOSt
     state.repairs.push(repair);
     // Reserve before invoking the agent; ambiguous network outcomes never dispatch twice.
     await save(`Reserving Copilot repair ${state.repairs.length}/${MAX_REPAIRS} for CI run ${run.id}.`);
-    if (!await stillCurrent()) {
-      // No external POST was attempted, so this reservation can safely be released.
-      state.repairs.splice(state.repairs.indexOf(repair), 1);
-      await save("Stopped: the PR or CI run changed during reservation. No repair was dispatched.");
+    if (!await revalidateReservation(state.repairs, repair, "No repair was dispatched.")) {
       return { result: "stopped", reason: "changed-after-reservation", pr: number };
     }
     const body = [
@@ -139,13 +150,14 @@ export async function runController(api, event, { now = () => new Date().toISOSt
     return { result: "skipped", reason: "review-already-present-or-reserved", pr: number };
   }
   if (!await stillCurrent()) return { result: "skipped", reason: "head-or-run-changed", pr: number };
+  if (state.reviews.length >= MAX_REVIEWS) {
+    await save("Stopped: the 100-head automatic review ledger limit is reached. Request further reviews manually.");
+    return { result: "stopped", reason: "review-limit", pr: number };
+  }
   const review = { sha: run.head_sha, run: run.id, at: now(), status: "reserved" };
   state.reviews.push(review);
   await save(`Reserving Copilot code review after successful CI run ${run.id}.`);
-  if (!await stillCurrent()) {
-    // Release only a provably undispatched request; ambiguous POSTs stay reserved.
-    state.reviews.splice(state.reviews.indexOf(review), 1);
-    await save("Stopped: the PR or CI run changed during reservation. No review was requested.");
+  if (!await revalidateReservation(state.reviews, review, "No review was requested.")) {
     return { result: "stopped", reason: "changed-after-reservation", pr: number };
   }
   try {

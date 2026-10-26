@@ -36,6 +36,8 @@ are made before requesting Copilot. An ambiguous delivery consumes its reserved
 attempt and requires inspection, rather than silently duplicating a coding task.
 If the PR or CI run changes before any external request is attempted, the unused
 reservation is released so the latest CI can act normally.
+The same release applies when the pre-dispatch GitHub query fails; the invocation
+fails visibly and can be retried without consuming a repair attempt.
 Do not delete or edit the ledger while automation is active.
 
 The visible `@copilot` request links the exact failed CI run and requires a
@@ -56,6 +58,8 @@ Successful CI requests one Copilot Code Review per head, skipping existing or
 pending reviews. A request is asynchronous: inspect the timeline for actual
 acceptance and the review result. Review feedback is left for the human to assess;
 it does not autonomously launch an additional repair loop.
+After 100 reserved or requested reviewed heads, further review requests stop for
+manual handling; the ledger remains readable and CI repair handling still works.
 
 ## Verification and rollback
 

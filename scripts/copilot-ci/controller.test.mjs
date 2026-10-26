@@ -274,6 +274,37 @@ test("an undispatched repair does not consume the two-attempt budget", async () 
   assert.equal((await f.execute()).round, 2);
 });
 
+for (const conclusion of ["failure", "success"]) {
+  test(`a pre-dispatch GET failure releases the unused ${conclusion} reservation`, async () => {
+    const f = fixture(conclusion);
+    let reads = 0;
+    f.onGetRuns = () => {
+      if (++reads === (conclusion === "failure" ? 4 : 3)) throw new Error("GitHub GET unavailable");
+    };
+    await assert.rejects(f.execute(), /GitHub GET unavailable/);
+    assert.equal(f.repairs().length + f.reviewRequests().length, 0);
+    assert.match(f.comments[0].body, /"repairs":\[\],"reviews":\[\]/);
+    f.onGetRuns = null;
+    assert.equal((await f.execute()).result, conclusion === "failure" ? "repair-requested" : "review-requested");
+    assert.equal(f.repairs().length + f.reviewRequests().length, 1);
+  });
+}
+
+test("the 100-head review limit never writes an unreadable ledger or blocks repairs", async () => {
+  const f = fixture("success");
+  const reviews = Array.from({ length: 100 }, (_, i) => ({
+    sha: i.toString(16).padStart(40, "0"), run: i + 1, status: "requested",
+  }));
+  f.comments = [{ id: 1, user, body: `${MARKER}${JSON.stringify({ version: 1, repairs: [], reviews })}\n-->` }];
+  assert.equal((await f.execute()).reason, "review-limit");
+  assert.equal((await f.execute()).reason, "review-limit");
+  assert.equal(f.reviewRequests().length, 0);
+  const state = JSON.parse(f.comments[0].body.split(MARKER)[1].split("\n-->")[0]);
+  assert.equal(state.reviews.length, 100);
+  f.run.conclusion = "failure";
+  assert.equal((await f.execute()).round, 1);
+});
+
 test("a non-owner token, forged ledger, and corrupt owner ledger fail closed", async () => {
   const wrongUser = fixture();
   wrongUser.user = { ...user, login: "github-actions[bot]", type: "Bot" };
