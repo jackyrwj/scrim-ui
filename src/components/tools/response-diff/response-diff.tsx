@@ -240,20 +240,26 @@ export function ResponseDiff() {
       <div className="mt-4">
         <Section title="Analysis">
           <ul className="space-y-2 text-sm text-(--muted-foreground)">
-            <AnalysisBullet>
-              Response A is{" "}
-              <span className="font-medium text-(--foreground)">
-                {Math.abs(
-                  Math.round(((statsA.chars - statsB.chars) / Math.max(statsB.chars, 1)) * 100),
-                )}
-                % {statsA.chars < statsB.chars ? "shorter" : "longer"}
-              </span>{" "}
-              than Response B
-            </AnalysisBullet>
-            <AnalysisBullet>Both responses include code examples</AnalysisBullet>
-            <AnalysisBullet>
-              Response A uses arrow function, Response B uses named function
-            </AnalysisBullet>
+            {statsA.chars === 0 && statsB.chars === 0 ? (
+              <AnalysisBullet>Paste two responses to compare their lengths</AnalysisBullet>
+            ) : statsA.chars === statsB.chars ? (
+              <AnalysisBullet>Both responses are the same length</AnalysisBullet>
+            ) : statsA.chars === 0 || statsB.chars === 0 ? (
+              <AnalysisBullet>
+                Response {statsA.chars === 0 ? "B" : "A"} has{" "}
+                {Math.max(statsA.chars, statsB.chars).toLocaleString()} characters; the other
+                response is empty
+              </AnalysisBullet>
+            ) : (
+              <AnalysisBullet>
+                Response A is{" "}
+                <span className="font-medium text-(--foreground)">
+                  {Math.abs(Math.round(((statsA.chars - statsB.chars) / statsB.chars) * 100))}%{" "}
+                  {statsA.chars < statsB.chars ? "shorter" : "longer"}
+                </span>{" "}
+                than Response B
+              </AnalysisBullet>
+            )}
           </ul>
         </Section>
       </div>

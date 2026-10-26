@@ -44,3 +44,9 @@ jobs:
         # component that grew an import fails — the registry route asserts
         # that every component imports nothing but React.
         run: npm run build
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Response Diff regression
+        run: npm run test:response-diff
