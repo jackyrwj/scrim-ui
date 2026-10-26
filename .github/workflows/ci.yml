@@ -25,7 +25,7 @@ jobs:
       - run: npm ci
 
       - name: Copilot CI controller tests
-        run: node --test scripts/copilot-ci/controller.test.mjs
+        run: node --test scripts/copilot-ci/controller.test.mjs scripts/copilot-ci/local-feedback.test.mjs
 
       - name: Types
         run: npx tsc --noEmit
