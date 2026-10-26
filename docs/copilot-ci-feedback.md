@@ -38,7 +38,8 @@ Do not delete or edit the ledger while automation is active.
 
 The visible `@copilot` request links the exact failed CI run and requires a
 minimal fix on the existing branch. Changes to workflows, automation scripts,
-agent instructions or dependency manifests require human investigation. The
+all CI scripts, nested agent instructions, build/lint/typecheck configuration,
+or dependency manifests require human investigation. The
 controller refuses automatic repair on PRs containing those changes. It never
 checks out or executes the PR branch in its privileged workflow, reads artifacts,
 approves workflows, changes protections, merges, or deploys.

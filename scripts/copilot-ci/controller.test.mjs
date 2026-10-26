@@ -15,13 +15,16 @@ function fixture(conclusion = "failure") {
   const f = { event: { repository: repo, workflow_run: { id: 100, run_attempt: 1 } }, run, pull,
     workflow: { name: "CI", path: ".github/workflows/ci.yml" }, comments: [], reviews: [],
     files: [{ filename: "src/lib/example.ts" }], mutations: [], runs: [], user,
-    failRepair: false, onGetPull: null };
+    failRepair: false, onGetPull: null, onGetRuns: null };
   f.api = {
     get: async (path) => {
       if (path === "/user") return f.user;
       if (path === `${ROOT}/actions/runs/${f.run.id}`) return structuredClone(f.run);
       if (path === `${ROOT}/actions/workflows/10`) return f.workflow;
-      if (path.startsWith(`${ROOT}/actions/workflows/10/runs?`)) return { workflow_runs: [f.run, ...f.runs] };
+      if (path.startsWith(`${ROOT}/actions/workflows/10/runs?`)) {
+        f.onGetRuns?.();
+        return { workflow_runs: [f.run, ...f.runs] };
+      }
       if (path === `${ROOT}/pulls/8`) {
         f.onGetPull?.();
         return structuredClone(f.pull);
@@ -165,7 +168,7 @@ test("a concurrent head update before reservation prevents all writes", async ()
 test("a head update after reservation stops before invoking Copilot", async () => {
   const f = fixture();
   let reads = 0;
-  f.onGetPull = () => { if (++reads === 3) f.pull.head.sha = "b".repeat(40); };
+  f.onGetPull = () => { if (++reads === 4) f.pull.head.sha = "b".repeat(40); };
   assert.equal((await f.execute()).reason, "changed-after-reservation");
   assert.equal(f.repairs().length, 0);
   assert.match(f.comments[0].body, /No repair was dispatched/);
@@ -177,12 +180,46 @@ test("protected paths and renamed protected paths stop repair", async () => {
     { filename: "AGENTS.md" },
     { filename: "package-lock.json" },
     { filename: "scripts/copilot-ci/controller.mjs" },
+    { filename: "scripts/contrast.mjs" },
+    { filename: "src/AGENTS.md" },
+    { filename: "src/CLAUDE.md" },
+    { filename: "templates/ai-chat/package.json" },
+    { filename: "eslint.config.mjs" },
+    { filename: "tsconfig.json" },
     { filename: "renamed.md", previous_filename: ".github/copilot-instructions.md" },
   ]) {
     const f = fixture();
     f.files = [file];
     assert.equal((await f.execute()).reason, "protected-files");
     assert.equal(f.repairs().length, 0);
+  }
+});
+
+test("a newer same-head run before budget evaluation prevents stale stop notices", async () => {
+  const f = fixture();
+  await f.execute();
+  f.nextFailure(101, "b");
+  await f.execute();
+  f.nextFailure(102, "c");
+  let reads = 0;
+  f.onGetRuns = () => {
+    if (++reads === 2) f.runs = [{ id: 103, head_sha: f.run.head_sha, conclusion: "success" }];
+  };
+  const before = f.mutations.length;
+  assert.equal((await f.execute()).reason, "head-or-run-changed");
+  assert.equal(f.mutations.length, before);
+});
+
+test("a newer same-head run after reservation prevents the external request", async () => {
+  for (const conclusion of ["success", "failure"]) {
+    const f = fixture(conclusion);
+    let reads = 0;
+    f.onGetRuns = () => {
+      const afterReservation = conclusion === "failure" ? 4 : 3;
+      if (++reads === afterReservation) f.runs = [{ id: 101, head_sha: SHA, status: "in_progress" }];
+    };
+    assert.equal((await f.execute()).reason, "changed-after-reservation");
+    assert.equal(f.repairs().length + f.reviewRequests().length, 0);
   }
 });
 
