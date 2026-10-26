@@ -157,7 +157,7 @@ for (const [name, change] of [
   ["approval required", (f) => { f.run.conclusion = "action_required"; }],
   ["old attempt", (f) => { f.run.run_attempt = 2; }],
   ["main push", (f) => { f.run.event = "push"; }],
-  ["newer CI exists", (f) => { f.runs = [{ id: 101, head_sha: SHA }]; }],
+  ["newer CI exists", (f) => { f.runs = [{ id: 101, head_sha: SHA, head_repository: f.run.head_repository }]; }],
 ]) {
   test(`${name} causes no mutation or agent request`, async () => {
     const f = fixture();
@@ -173,6 +173,15 @@ test("a concurrent head update before reservation prevents all writes", async ()
   f.onGetPull = () => { if (++reads === 2) f.pull.head.sha = "b".repeat(40); };
   assert.equal((await f.execute()).reason, "head-or-run-changed");
   assert.equal(f.mutations.length, 0);
+});
+
+test("a newer matching fork run cannot suppress same-repository repair or review", async () => {
+  for (const conclusion of ["failure", "success"]) {
+    const f = fixture(conclusion);
+    f.runs = [{ id: 101, head_sha: SHA, head_branch: f.run.head_branch, head_repository: { id: 55 } }];
+    assert.equal((await f.execute()).result, conclusion === "failure" ? "repair-requested" : "review-requested");
+    assert.equal(f.repairs().length + f.reviewRequests().length, 1);
+  }
 });
 
 test("a head update after reservation stops before invoking Copilot", async () => {
@@ -218,7 +227,7 @@ test("a newer same-head run before budget evaluation prevents stale stop notices
   f.nextFailure(102, "c");
   let reads = 0;
   f.onGetRuns = () => {
-    if (++reads === 2) f.runs = [{ id: 103, head_sha: f.run.head_sha, conclusion: "success" }];
+    if (++reads === 2) f.runs = [{ id: 103, head_sha: f.run.head_sha, head_repository: f.run.head_repository, conclusion: "success" }];
   };
   const before = f.mutations.length;
   assert.equal((await f.execute()).reason, "head-or-run-changed");
@@ -231,7 +240,7 @@ test("a newer same-head run after reservation prevents the external request", as
     let reads = 0;
     f.onGetRuns = () => {
       const afterReservation = conclusion === "failure" ? 4 : 3;
-      if (++reads === afterReservation) f.runs = [{ id: 101, head_sha: SHA, status: "in_progress" }];
+      if (++reads === afterReservation) f.runs = [{ id: 101, head_sha: SHA, head_repository: f.run.head_repository, status: "in_progress" }];
     };
     assert.equal((await f.execute()).reason, "changed-after-reservation");
     assert.equal(f.repairs().length + f.reviewRequests().length, 0);
@@ -242,7 +251,7 @@ test("a newer successful run can request a review after an undispatched reservat
   const f = fixture("success");
   let reads = 0;
   f.onGetRuns = () => {
-    if (++reads === 3) f.runs = [{ id: 101, head_sha: SHA, status: "in_progress" }];
+    if (++reads === 3) f.runs = [{ id: 101, head_sha: SHA, head_repository: f.run.head_repository, status: "in_progress" }];
   };
   assert.equal((await f.execute()).reason, "changed-after-reservation");
   assert.equal(f.reviewRequests().length, 0);
@@ -260,7 +269,7 @@ test("an undispatched repair does not consume the two-attempt budget", async () 
   const f = fixture();
   let reads = 0;
   f.onGetRuns = () => {
-    if (++reads === 4) f.runs = [{ id: 101, head_sha: SHA, status: "in_progress" }];
+    if (++reads === 4) f.runs = [{ id: 101, head_sha: SHA, head_repository: f.run.head_repository, status: "in_progress" }];
   };
   assert.equal((await f.execute()).reason, "changed-after-reservation");
   assert.equal(f.repairs().length, 0);

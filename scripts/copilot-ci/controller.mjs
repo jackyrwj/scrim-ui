@@ -57,7 +57,8 @@ export async function runController(api, event, { now = () => new Date().toISOSt
   if (!eligible(pull)) return { result: "skipped", reason: "pr-not-opted-in-or-stale", pr: number };
   const hasNewerRun = async () => {
     const runs = await api.get(`${root}/actions/workflows/${run.workflow_id}/runs?event=pull_request&branch=${encodeURIComponent(run.head_branch)}&head_sha=${run.head_sha}&per_page=100`);
-    return runs.workflow_runs.some((r) => r.id > run.id && r.head_sha === run.head_sha);
+    return runs.workflow_runs.some((r) => r.id > run.id && r.head_sha === run.head_sha &&
+      r.head_repository?.id === repository.id);
   };
   if (await hasNewerRun()) {
     return { result: "skipped", reason: "newer-ci-run-exists", pr: number };
