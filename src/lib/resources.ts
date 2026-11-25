@@ -241,6 +241,17 @@ export const resources: ResourceEntry[] = [
     tags: ["generator", "design", "figma"],
   },
   {
+    name: "Kite",
+    url: "https://kite.new",
+    category: "generators",
+    description: "Design canvas that Claude, ChatGPT, Cursor or Codex draw on through a hosted MCP server.",
+    free: true,
+    ai_native: true,
+    source: "official",
+    notes: "Use it when you want the agent's UI as editable layers your team can refine, then copy any frame out as HTML, React or Tailwind.",
+    tags: ["generator", "design", "mcp", "figma"],
+  },
+  {
     name: "Lovable",
     url: "https://lovable.dev",
     category: "generators",
